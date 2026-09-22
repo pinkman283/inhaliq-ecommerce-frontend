@@ -45,6 +45,7 @@ import { AdminPageHeader, AdminStatusBadge, AdminEmptyState } from "@/components
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { optimizeImageForUpload } from "@/lib/imageOptimizer";
 
 
 interface ProductFormImage {
@@ -529,7 +530,12 @@ export default function AdminProductsPage() {
       const uploadedImages: ProductFormImage[] = [];
       for (const file of filesToUpload) {
         if (!file.type.startsWith("image/")) continue;
-        const res = await adminApi.uploadProductImage(file);
+        const fileToUpload = await optimizeImageForUpload(file, {
+          maxDimension: 1600,
+          maxSizeBytes: 1.5 * 1024 * 1024,
+          quality: 0.88,
+        });
+        const res = await adminApi.uploadProductImage(fileToUpload);
         uploadedImages.push({
           image_url: res.image_url,
           is_primary: formImages.length === 0 && uploadedImages.length === 0,
@@ -549,7 +555,11 @@ export default function AdminProductsPage() {
         toast.success(`Uploaded ${uploadedImages.length} image(s).`);
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to upload image.");
+      const errMsg =
+        err.response?.data?.errors?.image?.[0] ||
+        err.response?.data?.message ||
+        "Failed to upload image.";
+      toast.error(errMsg);
     } finally {
       setIsUploadingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = "";

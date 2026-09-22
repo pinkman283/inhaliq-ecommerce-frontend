@@ -33,6 +33,7 @@ import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
 import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { optimizeImageForUpload } from "@/lib/imageOptimizer";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -289,22 +290,38 @@ export default function AdminCategoriesPage() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select a valid image file (JPG, PNG, WEBP, GIF, SVG, AVIF).");
+      toast.error("Please select a valid image file (JPG, PNG, WEBP, GIF, AVIF).");
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("Image file size must be less than 10MB.");
+    if (file.type === "image/svg+xml") {
+      toast.error("SVG vector files are not supported for category cover images. Please select a JPG, PNG, WEBP, or AVIF image.");
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Image file size must be less than 20MB.");
       return;
     }
 
     setUploadingImage(true);
     try {
-      const res = await adminApi.uploadCategoryImage(file);
+      // Auto-optimize & downscale high-resolution images to fit comfortably within server upload limits
+      const fileToUpload = await optimizeImageForUpload(file, {
+        maxDimension: 1600,
+        maxSizeBytes: 1.5 * 1024 * 1024,
+        quality: 0.88,
+      });
+
+      const res = await adminApi.uploadCategoryImage(fileToUpload);
       setImage(res.image_url);
       toast.success("Image uploaded from device successfully.");
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to upload image from device.");
+      const errMsg =
+        err.response?.data?.errors?.image?.[0] ||
+        err.response?.data?.message ||
+        "Failed to upload image from device.";
+      toast.error(errMsg);
     } finally {
       setUploadingImage(false);
       e.target.value = "";
@@ -1315,7 +1332,7 @@ export default function AdminCategoriesPage() {
                         <span>Change</span>
                         <input
                           type="file"
-                          accept="image/*"
+                          accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/avif"
                           className="hidden"
                           onChange={handleFileUpload}
                           disabled={uploadingImage}
@@ -1344,7 +1361,7 @@ export default function AdminCategoriesPage() {
                     <span>{uploadingImage ? "Uploading..." : "Upload Device Image"}</span>
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/avif"
                       className="hidden"
                       onChange={handleFileUpload}
                       disabled={uploadingImage}
