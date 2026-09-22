@@ -133,6 +133,8 @@ export default function AdminProductsPage() {
   // Form State
   const [name, setName] = useState("");
   const [category, setCategory] = useState("1");
+  const [subcategory, setSubcategory] = useState("");
+  const [brandId, setBrandId] = useState("");
   const [brand, setBrand] = useState("AETHER Studio");
   const [price, setPrice] = useState("0");
   const [comparePrice, setComparePrice] = useState("0");
@@ -225,6 +227,8 @@ export default function AdminProductsPage() {
     setEditingProduct(null);
     setName("");
     setCategory(categories[0]?.id?.toString() || "1");
+    setSubcategory("");
+    setBrandId(brands[0]?.id?.toString() || "");
     setBrand(brands[0]?.name || "AETHER Studio");
     setPrice("0");
     setComparePrice("0");
@@ -253,6 +257,8 @@ export default function AdminProductsPage() {
     setEditingProduct(product);
     setName(product.name);
     setCategory(product.category?.id?.toString() || product.category_id?.toString() || "1");
+    setSubcategory(product.subcategory_id?.toString() || "");
+    setBrandId(product.brand_id?.toString() || (brands.find((b) => b.name.toLowerCase() === (product.brand || "").toLowerCase())?.id?.toString() || ""));
     setBrand(product.brand || "AETHER Studio");
     setPrice(product.price.toString());
     setComparePrice(product.compare_at_price ? product.compare_at_price.toString() : "0");
@@ -596,7 +602,9 @@ export default function AdminProductsPage() {
     const payload = {
       name,
       category_id: Number(category),
-      brand,
+      subcategory_id: subcategory ? Number(subcategory) : null,
+      brand_id: brandId ? Number(brandId) : null,
+      brand: brand || undefined,
       price: Number(price),
       compare_at_price: comparePrice ? Number(comparePrice) : null,
       stock_quantity: Number(stock),
@@ -1177,11 +1185,12 @@ export default function AdminProductsPage() {
                   />
                 </div>
 
-                {/* Category & Brand */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {/* 3-Tier Classification: Category -> Subcategory -> Brand */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  {/* Tier 1: Root Category */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-medium text-slate-300">Category</label>
+                      <label className="text-xs font-medium text-slate-300">Category (Root)</label>
                       <button
                         type="button"
                         onClick={() => setIsQuickCategoryModalOpen(true)}
@@ -1193,14 +1202,25 @@ export default function AdminProductsPage() {
                     <div className="relative">
                       <select
                         value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
+                        onChange={(e) => {
+                          setCategory(e.target.value);
+                          setSubcategory("");
+                        }}
+                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
                       >
-                        {categories.map((c) => (
-                          <option key={c.id} value={c.id.toString()} className="bg-[#0e121e]">
-                            {c.name}
-                          </option>
-                        ))}
+                        {categories
+                          .filter((c) => !c.parent_id)
+                          .map((c) => (
+                            <option key={c.id} value={c.id.toString()} className="bg-[#0e121e]">
+                              {c.name}
+                            </option>
+                          ))}
+                        {categories.filter((c) => !c.parent_id).length === 0 &&
+                          categories.map((c) => (
+                            <option key={c.id} value={c.id.toString()} className="bg-[#0e121e]">
+                              {c.name}
+                            </option>
+                          ))}
                       </select>
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                         <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
@@ -1210,6 +1230,36 @@ export default function AdminProductsPage() {
                     </div>
                   </div>
 
+                  {/* Tier 2: Subcategory (Child) */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-medium text-slate-300">Subcategory</label>
+                      <span className="text-[10px] text-slate-500 font-mono">Optional</span>
+                    </div>
+                    <div className="relative">
+                      <select
+                        value={subcategory}
+                        onChange={(e) => setSubcategory(e.target.value)}
+                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
+                      >
+                        <option value="" className="bg-[#0e121e]">-- No Subcategory --</option>
+                        {categories
+                          .filter((c) => c.parent_id === Number(category))
+                          .map((sub) => (
+                            <option key={sub.id} value={sub.id.toString()} className="bg-[#0e121e]">
+                              {sub.name}
+                            </option>
+                          ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tier 3: Brand */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-medium text-slate-300">Brand</label>
@@ -1223,12 +1273,21 @@ export default function AdminProductsPage() {
                     </div>
                     <div className="relative">
                       <select
-                        value={brand}
-                        onChange={(e) => setBrand(e.target.value)}
-                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
+                        value={brandId || brand}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          const matchedBrand = brands.find((b) => b.id.toString() === val || b.name === val);
+                          if (matchedBrand) {
+                            setBrandId(matchedBrand.id.toString());
+                            setBrand(matchedBrand.name);
+                          } else {
+                            setBrand(val);
+                          }
+                        }}
+                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
                       >
                         {brands.map((b) => (
-                          <option key={b.id} value={b.name} className="bg-[#0e121e]">
+                          <option key={b.id} value={b.id.toString()} className="bg-[#0e121e]">
                             {b.name}
                           </option>
                         ))}
@@ -1241,6 +1300,7 @@ export default function AdminProductsPage() {
                     </div>
                   </div>
                 </div>
+
 
                 {/* Description */}
                 <div className="space-y-1.5">

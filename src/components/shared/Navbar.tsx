@@ -9,32 +9,18 @@ import {
   Heart,
   Search,
   User as UserIcon,
-  LogOut,
-  Package,
   Menu,
   X,
   Sparkles,
-  MapPin,
-  Flame,
-  LayoutDashboard,
+  Package,
+  Radio,
   ChevronDown,
   ChevronRight,
   ArrowRight,
-  Headphones,
-  Keyboard,
-  Briefcase,
-  Watch,
-  Radio,
-  Laptop,
-  Smartphone,
-  Tv,
-  Gamepad,
-  Shirt,
-  Home,
-  Layers,
-  Box,
+  Building2,
+  FolderTree,
+  ExternalLink,
   Tag,
-  Zap
 } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
@@ -43,251 +29,35 @@ import { useThemeStore } from "@/store/useThemeStore";
 import { BrandLogoImage } from "@/components/shared/BrandLogoImage";
 import { CustomerAccountDropdown } from "@/components/shared/CustomerAccountDropdown";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
-import { formatPrice } from "@/lib/utils";
-import { toast } from "sonner";
 import { api } from "@/lib/api";
-import { Category } from "@/types";
+import { NavbarItem } from "@/types";
 
 interface NavbarProps {
   onOpenSearch: () => void;
 }
 
-const ICON_MAP: Record<string, any> = {
-  Headphones,
-  Keyboard,
-  Briefcase,
-  Watch,
-  Radio,
-  Laptop,
-  Smartphone,
-  Tv,
-  Gamepad,
-  Shirt,
-  Home,
-  Layers,
-  Box,
-  Tag,
-  Zap,
-  Sparkles,
-};
-
-function getCategoryIcon(cat: Category) {
-  if (cat.icon && ICON_MAP[cat.icon]) {
-    return ICON_MAP[cat.icon];
-  }
-  const slug = (cat.slug || "").toLowerCase();
-  if (slug.includes("audio") || slug.includes("sound") || slug.includes("headphone")) return Headphones;
-  if (slug.includes("keyboard") || slug.includes("desk") || slug.includes("keycap")) return Keyboard;
-  if (slug.includes("carry") || slug.includes("bag") || slug.includes("backpack")) return Briefcase;
-  if (slug.includes("wearable") || slug.includes("watch")) return Watch;
-  if (slug.includes("light") || slug.includes("smart") || slug.includes("home")) return Sparkles;
-  if (slug.includes("laptop") || slug.includes("computer")) return Laptop;
-  if (slug.includes("phone") || slug.includes("mobile")) return Smartphone;
-  if (slug.includes("game") || slug.includes("gaming")) return Gamepad;
-  if (slug.includes("apparel") || slug.includes("cloth") || slug.includes("shirt")) return Shirt;
-  return Sparkles;
-}
-
-const DEFAULT_FALLBACK_CATEGORIES: Category[] = [
-  {
-    id: 1,
-    name: "Flagship Audio & Acoustics",
-    slug: "audio-acoustics",
-    is_featured: true,
-    display_order: 1,
-    children: [
-      {
-        id: 101,
-        name: "Headphones & IEMs",
-        slug: "headphones-iems",
-        is_featured: true,
-        display_order: 1,
-        children: [
-          {
-            id: 1001,
-            name: "Reference & Studio",
-            slug: "reference-studio",
-            is_featured: true,
-            display_order: 1,
-            children: [
-              { id: 10001, name: "Planar Magnetic Drivers", slug: "planar-magnetic-drivers", is_featured: true, display_order: 1 },
-              { id: 10002, name: "Beryllium Dynamic Monitors", slug: "beryllium-dynamic-monitors", is_featured: true, display_order: 2 },
-              { id: 10003, name: "Open-Back Mixing Cans", slug: "open-back-mixing", is_featured: true, display_order: 3 },
-              { id: 10004, name: "Closed-Back Isolation", slug: "closed-back-isolation", is_featured: true, display_order: 4 },
-            ]
-          },
-          {
-            id: 1002,
-            name: "Wireless & ANC",
-            slug: "wireless-anc",
-            is_featured: true,
-            display_order: 2,
-            children: [
-              { id: 10005, name: "Hybrid Noise Cancelling", slug: "hybrid-noise-cancelling", is_featured: true, display_order: 1 },
-              { id: 10006, name: "True Wireless Planar Buds", slug: "true-wireless-planar-buds", is_featured: true, display_order: 2 },
-              { id: 10007, name: "Transparency Mode Earphones", slug: "transparency-mode-earphones", is_featured: true, display_order: 3 },
-            ]
-          }
-        ]
-      },
-      {
-        id: 102,
-        name: "DACs & Amplifiers",
-        slug: "dacs-amplifiers",
-        is_featured: true,
-        display_order: 2,
-        children: [
-          {
-            id: 1003,
-            name: "Desktop Processing",
-            slug: "desktop-processing",
-            is_featured: true,
-            display_order: 1,
-            children: [
-              { id: 10008, name: "Balanced R2R DACs", slug: "balanced-r2r-dacs", is_featured: true, display_order: 1 },
-              { id: 10009, name: "Tube Headphone Amplifiers", slug: "tube-headphone-amps", is_featured: true, display_order: 2 },
-            ]
-          },
-          {
-            id: 1004,
-            name: "Portable Audio",
-            slug: "portable-audio",
-            is_featured: true,
-            display_order: 2,
-            children: [
-              { id: 10010, name: "Hi-Res Dongle DACs", slug: "hi-res-dongle-dacs", is_featured: true, display_order: 1 },
-              { id: 10011, name: "Bluetooth Receiver Amps", slug: "bluetooth-receiver-amps", is_featured: true, display_order: 2 },
-            ]
-          }
-        ]
-      },
-      {
-        id: 103,
-        name: "Acoustic Peripherals",
-        slug: "acoustic-peripherals",
-        is_featured: true,
-        display_order: 3,
-        children: []
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: "Mechanical Keyboards & Desks",
-    slug: "keyboards-desks",
-    is_featured: true,
-    display_order: 2,
-    children: [
-      {
-        id: 201,
-        name: "Custom Keyboards",
-        slug: "custom-keyboards",
-        is_featured: true,
-        display_order: 1,
-        children: [
-          {
-            id: 2001,
-            name: "Layout Form Factors",
-            slug: "layout-form-factors",
-            is_featured: true,
-            display_order: 1,
-            children: [
-              { id: 20001, name: "65% Compact Wireless", slug: "compact-65-wireless", is_featured: true, display_order: 1 },
-              { id: 20002, name: "75% Exploded Rotary Kits", slug: "gasket-mount-75", is_featured: true, display_order: 2 },
-              { id: 20003, name: "Tenkeyless (TKL) Aluminum", slug: "tkl-aluminum-boards", is_featured: true, display_order: 3 },
-            ]
-          },
-          {
-            id: 2002,
-            name: "Mounting & Acoustics",
-            slug: "mounting-acoustics",
-            is_featured: true,
-            display_order: 2,
-            children: [
-              { id: 20004, name: "CNC Gasket Mount Kits", slug: "cnc-gasket-mount-kits", is_featured: true, display_order: 1 },
-              { id: 20005, name: "Magnetic Hall Effect Boards", slug: "he-magnetic-rapid-trigger", is_featured: true, display_order: 2 },
-            ]
-          }
-        ]
-      },
-      {
-        id: 202,
-        name: "Switches & Modding",
-        slug: "switches-modding",
-        is_featured: true,
-        display_order: 2,
-        children: [
-          {
-            id: 2003,
-            name: "Mechanical Switches",
-            slug: "mechanical-switches",
-            is_featured: true,
-            display_order: 1,
-            children: [
-              { id: 20006, name: "Linear Pre-Lubed Switches", slug: "linear-pre-lubed", is_featured: true, display_order: 1 },
-              { id: 20007, name: "Tactile Silent Switches", slug: "tactile-silent-switches", is_featured: true, display_order: 2 },
-            ]
-          }
-        ]
-      },
-      {
-        id: 203,
-        name: "Keycaps & Desk Mats",
-        slug: "keycaps-mats",
-        is_featured: true,
-        display_order: 3,
-        children: []
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: "Everyday Carry & Tech Packs",
-    slug: "everyday-carry",
-    is_featured: true,
-    display_order: 3,
-    children: [
-      {
-        id: 301,
-        name: "Modular Backpacks",
-        slug: "modular-backpacks",
-        is_featured: true,
-        display_order: 1,
-        children: [
-          {
-            id: 3001,
-            name: "Tech Travel Packs",
-            slug: "tech-travel-packs",
-            is_featured: true,
-            display_order: 1,
-            children: [
-              { id: 30001, name: "X-Pac 24L Daily Carry", slug: "xpac-24l-daily", is_featured: true, display_order: 1 },
-              { id: 30002, name: "Cordura 30L Commuter Pack", slug: "cordura-30l-commuter", is_featured: true, display_order: 2 },
-            ]
-          }
-        ]
-      }
-    ]
-  }
-];
-
 export function Navbar({ onOpenSearch }: NavbarProps) {
   const router = useRouter();
+  const [navItems, setNavItems] = useState<NavbarItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Hover & Dropdown State
+  const [activeHoverId, setActiveHoverId] = useState<number | null>(null);
+  const [activeSubcategoryId, setActiveSubcategoryId] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [categories, setCategories] = useState<Category[]>(DEFAULT_FALLBACK_CATEGORIES);
-  const [activeHoverCategory, setActiveHoverCategory] = useState<string | null>(null);
-  const [activeSubcategorySlug, setActiveSubcategorySlug] = useState<string | null>(null);
-  const [searchFocused, setSearchFocused] = useState(false);
+
+  // Mobile Drawer State
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileExpandedCat, setMobileExpandedCat] = useState<string | null>(null);
-  const [mobileExpandedSubCat, setMobileExpandedSubCat] = useState<string | null>(null);
+  const [mobileExpandedId, setMobileExpandedId] = useState<number | null>(null);
+
   const [mounted, setMounted] = useState(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navContainerRef = useRef<HTMLElement | null>(null);
 
-  const { isWishlistOpen, openWishlist, items: wishlistItems } = useWishlistStore();
-  const { isCartOpen, openCart, getItemCount, getSubtotal } = useCartStore();
-  const { user, isAuthenticated, logout, openAuthModal } = useAuthStore();
+  const { openWishlist, items: wishlistItems } = useWishlistStore();
+  const { openCart, getItemCount } = useCartStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const { theme } = useAppTheme();
 
   const cartCount = getItemCount();
   const wishlistCount = wishlistItems.length;
@@ -299,37 +69,42 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
     };
     window.addEventListener("scroll", handleScroll);
 
-    // Load dynamic categories hierarchy from backend
-    api.getCategories()
+    // Fetch dynamic header navigation from backend API (Redis cached on proxy)
+    api.getHeaderNavigation()
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setCategories(data);
+          setNavItems(data);
         }
       })
-      .catch((err) => console.warn("Notice: Navbar categories fetch fallback:", err));
+      .catch((err) => console.warn("Notice: Dynamic navbar fetch fallback:", err))
+      .finally(() => setLoading(false));
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleMouseEnter = (cat: Category) => {
+  const handleMouseEnter = (item: NavbarItem) => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
-    setActiveHoverCategory(cat.slug);
-    setActiveSubcategorySlug(null);
+    setActiveHoverId(item.id);
+    // Auto-select first subcategory if available
+    if (item.subcategories && item.subcategories.length > 0) {
+      setActiveSubcategoryId(item.subcategories[0].id);
+    } else {
+      setActiveSubcategoryId(null);
+    }
   };
 
   const handleMouseLeave = () => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     hoverTimeoutRef.current = setTimeout(() => {
-      setActiveHoverCategory(null);
-      setActiveSubcategorySlug(null);
-    }, 250);
+      setActiveHoverId(null);
+      setActiveSubcategoryId(null);
+    }, 200);
   };
 
-  const { theme } = useAppTheme();
-  const activeCategoryData = categories.find((c) => c.slug === activeHoverCategory);
+  const activeItemData = navItems.find((item) => item.id === activeHoverId);
 
   return (
     <>
@@ -338,7 +113,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
         <div className="bg-gradient-to-r from-indigo-950 via-[#0a0d18] to-cyan-950 border-b border-white/5 text-[11px] py-1 px-4 text-center text-slate-300 flex items-center justify-between max-w-full">
           <div className="hidden md:flex items-center gap-3 text-slate-400">
             <span className="flex items-center gap-1 text-cyan-400 font-medium">
-              <Radio className="w-3 h-3 animate-pulse" /> {theme.announcement_badge || "Studio Dispatch: Global Shipping Active"}
+              <Radio className="w-3 h-3 animate-pulse" /> {theme.announcement_badge || "Dispatch: Fast Courier Delivery"}
             </span>
           </div>
           <div className="mx-auto md:mx-0 flex items-center justify-center gap-2">
@@ -360,7 +135,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
       {/* ===================== NON-STICKY TIER 1: BRAND LOGO + CENTER SEARCH + UTILITIES ===================== */}
       <div className="bg-white dark:bg-[#090b14]/95 border-b border-gray-200 dark:border-white/5 text-slate-900 dark:text-slate-100 transition-colors">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 sm:h-[82px] lg:h-[88px] flex items-center justify-between gap-3 sm:gap-4 lg:gap-8">
-          {/* Left: Brand Identity Logo & Store Department Switcher */}
+          {/* Left: Brand Identity Logo */}
           <Link href="/" suppressHydrationWarning className="h-full flex items-center group select-none shrink-0 py-1 -translate-y-0.5">
             <BrandLogoImage placement="navbar" priority={true} />
           </Link>
@@ -370,12 +145,12 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             <button
               onClick={onOpenSearch}
               className="w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 dark:bg-white/[0.08] hover:bg-gray-200/80 dark:hover:bg-white/[0.12] border border-gray-200 dark:border-white/20 text-slate-800 dark:text-white text-xs transition-all group cursor-pointer shadow-xs"
-              title="Search products, categories, audio, gear... (Cmd+K)"
+              title="Search products, brands, categories... (Cmd+K)"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <Search className="w-4 h-4 text-gray-500 dark:text-slate-300 group-hover:text-[#005826] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
                 <span className="text-xs text-gray-600 dark:text-slate-200 group-hover:text-gray-900 dark:group-hover:text-white font-medium truncate">
-                  Search hardware, audio, keyboards, tech packs...
+                  Search catalog, categories, authorized brands...
                 </span>
               </div>
               <div className="flex items-center gap-1 shrink-0 ml-2">
@@ -392,7 +167,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             <button
               onClick={onOpenSearch}
               className="sm:hidden p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs transition-all cursor-pointer"
-              title="Search products (Cmd+K)"
+              title="Search catalog (Cmd+K)"
             >
               <Search className="w-4 h-4" />
             </button>
@@ -469,335 +244,430 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
         </div>
       </div>
 
-      {/* ===================== ONLY THIS CATEGORY NAV SECTION IS STICKY ===================== */}
+      {/* ===================== STICKY TIER 2: 100% ADMIN-CONTROLLED DYNAMIC HEADER NAVBAR ===================== */}
       <nav
         ref={navContainerRef}
         onMouseLeave={handleMouseLeave}
-        className={`sticky top-0 z-40 transition-all duration-300 border-b theme-sticky-subnav ${isScrolled
+        className={`sticky top-0 z-40 transition-all duration-300 border-b theme-sticky-subnav ${
+          isScrolled
             ? "bg-white/95 dark:bg-[#070911]/95 backdrop-blur-xl shadow-md dark:shadow-2xl border-gray-200 dark:border-white/10 py-1.5"
             : "bg-white/90 dark:bg-[#090b14]/90 backdrop-blur-md border-gray-200 dark:border-white/5 py-1.5"
-          }`}
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* LuLu Style: Clean Single-Line Navigation with All Categories & Deals */}
           <div className="hidden lg:flex items-center justify-between relative min-h-[36px] flex-nowrap whitespace-nowrap">
-            {/* Left: Green "All Categories" Dropdown Button */}
+            {/* Left: Quick Catalog Hub Button */}
             <div className="flex items-center gap-2 shrink-0 z-10">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer all-categories-btn"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer"
                 style={{
                   backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #005826))",
                   color: "var(--theme-btn-primary-text, #ffffff)",
                 }}
               >
                 <Menu className="w-3.5 h-3.5" style={{ color: "var(--theme-btn-primary-text, #ffffff)" }} />
-                <span style={{ color: "var(--theme-btn-primary-text, #ffffff)" }}>All Categories</span>
+                <span>All Products</span>
               </Link>
-            </div>            {/* Center: Category Nav Links + Red Deals Pill (Anchored in the exact middle of navbar) */}
+            </div>
+
+            {/* Center: Fully Dynamic Admin-Configured Navigation Items */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0 pointer-events-auto">
-              {categories.slice(0, 7).map((cat, catIndex, arr) => {
-                const isCatHovered = activeHoverCategory === cat.slug;
-                const hasChildren = cat.children && cat.children.length > 0;
-                const activeSubcategory = cat.children?.find((c) => c.slug === activeSubcategorySlug) || null;
-                const hasRightGroups = activeSubcategory && activeSubcategory.children && activeSubcategory.children.length > 0;
-                const isRightSide = catIndex >= Math.ceil(arr.length / 2) || catIndex >= 2;
+              {loading && navItems.length === 0 ? (
+                /* Sleek Loading Skeleton */
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <div key={s} className="h-6 w-20 rounded bg-white/5 animate-pulse" />
+                  ))}
+                </div>
+              ) : (
+                navItems.map((item, itemIdx, arr) => {
+                  const isHovered = activeHoverId === item.id;
+                  const hasDropdownContent =
+                    (item.mega_menu_type && item.mega_menu_type !== "none") ||
+                    (item.subcategories && item.subcategories.length > 0) ||
+                    (item.brands && item.brands.length > 0) ||
+                    (item.children && item.children.length > 0);
 
-                return (
-                  <div
-                    key={cat.id || cat.slug}
-                    onMouseEnter={() => handleMouseEnter(cat)}
-                    onMouseLeave={handleMouseLeave}
-                    className="relative shrink-0"
-                  >
-                    <Link
-                      href={`/products?category=${cat.slug}`}
-                      onMouseEnter={() => handleMouseEnter(cat)}
-                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                        isCatHovered
-                          ? "text-[#005826] dark:text-emerald-400 bg-emerald-50/80 dark:bg-white/10"
-                          : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-                      }`}
+                  const isRightSide = itemIdx >= Math.ceil(arr.length / 2) || itemIdx >= 3;
+
+                  return (
+                    <div
+                      key={item.id}
+                      onMouseEnter={() => handleMouseEnter(item)}
+                      onMouseLeave={handleMouseLeave}
+                      className="relative shrink-0"
                     >
-                      <span>{cat.name}</span>
-                      {hasChildren && (
-                        <ChevronDown
-                          className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
-                            isCatHovered ? "rotate-180 text-[#005826] dark:text-emerald-400" : ""
-                          }`}
-                        />
-                      )}
-                    </Link>
+                      <Link
+                        href={item.computed_url || item.url || "#"}
+                        target={item.open_in_new_tab ? "_blank" : undefined}
+                        rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                          isHovered
+                            ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                            : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                        }`}
+                      >
+                        <span>{item.title}</span>
 
-                    {/* LuLu Style Floating Dropdown Popover */}
-                    <AnimatePresence>
-                      {isCatHovered && hasChildren && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 4, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 4, scale: 0.98 }}
-                          transition={{ duration: 0.12, ease: "easeOut" }}
-                          onMouseEnter={() => {
-                            if (hoverTimeoutRef.current) {
-                              clearTimeout(hoverTimeoutRef.current);
-                              hoverTimeoutRef.current = null;
-                            }
-                          }}
-                          onMouseLeave={handleMouseLeave}
-                          className={`absolute top-full mt-1 z-50 bg-white dark:bg-[#0e121e] rounded-2xl border border-gray-200/80 dark:border-white/10 shadow-[0_14px_45px_rgba(0,0,0,0.14)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.7)] overflow-hidden transition-all duration-150 text-left max-w-[calc(100vw-32px)] ${
-                            hasRightGroups ? "w-[680px] sm:w-[720px]" : "w-[230px]"
-                          } ${
-                            isRightSide ? "right-0 origin-top-right" : "left-0 origin-top-left"
-                          }`}
-                        >
-                          <div className="flex">
-                            {/* Left Column: Subcategory list */}
-                            <div className={`w-[230px] shrink-0 py-2.5 px-2 space-y-0.5 bg-white dark:bg-[#0e121e] ${
-                              hasRightGroups ? "border-r border-gray-100 dark:border-white/10" : ""
-                            }`}>
-                              {cat.children!.map((sub) => {
-                                const isSubActive = activeSubcategorySlug === sub.slug;
-                                const subHasChildren = sub.children && sub.children.length > 0;
-                                return (
-                                  <Link
-                                    key={sub.id || sub.slug}
-                                    href={`/products?category=${sub.slug}`}
-                                    onMouseEnter={() => setActiveSubcategorySlug(sub.slug)}
-                                    onClick={() => setActiveHoverCategory(null)}
-                                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13px] transition-colors cursor-pointer select-none ${
-                                      isSubActive
-                                        ? "bg-[#005826]/10 dark:bg-emerald-950/40 text-[#005826] dark:text-emerald-400 font-semibold"
-                                        : "text-slate-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
-                                    }`}
-                                  >
-                                    <span className="truncate">{sub.name}</span>
-                                    {subHasChildren && (
-                                      <ChevronRight
-                                        className={`w-3.5 h-3.5 transition-transform shrink-0 ml-1.5 ${
-                                          isSubActive ? "text-[#005826] dark:text-emerald-400 translate-x-0.5" : "text-slate-400"
-                                        }`}
-                                      />
-                                    )}
-                                  </Link>
-                                );
-                              })}
-                            </div>
+                        {/* Configurable Badge */}
+                        {item.badge && (
+                          <span
+                            className="text-[9px] px-1.5 py-0.2 rounded font-black tracking-wide text-white uppercase shadow-xs"
+                            style={{ backgroundColor: item.badge_color || "#EF4444" }}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
 
-                            {/* Right Area: Groups of the hovered subcategory */}
-                            {hasRightGroups && (
-                              <div className="flex-1 p-5 max-h-[420px] overflow-y-auto bg-white dark:bg-[#0e121e]">
-                                <div className="grid grid-cols-2 gap-x-8 gap-y-6">
-                                  {activeSubcategory.children!.map((group) => (
-                                    <div key={group.id || group.slug} className="space-y-1">
-                                      <Link
-                                        href={`/products?category=${group.slug}`}
-                                        onClick={() => setActiveHoverCategory(null)}
-                                        className="font-bold text-[13px] text-slate-900 dark:text-white hover:text-[#005826] dark:hover:text-emerald-400 transition-colors block mb-1.5"
-                                      >
-                                        {group.name}
-                                      </Link>
+                        {hasDropdownContent && (
+                          <ChevronDown
+                            className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
+                              isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                            }`}
+                          />
+                        )}
+                      </Link>
 
-                                      {group.children && group.children.length > 0 ? (
-                                        <div className="space-y-1">
-                                          {group.children.map((item) => (
-                                            <Link
-                                              key={item.id || item.slug}
-                                              href={`/products?category=${item.slug}`}
-                                              onClick={() => setActiveHoverCategory(null)}
-                                              className="block text-xs text-slate-500 dark:text-slate-400 hover:text-[#005826] dark:hover:text-emerald-400 transition-colors py-0.5 truncate"
-                                            >
-                                              {item.name}
-                                            </Link>
-                                          ))}
+                      {/* ===================== DYNAMIC MEGA-MENU / DROPDOWN POPOVER ===================== */}
+                      <AnimatePresence>
+                        {isHovered && hasDropdownContent && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                            transition={{ duration: 0.12, ease: "easeOut" }}
+                            onMouseEnter={() => {
+                              if (hoverTimeoutRef.current) {
+                                clearTimeout(hoverTimeoutRef.current);
+                                hoverTimeoutRef.current = null;
+                              }
+                            }}
+                            onMouseLeave={handleMouseLeave}
+                            className={`absolute top-full mt-1 z-50 bg-white dark:bg-[#0e121e] rounded-2xl border border-gray-200/80 dark:border-white/10 shadow-[0_14px_45px_rgba(0,0,0,0.14)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.7)] overflow-hidden transition-all duration-150 text-left max-w-[calc(100vw-32px)] ${
+                              item.mega_menu_type === "category_brand_grid"
+                                ? "w-[680px] sm:w-[740px]"
+                                : item.mega_menu_type === "columns"
+                                ? "w-[500px]"
+                                : "w-[240px]"
+                            } ${isRightSide ? "right-0 origin-top-right" : "left-0 origin-top-left"}`}
+                          >
+                            {/* CASE 1: Mega Menu with Subcategories + Category Brands Grid */}
+                            {item.mega_menu_type === "category_brand_grid" && (
+                              <div className="p-4 space-y-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                  {/* Left Column: Subcategories */}
+                                  <div className="space-y-2 border-r border-gray-100 dark:border-white/[0.08] pr-4">
+                                    <div className="flex items-center justify-between pb-1.5 border-b border-gray-100 dark:border-white/[0.06]">
+                                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                                        <FolderTree className="w-3 h-3 text-cyan-400" />
+                                        Subcategories
+                                      </span>
+                                    </div>
+
+                                    <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
+                                      {item.subcategories && item.subcategories.length > 0 ? (
+                                        item.subcategories.map((sub) => (
+                                          <Link
+                                            key={sub.id}
+                                            href={sub.url || `/category/${item.category_slug}/${sub.slug}`}
+                                            onClick={() => setActiveHoverId(null)}
+                                            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-white hover:bg-cyan-600/10 dark:hover:bg-white/5 transition-colors group"
+                                          >
+                                            <span className="group-hover:text-cyan-400 transition-colors">{sub.name}</span>
+                                            <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                                          </Link>
+                                        ))
+                                      ) : item.children && item.children.length > 0 ? (
+                                        item.children.map((child) => (
+                                          <Link
+                                            key={child.id}
+                                            href={child.computed_url || child.url || "#"}
+                                            onClick={() => setActiveHoverId(null)}
+                                            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-white hover:bg-cyan-600/10 dark:hover:bg-white/5 transition-colors group"
+                                          >
+                                            <span className="group-hover:text-cyan-400 transition-colors">{child.title}</span>
+                                            <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                                          </Link>
+                                        ))
+                                      ) : (
+                                        <div className="text-[11px] text-slate-500 py-3 text-center">
+                                          Browse full catalog collection
                                         </div>
-                                      ) : null}
+                                      )}
+                                    </div>
+                                  </div>
 
+                                  {/* Right Column: Authorized Brands Matrix */}
+                                  <div className="space-y-2 pl-1">
+                                    <div className="flex items-center justify-between pb-1.5 border-b border-gray-100 dark:border-white/[0.06]">
+                                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                                        <Building2 className="w-3 h-3 text-purple-400" />
+                                        Featured Brands
+                                      </span>
                                       <Link
-                                        href={`/products?category=${group.slug}`}
-                                        onClick={() => setActiveHoverCategory(null)}
-                                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#005826] dark:text-emerald-400 hover:underline pt-0.5"
+                                        href="/brands"
+                                        onClick={() => setActiveHoverId(null)}
+                                        className="text-[10px] text-cyan-400 hover:underline"
                                       >
-                                        <span>View all</span>
-                                        <span className="text-[12px]">→</span>
+                                        All Brands →
                                       </Link>
                                     </div>
-                                  ))}
+
+                                    {item.brands && item.brands.length > 0 ? (
+                                      <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+                                        {item.brands.map((brand) => (
+                                          <Link
+                                            key={brand.id}
+                                            href={`/brand/${brand.slug}`}
+                                            onClick={() => setActiveHoverId(null)}
+                                            className="p-2.5 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] hover:bg-purple-500/10 hover:border-purple-500/30 transition-all flex items-center gap-2.5 group"
+                                          >
+                                            <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center font-bold text-xs text-purple-400 group-hover:scale-105 transition-transform overflow-hidden shrink-0">
+                                              {brand.logo ? (
+                                                // eslint-disable-next-line @next/next/no-img-element
+                                                <img src={brand.logo} alt={brand.name} className="w-full h-full object-contain p-0.5" />
+                                              ) : (
+                                                brand.name.charAt(0)
+                                              )}
+                                            </div>
+                                            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover:text-purple-300 truncate">
+                                              {brand.name}
+                                            </span>
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <div className="py-8 text-center text-slate-500 text-xs">
+                                        <Building2 className="w-5 h-5 mx-auto mb-1 text-slate-600" />
+                                        Authorized partner brands
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Bottom Bar */}
+                                <div className="pt-3 border-t border-gray-100 dark:border-white/[0.08] flex items-center justify-between text-xs">
+                                  <span className="text-slate-400 text-[11px]">
+                                    Discover verified items under {item.title}
+                                  </span>
+                                  <Link
+                                    href={item.computed_url || item.url || "#"}
+                                    onClick={() => setActiveHoverId(null)}
+                                    className="font-semibold text-[#005826] dark:text-cyan-400 hover:underline flex items-center gap-1"
+                                  >
+                                    View All {item.title} Products
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                  </Link>
                                 </div>
                               </div>
                             )}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
 
-              {/* LuLu Inspired: Coral Red Deals Tab with Flame Icon (Admin Configurable) */}
-              {theme.nav_deals_enabled !== false && (
-                <Link
-                  href={theme.nav_deals_link || "/products?discounted=true"}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11.5px] font-extrabold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 transition-all shrink-0 cursor-pointer ml-1"
-                >
-                  <Flame className="w-3.5 h-3.5 text-rose-600 fill-rose-600 animate-pulse" />
-                  <span>{theme.nav_deals_text || "Deals"}</span>
-                </Link>
+                            {/* CASE 2: Multi-Column Subcategories */}
+                            {item.mega_menu_type === "columns" && (
+                              <div className="p-4 space-y-3">
+                                <div className="grid grid-cols-2 gap-2">
+                                  {(item.subcategories || item.children || []).map((sub: any) => (
+                                    <Link
+                                      key={sub.id}
+                                      href={sub.url || sub.computed_url || "#"}
+                                      onClick={() => setActiveHoverId(null)}
+                                      className="p-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                                    >
+                                      {sub.name || sub.title}
+                                    </Link>
+                                  ))}
+                                </div>
+                                <div className="pt-2 border-t border-gray-100 dark:border-white/10 text-right">
+                                  <Link
+                                    href={item.computed_url || item.url || "#"}
+                                    onClick={() => setActiveHoverId(null)}
+                                    className="text-xs font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1"
+                                  >
+                                    Browse all {item.title} →
+                                  </Link>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* CASE 3: Standard Compact Dropdown */}
+                            {(item.mega_menu_type === "standard_dropdown" || item.mega_menu_type === "none") && (
+                              <div className="p-2 space-y-0.5">
+                                {(item.children || item.subcategories || []).map((sub: any) => (
+                                  <Link
+                                    key={sub.id}
+                                    href={sub.url || sub.computed_url || "#"}
+                                    onClick={() => setActiveHoverId(null)}
+                                    className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                                  >
+                                    <span>{sub.title || sub.name}</span>
+                                    {sub.badge && (
+                                      <span
+                                        className="text-[9px] px-1 rounded font-bold text-white uppercase"
+                                        style={{ backgroundColor: sub.badge_color || "#EF4444" }}
+                                      >
+                                        {sub.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })
               )}
             </div>
 
-            {/* Right: LuLu Style Micro Promo Badge with Coupon Code (Admin Controllable) */}
-            <div className="flex items-center gap-1.5 shrink-0 text-xs ml-auto z-10">
-              {theme.navbar_promo_enabled !== false && (theme.navbar_promo_discount_text || theme.navbar_promo_code) ? (
-                <>
-                  {theme.navbar_promo_discount_text && (
-                    <span className="font-black text-slate-900 dark:text-white text-[10.5px]">
-                      {theme.navbar_promo_discount_text}
-                    </span>
-                  )}
-                  {theme.navbar_promo_code && (
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(theme.navbar_promo_code || "");
-                        toast.success(`Coupon code "${theme.navbar_promo_code}" copied to clipboard!`);
-                      }}
-                      title="Click to copy coupon code"
-                      className="px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-mono text-[9px] font-bold shadow-xs whitespace-nowrap transition cursor-pointer"
-                    >
-                      CODE: {theme.navbar_promo_code}
-                    </button>
-                  )}
-                </>
-              ) : null}
+            {/* Right: Hotline / Customer Guarantee Pill */}
+            <div className="flex items-center gap-2 shrink-0 z-10">
+              <span className="hidden xl:inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live Storefront Active
+              </span>
             </div>
           </div>
+        </div>
+      </nav>
 
-          {/* Mobile Categories Bar */}
-          <div className="lg:hidden flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 py-1">
-            <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Hardware Departments
-            </span>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="hover:opacity-80 text-xs flex items-center gap-1 transition-colors"
-              style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))" }}
-            >
-              <span>{mobileMenuOpen ? "Close Menu" : "View All"}</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileMenuOpen ? "rotate-180" : ""}`} />
-            </button>
-          </div>
-        </div>    </nav>
-
-      {/* ===================== MOBILE NAVIGATION DRAWER ===================== */}
+      {/* ===================== DYNAMIC MOBILE DRAWER (100% ADMIN-CONTROLLED) ===================== */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="lg:hidden fixed top-[110px] left-0 right-0 z-50 border-b border-white/10 bg-[#080a12] px-4 pt-3 pb-6 space-y-2 overflow-y-auto max-h-[80vh] shadow-2xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white dark:bg-[#090b14] border-b border-gray-200 dark:border-white/10 px-4 py-4 space-y-3 max-h-[80vh] overflow-y-auto text-left shadow-2xl"
           >
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1 pb-1">
-              Hardware Departments
+            <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider pb-1 border-b border-white/5">
+              Navigation Menu
             </div>
 
-            {categories.map((cat) => {
-              const isExpanded = mobileExpandedCat === cat.slug;
-              const hasChildren = cat.children && cat.children.length > 0;
-              const Icon = getCategoryIcon(cat);
+            {navItems.map((item) => {
+              const isExpanded = mobileExpandedId === item.id;
+              const hasChildren =
+                (item.subcategories && item.subcategories.length > 0) ||
+                (item.brands && item.brands.length > 0) ||
+                (item.children && item.children.length > 0);
 
               return (
-                <div key={cat.id || cat.slug} className="rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
-                  <div className="w-full flex items-center justify-between p-2.5 text-xs font-bold text-slate-200">
+                <div key={item.id} className="rounded-lg bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 overflow-hidden">
+                  <div className="w-full flex items-center justify-between p-2.5 text-xs font-bold text-slate-800 dark:text-slate-200">
                     <Link
-                      href={`/products?category=${cat.slug}`}
+                      href={item.computed_url || item.url || "#"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 flex-1"
                     >
-                      <Icon className="w-4 h-4 text-emerald-400" />
-                      <span>{cat.name}</span>
+                      <span>{item.title}</span>
+                      {item.badge && (
+                        <span
+                          className="text-[9px] px-1.5 py-0.2 rounded font-bold text-white uppercase"
+                          style={{ backgroundColor: item.badge_color || "#EF4444" }}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
                     </Link>
+
                     {hasChildren && (
                       <button
-                        onClick={() => setMobileExpandedCat(isExpanded ? null : cat.slug)}
+                        onClick={() => setMobileExpandedId(isExpanded ? null : item.id)}
                         className="p-1 text-slate-400 hover:text-white"
-                        aria-label="Toggle subcategories"
+                        aria-label={`Toggle ${item.title} sub-items`}
                       >
                         <ChevronDown
-                          className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180 text-emerald-400" : ""}`}
+                          className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180 text-cyan-400" : ""}`}
                         />
                       </button>
                     )}
                   </div>
 
                   {isExpanded && hasChildren && (
-                    <div className="p-2 pt-0 border-t border-white/5 space-y-1 bg-white/[0.01]">
+                    <div className="p-2 pt-0 border-t border-gray-200 dark:border-white/5 space-y-2 bg-white/50 dark:bg-white/[0.01]">
                       <Link
-                        href={`/products?category=${cat.slug}`}
+                        href={item.computed_url || item.url || "#"}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block px-2.5 py-1.5 rounded-md text-xs font-bold text-emerald-400 bg-emerald-500/10"
+                        className="block px-2.5 py-1.5 rounded-md text-xs font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-500/10"
                       >
-                        View All {cat.name} →
+                        View All {item.title} →
                       </Link>
 
-                      {cat.children!.map((sub) => {
-                        const isSubExpanded = mobileExpandedSubCat === sub.slug;
-                        const hasSubSubs = sub.children && sub.children.length > 0;
+                      {/* Subcategories */}
+                      {item.subcategories && item.subcategories.length > 0 && (
+                        <div className="space-y-1 pl-2 border-l border-white/10">
+                          <span className="text-[10px] font-mono uppercase text-slate-500 block pt-1">
+                            Subcategories:
+                          </span>
+                          {item.subcategories.map((sub) => (
+                            <Link
+                              key={sub.id}
+                              href={sub.url || `/category/${item.category_slug}/${sub.slug}`}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="block text-xs text-slate-600 dark:text-slate-300 hover:text-cyan-400 py-1"
+                            >
+                              • {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
 
-                        return (
-                          <div key={sub.id || sub.slug} className="pl-2 border-l border-white/10 space-y-1">
-                            <div className="flex items-center justify-between py-1 px-1">
+                      {/* Brands */}
+                      {item.brands && item.brands.length > 0 && (
+                        <div className="space-y-1 pl-2 border-l border-purple-500/30">
+                          <span className="text-[10px] font-mono uppercase text-purple-400 block pt-1">
+                            Brands:
+                          </span>
+                          <div className="grid grid-cols-2 gap-1.5 pt-0.5">
+                            {item.brands.map((brand) => (
                               <Link
-                                href={`/products?category=${sub.slug}`}
+                                key={brand.id}
+                                href={`/brand/${brand.slug}`}
                                 onClick={() => setMobileMenuOpen(false)}
-                                className="text-xs text-slate-300 hover:text-white font-medium flex-1 truncate"
+                                className="text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:text-purple-300 p-1.5 rounded bg-white/5 flex items-center gap-1.5"
                               >
-                                {sub.name}
+                                {brand.name}
                               </Link>
-                              {hasSubSubs && (
-                                <button
-                                  onClick={() => setMobileExpandedSubCat(isSubExpanded ? null : sub.slug)}
-                                  className="p-0.5 text-slate-500 hover:text-white"
-                                >
-                                  <ChevronDown className={`w-3 h-3 transition-transform ${isSubExpanded ? "rotate-180 text-emerald-400" : ""}`} />
-                                </button>
-                              )}
-                            </div>
-
-                            {isSubExpanded && hasSubSubs && (
-                              <div className="pl-3 space-y-1 pb-1">
-                                {sub.children!.map((leaf) => (
-                                  <Link
-                                    key={leaf.id || leaf.slug}
-                                    href={`/products?category=${leaf.slug}`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="block text-[11px] text-slate-400 hover:text-emerald-300 py-0.5"
-                                  >
-                                    ↳ {leaf.name}
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
+                            ))}
                           </div>
-                        );
-                      })}
+                        </div>
+                      )}
+
+                      {/* Custom Children */}
+                      {item.children && item.children.length > 0 && (
+                        <div className="space-y-1 pl-2 border-l border-white/10">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.id}
+                              href={child.computed_url || child.url || "#"}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="block text-xs text-slate-600 dark:text-slate-300 hover:text-cyan-400 py-1"
+                            >
+                              • {child.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               );
             })}
 
-            <div className="pt-3 border-t border-white/10 flex gap-2">
+            <div className="pt-3 border-t border-gray-200 dark:border-white/10 flex gap-2">
               <Link
                 href="/admin"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold"
+                className="flex-1 text-center py-2 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-500 dark:text-amber-300 text-xs font-bold"
               >
                 Admin Portal
               </Link>
               <Link
                 href="/track"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold"
+                className="flex-1 text-center py-2 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 text-xs font-bold"
               >
                 Track Order
               </Link>
@@ -808,3 +678,5 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
     </>
   );
 }
+
+export default Navbar;

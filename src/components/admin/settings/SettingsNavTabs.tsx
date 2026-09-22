@@ -17,6 +17,7 @@ import {
   FileText,
   BookOpen,
   Layers,
+  ListTree,
   ExternalLink,
   Mail
 } from "lucide-react";
@@ -32,6 +33,7 @@ export function SettingsNavTabs() {
     { label: "Homepage Sections", href: "/admin/settings/homepage", icon: Layers },
     { label: "CMS Static Pages", href: "/admin/online-store/pages", icon: FileText },
     { label: "Blog & Editorial", href: "/admin/blog", icon: BookOpen },
+    { label: "Header Nav", href: "/admin/online-store/navigation", icon: ListTree },
     { label: "Navigation & Footer", href: "/admin/online-store/footer", icon: Layers },
     { label: "Social Links", href: "/admin/online-store/social", icon: ExternalLink },
     { label: "Shipping Zones", href: "/admin/settings/shipping", icon: Truck },

@@ -16,6 +16,15 @@ interface CacheRule {
 function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRule | null {
   const pathStr = path.join("/");
 
+  // 0. Header Navigation
+  if (pathStr === "navigation/header") {
+    return {
+      key: () => "aether:navigation:header",
+      ttl: 86400, // 24 hours
+      tags: ["navigation"],
+    };
+  }
+
   // 1. Homepage Banners
   if (pathStr === "homepage/banners") {
     return {

@@ -284,6 +284,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             { label: "Homepage Sections", href: "/admin/settings/homepage", icon: Layers, permission: "theme.manage" },
             { label: "CMS Static Pages", href: "/admin/online-store/pages", icon: FileText, permission: "theme.manage" },
             { label: "Blog & Editorial", href: "/admin/blog", icon: BookOpen },
+            { label: "Header Navigation", href: "/admin/online-store/navigation", icon: ListTree, permission: "theme.manage" },
             { label: "Navigation & Footer", href: "/admin/online-store/footer", icon: Layers, permission: "theme.manage" },
             { label: "Social Links", href: "/admin/online-store/social", icon: ExternalLink, permission: "theme.manage" },
             { label: "Shipping Zones", href: "/admin/settings/shipping", icon: Truck, permission: "settings.manage" },

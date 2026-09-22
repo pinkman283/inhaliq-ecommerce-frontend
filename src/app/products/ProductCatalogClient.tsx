@@ -23,15 +23,21 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { formatPrice } from "@/lib/utils";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
 
-function ProductCatalogContent() {
+function ProductCatalogContent({
+  overrideCategory,
+  overrideBrand,
+}: {
+  overrideCategory?: string;
+  overrideBrand?: string;
+} = {}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { theme } = useAppTheme();
 
-  const rawCatParam = searchParams.get("categories") || searchParams.get("category") || "";
+  const rawCatParam = overrideCategory || searchParams.get("categories") || searchParams.get("category") || "";
   const initialCategories = rawCatParam ? rawCatParam.split(",").map((c) => c.trim()).filter(Boolean) : [];
   
-  const rawBrandParam = searchParams.get("brands") || searchParams.get("brand") || "";
+  const rawBrandParam = overrideBrand || searchParams.get("brands") || searchParams.get("brand") || "";
   const initialBrands = rawBrandParam ? rawBrandParam.split(",").map((b) => b.trim()).filter(Boolean) : [];
 
   const currentSearch = searchParams.get("search") || "";
@@ -1295,10 +1301,17 @@ function ProductCatalogContent() {
   );
 }
 
-export default function ProductCatalogClient() {
+export default function ProductCatalogClient({
+  overrideCategory,
+  overrideBrand,
+}: {
+  overrideCategory?: string;
+  overrideBrand?: string;
+} = {}) {
   return (
     <Suspense fallback={<div className="p-12 text-center text-slate-400 text-sm">Loading Catalog...</div>}>
-      <ProductCatalogContent />
+      <ProductCatalogContent overrideCategory={overrideCategory} overrideBrand={overrideBrand} />
     </Suspense>
   );
 }
+

@@ -57,6 +57,8 @@ import {
   FooterColumn,
   FooterLink,
   SocialLink,
+  NavbarItem,
+  NavigationOptions,
   ReviewSummary,
   Banner,
   Integration,
@@ -2093,8 +2095,96 @@ export const adminApi = {
   },
 
   // ==========================================
+  // Dynamic Header Navigation Management
+  // ==========================================
+
+  async getNavbarItems(): Promise<NavbarItem[]> {
+    const res = await adminClient.get("/admin/navigation");
+    return res.data;
+  },
+
+  async getNavbarTree(): Promise<NavbarItem[]> {
+    const res = await adminClient.get("/admin/navigation/tree");
+    return res.data;
+  },
+
+  async getNavigationOptions(): Promise<NavigationOptions> {
+    const res = await adminClient.get("/admin/navigation/options");
+    return res.data;
+  },
+
+  async createNavbarItem(data: Partial<NavbarItem>): Promise<{ message: string; item: NavbarItem }> {
+    const res = await adminClient.post("/admin/navigation", data);
+    if (typeof window !== "undefined") {
+      fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: ["navigation"] }),
+      }).catch(() => {});
+    }
+    return res.data;
+  },
+
+  async updateNavbarItem(id: number, data: Partial<NavbarItem>): Promise<{ message: string; item: NavbarItem }> {
+    const res = await adminClient.put(`/admin/navigation/${id}`, data);
+    if (typeof window !== "undefined") {
+      fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: ["navigation"] }),
+      }).catch(() => {});
+    }
+    return res.data;
+  },
+
+  async deleteNavbarItem(id: number): Promise<{ message: string }> {
+    const res = await adminClient.delete(`/admin/navigation/${id}`);
+    if (typeof window !== "undefined") {
+      fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: ["navigation"] }),
+      }).catch(() => {});
+    }
+    return res.data;
+  },
+
+  async reorderNavbarItems(items: Array<{ id: number; display_order: number; parent_id?: number | null }>): Promise<{ message: string }> {
+    const res = await adminClient.post("/admin/navigation/reorder", { items });
+    if (typeof window !== "undefined") {
+      fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: ["navigation"] }),
+      }).catch(() => {});
+    }
+    return res.data;
+  },
+
+  async getCategoryBrands(categoryId: number): Promise<{ category: any; linked_brands: any[]; all_brands: any[] }> {
+    const res = await adminClient.get(`/admin/navigation/category-brands/${categoryId}`);
+    return res.data;
+  },
+
+  async updateCategoryBrands(
+    categoryId: number,
+    brands: Array<{ brand_id: number; display_order?: number; is_in_navbar?: boolean; is_featured?: boolean }>
+  ): Promise<{ message: string }> {
+    const res = await adminClient.post(`/admin/navigation/category-brands/${categoryId}`, { brands });
+    if (typeof window !== "undefined") {
+      fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: ["navigation"] }),
+      }).catch(() => {});
+    }
+    return res.data;
+  },
+
+  // ==========================================
   // Phase 2: Enhanced Reviews Management
   // ==========================================
+
   async getReviewSummary(): Promise<ReviewSummary> {
     const res = await adminClient.get("/admin/reviews/summary");
     return res.data;

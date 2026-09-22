@@ -73,8 +73,12 @@ export interface Product {
   id: number;
   category_id?: number | null;
   category?: Category;
+  subcategory_id?: number | null;
+  subcategory?: Category | null;
   name: string;
   slug: string;
+  brand_id?: number | null;
+  brandRelation?: Brand | null;
   brand?: string | null;
   sku?: string | null;
   short_description?: string | null;
@@ -1454,8 +1458,75 @@ export interface SocialLink {
 }
 
 // ==========================================
+// Dynamic Storefront Header Navigation
+// ==========================================
+
+export type NavbarItemType = 'category' | 'subcategory' | 'brand' | 'custom' | 'dropdown_group';
+export type MegaMenuType = 'none' | 'category_brand_grid' | 'columns' | 'standard_dropdown';
+
+export interface NavbarItemBrand {
+  id: number;
+  name: string;
+  slug: string;
+  logo?: string | null;
+  is_featured?: boolean;
+}
+
+export interface NavbarItemSubcategory {
+  id: number;
+  name: string;
+  slug: string;
+  url: string;
+  icon?: string | null;
+  badge?: string | null;
+}
+
+export interface NavbarItem {
+  id: number;
+  parent_id?: number | null;
+  title: string;
+  type: NavbarItemType;
+  category_id?: number | null;
+  subcategory_id?: number | null;
+  brand_id?: number | null;
+  url?: string | null;
+  computed_url?: string;
+  icon?: string | null;
+  badge?: string | null;
+  badge_color?: string | null;
+  display_order: number;
+  is_active: boolean;
+  open_in_new_tab: boolean;
+  mega_menu_type: MegaMenuType;
+  category_name?: string;
+  category_slug?: string;
+  subcategory_slug?: string;
+  brand_name?: string;
+  brand_slug?: string;
+  brand_logo?: string | null;
+  brands?: NavbarItemBrand[];
+  subcategories?: NavbarItemSubcategory[];
+  children?: NavbarItem[];
+  parent?: NavbarItem | null;
+  category?: Category | null;
+  subcategory?: Category | null;
+  brand?: Brand | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface NavigationOptions {
+  root_categories: Array<{ id: number; name: string; slug: string }>;
+  subcategories: Array<{ id: number; name: string; slug: string; parent_id: number }>;
+  brands: Array<{ id: number; name: string; slug: string; logo?: string | null }>;
+  pages: Array<{ id: number; title: string; slug: string; url: string }>;
+  potential_parents: Array<{ id: number; title: string; type: string }>;
+}
+
+// ==========================================
 // Phase 2: Reviews & Marketing Banners
 // ==========================================
+
 
 export interface ReviewSummary {
   total_reviews: number;

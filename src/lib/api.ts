@@ -588,4 +588,16 @@ export const api = {
     });
     return res.data.products || res.data;
   },
+
+  // Public Dynamic Header Navigation (Cached via Redis Proxy)
+  async getHeaderNavigation(): Promise<import("@/types").NavbarItem[]> {
+    try {
+      const res = await storefrontClient.get("/navigation/header");
+      return Array.isArray(res.data) ? res.data : (res.data?.data || []);
+    } catch {
+      const res = await apiClient.get("/navigation/header");
+      return Array.isArray(res.data) ? res.data : (res.data?.data || []);
+    }
+  },
 };
+
