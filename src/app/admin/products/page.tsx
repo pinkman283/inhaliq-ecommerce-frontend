@@ -28,7 +28,10 @@ import {
   Building2,
   FolderTree,
   Palette,
-  CheckCircle2
+  CheckCircle2,
+  Boxes,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { Brand, Category, Product, ProductImage } from "@/types";
@@ -80,6 +83,19 @@ export default function AdminProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Pagination & Catalog Overview Stats
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(50);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [catalogStats, setCatalogStats] = useState<{
+    total_products: number;
+    total_warehouse_units: number;
+    total_categories: number;
+    low_stock_count: number;
+    out_of_stock_count: number;
+  } | null>(null);
 
   // Filters & Sorting
   const [search, setSearch] = useState("");
@@ -148,7 +164,7 @@ export default function AdminProductsPage() {
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const loadData = async () => {
+  const loadData = async (targetPage = currentPage, targetPerPage = perPage) => {
     setLoading(true);
     try {
       const [prodRes, catRes, brandRes] = await Promise.all([
@@ -156,13 +172,19 @@ export default function AdminProductsPage() {
           search: search.trim() || undefined,
           category_id: categoryId || undefined,
           stock_status: stockFilter !== "all" ? stockFilter : undefined,
-          per_page: 50,
+          page: targetPage,
+          per_page: targetPerPage,
         }),
         adminApi.getCategories(),
         adminApi.getBrands(),
       ]);
 
       setProducts(prodRes.data || []);
+      setTotalItems(prodRes.total || 0);
+      setTotalPages(prodRes.last_page || 1);
+      if (prodRes.stats) {
+        setCatalogStats(prodRes.stats);
+      }
       setCategories(catRes || []);
       setBrands(brandRes || []);
     } catch (err) {
@@ -174,12 +196,16 @@ export default function AdminProductsPage() {
   };
 
   useEffect(() => {
-    loadData();
-  }, [categoryId, stockFilter]);
+    loadData(currentPage, perPage);
+  }, [categoryId, stockFilter, currentPage, perPage]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    loadData();
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      loadData(1, perPage);
+    }
   };
 
   const handleResetFilters = () => {
@@ -188,7 +214,11 @@ export default function AdminProductsPage() {
     setStockFilter("all");
     setBadgeFilter("all");
     setSortBy("latest");
-    loadData();
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      loadData(1, perPage);
+    }
   };
 
   const handleOpenCreate = () => {
@@ -676,7 +706,7 @@ export default function AdminProductsPage() {
       <AdminPageHeader
         title="Products"
         description="Catalog inventory, variants, and pricing"
-        badge={`${displayedProducts.length} items`}
+        badge={`${totalItems > 0 ? totalItems : displayedProducts.length} items`}
         breadcrumbs={[
           { label: "Operations" },
           { label: "Products" },
@@ -691,6 +721,73 @@ export default function AdminProductsPage() {
           </button>
         }
       />
+
+      {/* Catalog Overview KPI Metric Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Card 1: Total Catalog Products */}
+        <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-medium text-slate-400 block">Catalog Products</span>
+            <span className="text-lg sm:text-xl font-bold text-white mt-0.5 block">
+              {(catalogStats?.total_products ?? totalItems).toLocaleString()}
+            </span>
+            <span className="text-[10px] text-slate-500 mt-0.5 block">Unique catalog items</span>
+          </div>
+          <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
+            <Package className="w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Card 2: Total Warehouse Stock Units (Resolves the 971 FIFO ledger question) */}
+        <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-medium text-slate-400 block">Warehouse Stock</span>
+            <span className="text-lg sm:text-xl font-bold text-emerald-400 mt-0.5 block">
+              {(catalogStats?.total_warehouse_units ?? 0).toLocaleString()}
+            </span>
+            <span className="text-[10px] text-slate-500 mt-0.5 block">Total physical units on hand</span>
+          </div>
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+            <Boxes className="w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Card 3: Categories */}
+        <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-medium text-slate-400 block">Categories</span>
+            <span className="text-lg sm:text-xl font-bold text-cyan-400 mt-0.5 block">
+              {(catalogStats?.total_categories ?? categories.length).toLocaleString()}
+            </span>
+            <span className="text-[10px] text-slate-500 mt-0.5 block">Taxonomy departments</span>
+          </div>
+          <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shrink-0">
+            <FolderTree className="w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Card 4: Stock Attention Alerts */}
+        <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-medium text-slate-400 block">Stock Attention</span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="text-lg sm:text-xl font-bold text-rose-400">
+                {catalogStats?.out_of_stock_count ?? 0}
+              </span>
+              <span className="text-[11px] text-slate-500">out</span>
+              <span className="text-slate-600 text-xs">/</span>
+              <span className="text-lg sm:text-xl font-bold text-amber-400">
+                {catalogStats?.low_stock_count ?? 0}
+              </span>
+              <span className="text-[11px] text-slate-500">low</span>
+            </div>
+            <span className="text-[10px] text-slate-500 mt-0.5 block">Requires replenishment</span>
+          </div>
+          <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+        </div>
+      </div>
 
       {/* Filter & Search Bar */}
       <div className="p-2.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-col lg:flex-row items-center justify-between gap-2">
@@ -709,7 +806,10 @@ export default function AdminProductsPage() {
         <div className="flex items-center gap-2 w-full lg:w-auto flex-wrap">
           <AdminDropdown
             value={categoryId}
-            onChange={(val) => setCategoryId(val)}
+            onChange={(val) => {
+              setCategoryId(val);
+              setCurrentPage(1);
+            }}
             options={[
               { value: "", label: "All Categories" },
               ...categories.map((c) => ({ value: c.id.toString(), label: c.name })),
@@ -718,7 +818,10 @@ export default function AdminProductsPage() {
 
           <AdminDropdown
             value={stockFilter}
-            onChange={(val) => setStockFilter(val)}
+            onChange={(val) => {
+              setStockFilter(val);
+              setCurrentPage(1);
+            }}
             options={[
               { value: "all", label: "All Stock Levels" },
               { value: "in_stock", label: "In Stock (>0)" },
@@ -961,6 +1064,62 @@ export default function AdminProductsPage() {
             </tbody>
           </table>
       </ScrollableTableCard>
+
+      {/* Pagination & Per-Page Controls */}
+      <div className="p-3 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
+        <div className="flex items-center gap-3">
+          <span>
+            Showing <span className="font-semibold text-white">{totalItems > 0 ? (currentPage - 1) * perPage + 1 : 0}</span> to{" "}
+            <span className="font-semibold text-white">{Math.min(currentPage * perPage, totalItems)}</span> of{" "}
+            <span className="font-semibold text-white">{totalItems}</span> products
+          </span>
+
+          <div className="flex items-center gap-1.5 pl-3 border-l border-white/[0.08]">
+            <span className="text-slate-500 text-[11px]">Per page:</span>
+            <select
+              value={perPage}
+              onChange={(e) => {
+                setPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="bg-white/[0.04] border border-white/[0.08] rounded-md px-2 py-1 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+            >
+              <option value={25} className="bg-[#0f121b]">25</option>
+              <option value={50} className="bg-[#0f121b]">50</option>
+              <option value={100} className="bg-[#0f121b]">100</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 self-end sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage <= 1 || loading}
+            className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer flex items-center gap-1"
+            title="Previous Page"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Prev</span>
+          </button>
+
+          <span className="px-2.5 py-1 text-[11px] text-slate-400 font-medium">
+            Page <span className="text-white font-semibold">{currentPage}</span> of{" "}
+            <span className="text-white font-semibold">{Math.max(1, totalPages)}</span>
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage >= totalPages || loading}
+            className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer flex items-center gap-1"
+            title="Next Page"
+          >
+            <span className="hidden sm:inline">Next</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
 
       {/* CREATE / EDIT PRODUCT DRAWER */}
       <Sheet open={isModalOpen} onOpenChange={setIsModalOpen}>

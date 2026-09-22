@@ -185,7 +185,21 @@ export const adminApi = {
     is_active?: boolean;
     page?: number;
     per_page?: number;
-  }): Promise<{ data: Product[]; total: number; current_page: number; last_page: number }> {
+  }): Promise<{
+    data: Product[];
+    total: number;
+    current_page: number;
+    last_page: number;
+    from?: number;
+    to?: number;
+    stats?: {
+      total_products: number;
+      total_warehouse_units: number;
+      total_categories: number;
+      low_stock_count: number;
+      out_of_stock_count: number;
+    };
+  }> {
     const res = await adminClient.get("/admin/products", { params });
     return res.data;
   },
@@ -568,6 +582,16 @@ export const adminApi = {
     notes?: string;
   }): Promise<{ status: string; message: string; data: OrderReturn }> {
     const res = await adminClient.post(`/admin/returns/${id}/refund`, data);
+    return res.data;
+  },
+
+  async deleteReturn(id: number | string): Promise<{ status: string; message: string }> {
+    const res = await adminClient.delete(`/admin/returns/${id}`);
+    return res.data;
+  },
+
+  async bulkDeleteReturns(ids: number[]): Promise<{ status: string; message: string; deleted_count: number }> {
+    const res = await adminClient.post("/admin/returns/bulk-delete", { ids });
     return res.data;
   },
 

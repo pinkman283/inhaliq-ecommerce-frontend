@@ -678,12 +678,16 @@ function OrdersContent() {
     if (selectedIds.length === 0) return;
     setIsBulkDeleting(true);
     try {
-      await Promise.all(selectedIds.map((id) => adminApi.deleteOrder(id)));
-      setOrders(orders.filter((o) => !selectedIds.includes(o.id)));
+      const res = await adminApi.bulkDeleteOrders(selectedIds);
+      const deletedIds = [...selectedIds];
+      setOrders((prev) => prev.filter((o) => !deletedIds.includes(o.id)));
+      if (selectedOrder && deletedIds.includes(selectedOrder.id)) {
+        setSelectedOrder(null);
+      }
       setSelectedIds([]);
-      toast.success(`Deleted ${selectedIds.length} orders.`);
-    } catch (err) {
-      toast.error("Failed to delete selected orders.");
+      toast.success(res.message || `Deleted ${deletedIds.length} orders.`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || err.message || "Failed to delete selected orders.");
     } finally {
       setIsBulkDeleting(false);
     }

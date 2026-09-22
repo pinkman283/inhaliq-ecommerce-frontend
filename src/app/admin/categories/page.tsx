@@ -406,9 +406,15 @@ export default function AdminCategoriesPage() {
       const updated = await adminApi.getCategories();
       setCategories(updated || []);
       setSelectedIds([]);
-      toast.success(res.message || `Processed category deletion.`);
+      if (res.deleted_count === 0 && (res.skipped_count ?? 0) > 0) {
+        toast.error(res.message);
+      } else if ((res.skipped_count ?? 0) > 0) {
+        toast.warning(res.message);
+      } else {
+        toast.success(res.message || `Processed category deletion.`);
+      }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to delete selected categories.");
+      toast.error(err.response?.data?.message || err.message || "Failed to delete selected categories.");
     } finally {
       setIsBulkDeleting(false);
     }
@@ -1461,9 +1467,18 @@ export default function AdminCategoriesPage() {
                 <p className="text-slate-300 leading-relaxed">
                   Are you sure you want to permanently delete category <strong className="text-white font-bold">{deletingCategory.name}</strong>?
                 </p>
-                <p className="text-slate-500 text-[11px]">
-                  This action cannot be undone. If products are linked to this category, deletion will be rejected.
-                </p>
+                {(deletingCategory.products_count ?? 0) > 0 ? (
+                  <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] leading-relaxed flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+                    <span>
+                      Cannot delete category because there are <strong>{deletingCategory.products_count} product(s)</strong> assigned to it. Reassign or delete those products first.
+                    </span>
+                  </div>
+                ) : (
+                  <p className="text-slate-500 text-[11px]">
+                    This action cannot be undone. Once deleted, this category will be permanently removed.
+                  </p>
+                )}
               </div>
 
               <div className="h-12 px-6 border-t border-white/[0.06] bg-[#0b0e17] flex items-center justify-between shrink-0">

@@ -26,13 +26,16 @@ import {
   AlertTriangle,
   ArrowRight,
   ExternalLink,
-  Check
+  Check,
+  Trash2
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { OrderReturn, OrderReturnItem } from "@/types";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { ScrollableTableCard } from "@/components/admin/ScrollableTableCard";
 import { AdminPageHeader, AdminStatusBadge, AdminEmptyState } from "@/components/admin/ui";
+import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { toast } from "sonner";
 
 export default function AdminReturnsPage() {
@@ -91,6 +94,12 @@ function ReturnsContent() {
   const [newReturnType, setNewReturnType] = useState("rto");
   const [newReturnReason, setNewReturnReason] = useState("");
   const [newReturnCreating, setNewReturnCreating] = useState(false);
+
+  // Deletion States
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+  const [deletingReturn, setDeletingReturn] = useState<OrderReturn | null>(null);
+  const [isDeletingSingle, setIsDeletingSingle] = useState(false);
 
   const fetchReturns = useCallback(async () => {
     setLoading(true);
@@ -217,7 +226,63 @@ function ReturnsContent() {
 
   const handleTabChange = (tabKey: string) => {
     setCurrentPage(1);
+    setSelectedIds([]);
     router.push(`/admin/orders/returns?tab=${tabKey}`);
+  };
+
+  const handleToggleSelectAll = () => {
+    if (returns.length > 0 && selectedIds.length === returns.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(returns.map((r) => r.id));
+    }
+  };
+
+  const handleToggleSelectRow = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleSingleDelete = async () => {
+    if (!deletingReturn) return;
+    setIsDeletingSingle(true);
+    try {
+      const res = await adminApi.deleteReturn(deletingReturn.id);
+      const deletedId = deletingReturn.id;
+      setReturns((prev) => prev.filter((r) => r.id !== deletedId));
+      setSelectedIds((prev) => prev.filter((id) => id !== deletedId));
+      if (selectedReturn?.id === deletedId) {
+        closeReturnDrawer();
+      }
+      toast.success(res.message || `Return #${deletingReturn.return_number} deleted.`);
+      setDeletingReturn(null);
+      fetchReturns();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || err.message || "Failed to delete return.");
+    } finally {
+      setIsDeletingSingle(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      const res = await adminApi.bulkDeleteReturns(selectedIds);
+      const deletedIds = [...selectedIds];
+      setReturns((prev) => prev.filter((r) => !deletedIds.includes(r.id)));
+      if (selectedReturn && deletedIds.includes(selectedReturn.id)) {
+        closeReturnDrawer();
+      }
+      setSelectedIds([]);
+      toast.success(res.message || `Deleted ${deletedIds.length} return(s).`);
+      fetchReturns();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || err.message || "Failed to delete selected returns.");
+    } finally {
+      setIsBulkDeleting(false);
+    }
   };
 
   const handleMarkReceived = async (returnId: number) => {
@@ -746,6 +811,14 @@ function ReturnsContent() {
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground border-b border-border">
               <tr>
+                <th className="w-12 px-4 py-3 text-left">
+                  <AdminCheckbox
+                    checked={returns.length > 0 && selectedIds.length === returns.length}
+                    indeterminate={selectedIds.length > 0 && selectedIds.length < returns.length}
+                    onChange={handleToggleSelectAll}
+                    title="Select all returns"
+                  />
+                </th>
                 <th className="px-4 py-3 font-semibold">Return / Tracking</th>
                 <th className="px-4 py-3 font-semibold">Order / Customer</th>
                 <th className="px-4 py-3 font-semibold">Type</th>
@@ -759,8 +832,19 @@ function ReturnsContent() {
             <tbody className="divide-y divide-border">
               {returns.map((ret) => {
                 const isRto = ret.return_type === "rto" || ret.return_type === "failed_delivery";
+                const isSelected = selectedIds.includes(ret.id);
                 return (
-                  <tr key={ret.id} className="hover:bg-muted/30 transition">
+                  <tr
+                    key={ret.id}
+                    className={`transition ${isSelected ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-muted/30"}`}
+                  >
+                    <td className="w-12 px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                      <AdminCheckbox
+                        checked={isSelected}
+                        onChange={() => handleToggleSelectRow(ret.id)}
+                        title={`Select return ${ret.return_number}`}
+                      />
+                    </td>
                     <td className="px-4 py-3">
                       <button
                         onClick={() => openReturnDrawer(ret)}
@@ -871,6 +955,13 @@ function ReturnsContent() {
                           title="View Details"
                         >
                           <Eye className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setDeletingReturn(ret)}
+                          className="p-1 hover:bg-rose-500/10 text-muted-foreground hover:text-rose-400 rounded transition cursor-pointer"
+                          title="Delete Return Record"
+                        >
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -1433,6 +1524,58 @@ function ReturnsContent() {
               >
                 {newReturnCreating && <Loader2 className="w-4 h-4 animate-spin" />}
                 Initiate Return
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={returns.length}
+        onClearSelection={() => setSelectedIds([])}
+        onConfirmDelete={handleBulkDelete}
+        isDeleting={isBulkDeleting}
+        itemName="return"
+      />
+
+      {/* Single Return Delete Modal */}
+      {deletingReturn && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border border-border rounded-xl w-full max-w-md shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h2 className="text-base font-bold text-foreground flex items-center gap-2 text-rose-400">
+                <AlertTriangle className="w-5 h-5 text-rose-500" />
+                Delete Return #{deletingReturn.return_number}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setDeletingReturn(null)}
+                className="text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Are you sure you want to permanently delete return record <strong className="text-foreground font-semibold">{deletingReturn.return_number}</strong>? This action will remove all associated line items and cannot be undone.
+            </p>
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setDeletingReturn(null)}
+                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingSingle}
+                onClick={handleSingleDelete}
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2 cursor-pointer shadow-sm"
+              >
+                {isDeletingSingle && <Loader2 className="w-4 h-4 animate-spin" />}
+                Delete Record
               </button>
             </div>
           </div>
