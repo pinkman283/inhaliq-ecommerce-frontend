@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { cachedFetch } from "@/lib/redis";
 import { cookies } from "next/headers";
 import { DEFAULT_THEME_SETTINGS, ThemeSettings, getHexLuminance, useThemeStore } from "@/store/useThemeStore";
+import { getStorefrontApi } from "@/lib/api";
+import { STOREFRONT_CONFIG } from "@/config/storefrontConfig";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -77,16 +79,61 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function getServerTheme(): Promise<ThemeSettings> {
   return cachedFetch<ThemeSettings>(
-    "aether:theme:settings",
+    "aether:theme:settings:v3",
     async () => {
       try {
+        const provider = process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior";
+        if (provider === "senior") {
+          const api = getStorefrontApi("senior");
+          const init = await api.getInitSettings();
+          const rawPrimary = init.main_settings?.primary_color;
+          const rawSecondary = init.main_settings?.secondary_color;
+          const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+            ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
+            : (rawPrimary || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
+          const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+            ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
+            : (rawSecondary || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
+
+          return {
+            ...DEFAULT_THEME_SETTINGS,
+            store_brand_name: init.general_settings?.name || DEFAULT_THEME_SETTINGS.store_brand_name,
+            store_brand_logo: init.general_settings?.logo || DEFAULT_THEME_SETTINGS.store_brand_logo,
+            theme_primary_color: primaryColor,
+            theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+            theme_secondary_color: secondaryColor,
+            theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
+            theme_btn_primary_bg: primaryColor,
+            theme_tab_active_bg: primaryColor,
+            theme_view_all_color: primaryColor,
+            theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+          };
+        }
+
         const apiUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
         const res = await fetch(`${apiUrl}/theme-settings`, {
-          signal: AbortSignal.timeout(5000),
+          signal: AbortSignal.timeout(3000),
         });
         if (res.ok) {
           const data = await res.json();
-          return { ...DEFAULT_THEME_SETTINGS, ...data };
+          const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+            ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
+            : (data.theme_primary_color || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
+          const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+            ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
+            : (data.theme_secondary_color || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
+
+          return {
+            ...DEFAULT_THEME_SETTINGS,
+            ...data,
+            theme_primary_color: primaryColor,
+            theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+            theme_secondary_color: secondaryColor,
+            theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
+            theme_btn_primary_bg: primaryColor,
+            theme_tab_active_bg: primaryColor,
+            theme_view_all_color: primaryColor,
+          };
         }
       } catch (err) {
         console.warn("SSR theme fetch fallback triggered:", err);
@@ -153,10 +200,13 @@ export default async function RootLayout({
             __html: `
               :root {
                 --theme-primary: ${serverTheme.theme_primary_color};
+                --theme-primary-hover: ${serverTheme.theme_primary_hover || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER};
                 --theme-secondary: ${serverTheme.theme_secondary_color};
+                --theme-secondary-hover: ${serverTheme.theme_secondary_hover || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER};
                 --theme-bg: ${serverTheme.theme_bg_color};
                 --theme-card-bg: ${serverTheme.theme_card_bg_color};
                 --theme-card-border: ${serverTheme.theme_card_border_color || (isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)")};
+                --theme-card-radius: ${serverTheme.theme_card_radius || STOREFRONT_CONFIG.DEFAULT_CARD_RADIUS || "10px"};
                 --theme-text-heading: ${serverTheme.theme_text_heading_color || (isLight ? "#0f172a" : "#ffffff")};
                 --theme-text-body: ${serverTheme.theme_text_body_color || (isLight ? "#475569" : "#94a3b8")};
                 --theme-btn-primary-bg: ${serverTheme.theme_btn_primary_bg || serverTheme.theme_primary_color};
@@ -187,7 +237,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geist.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className={`${geist.variable} font-sans antialiased min-h-screen flex flex-col overflow-x-clip`}
         style={{ backgroundColor: serverTheme.theme_bg_color }}
         suppressHydrationWarning
       >

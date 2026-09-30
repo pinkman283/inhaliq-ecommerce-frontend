@@ -47,7 +47,7 @@ export function MultiColumnNavMenu({
                   target={child.open_in_new_tab ? "_blank" : undefined}
                   rel={child.open_in_new_tab ? "noopener noreferrer" : undefined}
                   onClick={onClose}
-                  className="p-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#005826] dark:hover:text-cyan-400 transition-colors flex items-center justify-between group"
+                  className="p-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#006B45] dark:hover:text-cyan-400 transition-colors flex items-center justify-between group"
                 >
                   <span className="truncate">{child.title}</span>
                   {child.badge && (
@@ -67,7 +67,7 @@ export function MultiColumnNavMenu({
                 key={sub.id}
                 href={sub.url}
                 onClick={onClose}
-                className="p-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#005826] dark:hover:text-cyan-400 transition-colors truncate"
+                className="p-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#006B45] dark:hover:text-cyan-400 transition-colors truncate"
               >
                 {sub.name}
               </Link>
@@ -84,7 +84,7 @@ export function MultiColumnNavMenu({
             <Link
               href={targetUrl}
               onClick={onClose}
-              className="text-xs font-semibold text-[#005826] dark:text-cyan-400 hover:underline inline-flex items-center gap-1"
+              className="text-xs font-semibold text-[#006B45] dark:text-cyan-400 hover:underline inline-flex items-center gap-1"
             >
               Browse all {item.title} →
             </Link>

@@ -92,10 +92,10 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
       tags: ["categories"],
     };
   }
-  if (path.length === 2 && (path[0] === "categories" || path[0] === "category")) {
+  if (path.length === 2 && (path[0] === "categories" || path[0] === "category" || path[0] === "subcategory" || path[0] === "child-category")) {
     const slug = path[1];
     return {
-      key: () => `aether:category:${slug}`,
+      key: () => `aether:${path[0]}:${slug}`,
       ttl: 21600, // 6 hours
       tags: ["categories"],
     };
@@ -226,8 +226,64 @@ export async function GET(
   const searchParams = request.nextUrl.searchParams;
   const pathStr = path.join("/");
   const searchStr = searchParams.toString() ? `?${searchParams.toString()}` : "";
-  const { baseUrl, apiKey } = getUpstreamConfig();
+  const { baseUrl, apiKey, isSenior } = getUpstreamConfig();
   const targetUrl = `${baseUrl}/${pathStr}${searchStr}`;
+
+  // Synthesize store-navigation for Senior provider from init-settings and nav-menu
+  if (isSenior && pathStr === "store-navigation") {
+    try {
+      const [initRes, navRes] = await Promise.all([
+        fetch(`${baseUrl}/init-settings`, { headers: buildForwardHeaders(request, apiKey) }),
+        fetch(`${baseUrl}/nav-menu`, { headers: buildForwardHeaders(request, apiKey) }),
+      ]);
+      const initData = initRes.ok ? await initRes.json() : null;
+      const navData = navRes.ok ? await navRes.json() : null;
+
+      const social = initData?.data?.social_links || {};
+      const social_links = [];
+      let sIdx = 1;
+      for (const [platform, url] of Object.entries(social)) {
+        if (url && typeof url === "string") {
+          social_links.push({
+            id: sIdx++,
+            platform,
+            url,
+            label: platform.charAt(0).toUpperCase() + platform.slice(1),
+            is_active: true,
+            order: sIdx,
+          });
+        }
+      }
+
+      const navItems = navData?.data || [];
+      const footer_columns = [
+        {
+          id: 1,
+          title: "Categories",
+          column_type: "categories",
+          order: 1,
+          is_active: true,
+          links: Array.isArray(navItems)
+            ? navItems.map((it: any, idx: number) => ({
+                id: it.id || idx,
+                title: it.name || it.title,
+                url: `/category/${it.slug}`,
+                target: "_self",
+                is_active: true,
+                order: idx + 1,
+              }))
+            : [],
+        },
+      ];
+
+      return NextResponse.json({
+        footer_columns,
+        social_links,
+      });
+    } catch {
+      return NextResponse.json({ footer_columns: [], social_links: [] });
+    }
+  }
 
   const rule = matchCacheRule(path, searchParams);
 
@@ -292,25 +348,28 @@ export async function GET(
 
   // Cache Miss
   try {
-    const data = await cachedFetch(
-      cacheKey,
-      async () => {
-        const res = await fetch(targetUrl, {
-          headers: buildForwardHeaders(request, apiKey),
-          signal: AbortSignal.timeout(10000),
-        });
+    const upstreamRes = await fetch(targetUrl, {
+      headers: buildForwardHeaders(request, apiKey),
+      signal: AbortSignal.timeout(10000),
+    });
 
-        if (!res.ok) {
-          throw new Error(`Upstream API error: ${res.status} ${res.statusText}`);
-        }
+    const contentType = upstreamRes.headers.get("content-type") || "";
+    if (!upstreamRes.ok) {
+      const errorBody = contentType.includes("application/json") ? await upstreamRes.json() : await upstreamRes.text();
+      return NextResponse.json(
+        typeof errorBody === "object" ? errorBody : { error: errorBody || upstreamRes.statusText },
+        { status: upstreamRes.status }
+      );
+    }
 
-        return await res.json();
-      },
-      {
-        ttlSeconds: rule.ttl,
-        tags: rule.tags,
+    const data = await upstreamRes.json();
+    if (redis) {
+      try {
+        await redis.set(cacheKey, data, { ex: rule.ttl });
+      } catch (cacheErr) {
+        console.warn(`[Proxy] Redis write error for ${cacheKey}:`, cacheErr);
       }
-    );
+    }
 
     return NextResponse.json(data, {
       status: 200,

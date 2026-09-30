@@ -303,8 +303,12 @@ export function mapSeniorCategory(raw: any): Category {
     };
   }
 
-  const rawChildren = Array.isArray(raw.subcategories) && raw.subcategories.length > 0
+  const rawChildren = Array.isArray(raw.sub_categories) && raw.sub_categories.length > 0
+    ? raw.sub_categories
+    : Array.isArray(raw.subcategories) && raw.subcategories.length > 0
     ? raw.subcategories
+    : Array.isArray(raw.child_categories) && raw.child_categories.length > 0
+    ? raw.child_categories
     : Array.isArray(raw.childcategories) && raw.childcategories.length > 0
     ? raw.childcategories
     : Array.isArray(raw.children)
@@ -315,8 +319,8 @@ export function mapSeniorCategory(raw: any): Category {
 
   return {
     id: Number(raw.id),
-    parent_id: raw.parent_id ? Number(raw.parent_id) : null,
-    name: String(raw.name || ""),
+    parent_id: raw.parent_id ? Number(raw.parent_id) : (raw.category_id ? Number(raw.category_id) : (raw.sub_category_id ? Number(raw.sub_category_id) : null)),
+    name: String(raw.name || raw.sub_category_name || raw.child_category_name || raw.title || ""),
     slug: String(raw.slug || ""),
     description: raw.description ? String(raw.description) : null,
     image: raw.image || raw.icon || null,
@@ -412,34 +416,47 @@ export function mapSeniorHomeToBanners(homeData: any): HomepageBannersResponse {
     is_active: true,
   }));
 
-  // 2. Secondary Promo Banners (e.g. Side hero card or deals middle ads)
-  const remainingBanners = rawBanners.filter((b) => !rawSliders.some((s) => s.id === b.id));
-  const rawSecondary = Array.isArray(data.deals_middle_ads) && data.deals_middle_ads.length > 0
+  // 2. Secondary Promo Banner (Right side of hero: SECOND promotional banner)
+  // Deterministically select the second promotional banner:
+  // Prefer category_bottom_ads[0] (which is 2nd-banner.png in Senior API), deals_middle_ads[0], rawBanners[0], or sliders[1]
+  const rawSecondBanner = (Array.isArray(data.category_bottom_ads) && data.category_bottom_ads.length > 0)
+    ? data.category_bottom_ads[0]
+    : (Array.isArray(data.deals_middle_ads) && data.deals_middle_ads.length > 0)
+    ? data.deals_middle_ads[0]
+    : rawBanners.length > 0
+    ? rawBanners[0]
+    : rawSliders.length > 1
+    ? rawSliders[1]
+    : null;
+
+  const secondaryBanners: Banner[] = rawSecondBanner
+    ? [{
+        id: Number(rawSecondBanner.id || 201),
+        title: String(rawSecondBanner.title || rawSecondBanner.name || ""),
+        subtitle: rawSecondBanner.subtitle || rawSecondBanner.description || null,
+        eyebrow: rawSecondBanner.eyebrow || rawSecondBanner.badge || null,
+        badge: rawSecondBanner.badge || null,
+        discount_tag: rawSecondBanner.discount_tag || null,
+        cta_text: rawSecondBanner.cta_text || rawSecondBanner.button_text || "",
+        cta_link: rawSecondBanner.cta_link || rawSecondBanner.link || "/products",
+        image_url: resolveImageUrl(rawSecondBanner),
+        mobile_image_url: rawSecondBanner.mobile_image ? resolveImageUrl(rawSecondBanner.mobile_image) : null,
+        placement: "secondary_hero",
+        sort_order: 1,
+        clicks_count: 0,
+        impressions_count: 0,
+        is_active: true,
+      }]
+    : [];
+
+  // 3. Bottom / Showcase Banners (e.g. category bottom ads or deals middle ads)
+  const rawBottom = (Array.isArray(data.category_bottom_ads) && data.category_bottom_ads.length > 1)
+    ? data.category_bottom_ads.slice(1)
+    : (Array.isArray(data.deals_middle_ads) && data.deals_middle_ads.length > 0 && rawSecondBanner !== data.deals_middle_ads[0])
     ? data.deals_middle_ads
-    : remainingBanners.slice(0, 2);
-
-  const secondaryBanners: Banner[] = rawSecondary.map((b: any, idx: number) => ({
-    id: Number(b.id || idx + 200),
-    title: String(b.title || b.name || ""),
-    subtitle: b.subtitle || b.description || null,
-    eyebrow: b.eyebrow || b.badge || null,
-    badge: b.badge || null,
-    discount_tag: b.discount_tag || null,
-    cta_text: b.cta_text || b.button_text || "Claim Offer",
-    cta_link: b.cta_link || b.link || "/products",
-    image_url: resolveImageUrl(b),
-    mobile_image_url: b.mobile_image ? resolveImageUrl(b.mobile_image) : null,
-    placement: "secondary_hero",
-    sort_order: Number(b.sort_order ?? b.sorting ?? idx + 1),
-    clicks_count: Number(b.clicks_count || 0),
-    impressions_count: Number(b.impressions_count || 0),
-    is_active: true,
-  }));
-
-  // 3. Bottom / Showcase Banners (e.g. category bottom ads)
-  const rawBottom = Array.isArray(data.category_bottom_ads) && data.category_bottom_ads.length > 0
-    ? data.category_bottom_ads
-    : (Array.isArray(data.deals_middle_ads) ? remainingBanners : remainingBanners.slice(2));
+    : rawBanners.length > 1
+    ? rawBanners.slice(1)
+    : [];
 
   const bottomBanners: Banner[] = rawBottom.map((b: any, idx: number) => ({
     id: Number(b.id || idx + 300),
@@ -482,6 +499,7 @@ export function mapSeniorHomeToBanners(homeData: any): HomepageBannersResponse {
 
 /**
  * Maps Senior API `/nav-menu` nested structure into the Storefront `NavbarItem[]` tree.
+ * Preserves the full 3-level hierarchy: Category -> Subcategory -> Child Category.
  */
 export function mapSeniorNavMenuToNavbarItems(navMenuData: any): NavbarItem[] {
   if (!navMenuData) return [];
@@ -492,25 +510,81 @@ export function mapSeniorNavMenuToNavbarItems(navMenuData: any): NavbarItem[] {
     : [];
 
   return rawList.map((cat, idx) => {
-    const rawChildren: any[] = Array.isArray(cat.children)
-      ? cat.children
+    // 1. Extract raw subcategories (support sub_categories, subcategories, or children)
+    const rawSubcategories: any[] = Array.isArray(cat.sub_categories)
+      ? cat.sub_categories
       : Array.isArray(cat.subcategories)
-      ? cat.subcategories
-      : [];
-
-    const subcats: any[] = Array.isArray(cat.subcategories)
       ? cat.subcategories
       : Array.isArray(cat.children)
       ? cat.children
       : [];
 
+    const itemName = String(cat.name || cat.title || "");
+    const itemSlug = String(cat.slug || "");
+    const itemHref = cat.url || (itemSlug.startsWith("/") ? itemSlug : `/category/${itemSlug}`);
+
+    // Map subcategories (Tier 2)
+    const mappedSubcategories: NavbarItem[] = rawSubcategories.map((sub, subIdx) => {
+      // 2. Extract raw child categories (support child_categories, childcategories, or children)
+      const rawChildCategories: any[] = Array.isArray(sub.child_categories)
+        ? sub.child_categories
+        : Array.isArray(sub.childcategories)
+        ? sub.childcategories
+        : Array.isArray(sub.children)
+        ? sub.children
+        : [];
+
+      const subName = String(sub.name || sub.title || "");
+      const subSlug = String(sub.slug || "");
+      const subHref = sub.url || (subSlug.startsWith("/") ? subSlug : `/category/${subSlug}`);
+
+      // Map child categories (Tier 3)
+      const mappedChildCategories: NavbarItem[] = rawChildCategories.map((child, childIdx) => {
+        const childName = String(child.name || child.title || "");
+        const childSlug = String(child.slug || "");
+        const childHref = child.url || (childSlug.startsWith("/") ? childSlug : `/category/${childSlug}`);
+
+        return {
+          id: child.id ? 200000 + Number(child.id) : 200000 + (subIdx + 1) * 100 + childIdx + 1,
+          parent_id: sub.id ? 100000 + Number(sub.id) : 100000 + subIdx + 1,
+          title: childName,
+          name: childName,
+          type: "subcategory" as const,
+          url: childHref,
+          computed_url: childHref,
+          badge: child.badge || null,
+          badge_color: null,
+          is_active: true,
+          open_in_new_tab: false,
+          mega_menu_type: "none" as const,
+          display_order: Number(child.sorting ?? childIdx + 1),
+          children: undefined,
+          is_valid: true,
+        };
+      });
+
+      return {
+        id: sub.id ? 100000 + Number(sub.id) : 100000 + subIdx + 1,
+        parent_id: Number(cat.id || idx + 1),
+        title: subName,
+        name: subName,
+        type: "subcategory" as const,
+        url: subHref,
+        computed_url: subHref,
+        badge: sub.badge || null,
+        badge_color: null,
+        is_active: true,
+        open_in_new_tab: false,
+        mega_menu_type: "none" as const,
+        display_order: Number(sub.sorting ?? subIdx + 1),
+        children: mappedChildCategories.length > 0 ? mappedChildCategories : undefined,
+        is_valid: true,
+      };
+    });
+
     const products: any[] = Array.isArray(cat.products)
       ? cat.products.map(mapSeniorProduct)
       : [];
-
-    const itemName = String(cat.name || cat.title || "");
-    const itemHref = cat.url || (cat.slug?.startsWith("/") ? cat.slug : `/category/${cat.slug || ""}`);
-    const mappedChildren = rawChildren.length > 0 ? mapSeniorNavMenuToNavbarItems(rawChildren) : [];
 
     return {
       id: Number(cat.id || idx + 1),
@@ -526,26 +600,17 @@ export function mapSeniorNavMenuToNavbarItems(navMenuData: any): NavbarItem[] {
       open_in_new_tab: false,
       menu_type: "tree",
       type: (cat.type as any) || "category",
-      children: mappedChildren.length > 0 ? mappedChildren : undefined,
-      subcategories: subcats.map((sub: any, subIdx: number) => ({
-        id: Number(sub.id || subIdx + 1),
-        name: String(sub.name || ""),
-        slug: String(sub.slug || ""),
-        parent_id: Number(cat.id),
-        display_order: Number(sub.sorting ?? subIdx + 1),
-        is_featured: Boolean(sub.is_featured),
-        children: Array.isArray(sub.child_categories)
-          ? sub.child_categories.map((child: any, cIdx: number) => ({
-              id: Number(child.id || cIdx + 1),
-              name: String(child.name || ""),
-              slug: String(child.slug || ""),
-              parent_id: Number(sub.id),
-              display_order: Number(child.sorting ?? cIdx + 1),
-              is_featured: false,
-            }))
-          : [],
-      })),
+      children: mappedSubcategories.length > 0 ? mappedSubcategories : undefined,
+      subcategories: mappedSubcategories.length > 0 ? mappedSubcategories.map((s) => ({
+        id: s.id,
+        name: s.title,
+        slug: s.url ? s.url.replace(/^\/category\//, "") : "",
+        url: s.url || "",
+        badge: s.badge,
+      })) : undefined,
       featured_products: products.slice(0, 8),
+      is_valid: true,
+      mega_menu_type: "none" as const,
     } as unknown as NavbarItem;
   });
 }

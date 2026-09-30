@@ -138,7 +138,7 @@ export function HomepageProductSection({ section }: HomepageProductSectionProps)
   };
 
   const Icon = ICON_MAP[section.badge_icon || ""] || Layers;
-  const viewAllUrl = section.view_all_url || `/products?category=${section.category?.slug || ""}`;
+  const viewAllUrl = section.view_all_url || (section.category?.slug ? `/category/${section.category.slug}` : `/products`);
   const viewAllLabel = section.view_all_label || "View All";
 
   if (!section.is_active || (currentProducts.length === 0 && !loadingTab)) {
@@ -154,12 +154,12 @@ export function HomepageProductSection({ section }: HomepageProductSectionProps)
             <div
               className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider mb-1.5 border"
               style={{
-                backgroundColor: "color-mix(in srgb, var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4))) 12%, transparent)",
-                borderColor: "color-mix(in srgb, var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4))) 30%, transparent)",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4)))",
+                backgroundColor: "color-mix(in srgb, var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45))) 12%, transparent)",
+                borderColor: "color-mix(in srgb, var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45))) 30%, transparent)",
+                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
               }}
             >
-              <Icon className="w-3 h-3" style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4)))" }} />
+              <Icon className="w-3 h-3" style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }} />
               <span>{section.badge_text}</span>
             </div>
           )}
@@ -254,7 +254,7 @@ export function HomepageProductSection({ section }: HomepageProductSectionProps)
 
       {/* View All Button Below Carousel */}
       {viewAllUrl && (
-        <div className="text-center pt-1">
+        <div className="text-center pt-3 pb-2 sm:pt-5 sm:pb-3">
           <Link
             href={viewAllUrl}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md theme-btn-secondary theme-view-all-btn text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:scale-[1.02]"

@@ -36,15 +36,21 @@ export default function HomePage() {
   useEffect(() => {
     async function loadStoreData() {
       try {
-        const [data, bannerData] = await Promise.all([
+        const [data, bannerData, catData] = await Promise.all([
           api.getFeatured(),
           api.getHomepageBanners().catch(() => null),
+          api.getCategories().catch(() => []),
         ]);
         setFeaturedProducts(Array.isArray(data?.featured_products) ? data.featured_products : []);
         setNewArrivals(Array.isArray(data?.new_arrivals) ? data.new_arrivals : []);
         setBestSellers(Array.isArray(data?.best_sellers) ? data.best_sellers : []);
 
-        const rawCats = data?.featured_categories ?? (data as any)?.categories;
+        const rawCats = (data?.featured_categories && (data.featured_categories as any[]).length > 0)
+          ? data.featured_categories
+          : (Array.isArray(catData) && catData.length > 0)
+          ? catData
+          : (data as any)?.categories;
+
         const safeCats = Array.isArray(rawCats)
           ? rawCats
           : rawCats && typeof rawCats === "object"
@@ -66,7 +72,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-10 sm:space-y-14 lg:space-y-16 pb-8 sm:pb-12 lg:pb-16">
       {/* 1. Hero Section (Compact Carousel + Secondary Promo + Top Strip) */}
       <HeroSection />
 

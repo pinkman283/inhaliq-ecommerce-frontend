@@ -148,62 +148,9 @@ export class SeniorApiAdapter implements IStorefrontApi {
   }
 
   async getHomepageSections(): Promise<HomepageSection[]> {
-    // Senior backend drives homepage sections through /home collections.
-    // We synthesize standard sections for the existing storefront UI components.
-    try {
-      const home = await this.getHomepageData();
-      const sections: HomepageSection[] = [];
-
-      if (home.flash_sales && home.flash_sales.length > 0) {
-        sections.push({
-          id: 101,
-          title: "Flash Sales",
-          slug: "flash-sales",
-          subtitle: "Limited time pricing on verified hardware",
-          badge_text: "HOT DEALS",
-          is_active: true,
-          sort_order: 1,
-          product_count: home.flash_sales.length,
-          has_tabs: true,
-          tabs: [
-            {
-              id: "tab-flash",
-              name: "All Deals",
-              source_type: "manual",
-              limit: 8,
-              products: home.flash_sales,
-            },
-          ],
-        });
-      }
-
-      if (home.hot_deals && home.hot_deals.length > 0) {
-        sections.push({
-          id: 102,
-          title: "Hot Deals",
-          slug: "hot-deals",
-          subtitle: "Top-rated gear in high demand",
-          badge_text: "POPULAR",
-          is_active: true,
-          sort_order: 2,
-          product_count: home.hot_deals.length,
-          has_tabs: true,
-          tabs: [
-            {
-              id: "tab-hot",
-              name: "Featured",
-              source_type: "manual",
-              limit: 8,
-              products: home.hot_deals,
-            },
-          ],
-        });
-      }
-
-      return sections;
-    } catch {
-      return [];
-    }
+    // Senior backend drives storefront categories via /categories and /category/{slug}.
+    // Return empty array so CategoryShowcase renders real category-specific sections.
+    return [];
   }
 
   async getSectionTabProducts(_sectionId: number, _tabId: string): Promise<Product[]> {
@@ -283,18 +230,92 @@ export class SeniorApiAdapter implements IStorefrontApi {
   // ==========================================
   // Navigation & Categories
   // ==========================================
+  private tierLookupMap: Map<string, "category" | "subcategory" | "childcategory"> = new Map();
+  private tierLookupPromise: Promise<void> | null = null;
+
+  private async ensureTierLookup(): Promise<void> {
+    if (this.tierLookupMap.size > 0) return;
+    if (this.tierLookupPromise) return this.tierLookupPromise;
+
+    this.tierLookupPromise = (async () => {
+      try {
+        const res = await this.client.get("/nav-menu");
+        const list: any[] = Array.isArray(res.data?.data)
+          ? res.data.data
+          : (Array.isArray(res.data) ? res.data : []);
+
+        for (const cat of list) {
+          if (cat.slug) this.tierLookupMap.set(String(cat.slug).toLowerCase(), "category");
+          const subs = Array.isArray(cat.sub_categories)
+            ? cat.sub_categories
+            : (Array.isArray(cat.subcategories) ? cat.subcategories : []);
+          for (const sub of subs) {
+            if (sub.slug) this.tierLookupMap.set(String(sub.slug).toLowerCase(), "subcategory");
+            const children = Array.isArray(sub.child_categories)
+              ? sub.child_categories
+              : (Array.isArray(sub.childcategories) ? sub.childcategories : []);
+            for (const child of children) {
+              if (child.slug) this.tierLookupMap.set(String(child.slug).toLowerCase(), "childcategory");
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Notice: Tier lookup populate fallback:", err);
+      } finally {
+        this.tierLookupPromise = null;
+      }
+    })();
+
+    return this.tierLookupPromise;
+  }
+
   async getNavMenu(): Promise<NavbarItem[]> {
     const res = await this.client.get("/nav-menu");
     return mapSeniorNavMenuToNavbarItems(res.data);
   }
 
   async getCategories(): Promise<Category[]> {
+    try {
+      const res = await this.client.get("/nav-menu");
+      const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
+      if (list.length > 0) {
+        // Also populate tier lookup map while we have the tree
+        for (const cat of list) {
+          if (cat.slug) this.tierLookupMap.set(String(cat.slug).toLowerCase(), "category");
+          const subs = Array.isArray(cat.sub_categories)
+            ? cat.sub_categories
+            : (Array.isArray(cat.subcategories) ? cat.subcategories : []);
+          for (const sub of subs) {
+            if (sub.slug) this.tierLookupMap.set(String(sub.slug).toLowerCase(), "subcategory");
+            const children = Array.isArray(sub.child_categories)
+              ? sub.child_categories
+              : (Array.isArray(sub.childcategories) ? sub.childcategories : []);
+            for (const child of children) {
+              if (child.slug) this.tierLookupMap.set(String(child.slug).toLowerCase(), "childcategory");
+            }
+          }
+        }
+        return list.map(mapSeniorCategory);
+      }
+    } catch {}
+
     const res = await this.client.get("/categories");
     const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
     return list.map(mapSeniorCategory);
   }
 
   async getCategory(slug: string, params?: ProductCatalogParams): Promise<StorefrontCategoryPage> {
+    const cleanSlug = slug.trim();
+    await this.ensureTierLookup();
+    const knownTier = this.tierLookupMap.get(cleanSlug.toLowerCase());
+
+    if (knownTier === "childcategory") {
+      return this.getChildCategory(cleanSlug, params);
+    }
+    if (knownTier === "subcategory") {
+      return this.getSubcategory(cleanSlug, params);
+    }
+
     const sort = this.normalizeSortParam(params?.sort);
     const queryParams: Record<string, any> = {
       page: params?.page || 1,
@@ -304,25 +325,38 @@ export class SeniorApiAdapter implements IStorefrontApi {
       ...(params?.max_price !== undefined ? { max_price: params.max_price } : {}),
     };
 
-    const res = await this.client.get(`/category/${slug}`, { params: queryParams });
-    const data = res.data?.data || res.data;
+    try {
+      const res = await this.client.get(`/category/${cleanSlug}`, { params: queryParams });
+      const data = res.data?.data || res.data;
 
-    const rawProducts = Array.isArray(data.products?.data)
-      ? data.products.data
-      : (Array.isArray(data.products) ? data.products : []);
+      const rawProducts = Array.isArray(data.products?.data)
+        ? data.products.data
+        : (Array.isArray(data.products) ? data.products : []);
 
-    const categoryObj = data.category || { id: data.id, name: data.name, slug: data.slug || slug };
+      const categoryObj = data.category || { id: data.id, name: data.name, slug: data.slug || cleanSlug };
 
-    return {
-      category: mapSeniorCategory(categoryObj),
-      products: rawProducts.map(mapSeniorProduct),
-      min_price: data.min_price,
-      max_price: data.max_price,
-      total: data.products?.total || rawProducts.length,
-      current_page: data.products?.current_page || 1,
-      last_page: data.products?.last_page || 1,
-      event_id: data.event_id,
-    };
+      return {
+        category: mapSeniorCategory(categoryObj),
+        products: rawProducts.map(mapSeniorProduct),
+        min_price: data.min_price,
+        max_price: data.max_price,
+        total: data.products?.total || rawProducts.length,
+        current_page: data.products?.current_page || 1,
+        last_page: data.products?.last_page || 1,
+        event_id: data.event_id,
+      };
+    } catch (err: any) {
+      // If root category endpoint fails (e.g. 404), fall back to subcategory or child-category
+      try {
+        return await this.getSubcategory(cleanSlug, params);
+      } catch {
+        try {
+          return await this.getChildCategory(cleanSlug, params);
+        } catch {
+          throw err;
+        }
+      }
+    }
   }
 
   async getSubcategory(slug: string, params?: ProductCatalogParams): Promise<StorefrontCategoryPage> {
@@ -331,12 +365,15 @@ export class SeniorApiAdapter implements IStorefrontApi {
       page: params?.page || 1,
       per_page: params?.per_page || 24,
       ...(sort ? { sort } : {}),
+      ...(params?.min_price !== undefined ? { min_price: params.min_price } : {}),
+      ...(params?.max_price !== undefined ? { max_price: params.max_price } : {}),
     };
     const res = await this.client.get(`/subcategory/${slug}`, { params: queryParams });
     const data = res.data?.data || res.data;
     const rawProducts = Array.isArray(data.products?.data) ? data.products.data : (Array.isArray(data.products) ? data.products : []);
+    const categoryObj = data.subcategory || data.sub_category || data.category || { id: data.id, name: data.name, slug: data.slug || slug };
     return {
-      category: mapSeniorCategory(data.subcategory || data),
+      category: mapSeniorCategory(categoryObj),
       products: rawProducts.map(mapSeniorProduct),
       total: data.products?.total || rawProducts.length,
       current_page: data.products?.current_page || 1,
@@ -346,11 +383,20 @@ export class SeniorApiAdapter implements IStorefrontApi {
   }
 
   async getChildCategory(slug: string, params?: ProductCatalogParams): Promise<StorefrontCategoryPage> {
-    const res = await this.client.get(`/child-category/${slug}`, { params });
+    const sort = this.normalizeSortParam(params?.sort);
+    const queryParams = {
+      page: params?.page || 1,
+      per_page: params?.per_page || 24,
+      ...(sort ? { sort } : {}),
+      ...(params?.min_price !== undefined ? { min_price: params.min_price } : {}),
+      ...(params?.max_price !== undefined ? { max_price: params.max_price } : {}),
+    };
+    const res = await this.client.get(`/child-category/${slug}`, { params: queryParams });
     const data = res.data?.data || res.data;
     const rawProducts = Array.isArray(data.products?.data) ? data.products.data : (Array.isArray(data.products) ? data.products : []);
+    const categoryObj = data.childcategory || data.child_category || data.category || { id: data.id, name: data.name, slug: data.slug || slug };
     return {
-      category: mapSeniorCategory(data.child_category || data),
+      category: mapSeniorCategory(categoryObj),
       products: rawProducts.map(mapSeniorProduct),
       total: data.products?.total || rawProducts.length,
       current_page: data.products?.current_page || 1,
@@ -400,8 +446,128 @@ export class SeniorApiAdapter implements IStorefrontApi {
   async getProducts(params?: ProductCatalogParams): Promise<PaginatedProductsResponse> {
     // If search term is present, use Senior /search endpoint
     if (params?.search && params.search.trim()) {
-      const cat = typeof params.category === "string" ? params.category : undefined;
+      const cat = typeof params.category === "string" ? params.category : (typeof params.categories === "string" ? params.categories : undefined);
       return this.searchProducts(params.search.trim(), cat, params.page);
+    }
+
+    // Support both `category` and `categories` parameters (single or comma-separated)
+    const catInput = params?.category || params?.categories;
+    const catSlugs = catInput
+      ? (Array.isArray(catInput) ? catInput : String(catInput).split(",").map((s) => s.trim()).filter(Boolean))
+      : [];
+
+    if (catSlugs.length === 1) {
+      try {
+        const catRes = await this.getCategory(catSlugs[0], params);
+        return {
+          data: catRes.products,
+          current_page: catRes.current_page || 1,
+          last_page: catRes.last_page || 1,
+          per_page: params?.per_page || 24,
+          total: catRes.total ?? catRes.products.length,
+        };
+      } catch {
+        return {
+          data: [],
+          current_page: 1,
+          last_page: 1,
+          per_page: params?.per_page || 24,
+          total: 0,
+        };
+      }
+    } else if (catSlugs.length > 1) {
+      try {
+        const results = await Promise.all(
+          catSlugs.map((slug) => this.getCategory(slug, params).catch(() => null))
+        );
+        const seenIds = new Set<number>();
+        const merged: Product[] = [];
+        for (const r of results) {
+          if (r?.products) {
+            for (const p of r.products) {
+              if (!seenIds.has(p.id)) {
+                seenIds.add(p.id);
+                merged.push(p);
+              }
+            }
+          }
+        }
+        return {
+          data: merged,
+          current_page: 1,
+          last_page: 1,
+          per_page: params?.per_page || (merged.length > 0 ? merged.length : 24),
+          total: merged.length,
+        };
+      } catch {
+        return {
+          data: [],
+          current_page: 1,
+          last_page: 1,
+          per_page: params?.per_page || 24,
+          total: 0,
+        };
+      }
+    }
+
+    // Support both `brand` and `brands` parameters (single or comma-separated)
+    const brandInput = params?.brand || params?.brands;
+    const brandSlugs = brandInput
+      ? (Array.isArray(brandInput) ? brandInput : String(brandInput).split(",").map((s) => s.trim()).filter(Boolean))
+      : [];
+
+    if (brandSlugs.length === 1) {
+      try {
+        const brandRes = await this.getBrand(brandSlugs[0], params);
+        return {
+          data: brandRes.products,
+          current_page: brandRes.current_page || 1,
+          last_page: brandRes.last_page || 1,
+          per_page: params?.per_page || 24,
+          total: brandRes.total ?? brandRes.products.length,
+        };
+      } catch {
+        return {
+          data: [],
+          current_page: 1,
+          last_page: 1,
+          per_page: params?.per_page || 24,
+          total: 0,
+        };
+      }
+    } else if (brandSlugs.length > 1) {
+      try {
+        const results = await Promise.all(
+          brandSlugs.map((slug) => this.getBrand(slug, params).catch(() => null))
+        );
+        const seenIds = new Set<number>();
+        const merged: Product[] = [];
+        for (const r of results) {
+          if (r?.products) {
+            for (const p of r.products) {
+              if (!seenIds.has(p.id)) {
+                seenIds.add(p.id);
+                merged.push(p);
+              }
+            }
+          }
+        }
+        return {
+          data: merged,
+          current_page: 1,
+          last_page: 1,
+          per_page: params?.per_page || (merged.length > 0 ? merged.length : 24),
+          total: merged.length,
+        };
+      } catch {
+        return {
+          data: [],
+          current_page: 1,
+          last_page: 1,
+          per_page: params?.per_page || 24,
+          total: 0,
+        };
+      }
     }
 
     const sort = this.normalizeSortParam(params?.sort);
@@ -412,16 +578,6 @@ export class SeniorApiAdapter implements IStorefrontApi {
       ...(params?.min_price !== undefined ? { min_price: params.min_price } : {}),
       ...(params?.max_price !== undefined ? { max_price: params.max_price } : {}),
     };
-
-    if (params?.category) {
-      const catSlug = Array.isArray(params.category) ? params.category[0] : params.category;
-      queryParams.category = catSlug;
-    }
-
-    if (params?.brand) {
-      const brandSlug = Array.isArray(params.brand) ? params.brand[0] : params.brand;
-      queryParams.brand = brandSlug;
-    }
 
     const res = await this.client.get("/shop", { params: queryParams });
     const rawData = res.data?.data || res.data;

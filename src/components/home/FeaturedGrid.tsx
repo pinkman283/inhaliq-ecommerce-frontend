@@ -72,6 +72,10 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
     }
   }, [activeTab, api, resetAutoplay]);
 
+  if (displayList.length === 0) {
+    return null;
+  }
+
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header & Tabs */}
@@ -79,7 +83,7 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
         <div>
           <span
             className="text-[11px] font-black uppercase tracking-widest block mb-1"
-            style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4)))" }}
+            style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
           >
             Studio Selection
           </span>
@@ -92,10 +96,10 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
         </div>
 
         {/* Tab Pills */}
-        <div className="flex theme-tab-container rounded-xl p-1 border self-start sm:self-auto gap-1">
+        <div className="flex theme-tab-container rounded-md p-1 border self-start sm:self-auto gap-1">
           <button
             onClick={() => setActiveTab("featured")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
               activeTab === "featured"
                 ? "theme-tab-pill-active"
                 : "theme-tab-pill-inactive"
@@ -106,7 +110,7 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
 
           <button
             onClick={() => setActiveTab("new")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
               activeTab === "new"
                 ? "theme-tab-pill-active"
                 : "theme-tab-pill-inactive"
@@ -117,7 +121,7 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
 
           <button
             onClick={() => setActiveTab("bestsellers")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
               activeTab === "bestsellers"
                 ? "theme-tab-pill-active"
                 : "theme-tab-pill-inactive"
@@ -166,7 +170,7 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
       </Carousel>
 
       {/* View All CTA */}
-      <div className="text-center mt-6">
+      <div className="text-center mt-6 mb-2 sm:mt-8 sm:mb-3">
         <Link
           href="/products"
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 theme-view-all-btn text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:scale-[1.02]"

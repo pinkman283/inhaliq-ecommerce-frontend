@@ -40,7 +40,7 @@ export function CategoryBrandGridMenu({
           <div className="space-y-2 border-r border-gray-100 dark:border-white/[0.08] pr-4">
             <div className="flex items-center justify-between pb-1.5 border-b border-gray-100 dark:border-white/[0.06]">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <FolderTree className="w-3.5 h-3.5 text-[#005826] dark:text-cyan-400" />
+                <FolderTree className="w-3.5 h-3.5 text-[#006B45] dark:text-cyan-400" />
                 Subcategories & Series
               </span>
             </div>
@@ -61,7 +61,7 @@ export function CategoryBrandGridMenu({
                       className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-white hover:bg-cyan-600/10 dark:hover:bg-white/5 transition-colors group"
                     >
                       <div className="flex items-center gap-2 truncate">
-                        <span className="group-hover:text-[#005826] dark:group-hover:text-cyan-400 transition-colors truncate">
+                        <span className="group-hover:text-[#006B45] dark:group-hover:text-cyan-400 transition-colors truncate">
                           {child.title}
                         </span>
                         {child.badge && (
@@ -73,7 +73,7 @@ export function CategoryBrandGridMenu({
                           </span>
                         )}
                       </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#005826] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#006B45] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
                     </Link>
                   );
                 })
@@ -85,10 +85,10 @@ export function CategoryBrandGridMenu({
                     onClick={onClose}
                     className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-white hover:bg-cyan-600/10 dark:hover:bg-white/5 transition-colors group"
                   >
-                    <span className="group-hover:text-[#005826] dark:group-hover:text-cyan-400 transition-colors truncate">
+                    <span className="group-hover:text-[#006B45] dark:group-hover:text-cyan-400 transition-colors truncate">
                       {sub.name}
                     </span>
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#005826] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#006B45] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
                   </Link>
                 ))
               ) : (
@@ -109,7 +109,7 @@ export function CategoryBrandGridMenu({
               <Link
                 href="/brands"
                 onClick={onClose}
-                className="text-[10px] text-[#005826] dark:text-cyan-400 hover:underline"
+                className="text-[10px] text-[#006B45] dark:text-cyan-400 hover:underline"
               >
                 All Brands →
               </Link>
@@ -160,7 +160,7 @@ export function CategoryBrandGridMenu({
             <Link
               href={targetUrl}
               onClick={onClose}
-              className="font-semibold text-[#005826] dark:text-cyan-400 hover:underline flex items-center gap-1"
+              className="font-semibold text-[#006B45] dark:text-cyan-400 hover:underline flex items-center gap-1"
             >
               <span>View All {item.title}</span>
               <ArrowRight className="w-3.5 h-3.5" />

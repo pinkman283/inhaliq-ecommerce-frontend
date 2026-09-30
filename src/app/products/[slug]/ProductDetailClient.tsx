@@ -61,9 +61,12 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
         setProduct(data.product);
         setRelated(data.related || []);
         
-        // Single color: auto-select. Multiple colors: prompt selection
-        if (data.product.variants && data.product.variants.length === 1) {
-          setSelectedVariant(data.product.variants[0]);
+        // Pre-select first in-stock variant or first variant
+        if (data.product.variants && data.product.variants.length > 0) {
+          const firstInStock = data.product.variants.find((v) => Number(v.stock_quantity) > 0) || data.product.variants[0];
+          setSelectedVariant(firstInStock);
+          if (firstInStock.color_name) setSelectedColor(firstInStock.color_name);
+          if (firstInStock.size) setSelectedSize(firstInStock.size);
         } else {
           setSelectedVariant(null);
         }
@@ -133,7 +136,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
         </p>
         <Link 
           href="/products" 
-          className="inline-block px-6 py-2.5 rounded-xl theme-btn-primary text-xs font-bold"
+          className="inline-block px-6 py-2.5 rounded-md theme-btn-primary text-xs font-bold"
         >
           Return to Catalog
         </Link>
@@ -423,7 +426,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
               {/* Quantity Selector */}
               <div className="flex flex-col items-center">
                 <div 
-                  className={`flex items-center rounded-xl p-1 shrink-0 transition-colors shadow-2xs ${
+                  className={`flex items-center rounded-md p-1 shrink-0 transition-colors shadow-2xs ${
                     isOutOfStock ? "opacity-50 pointer-events-none" : ""
                   } ${
                     isStockExceeded ? "border border-rose-500 ring-1 ring-rose-500/20" : "border border-gray-200 dark:border-white/10"
@@ -436,7 +439,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
                     type="button"
                     disabled={isOutOfStock || quantity <= 0}
                     onClick={handleDecreaseQuantity}
-                    className="w-8 h-8 rounded-lg border-0 hover:bg-gray-100 font-bold text-sm flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-transparent"
+                    className="w-8 h-8 rounded-md border-0 hover:bg-gray-100 font-bold text-sm flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-transparent"
                     style={{ color: "#0f172a" }}
                     aria-label="Decrease quantity"
                   >
@@ -466,7 +469,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
                     type="button"
                     disabled={isOutOfStock || quantity >= availableStock}
                     onClick={handleIncreaseQuantity}
-                    className="w-8 h-8 rounded-lg border-0 hover:bg-gray-100 font-bold text-sm flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-transparent"
+                    className="w-8 h-8 rounded-md border-0 hover:bg-gray-100 font-bold text-sm flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-transparent"
                     style={{ color: "#0f172a" }}
                     aria-label="Increase quantity"
                   >
@@ -485,7 +488,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
                 type="button"
                 disabled={isOutOfStock || quantity <= 0 || isStockExceeded}
                 onClick={handleAddToCart}
-                className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer border ${
+                className={`flex-1 py-3 px-4 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer border ${
                   isOutOfStock || quantity <= 0 || isStockExceeded
                     ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-white/5 text-slate-400 border-gray-200 dark:border-white/10"
                     : "bg-white hover:bg-gray-50 active:bg-gray-100 text-slate-900 border-gray-300 dark:border-gray-200 shadow-sm active:scale-95"
@@ -499,7 +502,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
               <button
                 type="button"
                 onClick={() => toggleWishlist(product)}
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
+                className={`p-3 rounded-md border transition-all cursor-pointer flex items-center justify-center ${
                   inWishlist
                     ? "text-white shadow-sm shadow-[#fb2c5c]/25 hover:opacity-90 active:scale-95"
                     : "hover:border-[#fb2c5c] text-slate-400 hover:text-[#fb2c5c]"
@@ -520,7 +523,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
               type="button"
               disabled={isOutOfStock || quantity <= 0 || isStockExceeded}
               onClick={handleBuyNow}
-              className={`w-full py-3 px-6 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer ${
+              className={`w-full py-3 px-6 rounded-md text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer ${
                 isOutOfStock || quantity <= 0 || isStockExceeded
                   ? "opacity-50 cursor-not-allowed bg-gray-200 dark:bg-white/5 text-slate-400"
                   : "theme-btn-primary hover:opacity-95 hover:scale-[1.005] active:scale-95"
@@ -811,7 +814,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
                 type="button"
                 disabled={isOutOfStock || quantity <= 0 || isStockExceeded}
                 onClick={handleAddToCart}
-                className={`px-3 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-1 border ${
+                className={`px-3 py-2 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-1 border ${
                   isOutOfStock || quantity <= 0 || isStockExceeded
                     ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-white/5 text-slate-400 border-gray-200 dark:border-white/10"
                     : "bg-white hover:bg-gray-50 active:bg-gray-100 text-slate-900 border-gray-300 dark:border-gray-200 shadow-xs cursor-pointer active:scale-95"
@@ -824,7 +827,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
                 type="button"
                 disabled={isOutOfStock || quantity <= 0 || isStockExceeded}
                 onClick={handleBuyNow}
-                className={`px-3.5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1 ${
+                className={`px-3.5 py-2 rounded-md text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1 ${
                   isOutOfStock || quantity <= 0 || isStockExceeded
                     ? "opacity-50 cursor-not-allowed bg-gray-200 dark:bg-white/5 text-slate-400"
                     : "theme-btn-primary cursor-pointer shadow-md active:scale-95"

@@ -213,7 +213,7 @@ export function FlashSaleSection({ products }: FlashSaleSectionProps) {
         <div className="relative z-10 pt-6 mt-4 flex items-center justify-center border-t border-white/5">
           <Link
             href={ctaLink}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs theme-btn-secondary transition-all hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md font-bold text-xs theme-btn-secondary transition-all hover:scale-[1.02]"
           >
             <span>{flashPromo?.cta_text || "Explore All Discounted Drops"}</span>
             <ArrowRight className="w-3.5 h-3.5" />

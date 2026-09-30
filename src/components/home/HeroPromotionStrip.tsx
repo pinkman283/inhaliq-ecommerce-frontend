@@ -71,7 +71,7 @@ export function HeroPromotionStrip({ banner }: HeroPromotionStripProps) {
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-100/90 hover:bg-amber-200 dark:bg-black/40 dark:hover:bg-black/60 border border-amber-400/60 text-amber-950 dark:text-amber-300 font-mono text-[11px] font-black transition-all cursor-pointer shadow-xs active:scale-95"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-100/90 hover:bg-amber-200 dark:bg-black/40 dark:hover:bg-black/60 border border-amber-400/60 text-amber-950 dark:text-amber-300 font-mono text-[11px] font-black transition-all cursor-pointer shadow-xs active:scale-95"
                 title="Click to copy voucher code"
               >
                 <Tag className="w-3 h-3 text-amber-600 dark:text-amber-400" />

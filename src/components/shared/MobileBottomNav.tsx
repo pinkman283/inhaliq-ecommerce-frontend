@@ -31,7 +31,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
         <Link
           href="/"
           className={`flex flex-col items-center justify-center py-1 rounded-lg transition-colors ${
-            pathname === "/" ? "text-cyan-400" : "text-slate-400 hover:text-white"
+            pathname === "/" ? "text-[var(--theme-primary,#006B45)]" : "text-slate-400 hover:text-white"
           }`}
         >
           <Home className="w-4 h-4" />
@@ -43,7 +43,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
           href="/products"
           className={`flex flex-col items-center justify-center py-1 rounded-lg transition-colors ${
             pathname.startsWith("/products")
-              ? "text-cyan-400"
+              ? "text-[var(--theme-primary,#006B45)]"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -54,7 +54,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
         {/* 3. Search Trigger */}
         <button
           onClick={onOpenSearch}
-          className="flex flex-col items-center justify-center py-1 rounded-lg text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer"
+          className="flex flex-col items-center justify-center py-1 rounded-lg text-slate-400 hover:text-[var(--theme-primary,#006B45)] transition-colors cursor-pointer"
         >
           <Search className="w-4 h-4" />
           <span className="text-[9.5px] font-bold mt-0.5">Search</span>
@@ -64,7 +64,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
         <Link
           href="/track"
           className={`flex flex-col items-center justify-center py-1 rounded-lg transition-colors ${
-            pathname === "/track" ? "text-cyan-400" : "text-slate-400 hover:text-white"
+            pathname === "/track" ? "text-[var(--theme-primary,#006B45)]" : "text-slate-400 hover:text-white"
           }`}
         >
           <Package className="w-4 h-4" />
@@ -74,7 +74,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
         {/* 5. Cart Drawer Trigger */}
         <button
           onClick={openCart}
-          className="relative flex flex-col items-center justify-center py-1 rounded-lg text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer"
+          className="relative flex flex-col items-center justify-center py-1 rounded-lg text-slate-400 hover:text-[var(--theme-primary,#006B45)] transition-colors cursor-pointer"
         >
           <div className="relative">
             <ShoppingBag className="w-4 h-4" />
@@ -82,7 +82,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
               <span
                 className="absolute -top-1.5 -right-2 min-w-[15px] h-[15px] px-0.5 font-black text-[8px] rounded-full flex items-center justify-center shadow-md"
                 style={{
-                  backgroundColor: "var(--theme-primary, #06b6d4)",
+                  backgroundColor: "var(--theme-primary, #006B45)",
                   color: "var(--theme-btn-primary-text, #ffffff)",
                 }}
               >

@@ -94,7 +94,7 @@ export function CategoryBento({ categories }: CategoryBentoProps) {
 
         {/* Top Header: Badge / Product Count & Arrow */}
         <div className="relative z-10 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5" style={{ color: "var(--theme-primary, #06b6d4)" }}>
+          <div className="flex items-center gap-1.5" style={{ color: "var(--theme-primary, #006B45)" }}>
             <Icon className="w-3.5 h-3.5" />
             <span className="text-[10px] font-bold tracking-wider uppercase">
               {cat.products_count ?? 0} Products
@@ -130,7 +130,7 @@ export function CategoryBento({ categories }: CategoryBentoProps) {
         <div>
           <span
             className="text-[11px] font-black uppercase tracking-widest block mb-1"
-            style={{ color: "var(--theme-primary, #06b6d4)" }}
+            style={{ color: "var(--theme-primary, #006B45)" }}
           >
             Curated Ecosystems
           </span>
@@ -145,7 +145,7 @@ export function CategoryBento({ categories }: CategoryBentoProps) {
         <Link
           href="/products"
           className="text-xs font-bold flex items-center gap-1 group mr-1 self-start sm:self-auto transition-colors hover:opacity-80"
-          style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4)))" }}
+          style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
         >
           View All Categories <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </Link>

@@ -50,7 +50,7 @@ export function MobileNavTree({ items, onItemClick, depth = 0 }: MobileNavTreePr
                   target={item.open_in_new_tab ? "_blank" : undefined}
                   rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
                   onClick={onItemClick}
-                  className="flex items-center gap-2 flex-1 py-1 text-sm font-medium text-slate-800 dark:text-slate-200 hover:text-[#005826] dark:hover:text-cyan-400 transition-colors"
+                  className="flex items-center gap-2 flex-1 py-1 text-sm font-medium text-slate-800 dark:text-slate-200 hover:text-[#006B45] dark:hover:text-cyan-400 transition-colors"
                 >
                   <span className="truncate">{item.title}</span>
                   {item.badge && (
@@ -92,7 +92,7 @@ export function MobileNavTree({ items, onItemClick, depth = 0 }: MobileNavTreePr
                 >
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
-                      isExpanded ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                      isExpanded ? "rotate-180 text-[#006B45] dark:text-cyan-400" : ""
                     }`}
                   />
                 </button>

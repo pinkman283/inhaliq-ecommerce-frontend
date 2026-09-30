@@ -27,7 +27,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const img =
     product.primary_image?.image_url ||
     product.images?.[0]?.image_url ||
-    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80";
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/%3E%3C/svg%3E";
 
   const inWishlist = isInWishlist(product.id);
   const isOutOfStock = product.stock_quantity !== undefined && product.stock_quantity <= 0;
@@ -92,11 +92,11 @@ export function ProductCard({ product }: ProductCardProps) {
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group relative w-full rounded-2xl theme-card p-2 sm:p-2.5 lg:p-3 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-white/20"
+      className="group relative w-full rounded-[var(--theme-card-radius,10px)] theme-card p-2 sm:p-2.5 lg:p-3 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-white/20"
     >
       <div>
         {/* Image Container with Badges */}
-        <div className="relative aspect-square w-full rounded-xl overflow-hidden theme-img-bg bg-gray-50 dark:bg-slate-950 mb-2 sm:mb-2.5 border border-gray-100 dark:border-white/5">
+        <div className="relative aspect-square w-full rounded-[calc(var(--theme-card-radius,10px)-2px)] overflow-hidden theme-img-bg bg-gray-50 dark:bg-slate-950 mb-2 sm:mb-2.5 border border-gray-100 dark:border-white/5">
           <Link href={`/products/${product.slug}`} className="block w-full h-full relative">
             <Image
               src={img}
@@ -130,7 +130,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span
                   className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider shadow-xs"
                   style={{
-                    backgroundColor: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                    backgroundColor: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                     color: "var(--theme-btn-primary-text, #ffffff)",
                   }}
                 >
@@ -140,7 +140,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.is_best_seller && (
                 <span
                   className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-xs"
-                  style={{ backgroundColor: "var(--theme-secondary, #2da54b)" }}
+                  style={{ backgroundColor: "var(--theme-secondary, #C6A15B)" }}
                 >
                   Best Seller
                 </span>
@@ -171,7 +171,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center justify-between gap-1">
             <span
               className="text-[9px] font-black uppercase tracking-wider block truncate max-w-[120px]"
-              style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #06b6d4)))" }}
+              style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
             >
               {product.category?.name || product.brand || "Studio Edition"}
             </span>
@@ -235,7 +235,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className={`py-1.5 px-1.5 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+            className={`py-1.5 px-1.5 rounded-md text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
               isOutOfStock
                 ? "opacity-50 cursor-not-allowed bg-slate-800 text-slate-500 border border-white/5"
                 : addedAnim
@@ -252,7 +252,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <>
                 <ShoppingBag
                   className="w-2.5 h-2.5 shrink-0"
-                  style={{ color: "var(--theme-primary, #06b6d4)" }}
+                  style={{ color: "var(--theme-primary, #006B45)" }}
                 />
                 <span className="truncate">Add to Cart</span>
               </>
@@ -262,7 +262,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={handleBuyNow}
             disabled={isOutOfStock}
-            className={`py-1.5 px-1.5 rounded-lg font-black text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer ${
+            className={`py-1.5 px-1.5 rounded-md font-black text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer ${
               isOutOfStock
                 ? "opacity-50 cursor-not-allowed bg-slate-800 text-slate-500"
                 : "theme-btn-primary hover:scale-[1.02]"

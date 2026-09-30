@@ -75,7 +75,7 @@ export const CustomerAccountDropdown: React.FC<CustomerAccountDropdownProps> = (
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        className={`group flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full sm:rounded-xl border transition-all duration-150 cursor-pointer focus:outline-none select-none ${
+        className={`group flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-md border transition-all duration-150 cursor-pointer focus:outline-none select-none ${
           isOpen
             ? "bg-gray-100 dark:bg-white/[0.08] border-purple-500/60 dark:border-purple-500/60 ring-2 ring-purple-500/25 text-slate-900 dark:text-white"
             : "bg-gray-50/80 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border-gray-200 dark:border-white/10 text-slate-800 dark:text-slate-200"

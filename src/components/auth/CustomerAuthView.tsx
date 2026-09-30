@@ -320,7 +320,7 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
           <button
             type="button"
             onClick={handleBack}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-sm group w-fit mb-3.5"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-md bg-black/40 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-sm group w-fit mb-3.5"
             title="Return to previous page"
           >
             <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5 text-white" />

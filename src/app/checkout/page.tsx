@@ -596,7 +596,7 @@ export default function CheckoutPage() {
         <p className="text-xs text-slate-400">Add products to your cart before proceeding to checkout.</p>
         <Link
           href="/products"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl theme-btn-primary text-xs font-bold shadow-lg cursor-pointer"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-md theme-btn-primary text-xs font-bold shadow-lg cursor-pointer"
         >
           <span>Explore Products</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -619,14 +619,14 @@ export default function CheckoutPage() {
             <button
               type="button"
               onClick={() => openAuthModal("login")}
-              className="px-4 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/15 transition-all cursor-pointer flex items-center gap-1.5"
+              className="px-4 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/15 transition-all cursor-pointer flex items-center gap-1.5"
             >
               <LogIn className="w-3.5 h-3.5" /> Login
             </button>
             <button
               type="button"
               onClick={() => openAuthModal("register")}
-              className="px-4 py-1.5 rounded-lg theme-btn-primary text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="px-4 py-1.5 rounded-md theme-btn-primary text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
             >
               <UserPlus className="w-3.5 h-3.5" /> Register
             </button>
@@ -877,7 +877,7 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       onClick={() => setShowSavedAddresses(!showSavedAddresses)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/15 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/15 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-colors cursor-pointer"
                     >
                       <MapPin className="w-3.5 h-3.5" />
                       <span>Saved Addresses</span>
@@ -1193,14 +1193,14 @@ export default function CheckoutPage() {
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                         placeholder="Coupon Code"
-                        className="w-full theme-input rounded-xl pl-8.5 pr-3 py-2 text-xs uppercase tracking-wider focus:outline-none focus:border-cyan-400"
+                        className="w-full theme-input rounded-md pl-8.5 pr-3 py-2 text-xs uppercase tracking-wider focus:outline-none focus:border-cyan-400"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={handleApplyCoupon}
                       disabled={couponLoading || !couponInput.trim()}
-                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-all disabled:opacity-50 cursor-pointer border border-white/10"
+                      className="px-4 py-2 rounded-md bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-all disabled:opacity-50 cursor-pointer border border-white/10"
                     >
                       {couponLoading ? "..." : "Apply"}
                     </button>
@@ -1444,7 +1444,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading || hasInvalidItems() || isValidating}
-                className="w-full py-3.5 rounded-xl theme-btn-primary hover:opacity-95 text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3.5 rounded-md theme-btn-primary hover:opacity-95 text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading || isValidating ? (
                   <>

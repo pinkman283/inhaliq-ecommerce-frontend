@@ -3,11 +3,15 @@
 import { motion } from "framer-motion";
 import { Truck, ShieldCheck, Banknote, RotateCcw } from "lucide-react";
 import { useThemeStore } from "@/store/useThemeStore";
+import { STOREFRONT_CONFIG } from "@/config/storefrontConfig";
 
 export function TrustRibbon() {
   const { theme } = useThemeStore();
 
-  if (theme.trust_ribbon_enabled === false) return null;
+  // Controlled by centralized STOREFRONT_CONFIG (Default: false / Hidden)
+  if (!STOREFRONT_CONFIG.SHOW_BENEFIT_CARDS || theme.trust_ribbon_enabled === false) {
+    return null;
+  }
 
   const trustItems = [
     {
@@ -15,7 +19,7 @@ export function TrustRibbon() {
       title: theme.trust_ribbon_title_1 || "Fast Express Delivery",
       subtitle: theme.trust_ribbon_desc_1 || "Dispatched within 24-48 hours",
       badge: "Express",
-      colorClass: "text-[#005826] dark:text-cyan-400",
+      colorClass: "text-[#006B45] dark:text-cyan-400",
       glowClass: "from-emerald-500/10 to-transparent",
     },
     {
@@ -31,7 +35,7 @@ export function TrustRibbon() {
       title: theme.trust_ribbon_title_3 || "100% Genuine & Authentic",
       subtitle: theme.trust_ribbon_desc_3 || "Official manufacturer warranty coverage",
       badge: "Verified",
-      colorClass: "text-[#005826] dark:text-indigo-400",
+      colorClass: "text-[#006B45] dark:text-indigo-400",
       glowClass: "from-emerald-500/10 to-transparent",
     },
     {
@@ -56,7 +60,7 @@ export function TrustRibbon() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.08, duration: 0.4 }}
-              className="relative group p-3.5 sm:p-4 rounded-xl theme-card border border-gray-200 dark:border-white/10 overflow-hidden flex items-center gap-3.5 transition-all duration-300 hover:border-[#005826]/30 dark:hover:border-white/20 hover:scale-[1.01] shadow-xs"
+              className="relative group p-3.5 sm:p-4 rounded-xl theme-card border border-gray-200 dark:border-white/10 overflow-hidden flex items-center gap-3.5 transition-all duration-300 hover:border-[#006B45]/30 dark:hover:border-white/20 hover:scale-[1.01] shadow-xs"
             >
               {/* Subtle gradient background glow on hover */}
               <div
@@ -67,8 +71,8 @@ export function TrustRibbon() {
               <div
                 className="relative p-2.5 rounded-xl border shrink-0 transition-transform duration-300 group-hover:scale-110 shadow-inner"
                 style={{
-                  backgroundColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 12%, rgba(255, 255, 255, 0.03))",
-                  borderColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 25%, rgba(255, 255, 255, 0.1))",
+                  backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 12%, rgba(255, 255, 255, 0.03))",
+                  borderColor: "color-mix(in srgb, var(--theme-primary, #006B45) 25%, rgba(255, 255, 255, 0.1))",
                 }}
               >
                 <Icon className={`w-5 h-5 ${item.colorClass}`} />
@@ -87,9 +91,9 @@ export function TrustRibbon() {
                     <span
                       className="px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider shrink-0"
                       style={{
-                        backgroundColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 15%, transparent)",
-                        color: "var(--theme-primary, #06b6d4)",
-                        border: "1px solid color-mix(in srgb, var(--theme-primary, #06b6d4) 30%, transparent)",
+                        backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 15%, transparent)",
+                        color: "var(--theme-primary, #006B45)",
+                        border: "1px solid color-mix(in srgb, var(--theme-primary, #006B45) 30%, transparent)",
                       }}
                     >
                       {item.badge}

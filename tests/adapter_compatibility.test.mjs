@@ -169,6 +169,68 @@ describe("STOREFRONT BACKEND ADAPTER & MAPPERS COMPATIBILITY SUITE", () => {
       assert.equal(navItems[1].children?.[0].name, "Audio");
     });
 
+    it("maps Senior 3-level nav-menu (sub_categories & child_categories) without flattening and omits empty tiers", () => {
+      const liveSeniorNavMenu = [
+        {
+          id: 2,
+          name: "Disposable",
+          slug: "disposable-1",
+          sub_categories: [
+            {
+              id: 7,
+              name: "Voltbar",
+              slug: "voltbar",
+              child_categories: [
+                { id: 9, name: "Voltbar 12K Cartridge", slug: "voltbar-12k-cartridge" },
+                { id: 8, name: "Voltbar Switch Battery", slug: "voltbar-switch-battery" },
+              ],
+            },
+            {
+              id: 1,
+              name: "Flyto",
+              slug: "flyto-2",
+              child_categories: [],
+            },
+          ],
+        },
+        {
+          id: 4,
+          name: "Nicsalt Juice",
+          slug: "nicsalt-juice-1",
+          sub_categories: [],
+        },
+      ];
+
+      const mapped = mapSeniorNavMenuToNavbarItems(liveSeniorNavMenu);
+
+      // Root level
+      assert.equal(mapped.length, 2);
+      assert.equal(mapped[0].title, "Disposable");
+      assert.equal(mapped[0].url, "/category/disposable-1");
+      assert.equal(mapped[0].children?.length, 2);
+
+      // Tier 2: Subcategories under Disposable
+      const voltbar = mapped[0].children?.[0];
+      assert.equal(voltbar?.title, "Voltbar");
+      assert.equal(voltbar?.url, "/category/voltbar");
+      assert.equal(voltbar?.children?.length, 2);
+
+      // Tier 3: Child categories under Voltbar
+      assert.equal(voltbar?.children?.[0].title, "Voltbar 12K Cartridge");
+      assert.equal(voltbar?.children?.[0].url, "/category/voltbar-12k-cartridge");
+      assert.equal(voltbar?.children?.[0].children, undefined); // Leaf node: no children
+
+      // Tier 2 item without children must have children = undefined (no empty menu)
+      const flyto = mapped[0].children?.[1];
+      assert.equal(flyto?.title, "Flyto");
+      assert.equal(flyto?.children, undefined);
+
+      // Root item without subcategories must have children = undefined (direct category link)
+      assert.equal(mapped[1].title, "Nicsalt Juice");
+      assert.equal(mapped[1].url, "/category/nicsalt-juice-1");
+      assert.equal(mapped[1].children, undefined);
+    });
+
     it("preserves Original Category structure with children", () => {
       const originalCat = {
         id: 10,

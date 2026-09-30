@@ -146,7 +146,7 @@ function CascadingMenuTier({
               <div
                 className={`flex items-center justify-between w-full px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider select-none ${
                   isActiveOrHovered
-                    ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/70 dark:bg-white/5"
+                    ? "text-[#006B45] dark:text-cyan-400 bg-emerald-50/70 dark:bg-white/5"
                     : "text-slate-400 dark:text-slate-400"
                 }`}
               >
@@ -162,24 +162,16 @@ function CascadingMenuTier({
                 href={targetUrl}
                 target={item.open_in_new_tab ? "_blank" : undefined}
                 rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
-                onClick={(e) => {
-                  if (hasChildren) {
-                    // Prevent accidental navigation when clicking item with children
-                    if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
-                      e.preventDefault();
-                      setActiveChildId((prev) => (prev === item.id ? null : item.id));
-                    }
-                  } else {
-                    onClose();
-                  }
+                onClick={() => {
+                  onClose();
                 }}
                 onKeyDown={(e) => handleKeyDown(e, item, index)}
                 tabIndex={0}
                 role="menuitem"
                 className={`flex items-center justify-between w-full px-3 py-2 rounded-lg text-[12.5px] tracking-tight transition-all duration-120 group outline-none ${
                   isActiveOrHovered
-                    ? "text-[#005826] dark:text-cyan-300 bg-emerald-50/80 dark:bg-white/10 font-semibold shadow-2xs"
-                    : "text-slate-700 dark:text-slate-200 hover:text-[#005826] dark:hover:text-white hover:bg-gray-50/90 dark:hover:bg-white/5 font-medium"
+                    ? "text-[#006B45] dark:text-cyan-300 bg-emerald-50/80 dark:bg-white/10 font-semibold shadow-2xs"
+                    : "text-slate-700 dark:text-slate-200 hover:text-[#006B45] dark:hover:text-white hover:bg-gray-50/90 dark:hover:bg-white/5 font-medium"
                 }`}
               >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -202,7 +194,7 @@ function CascadingMenuTier({
                   <ChevronRight
                     className={`w-3.5 h-3.5 transition-transform duration-120 shrink-0 ml-1.5 ${
                       isActiveOrHovered
-                        ? "text-[#005826] dark:text-cyan-400 translate-x-0.5"
+                        ? "text-[#006B45] dark:text-cyan-400 translate-x-0.5"
                         : "text-slate-400 dark:text-slate-500 group-hover:translate-x-0.5"
                     }`}
                   />
@@ -218,7 +210,7 @@ function CascadingMenuTier({
                 onClick={() => hasChildren && setActiveChildId(activeChildId === item.id ? null : item.id)}
                 className={`flex items-center justify-between w-full px-3 py-2 rounded-lg text-[12.5px] tracking-tight transition-all duration-120 cursor-pointer outline-none ${
                   isActiveOrHovered
-                    ? "text-[#005826] dark:text-cyan-300 bg-emerald-50/80 dark:bg-white/10 font-semibold"
+                    ? "text-[#006B45] dark:text-cyan-300 bg-emerald-50/80 dark:bg-white/10 font-semibold"
                     : "text-slate-700 dark:text-slate-200 hover:bg-gray-50/90 dark:hover:bg-white/5 font-medium"
                 }`}
               >
@@ -238,7 +230,7 @@ function CascadingMenuTier({
                   <ChevronRight
                     className={`w-3.5 h-3.5 transition-transform duration-120 shrink-0 ml-1.5 ${
                       isActiveOrHovered
-                        ? "text-[#005826] dark:text-cyan-400 translate-x-0.5"
+                        ? "text-[#006B45] dark:text-cyan-400 translate-x-0.5"
                         : "text-slate-400 dark:text-slate-500"
                     }`}
                   />

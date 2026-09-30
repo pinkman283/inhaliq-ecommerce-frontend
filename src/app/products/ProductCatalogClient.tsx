@@ -90,17 +90,17 @@ function ProductCatalogContent({
   }, []);
 
   useEffect(() => {
-    const rawCat = searchParams.get("categories") || searchParams.get("category") || "";
+    const rawCat = searchParams.get("categories") || searchParams.get("category") || overrideCategory || "";
     setSelectedCategories(rawCat ? rawCat.split(",").map((c) => c.trim()).filter(Boolean) : []);
     
-    const rawBrd = searchParams.get("brands") || searchParams.get("brand") || "";
+    const rawBrd = searchParams.get("brands") || searchParams.get("brand") || overrideBrand || "";
     setSelectedBrands(rawBrd ? rawBrd.split(",").map((b) => b.trim()).filter(Boolean) : []);
 
     setSearch(searchParams.get("search") || "");
 
     const isDisc = searchParams.get("discounted") === "true" || searchParams.get("discounted") === "1" || searchParams.get("on_sale") === "true" || searchParams.get("deals") === "true";
     setDiscountedOnly(isDisc);
-  }, [searchParams]);
+  }, [searchParams, overrideCategory, overrideBrand]);
 
   // Reset to page 1 on filter changes
   useEffect(() => {
@@ -118,9 +118,11 @@ function ProductCatalogContent({
         };
         if (selectedCategories.length > 0) {
           params.categories = selectedCategories.join(",");
+          params.category = selectedCategories[0];
         }
         if (selectedBrands.length > 0) {
           params.brands = selectedBrands.join(",");
+          params.brand = selectedBrands[0];
         }
         if (search.trim()) params.search = search;
         if (minPrice !== "") params.min_price = Number(minPrice);
@@ -309,6 +311,11 @@ function ProductCatalogContent({
         >
           {selectedCategoryObj
             ? selectedCategoryObj.name
+            : selectedCategories.length === 1
+            ? selectedCategories[0]
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ")
             : selectedCategories.length > 1
             ? `${selectedCategories.length} Categories Selected`
             : selectedBrands.length === 1
@@ -327,7 +334,7 @@ function ProductCatalogContent({
 
       {/* Top Search & Filter Bar */}
       <div 
-        className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl border mb-6 sm:mb-8 shadow-2xs"
+        className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-lg border mb-6 sm:mb-8 shadow-2xs"
         style={{
           backgroundColor: "var(--theme-card-bg, #ffffff)",
           borderColor: "var(--theme-card-border, #e5e7eb)"
@@ -339,7 +346,7 @@ function ProductCatalogContent({
           <button
             type="button"
             onClick={() => setIsFilterDrawerOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-xs hover:border-[#005826] select-none shrink-0"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-md border text-xs font-bold transition-all cursor-pointer shadow-xs hover:border-[#005826] select-none shrink-0"
             style={{
               backgroundColor: hasActiveFilters 
                 ? "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))" 
@@ -383,7 +390,7 @@ function ProductCatalogContent({
                 }
               }}
               placeholder="Search keywords or specs..."
-              className="w-full rounded-xl pl-9.5 pr-8 py-2 text-xs border transition-colors focus:outline-none"
+              className="w-full rounded-md pl-9.5 pr-8 py-2 text-xs border transition-colors focus:outline-none"
               style={{
                 backgroundColor: "var(--theme-card-bg, #ffffff)",
                 borderColor: "var(--theme-card-border, #e5e7eb)",
@@ -423,7 +430,7 @@ function ProductCatalogContent({
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="border rounded-xl px-3 py-2 text-xs font-medium focus:outline-none transition-colors cursor-pointer"
+              className="border rounded-md px-3 py-2 text-xs font-medium focus:outline-none transition-colors cursor-pointer"
               style={{
                 backgroundColor: "var(--theme-card-bg, #ffffff)",
                 borderColor: "var(--theme-card-border, #e5e7eb)",
@@ -441,7 +448,7 @@ function ProductCatalogContent({
           {hasActiveFilters && (
             <button
               onClick={clearAllFilters}
-              className="px-3 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-500 border-rose-200 dark:border-rose-900/30"
+              className="px-3 py-2 rounded-md border text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-500 border-rose-200 dark:border-rose-900/30"
               title="Reset all filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -463,7 +470,13 @@ function ProductCatalogContent({
 
           {/* Multiple Category Badges */}
           {selectedCategories.map((slug) => {
-            const catName = findCategoryBySlug(categories, slug)?.name || slug;
+            const catObj = findCategoryBySlug(categories, slug);
+            const catName = catObj
+              ? catObj.name
+              : slug
+                  .split("-")
+                  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join(" ");
             return (
               <span 
                 key={`cat-${slug}`}
@@ -658,7 +671,7 @@ function ProductCatalogContent({
           </p>
           <button
             onClick={clearAllFilters}
-            className="px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs theme-btn-primary hover:opacity-90"
+            className="px-6 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer shadow-xs theme-btn-primary hover:opacity-90"
           >
             Clear All Filters
           </button>
@@ -683,7 +696,7 @@ function ProductCatalogContent({
                   setCurrentPage((p) => Math.max(1, p - 1));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="px-4 py-2 rounded-xl border text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                className="px-4 py-2 rounded-md border text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                 style={{
                   backgroundColor: "var(--theme-card-bg, #ffffff)",
                   borderColor: "var(--theme-card-border, #e5e7eb)",
@@ -703,7 +716,7 @@ function ProductCatalogContent({
                         setCurrentPage(pageNum);
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
-                      className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                      className={`w-8 h-8 rounded-md text-xs font-bold transition-all cursor-pointer border ${
                         isActive ? "shadow-sm scale-105" : "hover:opacity-80"
                       }`}
                       style={isActive ? {
@@ -728,7 +741,7 @@ function ProductCatalogContent({
                   setCurrentPage((p) => Math.min(lastPage, p + 1));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="px-4 py-2 rounded-xl border text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                className="px-4 py-2 rounded-md border text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                 style={{
                   backgroundColor: "var(--theme-card-bg, #ffffff)",
                   borderColor: "var(--theme-card-border, #e5e7eb)",
@@ -1306,7 +1319,7 @@ function ProductCatalogContent({
                   <button
                     type="button"
                     onClick={clearAllFilters}
-                    className="py-2.5 px-4 rounded-xl border text-xs font-bold transition-colors cursor-pointer shrink-0 hover:bg-black/5 dark:hover:bg-white/5"
+                    className="py-2.5 px-4 rounded-md border text-xs font-bold transition-colors cursor-pointer shrink-0 hover:bg-black/5 dark:hover:bg-white/5"
                     style={{ 
                       borderColor: "var(--theme-card-border, #e5e7eb)",
                       color: "var(--theme-text-heading, #0f172a)"
@@ -1318,7 +1331,7 @@ function ProductCatalogContent({
                 <button
                   type="button"
                   onClick={() => setIsFilterDrawerOpen(false)}
-                  className="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold text-white transition-all shadow-md cursor-pointer text-center hover:opacity-95 active:scale-[0.99]"
+                  className="flex-1 py-2.5 px-4 rounded-md text-xs font-bold text-white transition-all shadow-md cursor-pointer text-center hover:opacity-95 active:scale-[0.99]"
                   style={{ backgroundColor: "var(--theme-primary, #005826)" }}
                 >
                   View {totalCount || products.length} Results

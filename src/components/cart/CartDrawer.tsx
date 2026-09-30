@@ -188,13 +188,13 @@ export function CartDrawer() {
                   <div 
                     className="w-8 h-8 rounded-lg border flex items-center justify-center transition-colors"
                     style={{ 
-                      backgroundColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 12%, transparent)", 
-                      borderColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 28%, transparent)" 
+                      backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 12%, transparent)", 
+                      borderColor: "color-mix(in srgb, var(--theme-primary, #006B45) 28%, transparent)" 
                     }}
                   >
                     <ShoppingBag 
                       className="w-4 h-4" 
-                      style={{ color: "var(--theme-primary, #6366f1)" }} 
+                      style={{ color: "var(--theme-primary, #006B45)" }} 
                     />
                   </div>
                   <div>
@@ -228,7 +228,7 @@ export function CartDrawer() {
                   )}
                   <button
                     onClick={closeCart}
-                    className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-all cursor-pointer"
+                    className="p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-all cursor-pointer"
                     style={{ color: "var(--theme-text-body, #64748b)" }}
                   >
                     <X className="w-5 h-5" />
@@ -265,7 +265,7 @@ export function CartDrawer() {
                     <div 
                       className="w-16 h-16 rounded-2xl border flex items-center justify-center mb-4 transition-colors"
                       style={{ 
-                        backgroundColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 10%, transparent)", 
+                        backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 10%, transparent)", 
                         borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))" 
                       }}
                     >
@@ -288,11 +288,11 @@ export function CartDrawer() {
                     </p>
                     <button
                       onClick={closeCart}
-                      className="px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-lg hover:brightness-105 active:scale-95"
+                      className="px-6 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer shadow-lg hover:brightness-105 active:scale-95"
                       style={{ 
-                        backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #6366f1))", 
+                        backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))", 
                         color: "var(--theme-btn-primary-text, #ffffff)",
-                        boxShadow: "0 8px 24px -4px color-mix(in srgb, var(--theme-primary, #6366f1) 35%, transparent)"
+                        boxShadow: "0 8px 24px -4px color-mix(in srgb, var(--theme-primary, #006B45) 35%, transparent)"
                       }}
                     >
                       Start Exploring
@@ -391,9 +391,9 @@ export function CartDrawer() {
                                 <span 
                                   className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors"
                                   style={{
-                                    backgroundColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 12%, transparent)",
-                                    color: "var(--theme-primary, #6366f1)",
-                                    borderColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 25%, transparent)"
+                                    backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 12%, transparent)",
+                                    color: "var(--theme-primary, #006B45)",
+                                    borderColor: "color-mix(in srgb, var(--theme-primary, #006B45) 25%, transparent)"
                                   }}
                                 >
                                   {item.variant.name}
@@ -436,13 +436,13 @@ export function CartDrawer() {
                           >
                             <span 
                               className="text-xs font-black"
-                              style={{ color: "var(--theme-primary, #6366f1)" }}
+                              style={{ color: "var(--theme-primary, #006B45)" }}
                             >
                               {formatPrice(itemPrice * item.quantity)}
                             </span>
 
                             <div 
-                              className="flex items-center gap-2 rounded-lg p-1 border transition-colors"
+                              className="flex items-center gap-2 rounded-md p-1 border transition-colors"
                               style={{
                                 backgroundColor: "color-mix(in srgb, var(--theme-card-bg, #ffffff) 70%, var(--theme-bg, #f8fafc))",
                                 borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))"
@@ -536,7 +536,7 @@ export function CartDrawer() {
                             value={couponInput}
                             onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                             placeholder="Promo Code (e.g. WELCOME20)"
-                            className="w-full rounded-xl pl-8.5 pr-3 py-2 text-xs uppercase tracking-wider focus:outline-none transition-colors border"
+                            className="w-full rounded-md pl-8.5 pr-3 py-2 text-xs uppercase tracking-wider focus:outline-none transition-colors border"
                             style={{
                               backgroundColor: "color-mix(in srgb, var(--theme-bg, #f8fafc) 85%, var(--theme-card-bg, #ffffff))",
                               borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.12))",
@@ -547,11 +547,11 @@ export function CartDrawer() {
                         <button
                           type="submit"
                           disabled={couponLoading || !couponInput.trim()}
-                          className="px-4 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-50 cursor-pointer shadow-md hover:brightness-110 active:scale-95"
+                          className="px-4 py-2 rounded-md text-xs font-bold transition-all disabled:opacity-50 cursor-pointer shadow-md hover:brightness-110 active:scale-95"
                           style={{
-                            backgroundColor: "var(--theme-primary, #6366f1)",
+                            backgroundColor: "var(--theme-primary, #006B45)",
                             color: "var(--theme-btn-primary-text, #ffffff)",
-                            boxShadow: "0 4px 14px -2px color-mix(in srgb, var(--theme-primary, #6366f1) 35%, transparent)"
+                            boxShadow: "0 4px 14px -2px color-mix(in srgb, var(--theme-primary, #006B45) 35%, transparent)"
                           }}
                         >
                           {couponLoading ? "..." : "Apply"}
@@ -590,8 +590,8 @@ export function CartDrawer() {
                           <div 
                             className="space-y-1.5 p-2 rounded-lg border my-1"
                             style={{
-                              backgroundColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 5%, transparent)",
-                              borderColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 15%, transparent)"
+                              backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 5%, transparent)",
+                              borderColor: "color-mix(in srgb, var(--theme-primary, #006B45) 15%, transparent)"
                             }}
                           >
                             {promotionEvaluation.applied_promotions.map((p, idx) => (
@@ -618,7 +618,7 @@ export function CartDrawer() {
                           style={{ borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))" }}
                         >
                           <span style={{ color: "var(--theme-text-heading, #0f172a)" }}>Total</span>
-                          <span className="text-base font-black" style={{ color: "var(--theme-primary, #6366f1)" }}>
+                          <span className="text-base font-black" style={{ color: "var(--theme-primary, #006B45)" }}>
                             {formatPrice(Math.max(0, subtotal - discount))}
                           </span>
                         </div>
@@ -628,7 +628,7 @@ export function CartDrawer() {
                         className="flex justify-between text-sm font-black py-1"
                       >
                         <span style={{ color: "var(--theme-text-heading, #0f172a)" }}>Subtotal</span>
-                        <span className="text-base font-black" style={{ color: "var(--theme-primary, #6366f1)" }}>
+                        <span className="text-base font-black" style={{ color: "var(--theme-primary, #006B45)" }}>
                           {formatPrice(subtotal)}
                         </span>
                       </div>
@@ -647,11 +647,11 @@ export function CartDrawer() {
                   <button
                     onClick={handleCheckout}
                     disabled={checkoutLoading || hasInvalidItems()}
-                    className="w-full py-3.5 rounded-xl text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3.5 rounded-md text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
-                      background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #6366f1)), var(--theme-secondary, var(--theme-primary, #6366f1)))",
+                      background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #006B45)), var(--theme-secondary, #C6A15B))",
                       color: "var(--theme-btn-primary-text, #ffffff)",
-                      boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #6366f1) 40%, transparent)"
+                      boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)"
                     }}
                   >
                     {checkoutLoading ? (
@@ -677,19 +677,19 @@ export function CartDrawer() {
                     <span className="flex items-center gap-1">
                       <span 
                         className="w-1.5 h-1.5 rounded-full inline-block" 
-                        style={{ backgroundColor: "var(--theme-primary, #6366f1)" }}
+                        style={{ backgroundColor: "var(--theme-primary, #006B45)" }}
                       /> Cash on Delivery
                     </span>
                     <span className="flex items-center gap-1">
                       <span 
                         className="w-1.5 h-1.5 rounded-full inline-block" 
-                        style={{ backgroundColor: "var(--theme-secondary, var(--theme-primary, #6366f1))" }}
+                        style={{ backgroundColor: "var(--theme-secondary, #C6A15B)" }}
                       /> Express Dispatch
                     </span>
                     <span className="flex items-center gap-1">
                       <span 
                         className="w-1.5 h-1.5 rounded-full inline-block" 
-                        style={{ backgroundColor: "color-mix(in srgb, var(--theme-primary, #6366f1) 65%, #10b981)" }}
+                        style={{ backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 65%, #10b981)" }}
                       /> 100% Authentic
                     </span>
                   </div>

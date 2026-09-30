@@ -23,6 +23,7 @@ import {
   Tag,
 } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { STOREFRONT_CONFIG } from "@/config/storefrontConfig";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useThemeStore } from "@/store/useThemeStore";
@@ -113,7 +114,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
   return (
     <>
       {/* ===================== NON-STICKY TOP NOTIFICATION BAR ===================== */}
-      {mounted && theme.announcement_enabled && (
+      {mounted && STOREFRONT_CONFIG.SHOW_TOP_ANNOUNCEMENT && theme.announcement_enabled && (
         <div className="bg-gradient-to-r from-indigo-950 via-[#0a0d18] to-cyan-950 border-b border-white/5 text-[11px] py-1 px-4 text-center text-slate-300 flex items-center justify-between max-w-full">
           <div className="hidden md:flex items-center gap-3 text-slate-400">
             <span className="flex items-center gap-1 text-cyan-400 font-medium">
@@ -145,14 +146,14 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
           </Link>
 
           {/* Middle: Big Prominent Search Area */}
-          <div className="flex-1 max-w-xl mx-2 sm:mx-4 hidden sm:block">
+          <div className="flex-1 min-w-0 max-w-xl mx-2 sm:mx-4 hidden md:block">
             <button
               onClick={onOpenSearch}
-              className="w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 dark:bg-white/[0.08] hover:bg-gray-200/80 dark:hover:bg-white/[0.12] border border-gray-200 dark:border-white/20 text-slate-800 dark:text-white text-xs transition-all group cursor-pointer shadow-xs"
+              className="w-full flex items-center justify-between px-4 py-2 rounded-md bg-gray-100 dark:bg-white/[0.08] hover:bg-gray-200/80 dark:hover:bg-white/[0.12] border border-gray-200 dark:border-white/20 text-slate-800 dark:text-white text-xs transition-all group cursor-pointer shadow-xs"
               title="Search products, brands, categories... (Cmd+K)"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <Search className="w-4 h-4 text-gray-500 dark:text-slate-300 group-hover:text-[#005826] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
+                <Search className="w-4 h-4 text-gray-500 dark:text-slate-300 group-hover:text-[#006B45] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
                 <span className="text-xs text-gray-600 dark:text-slate-200 group-hover:text-gray-900 dark:group-hover:text-white font-medium truncate">
                   Search catalog, categories, authorized brands...
                 </span>
@@ -170,7 +171,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Mobile Search Trigger */}
             <button
               onClick={onOpenSearch}
-              className="sm:hidden p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs transition-all cursor-pointer"
+              className="md:hidden p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs transition-all cursor-pointer"
               title="Search catalog (Cmd+K)"
             >
               <Search className="w-4 h-4" />
@@ -179,7 +180,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Wishlist Icon */}
             <button
               onClick={openWishlist}
-              className="relative p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-[#fb2c5c] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 border border-transparent transition-all cursor-pointer group"
+              className="relative p-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-[#fb2c5c] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 border border-transparent transition-all cursor-pointer group"
               title="Saved Wishlist"
             >
               <Heart
@@ -203,19 +204,20 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Shopping Cart Drawer Trigger */}
             <button
               onClick={openCart}
-              className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#005826] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
+              className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-md border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#006B45] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
               title="Shopping Cart"
             >
               {mounted && cartCount > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] px-1 font-black text-[10px] rounded-full flex items-center justify-center shadow-md bg-[#005826] text-white ring-2 ring-white dark:ring-[#090b14] z-10"
+                  className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] px-1 font-black text-[10px] rounded-full flex items-center justify-center shadow-md text-white ring-2 ring-white dark:ring-[#090b14] z-10"
+                  style={{ backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))" }}
                 >
                   {cartCount}
                 </motion.span>
               )}
-              <ShoppingBag className="w-4 h-4 text-[#005826] dark:text-indigo-400 transition-colors" />
+              <ShoppingBag className="w-4 h-4 text-[#006B45] dark:text-indigo-400 transition-colors" />
               <span className="text-xs font-bold hidden sm:inline">
                 Cart
               </span>
@@ -228,9 +230,9 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
               ) : (
                 <Link
                   href="/login"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-xs font-bold text-slate-800 dark:text-white hover:border-[#005826] transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-xs font-bold text-slate-800 dark:text-white hover:border-[#006B45] transition-all cursor-pointer"
                 >
-                  <UserIcon className="w-3.5 h-3.5 text-[#005826] dark:text-indigo-400" />
+                  <UserIcon className="w-3.5 h-3.5 text-[#006B45] dark:text-indigo-400" />
                   <span>Sign In</span>
                 </Link>
               )}
@@ -239,7 +241,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Mobile Navigation Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-lg text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
+              className="lg:hidden p-1.5 rounded-md text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -264,14 +266,20 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             <div className="flex items-center gap-2 shrink-0 z-10">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer"
+                className="all-categories-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer"
                 style={{
-                  backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #005826))",
-                  color: "var(--theme-btn-primary-text, #ffffff)",
+                  backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))",
+                  color: "#ffffff",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--theme-primary-hover, #005238)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))";
                 }}
               >
-                <Menu className="w-3.5 h-3.5" style={{ color: "var(--theme-btn-primary-text, #ffffff)" }} />
-                <span>All Products</span>
+                <Menu className="w-3.5 h-3.5 text-white shrink-0" style={{ color: "#ffffff" }} />
+                <span className="text-white font-bold" style={{ color: "#ffffff" }}>All Products</span>
               </Link>
             </div>
 
@@ -330,8 +338,8 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                         <div
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all select-none ${
                             isHovered
-                              ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
-                              : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white"
+                              ? "text-[#006B45] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                              : "text-slate-700 dark:text-slate-300 hover:text-[#006B45] dark:hover:text-white"
                           }`}
                         >
                           <span>{item.title}</span>
@@ -346,7 +354,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                           {hasDropdown && (
                             <ChevronDown
                               className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
-                                isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                                isHovered ? "rotate-180 text-[#006B45] dark:text-cyan-400" : ""
                               }`}
                             />
                           )}
@@ -358,8 +366,8 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                           rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
                             isHovered
-                              ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
-                              : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                              ? "text-[#006B45] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                              : "text-slate-700 dark:text-slate-300 hover:text-[#006B45] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
                           }`}
                         >
                           <span>{item.title}</span>
@@ -376,7 +384,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                           {hasDropdown && (
                             <ChevronDown
                               className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
-                                isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                                isHovered ? "rotate-180 text-[#006B45] dark:text-cyan-400" : ""
                               }`}
                             />
                           )}
@@ -385,7 +393,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all whitespace-nowrap ${
                             isHovered
-                              ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                              ? "text-[#006B45] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
                               : "text-slate-700 dark:text-slate-300"
                           }`}
                         >
@@ -393,7 +401,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                           {hasDropdown && (
                             <ChevronDown
                               className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
-                                isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                                isHovered ? "rotate-180 text-[#006B45] dark:text-cyan-400" : ""
                               }`}
                             />
                           )}

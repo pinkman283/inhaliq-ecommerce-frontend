@@ -14,14 +14,8 @@ async function inspectHome() {
   const homeJson = await homeRes.json();
   const d = homeJson.data;
   console.log("Home keys:", Object.keys(d || {}));
-  console.log("Sliders count:", d?.sliders?.length);
-  if (d?.sliders?.length > 0) {
-    console.log("First slider:", d.sliders[0]);
-  }
-  console.log("Category bottom ads count:", d?.category_bottom_ads?.length);
-  if (d?.category_bottom_ads?.length > 0) {
-    console.log("First category bottom ad:", d.category_bottom_ads[0]);
-  }
+  console.log("ALL SLIDERS:", d?.sliders);
+  console.log("CATEGORY BOTTOM ADS:", d?.category_bottom_ads);
   console.log("Deals middle ads count:", d?.deals_middle_ads?.length);
   if (d?.deals_middle_ads?.length > 0) {
     console.log("First deals middle ad:", d.deals_middle_ads[0]);

@@ -72,12 +72,23 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     router.push(`/products/${slug}`);
   };
 
-  const quickCategories = [
-    { name: "Audio & Acoustics", slug: "audio-acoustics" },
-    { name: "Mechanical Keyboards", slug: "keyboards-desks" },
-    { name: "Everyday Carry", slug: "everyday-carry" },
-    { name: "Desk Lighting", slug: "smart-living-lighting" },
-  ];
+  const [quickCategories, setQuickCategories] = useState<{ name: string; slug: string }[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      api.getCategories()
+        .then((cats) => {
+          const list = Array.isArray(cats) ? cats : [];
+          setQuickCategories(
+            list
+              .filter((c) => c && c.slug && !c.slug.includes("test"))
+              .slice(0, 6)
+              .map((c) => ({ name: c.name, slug: c.slug }))
+          );
+        })
+        .catch(() => {});
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -97,7 +108,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="relative w-full max-w-2xl rounded-2xl bg-[#0e121e] border border-white/15 shadow-2xl overflow-hidden z-10"
+            className="relative w-full max-w-2xl rounded-lg bg-[#0e121e] border border-white/15 shadow-2xl overflow-hidden z-10"
           >
             {/* Input Bar */}
             <div className="flex items-center px-4 py-3.5 border-b border-white/10 gap-3">
@@ -119,7 +130,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
               {query && (
                 <button
                   onClick={() => setQuery("")}
-                  className="p-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer"
+                  className="p-1 rounded-md hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -159,13 +170,13 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       <div
                         key={product.id}
                         onClick={() => handleSelectProduct(product.slug)}
-                        className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 cursor-pointer transition-all group"
+                        className="flex items-center gap-3 p-2.5 rounded-md hover:bg-white/5 border border-transparent hover:border-white/10 cursor-pointer transition-all group"
                       >
                         {img && (
                           <img
                             src={img}
                             alt={product.name}
-                            className="w-12 h-12 rounded-lg object-cover bg-slate-900 border border-white/10"
+                            className="w-12 h-12 rounded-md object-cover bg-slate-900 border border-white/10"
                           />
                         )}
                         <div className="flex-1 min-w-0">
@@ -194,7 +205,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         onClose();
                         router.push(`/products?search=${encodeURIComponent(query.trim())}`);
                       }}
-                      className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white transition-colors cursor-pointer"
+                      className="w-full py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white transition-colors cursor-pointer"
                     >
                       See all products matching &ldquo;{query}&rdquo;
                     </button>
@@ -215,9 +226,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         key={c.slug}
                         onClick={() => {
                           onClose();
-                          router.push(`/products?category=${c.slug}`);
+                          router.push(`/category/${c.slug}`);
                         }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-200 hover:text-white transition-all"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-200 hover:text-white transition-all"
                       >
                         <Tag className="w-3 h-3 text-indigo-400" />
                         {c.name}

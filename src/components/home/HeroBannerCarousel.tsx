@@ -80,7 +80,7 @@ export function HeroBannerCarousel({ banners }: HeroBannerCarouselProps) {
 
   return (
     <div
-      className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-xl group select-none bg-[#090b11] h-[220px] sm:h-[250px] lg:h-[280px]"
+      className="relative rounded-lg sm:rounded-xl overflow-hidden border border-white/10 shadow-xl group select-none bg-[#090b11] w-full aspect-[16/9] min-h-[200px] max-h-[460px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -90,6 +90,7 @@ export function HeroBannerCarousel({ banners }: HeroBannerCarouselProps) {
           {banners.map((banner, index) => {
             const targetUrl = banner.computed_link || banner.cta_link || "/products";
             const isPriority = index === 0;
+            const hasTextOverlay = Boolean(banner.title && banner.title.trim().length > 0);
 
             return (
               <div
@@ -111,67 +112,67 @@ export function HeroBannerCarousel({ banners }: HeroBannerCarouselProps) {
                     )}
                     <img
                       src={banner.image_url}
-                      alt={banner.alt_text || banner.title}
+                      alt={banner.alt_text || banner.title || "Promotional Banner"}
                       loading={isPriority ? "eager" : "lazy"}
-                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/card:scale-[1.02]"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/card:scale-[1.01]"
                     />
                   </picture>
 
-                  {/* Contrast Gradient: Dark on left so text is 100% readable, fades to show product on right */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-transparent w-full sm:w-2/3 z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent sm:hidden z-10" />
+                  {/* NO artificial dark overlay - natural image composition */}
 
-                  {/* Banner Copy Overlay */}
-                  <div className="absolute inset-0 z-20 flex flex-col justify-center p-4 sm:p-6 lg:p-7 max-w-sm sm:max-w-md space-y-1.5 sm:space-y-2 dark-banner-content">
-                    {/* Eyebrow & Badges */}
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {banner.eyebrow && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-white/10 text-cyan-300 border border-cyan-400/30 backdrop-blur-md shadow-sm">
-                          <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
-                          {banner.eyebrow}
-                        </span>
-                      )}
+                  {/* Banner Copy Overlay (only if real text content is configured) */}
+                  {hasTextOverlay && (
+                    <div className="absolute inset-0 z-20 flex flex-col justify-center p-4 sm:p-6 lg:p-7 max-w-sm sm:max-w-md space-y-1.5 sm:space-y-2 dark-banner-content">
+                      {/* Eyebrow & Badges */}
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {banner.eyebrow && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-white/10 text-cyan-300 border border-cyan-400/30 backdrop-blur-md shadow-sm">
+                            <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
+                            {banner.eyebrow}
+                          </span>
+                        )}
 
-                      {banner.badge && (
-                        <span className="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 shadow-sm">
-                          {banner.badge}
-                        </span>
-                      )}
+                        {banner.badge && (
+                          <span className="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 shadow-sm">
+                            {banner.badge}
+                          </span>
+                        )}
 
-                      {banner.discount_tag && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/20 text-purple-200 border border-purple-400/40 backdrop-blur-md">
-                          <Tag className="w-2.5 h-2.5 text-purple-400" />
-                          {banner.discount_tag}
-                        </span>
-                      )}
-                    </div>
+                        {banner.discount_tag && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/20 text-purple-200 border border-purple-400/40 backdrop-blur-md">
+                            <Tag className="w-2.5 h-2.5 text-purple-400" />
+                            {banner.discount_tag}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Headline */}
-                    <h2
-                      style={{ color: "#ffffff" }}
-                      className="text-base sm:text-xl lg:text-2xl font-black text-white tracking-tight leading-snug drop-shadow-md line-clamp-2"
-                    >
-                      {banner.title}
-                    </h2>
-
-                    {/* Subtitle */}
-                    {banner.subtitle && (
-                      <p
-                        style={{ color: "rgba(241, 245, 249, 0.95)" }}
-                        className="text-[11px] sm:text-xs text-slate-200/90 leading-relaxed line-clamp-1 sm:line-clamp-2 drop-shadow"
+                      {/* Headline */}
+                      <h2
+                        style={{ color: "#ffffff" }}
+                        className="text-base sm:text-xl lg:text-2xl font-black text-white tracking-tight leading-snug drop-shadow-md line-clamp-2"
                       >
-                        {banner.subtitle}
-                      </p>
-                    )}
+                        {banner.title}
+                      </h2>
 
-                    {/* CTA Button */}
-                    <div className="pt-0.5">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-white text-slate-950 font-black text-[10px] sm:text-[11px] uppercase tracking-wider group-hover/card:bg-cyan-400 transition-all duration-300 shadow-lg group-hover/card:translate-x-0.5">
-                        <span>{banner.cta_text || "Shop Now"}</span>
-                        <ArrowRight className="w-3 h-3 transition-transform group-hover/card:translate-x-0.5" />
-                      </span>
+                      {/* Subtitle */}
+                      {banner.subtitle && (
+                        <p
+                          style={{ color: "rgba(241, 245, 249, 0.95)" }}
+                          className="text-[11px] sm:text-xs text-slate-200/90 leading-relaxed line-clamp-1 sm:line-clamp-2 drop-shadow"
+                        >
+                          {banner.subtitle}
+                        </p>
+                      )}
+
+                      {/* CTA Button */}
+                      <div className="pt-0.5">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-md bg-white text-slate-950 font-black text-[10px] sm:text-[11px] uppercase tracking-wider group-hover/card:bg-cyan-400 transition-all duration-300 shadow-lg group-hover/card:translate-x-0.5">
+                          <span>{banner.cta_text || "Shop Now"}</span>
+                          <ArrowRight className="w-3 h-3 transition-transform group-hover/card:translate-x-0.5" />
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </Link>
               </div>
             );

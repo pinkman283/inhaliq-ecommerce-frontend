@@ -1,9 +1,12 @@
 import { create } from "zustand";
 import axios from "axios";
+import { STOREFRONT_CONFIG } from "@/config/storefrontConfig";
 
 export interface ThemeSettings {
   theme_primary_color: string;
+  theme_primary_hover?: string;
   theme_secondary_color: string;
+  theme_secondary_hover?: string;
   theme_accent_gradient: string;
   theme_bg_color: string;
   theme_card_bg_color: string;
@@ -24,6 +27,7 @@ export interface ThemeSettings {
   theme_footer_bg_color?: string;
   theme_footer_text_color?: string;
   theme_radius: "rounded-none" | "rounded-md" | "rounded-lg" | "rounded-xl" | "rounded-2xl" | string;
+  theme_card_radius?: string;
   announcement_enabled: boolean;
   announcement_text: string;
   announcement_badge: string;
@@ -103,34 +107,37 @@ export interface ThemeSettings {
 }
 
 export const DEFAULT_THEME_SETTINGS: ThemeSettings = {
-  theme_primary_color: "#005826",
-  theme_secondary_color: "#2da54b",
+  theme_primary_color: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
+  theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+  theme_secondary_color: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY,
+  theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
   theme_accent_gradient: "emerald-teal",
   theme_bg_color: "#ffffff",
   theme_card_bg_color: "#ffffff",
   theme_card_border_color: "#e5e7eb",
   theme_text_heading_color: "#0f172a",
   theme_text_body_color: "#475569",
-  theme_btn_primary_bg: "#005826",
+  theme_btn_primary_bg: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
   theme_btn_primary_text: "#ffffff",
   theme_btn_secondary_bg: "#f3f4f6",
   theme_btn_secondary_text: "#0f172a",
-  theme_tab_active_bg: "#005826",
+  theme_tab_active_bg: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
   theme_tab_active_text: "#ffffff",
-  theme_view_all_color: "#005826",
-  theme_hover_bg: "rgba(0, 88, 38, 0.08)",
-  theme_hover_text: "#005826",
+  theme_view_all_color: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
+  theme_hover_bg: "rgba(0, 107, 69, 0.08)",
+  theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
   theme_nav_btn_bg: "#ffffff",
   theme_nav_btn_color: "#0f172a",
   theme_footer_bg_color: "#0f172a",
   theme_footer_text_color: "#94a3b8",
-  theme_radius: "rounded-xl",
-  announcement_enabled: true,
-  announcement_text: "Free Express Courier on orders over ৳2,000 • Code: AETHER10 (-10%)",
+  theme_radius: "rounded-md",
+  theme_card_radius: STOREFRONT_CONFIG.DEFAULT_CARD_RADIUS,
+  announcement_enabled: STOREFRONT_CONFIG.SHOW_TOP_ANNOUNCEMENT,
+  announcement_text: "Free Express Courier on orders over ৳2,000",
   announcement_badge: "Fast Dispatch: Daily Courier Active",
-  navbar_promo_enabled: true,
-  navbar_promo_discount_text: "20% OFF",
-  navbar_promo_code: "AETHER10",
+  navbar_promo_enabled: false,
+  navbar_promo_discount_text: "",
+  navbar_promo_code: "",
   navbar_promo_link: "/promotions",
   nav_deals_enabled: true,
   nav_deals_text: "Deals",
@@ -140,17 +147,17 @@ export const DEFAULT_THEME_SETTINGS: ThemeSettings = {
   category_deals_card_subtitle: "Up to 20% Off",
   category_deals_card_link: "/products?discounted=true",
   footer_features_enabled: true,
-  footer_feature_title_1: "Free Express Shipping",
-  footer_feature_desc_1: "Complimentary delivery on qualifying orders.",
+  footer_feature_title_1: "Nationwide Delivery",
+  footer_feature_desc_1: "Fast delivery across Bangladesh",
   footer_feature_link_1: "/shipping-policy",
   footer_feature_title_2: "100% Authentic Guarantee",
-  footer_feature_desc_2: "Verified authentic hardware and genuine e-liquids.",
+  footer_feature_desc_2: "Verified genuine products",
   footer_feature_link_2: "/about",
-  footer_feature_title_3: "Fast Dispatch",
-  footer_feature_desc_3: "Orders processed and dispatched within 24-48 hours.",
+  footer_feature_title_3: "Cash on Delivery",
+  footer_feature_desc_3: "Pay upon order arrival",
   footer_feature_link_3: "/track",
   footer_feature_title_4: "Dedicated Customer Care",
-  footer_feature_desc_4: "Expert assistance with orders and device support.",
+  footer_feature_desc_4: "Prompt expert support",
   footer_feature_link_4: "/contact",
   customer_auth_bg_image: "",
   customer_auth_bg_color: "#ffffff",
@@ -204,14 +211,17 @@ export const RADIUS_MAP: Record<string, { root: string; sm: string; md: string; 
 };
 
 export function getThemeCardRadiusPx(radiusKey?: string): number {
-  if (!radiusKey) return 24;
+  if (!radiusKey) {
+    const defaultVal = STOREFRONT_CONFIG.DEFAULT_CARD_RADIUS || "10px";
+    return parseInt(defaultVal, 10) || 10;
+  }
   if (radiusKey === "rounded-none") return 0;
-  if (radiusKey === "rounded-md") return 12;
-  if (radiusKey === "rounded-lg") return 18;
-  if (radiusKey === "rounded-xl") return 24;
-  if (radiusKey === "rounded-2xl") return 32;
+  if (radiusKey === "rounded-md") return 8;
+  if (radiusKey === "rounded-lg") return 10;
+  if (radiusKey === "rounded-xl") return 14;
+  if (radiusKey === "rounded-2xl") return 18;
   if (radiusKey.endsWith("px")) return Math.max(0, parseInt(radiusKey, 10) || 0);
-  return 24;
+  return 10;
 }
 
 export function getThemeInputRadiusPx(radiusKey?: string): number {
@@ -302,8 +312,15 @@ export function applyThemeToDOM(theme: ThemeSettings) {
   root.classList.toggle("theme-light-mode", isLightMode);
 
   // Core Canvas & Brand Accent Tokens
-  root.style.setProperty("--theme-primary", theme.theme_primary_color);
-  root.style.setProperty("--theme-secondary", theme.theme_secondary_color);
+  const primaryColor = theme.theme_primary_color || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+  const primaryHover = theme.theme_primary_hover || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER;
+  const secondaryColor = theme.theme_secondary_color || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY;
+  const secondaryHover = theme.theme_secondary_hover || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER;
+
+  root.style.setProperty("--theme-primary", primaryColor);
+  root.style.setProperty("--theme-primary-hover", primaryHover);
+  root.style.setProperty("--theme-secondary", secondaryColor);
+  root.style.setProperty("--theme-secondary-hover", secondaryHover);
   root.style.setProperty("--theme-bg", theme.theme_bg_color);
   root.style.setProperty("--theme-card-bg", theme.theme_card_bg_color);
 
@@ -372,8 +389,7 @@ export function applyThemeToDOM(theme: ThemeSettings) {
   root.style.setProperty("--theme-footer-social-border", footerSocialBorder);
   root.style.setProperty("--theme-footer-logo-inner-bg", footerLogoBg);
 
-  // Dynamic Radius tokens
-  const radiusConfig = RADIUS_MAP[theme.theme_radius] || RADIUS_MAP["rounded-lg"];
+  const radiusConfig = RADIUS_MAP[theme.theme_radius] || RADIUS_MAP["rounded-md"];
   root.style.setProperty("--radius", radiusConfig.root);
   root.style.setProperty("--radius-sm", radiusConfig.sm);
   root.style.setProperty("--radius-md", radiusConfig.md);
@@ -382,6 +398,9 @@ export function applyThemeToDOM(theme: ThemeSettings) {
   root.style.setProperty("--radius-2xl", radiusConfig["2xl"]);
   root.style.setProperty("--radius-3xl", radiusConfig["3xl"]);
   root.style.setProperty("--radius-4xl", radiusConfig["4xl"]);
+  root.style.setProperty("--theme-card-radius", theme.theme_card_radius || STOREFRONT_CONFIG.DEFAULT_CARD_RADIUS || "8px");
+  root.style.setProperty("--theme-btn-radius", "6px");
+  root.style.setProperty("--theme-input-radius", "6px");
 }
 
 interface ThemeState {
@@ -402,6 +421,16 @@ export function initThemeFromCache(): boolean {
     if (cached) {
       const parsed = JSON.parse(cached);
       const restored = { ...DEFAULT_THEME_SETTINGS, ...parsed };
+      if (STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS) {
+        restored.theme_primary_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+        restored.theme_primary_hover = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER;
+        restored.theme_secondary_color = STOREFRONT_CONFIG.THEME_COLORS.SECONDARY;
+        restored.theme_secondary_hover = STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER;
+        restored.theme_btn_primary_bg = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+        restored.theme_tab_active_bg = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+        restored.theme_view_all_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+        restored.theme_hover_text = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+      }
       useThemeStore.setState({
         theme: restored,
         isLoaded: true,
@@ -418,7 +447,19 @@ const getInitialClientTheme = (): ThemeSettings => {
     try {
       const cached = localStorage.getItem("aether_active_theme_cache");
       if (cached) {
-        return { ...DEFAULT_THEME_SETTINGS, ...JSON.parse(cached) };
+        const parsed = JSON.parse(cached);
+        const restored = { ...DEFAULT_THEME_SETTINGS, ...parsed };
+        if (STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS) {
+          restored.theme_primary_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_primary_hover = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER;
+          restored.theme_secondary_color = STOREFRONT_CONFIG.THEME_COLORS.SECONDARY;
+          restored.theme_secondary_hover = STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER;
+          restored.theme_btn_primary_bg = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_tab_active_bg = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_view_all_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_hover_text = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+        }
+        return restored;
       }
     } catch (e) {}
   }
@@ -442,11 +483,69 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
 
   fetchTheme: async () => {
     try {
+      const provider = process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior";
+      if (provider === "senior") {
+        const res = await axios.get("/api/storefront/init-settings", {
+          timeout: 8000,
+        });
+        if (res.data?.success && res.data?.data) {
+          const init = res.data.data;
+          const rawPrimary = init.main_settings?.primary_color;
+          const rawSecondary = init.main_settings?.secondary_color;
+          const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+            ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
+            : (rawPrimary || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
+          const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+            ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
+            : (rawSecondary || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
+
+          const loadedTheme: ThemeSettings = {
+            ...get().theme,
+            store_brand_name: init.general_settings?.name || get().theme.store_brand_name,
+            store_brand_logo: init.general_settings?.logo || get().theme.store_brand_logo,
+            theme_primary_color: primaryColor,
+            theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+            theme_secondary_color: secondaryColor,
+            theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
+            theme_btn_primary_bg: primaryColor,
+            theme_tab_active_bg: primaryColor,
+            theme_view_all_color: primaryColor,
+            theme_hover_text: primaryColor,
+          };
+          set({ theme: loadedTheme, isLoaded: true });
+          applyThemeToDOM(loadedTheme);
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.setItem("aether_active_theme_cache", JSON.stringify(loadedTheme));
+            } catch (e) {}
+          }
+          return;
+        }
+      }
+
       const res = await axios.get(`${API_BASE_URL}/theme-settings`, {
         timeout: 8000,
       });
       if (res.data) {
-        const loadedTheme = { ...DEFAULT_THEME_SETTINGS, ...res.data };
+        const backendData = res.data;
+        const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+          ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
+          : (backendData.theme_primary_color || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
+        const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+          ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
+          : (backendData.theme_secondary_color || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
+
+        const loadedTheme: ThemeSettings = {
+          ...DEFAULT_THEME_SETTINGS,
+          ...backendData,
+          theme_primary_color: primaryColor,
+          theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+          theme_secondary_color: secondaryColor,
+          theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
+          theme_btn_primary_bg: primaryColor,
+          theme_tab_active_bg: primaryColor,
+          theme_view_all_color: primaryColor,
+        };
         set({ theme: loadedTheme, isLoaded: true });
         applyThemeToDOM(loadedTheme);
         if (typeof window !== "undefined") {

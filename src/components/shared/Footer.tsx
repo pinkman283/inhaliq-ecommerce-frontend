@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   Truck,
   RotateCcw,
+  Banknote,
   Headphones,
   Globe,
   ChevronDown,
@@ -42,14 +43,17 @@ export function Footer() {
           }
         }
       } catch (err) {
-        // Graceful fallback to direct API if storefront proxy failed
+        // Graceful fallback to direct API if storefront proxy failed and not senior
         try {
-          const directUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
-          const directRes = await fetch(`${directUrl}/store-navigation`);
-          if (directRes.ok && isMounted) {
-            const directData = await directRes.json();
-            if (directData.footer_columns) setColumns(directData.footer_columns);
-            if (directData.social_links) setSocialLinks(directData.social_links);
+          const provider = process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior";
+          if (provider !== "senior") {
+            const directUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
+            const directRes = await fetch(`${directUrl}/store-navigation`);
+            if (directRes.ok && isMounted) {
+              const directData = await directRes.json();
+              if (directData.footer_columns) setColumns(directData.footer_columns);
+              if (directData.social_links) setSocialLinks(directData.social_links);
+            }
           }
         } catch {}
       }
@@ -82,78 +86,98 @@ export function Footer() {
     .sort((a, b) => a.sort_order - b.sort_order);
 
   return (
-    <footer
-      suppressHydrationWarning
-      className="theme-footer border-t text-sm transition-colors duration-200"
-      role="contentinfo"
-    >
-      {/* 1. Guarantees Ribbon (Theme-Managed) */}
+    <>
+      {/* 1. Store Benefits Strip (Clean, Production-Grade Trust Strip) */}
       {theme.footer_features_enabled !== false && (
-        <div className="theme-footer-guarantees border-b transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              <Link href={theme.footer_feature_link_1 || "/shipping-policy"} className="flex items-center gap-4 group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-xl p-1">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:border-indigo-400 transition-colors">
-                  <Truck className="w-6 h-6 text-indigo-400" />
+        <section
+          aria-label="Why Shop With Us"
+          className="w-full border-t border-gray-200/80 dark:border-white/10 bg-white dark:bg-[#0b101a] py-8 sm:py-9 transition-colors"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-0 lg:divide-x divide-gray-200/80 dark:divide-white/10">
+              {/* 1. Nationwide Delivery */}
+              <Link
+                href={theme.footer_feature_link_1 || "/shipping-policy"}
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                  <Truck className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
-                <div>
-                  <h4 className="theme-footer-card-title font-bold text-sm group-hover:text-cyan-400 transition-colors">
-                    {theme.footer_feature_title_1 || "Free Express Shipping"}
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
+                    {theme.footer_feature_title_1 || "Nationwide Delivery"}
                   </h4>
-                  <p className="theme-footer-card-desc text-xs mt-0.5">
-                    {theme.footer_feature_desc_1 || "Complimentary delivery on qualifying orders."}
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
+                    {theme.footer_feature_desc_1 || "Fast delivery across Bangladesh"}
                   </p>
                 </div>
               </Link>
 
-              <Link href={theme.footer_feature_link_2 || "/about"} className="flex items-center gap-4 group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-xl p-1">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 group-hover:border-cyan-400 transition-colors">
-                  <ShieldCheck className="w-6 h-6 text-cyan-400" />
+              {/* 2. 100% Authentic Guarantee */}
+              <Link
+                href={theme.footer_feature_link_2 || "/about"}
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                  <ShieldCheck className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
-                <div>
-                  <h4 className="theme-footer-card-title font-bold text-sm group-hover:text-cyan-400 transition-colors">
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
                     {theme.footer_feature_title_2 || "100% Authentic Guarantee"}
                   </h4>
-                  <p className="theme-footer-card-desc text-xs mt-0.5">
-                    {theme.footer_feature_desc_2 || "Verified authentic hardware and genuine e-liquids."}
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
+                    {theme.footer_feature_desc_2 || "Verified genuine products"}
                   </p>
                 </div>
               </Link>
 
-              <Link href={theme.footer_feature_link_3 || "/track"} className="flex items-center gap-4 group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-xl p-1">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:border-purple-400 transition-colors">
-                  <RotateCcw className="w-6 h-6 text-purple-400" />
+              {/* 3. Cash on Delivery */}
+              <Link
+                href={theme.footer_feature_link_3 || "/track"}
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                  <Banknote className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
-                <div>
-                  <h4 className="theme-footer-card-title font-bold text-sm group-hover:text-cyan-400 transition-colors">
-                    {theme.footer_feature_title_3 || "Fast Dispatch"}
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
+                    {theme.footer_feature_title_3 || "Cash on Delivery"}
                   </h4>
-                  <p className="theme-footer-card-desc text-xs mt-0.5">
-                    {theme.footer_feature_desc_3 || "Orders processed and dispatched within 24-48 hours."}
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
+                    {theme.footer_feature_desc_3 || "Pay safely upon arrival"}
                   </p>
                 </div>
               </Link>
 
-              <Link href={theme.footer_feature_link_4 || "/contact"} className="flex items-center gap-4 group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-xl p-1">
-                <div className="w-12 h-12 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center shrink-0 group-hover:border-pink-400 transition-colors">
-                  <Headphones className="w-6 h-6 text-pink-400" />
+              {/* 4. Dedicated Customer Care */}
+              <Link
+                href={theme.footer_feature_link_4 || "/contact"}
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                  <Headphones className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
-                <div>
-                  <h4 className="theme-footer-card-title font-bold text-sm group-hover:text-cyan-400 transition-colors">
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
                     {theme.footer_feature_title_4 || "Dedicated Customer Care"}
                   </h4>
-                  <p className="theme-footer-card-desc text-xs mt-0.5">
-                    {theme.footer_feature_desc_4 || "Expert assistance with orders and device support."}
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
+                    {theme.footer_feature_desc_4 || "Prompt expert support"}
                   </p>
                 </div>
               </Link>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* 2. Main Footer Area */}
-      <div className="theme-footer-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-16">
+      <footer
+        suppressHydrationWarning
+        className="theme-footer border-t text-sm transition-colors duration-200"
+        role="contentinfo"
+      >
+        <div className="theme-footer-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-14 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-16">
         <nav aria-label="Footer Navigation" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Brand Column (2-wide on lg) */}
           <div className="lg:col-span-2 space-y-4">
@@ -181,7 +205,7 @@ export function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Follow ${brandName} on ${social.platform} (opens in a new tab)`}
-                      className="theme-footer-social-btn w-8 h-8 rounded-xl border flex items-center justify-center transition-all hover:text-cyan-400 hover:border-cyan-400/50 hover:bg-cyan-500/10 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400"
+                      className="theme-footer-social-btn w-8 h-8 rounded-md border flex items-center justify-center transition-all hover:text-cyan-400 hover:border-cyan-400/50 hover:bg-cyan-500/10 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400"
                     >
                       <SocialPlatformIcon platform={social.platform} icon={social.icon} />
                     </a>
@@ -274,5 +298,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  );
+  </>
+);
 }

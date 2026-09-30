@@ -79,7 +79,7 @@ export function ReviewSummary({
         <div>
           <span 
             className="text-xs font-black uppercase tracking-widest block mb-1"
-            style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))" }}
+            style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
           >
             Customer Validation
           </span>
@@ -101,7 +101,7 @@ export function ReviewSummary({
         >
           <Plus 
             className="w-4 h-4" 
-            style={{ color: "var(--theme-view-all-color, var(--theme-primary, #005826))" }}
+            style={{ color: "var(--theme-view-all-color, var(--theme-primary, #006B45))" }}
           /> 
           <span>Write a Review / Rate</span>
         </button>

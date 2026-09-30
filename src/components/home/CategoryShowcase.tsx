@@ -24,15 +24,18 @@ import {
 } from "@/components/ui/carousel";
 import { Banner, Category, Product, HomepageSection } from "@/types";
 import { api } from "@/lib/api";
+import { STOREFRONT_CONFIG } from "@/config/storefrontConfig";
 import { BottomBannerCarousel } from "./BottomBannerCarousel";
 import { HomepageProductSection } from "./HomepageProductSection";
 
 const ICON_MAP: Record<string, any> = {
-  "audio-acoustics": Headphones,
-  "keyboards-desks": Keyboard,
-  "everyday-carry": Briefcase,
-  "smart-living-lighting": Sparkles,
-  "pro-wearables": Watch,
+  "disposable": Sparkles,
+  "disposable-1": Sparkles,
+  "devices": Layers,
+  "devices-1": Layers,
+  "nicsalt-juice": Flame,
+  "nicsalt-juice-1": Flame,
+  "freebase-juice": Trophy,
 };
 
 interface CategorySectionData {
@@ -116,12 +119,12 @@ function SingleCategoryRow({ section }: { section: CategorySectionData }) {
           <div
             className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider mb-1.5 border"
             style={{
-              backgroundColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 12%, transparent)",
-              borderColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 30%, transparent)",
-              color: "var(--theme-primary, #06b6d4)",
+              backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 12%, transparent)",
+              borderColor: "color-mix(in srgb, var(--theme-primary, #006B45) 30%, transparent)",
+              color: "var(--theme-primary, #006B45)",
             }}
           >
-            <Icon className="w-3 h-3" style={{ color: "var(--theme-primary, #06b6d4)" }} />
+            <Icon className="w-3 h-3" style={{ color: "var(--theme-primary, #006B45)" }} />
             <span>{section.category.badge || section.category.name}</span>
           </div>
 
@@ -226,9 +229,9 @@ function SingleCategoryRow({ section }: { section: CategorySectionData }) {
       </Carousel>
 
       {/* Compact View All Button Below Carousel */}
-      <div className="text-center pt-1">
+      <div className="text-center pt-3 pb-2 sm:pt-5 sm:pb-3">
         <Link
-          href={`/products?category=${section.category.slug}`}
+          href={`/category/${section.category.slug}`}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md theme-btn-secondary theme-view-all-btn text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:scale-[1.02]"
         >
           <span>View All</span>
@@ -335,19 +338,10 @@ export function CategoryShowcase({ categories = [], bottomBanners = [] }: Catego
 
   // Render Dynamic Sections (Database-backed)
   if (dynamicSections.length > 0) {
-    const hasSmartLiving = dynamicSections.some(
-      (s) =>
-        s.title.toLowerCase().includes("smart living") ||
-        s.category?.slug?.includes("smart-living")
-    );
-
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {dynamicSections.map((section, idx) => {
-          const isTarget =
-            section.title.toLowerCase().includes("smart living") ||
-            section.category?.slug?.includes("smart-living") ||
-            (!hasSmartLiving && idx === Math.min(3, dynamicSections.length - 1));
+          const isTarget = STOREFRONT_CONFIG.SHOW_BOTTOM_PROMOTION && idx === Math.min(2, dynamicSections.length - 1);
 
           return (
             <div key={section.id} className="space-y-16">
@@ -363,21 +357,10 @@ export function CategoryShowcase({ categories = [], bottomBanners = [] }: Catego
   }
 
   // Fallback to static category sections if dynamic sections not available
-  const hasSmartLiving = fallbackSections.some(
-    (s) =>
-      s.category.slug === "smart-living-lighting" ||
-      s.category.slug.includes("smart-living") ||
-      s.category.name.toLowerCase().includes("smart living")
-  );
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       {fallbackSections.map((section, idx) => {
-        const isTarget =
-          section.category.slug === "smart-living-lighting" ||
-          section.category.slug.includes("smart-living") ||
-          section.category.name.toLowerCase().includes("smart living") ||
-          (!hasSmartLiving && idx === Math.min(3, fallbackSections.length - 1));
+        const isTarget = STOREFRONT_CONFIG.SHOW_BOTTOM_PROMOTION && idx === Math.min(2, fallbackSections.length - 1);
 
         return (
           <div key={section.category.id} className="space-y-16">

@@ -300,8 +300,8 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
         className="h-full rounded-full"
         style={{
           width: `${loaderProgress}%`,
-          background: "linear-gradient(90deg, var(--theme-primary, #06b6d4), var(--theme-secondary, #6366f1))",
-          boxShadow: "0 0 12px var(--theme-primary, #06b6d4)",
+          background: "linear-gradient(90deg, var(--theme-primary, #006B45), var(--theme-secondary, #C6A15B))",
+          boxShadow: "0 0 12px var(--theme-primary, #006B45)",
           transition: "width 0.06s linear",
         }}
       />
@@ -344,7 +344,7 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden border-b shadow-2xl pointer-events-auto"
               style={{
                 backgroundColor: "var(--theme-bg, #090a0f)",
-                borderBottomColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 40%, transparent)",
+                borderBottomColor: "color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)",
                 willChange: "transform",
                 transform: "translateZ(0)",
               }}
@@ -366,8 +366,8 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               <div
                 className="absolute bottom-0 left-0 right-0 h-[1px]"
                 style={{
-                  background: "linear-gradient(90deg, transparent, var(--theme-primary, #06b6d4), transparent)",
-                  boxShadow: "0 0 14px var(--theme-primary, #06b6d4)",
+                  background: "linear-gradient(90deg, transparent, var(--theme-primary, #006B45), transparent)",
+                  boxShadow: "0 0 14px var(--theme-primary, #006B45)",
                 }}
               />
 
@@ -385,7 +385,7 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden border-t shadow-2xl pointer-events-auto"
               style={{
                 backgroundColor: "var(--theme-bg, #090a0f)",
-                borderTopColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 40%, transparent)",
+                borderTopColor: "color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)",
                 willChange: "transform",
                 transform: "translateZ(0)",
               }}
@@ -407,8 +407,8 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               <div
                 className="absolute top-0 left-0 right-0 h-[1px]"
                 style={{
-                  background: "linear-gradient(90deg, transparent, var(--theme-primary, #06b6d4), transparent)",
-                  boxShadow: "0 0 14px var(--theme-primary, #06b6d4)",
+                  background: "linear-gradient(90deg, transparent, var(--theme-primary, #006B45), transparent)",
+                  boxShadow: "0 0 14px var(--theme-primary, #006B45)",
                 }}
               />
 
@@ -441,7 +441,7 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               className="absolute top-0 bottom-0 left-0 w-1/2 overflow-hidden border-r shadow-2xl pointer-events-auto"
               style={{
                 backgroundColor: "var(--theme-bg, #090a0f)",
-                borderRightColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 40%, transparent)",
+                borderRightColor: "color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)",
                 willChange: "transform",
                 transform: "translateZ(0)",
               }}
@@ -458,8 +458,8 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               <div
                 className="absolute top-0 bottom-0 right-0 w-[1px]"
                 style={{
-                  background: "linear-gradient(180deg, transparent, var(--theme-primary, #06b6d4), transparent)",
-                  boxShadow: "0 0 14px var(--theme-primary, #06b6d4)",
+                  background: "linear-gradient(180deg, transparent, var(--theme-primary, #006B45), transparent)",
+                  boxShadow: "0 0 14px var(--theme-primary, #006B45)",
                 }}
               />
 
@@ -482,7 +482,7 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               className="absolute top-0 bottom-0 right-0 w-1/2 overflow-hidden border-l shadow-2xl pointer-events-auto"
               style={{
                 backgroundColor: "var(--theme-bg, #090a0f)",
-                borderLeftColor: "color-mix(in srgb, var(--theme-primary, #06b6d4) 40%, transparent)",
+                borderLeftColor: "color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)",
                 willChange: "transform",
                 transform: "translateZ(0)",
               }}
@@ -499,8 +499,8 @@ export function SplitReveal({ initialTheme, onComplete: onCompleteCb }: { initia
               <div
                 className="absolute top-0 bottom-0 left-0 w-[1px]"
                 style={{
-                  background: "linear-gradient(180deg, transparent, var(--theme-primary, #06b6d4), transparent)",
-                  boxShadow: "0 0 14px var(--theme-primary, #06b6d4)",
+                  background: "linear-gradient(180deg, transparent, var(--theme-primary, #006B45), transparent)",
+                  boxShadow: "0 0 14px var(--theme-primary, #006B45)",
                 }}
               />
 

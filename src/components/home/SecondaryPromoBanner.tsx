@@ -78,7 +78,7 @@ export function SecondaryPromoBanner({ banners }: SecondaryPromoBannerProps) {
 
   return (
     <div 
-      className="relative h-[220px] sm:h-[250px] lg:h-[280px] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-xl group select-none bg-[#0c0f18]"
+      className="relative w-full h-full min-h-[200px] aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto rounded-lg sm:rounded-xl overflow-hidden border border-white/10 shadow-xl group select-none bg-[#0c0f18]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -88,6 +88,7 @@ export function SecondaryPromoBanner({ banners }: SecondaryPromoBannerProps) {
           {banners.map((banner, index) => {
             const targetUrl = banner.computed_link || banner.cta_link || "/products";
             const isPriority = index === 0;
+            const hasTextOverlay = Boolean(banner.title && banner.title.trim().length > 0);
 
             return (
               <div
@@ -106,71 +107,72 @@ export function SecondaryPromoBanner({ banners }: SecondaryPromoBannerProps) {
                     )}
                     <img
                       src={banner.image_url}
-                      alt={banner.alt_text || banner.title}
+                      alt={banner.alt_text || banner.title || "Promotional Banner"}
                       loading={isPriority ? "eager" : "lazy"}
-                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/card:scale-105"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/card:scale-102"
                     />
                   </picture>
 
-                  {/* Contrast Gradients */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30 z-10" />
+                  {/* NO artificial dark overlay - clean natural banner presentation */}
 
-                  {/* Content Overlay */}
-                  <div className="absolute inset-0 z-20 flex flex-col justify-between p-4 sm:p-5">
-                    {/* Top Badges */}
-                    <div className="flex items-center justify-between gap-2">
-                      {banner.eyebrow ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/15 text-white border border-white/20 backdrop-blur-md">
-                          <Sparkles className="w-2.5 h-2.5 text-amber-400" />
-                          {banner.eyebrow}
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30 backdrop-blur-md">
-                          <Flame className="w-2.5 h-2.5 text-amber-400" />
-                          PROMO
-                        </span>
-                      )}
+                  {/* Content Overlay (only if real text content is configured) */}
+                  {hasTextOverlay && (
+                    <div className="absolute inset-0 z-20 flex flex-col justify-between p-4 sm:p-5">
+                      {/* Top Badges */}
+                      <div className="flex items-center justify-between gap-2">
+                        {banner.eyebrow ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/15 text-white border border-white/20 backdrop-blur-md">
+                            <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+                            {banner.eyebrow}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30 backdrop-blur-md">
+                            <Flame className="w-2.5 h-2.5 text-amber-400" />
+                            PROMO
+                          </span>
+                        )}
 
-                      {banner.badge && (
-                        <span className="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 shadow-sm">
-                          {banner.badge}
-                        </span>
-                      )}
-                    </div>
+                        {banner.badge && (
+                          <span className="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 shadow-sm">
+                            {banner.badge}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Bottom Copy & CTA */}
-                    <div className="space-y-1.5 dark-banner-content">
-                      {banner.discount_tag && (
-                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/70 border border-amber-400/50 text-amber-300 font-mono text-[9px] sm:text-[10px] font-black backdrop-blur-md shadow-sm">
-                          <Tag className="w-2.5 h-2.5 text-amber-400" />
-                          <span>{banner.discount_tag}</span>
-                        </div>
-                      )}
+                      {/* Bottom Copy & CTA */}
+                      <div className="space-y-1.5 dark-banner-content">
+                        {banner.discount_tag && (
+                          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/70 border border-amber-400/50 text-amber-300 font-mono text-[9px] sm:text-[10px] font-black backdrop-blur-md shadow-sm">
+                            <Tag className="w-2.5 h-2.5 text-amber-400" />
+                            <span>{banner.discount_tag}</span>
+                          </div>
+                        )}
 
-                      <h3
-                        style={{ color: "#ffffff" }}
-                        className="text-sm sm:text-base lg:text-lg font-black text-white tracking-tight leading-snug line-clamp-2 drop-shadow-md"
-                      >
-                        {banner.title}
-                      </h3>
-
-                      {banner.subtitle && (
-                        <p
-                          style={{ color: "rgba(226, 232, 240, 0.95)" }}
-                          className="text-[10px] sm:text-[11px] text-slate-200 leading-relaxed line-clamp-1 drop-shadow"
+                        <h3
+                          style={{ color: "#ffffff" }}
+                          className="text-sm sm:text-base lg:text-lg font-black text-white tracking-tight leading-snug line-clamp-2 drop-shadow-md"
                         >
-                          {banner.subtitle}
-                        </p>
-                      )}
+                          {banner.title}
+                        </h3>
 
-                      <div className="pt-0.5">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 group-hover/card:bg-white text-white group-hover/card:text-slate-950 font-black text-[9px] sm:text-[10px] uppercase tracking-wider border border-white/20 transition-all duration-300 shadow">
-                          <span>{banner.cta_text || "Explore Deal"}</span>
-                          <ArrowRight className="w-3 h-3 transition-transform group-hover/card:translate-x-0.5" />
-                        </span>
+                        {banner.subtitle && (
+                          <p
+                            style={{ color: "rgba(226, 232, 240, 0.95)" }}
+                            className="text-[10px] sm:text-[11px] text-slate-200 leading-relaxed line-clamp-1 drop-shadow"
+                          >
+                            {banner.subtitle}
+                          </p>
+                        )}
+
+                        <div className="pt-0.5">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 group-hover/card:bg-white text-white group-hover/card:text-slate-950 font-black text-[9px] sm:text-[10px] uppercase tracking-wider border border-white/20 transition-all duration-300 shadow">
+                            <span>{banner.cta_text || "Explore Deal"}</span>
+                            <ArrowRight className="w-3 h-3 transition-transform group-hover/card:translate-x-0.5" />
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </Link>
               </div>
             );

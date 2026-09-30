@@ -23,6 +23,9 @@ import { ThemeSettings } from "@/store/useThemeStore";
 type AgeGateStatus = "waiting" | "gate" | "denied" | "allowed";
 
 function AgeGate({ status, onAccept, onDeny }: { status: AgeGateStatus; onAccept: () => void; onDeny: () => void }) {
+  if (typeof window !== "undefined" && localStorage.getItem("inhaliq_age_verified") === "true") {
+    return null;
+  }
   // Not visible while waiting for split reveal, or after user accepted
   if (status === "waiting" || status === "allowed") return null;
 
@@ -42,7 +45,7 @@ function AgeGate({ status, onAccept, onDeny }: { status: AgeGateStatus; onAccept
         {/* Subtle top accent bar */}
         <div
           className="h-1 w-full"
-          style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa)" }}
+          style={{ background: "linear-gradient(90deg, var(--theme-primary, #006B45), var(--theme-secondary, #C6A15B))" }}
         />
 
         <div className="px-6 pt-7 pb-6 sm:px-8 sm:pt-8 sm:pb-7">
@@ -53,9 +56,9 @@ function AgeGate({ status, onAccept, onDeny }: { status: AgeGateStatus; onAccept
               <div className="flex justify-center mb-5">
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: "#f0f0ff", border: "2px solid #e0e0f5" }}
+                  style={{ backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 8%, #ffffff)", border: "2px solid color-mix(in srgb, var(--theme-primary, #006B45) 15%, transparent)" }}
                 >
-                  <span style={{ fontSize: "22px", fontWeight: 700, color: "#6366f1", letterSpacing: "-0.5px" }}>18+</span>
+                  <span style={{ fontSize: "22px", fontWeight: 700, color: "var(--theme-primary, #006B45)", letterSpacing: "-0.5px" }}>18+</span>
                 </div>
               </div>
 
@@ -77,14 +80,14 @@ function AgeGate({ status, onAccept, onDeny }: { status: AgeGateStatus; onAccept
                   onClick={onAccept}
                   className="w-full py-3 rounded-xl font-semibold text-sm tracking-wide transition-all duration-200"
                   style={{
-                    backgroundColor: "#6366f1",
-                    color: "#ffffff",
+                    backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))",
+                    color: "var(--theme-btn-primary-text, #ffffff)",
                     border: "none",
                     cursor: "pointer",
                     letterSpacing: "0.5px",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#5558e6"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(99, 102, 241, 0.35)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#6366f1"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-primary-hover, #005238)"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 14px color-mix(in srgb, var(--theme-primary, #006B45) 35%, transparent)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
                 >
                   YES, ENTER
                 </button>
@@ -151,18 +154,37 @@ export function AppProviders({
   const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Age gate state — never persisted, resets on every page load
-  const splitRevealEnabled = initialTheme?.split_reveal_enabled ?? true;
-  const [ageGateStatus, setAgeGateStatus] = useState<AgeGateStatus>(
-    splitRevealEnabled ? "waiting" : "gate"
-  );
+  // Age gate state — verified in localStorage
+  const [ageGateStatus, setAgeGateStatus] = useState<AgeGateStatus>("waiting");
+
+  useEffect(() => {
+    try {
+      const verified = localStorage.getItem("inhaliq_age_verified");
+      if (verified === "true") {
+        setAgeGateStatus("allowed");
+        return;
+      }
+    } catch {}
+    setAgeGateStatus("gate");
+  }, []);
 
   const handleSplitRevealComplete = useCallback(() => {
-    setAgeGateStatus((prev) => (prev === "waiting" ? "gate" : prev));
+    try {
+      if (localStorage.getItem("inhaliq_age_verified") === "true") {
+        setAgeGateStatus("allowed");
+        return;
+      }
+    } catch {}
+    setAgeGateStatus("gate");
   }, []);
 
   const handleAgeAccept = useCallback(() => {
     setAgeGateStatus("allowed");
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("inhaliq_age_verified", "true");
+      } catch {}
+    }
     if (typeof document !== "undefined") {
       document.body.style.overflow = "";
     }

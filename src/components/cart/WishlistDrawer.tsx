@@ -91,7 +91,7 @@ export function WishlistDrawer() {
                   )}
                   <button
                     onClick={closeWishlist}
-                    className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-all cursor-pointer"
+                    className="p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-all cursor-pointer"
                     style={{ color: "var(--theme-text-body, #64748b)" }}
                   >
                     <X className="w-5 h-5" />
@@ -197,7 +197,7 @@ export function WishlistDrawer() {
                           >
                             <span 
                               className="text-xs font-black"
-                              style={{ color: "var(--theme-primary, #6366f1)" }}
+                              style={{ color: "var(--theme-primary, #006B45)" }}
                             >
                               {formatPrice(product.price)}
                             </span>
@@ -209,9 +209,9 @@ export function WishlistDrawer() {
                               <Link
                                 href={`/products/${product.slug}`}
                                 onClick={closeWishlist}
-                                className="flex items-center gap-1 px-3 py-1 rounded-lg text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
+                                className="flex items-center gap-1 px-3 py-1 rounded-md text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
                                 style={{
-                                  backgroundColor: "var(--theme-primary, #6366f1)",
+                                  backgroundColor: "var(--theme-primary, #006B45)",
                                   color: "var(--theme-btn-primary-text, #ffffff)"
                                 }}
                               >
@@ -221,9 +221,9 @@ export function WishlistDrawer() {
                               <button
                                 type="button"
                                 onClick={() => handleMoveToCart(product)}
-                                className="flex items-center gap-1 px-3 py-1 rounded-lg text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
+                                className="flex items-center gap-1 px-3 py-1 rounded-md text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
                                 style={{
-                                  backgroundColor: "var(--theme-primary, #6366f1)",
+                                  backgroundColor: "var(--theme-primary, #006B45)",
                                   color: "var(--theme-btn-primary-text, #ffffff)"
                                 }}
                               >
@@ -249,11 +249,11 @@ export function WishlistDrawer() {
                 >
                   <button
                     onClick={handleMoveAllToCart}
-                    className="w-full py-3 rounded-xl text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl"
+                    className="w-full py-3 rounded-md text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl"
                     style={{
-                      background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #6366f1)), var(--theme-secondary, var(--theme-primary, #6366f1)))",
+                      background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #006B45)), var(--theme-secondary, #C6A15B))",
                       color: "var(--theme-btn-primary-text, #ffffff)",
-                      boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #6366f1) 40%, transparent)"
+                      boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)"
                     }}
                   >
                     Move All to Cart <ArrowRight className="w-4 h-4" />
