@@ -1,3 +1,10 @@
-import AdminBannersPage from "@/app/admin/marketing/banners/page";
+"use client";
 
-export default AdminBannersPage;
+import AdminContentBannersPage from "@/app/admin/content/banners/page";
+
+/**
+ * Backward-compatibility alias for /admin/banners
+ * Points directly to the single canonical Banner & Ads management source of truth:
+ * /admin/content/banners
+ */
+export default AdminContentBannersPage;

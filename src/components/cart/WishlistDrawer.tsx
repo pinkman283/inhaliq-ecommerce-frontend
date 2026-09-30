@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Heart, ShoppingBag, Trash2, ArrowRight } from "lucide-react";
+import { X, Heart, ShoppingBag, Trash2, ArrowRight, SlidersHorizontal } from "lucide-react";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/utils";
@@ -127,6 +128,9 @@ export function WishlistDrawer() {
                 ) : (
                   items.map((product) => {
                     const img = product.primary_image?.image_url || product.images?.[0]?.image_url;
+                    const hasVariants = Boolean(product.variants && product.variants.length > 1);
+                    const isOutOfStock = product.stock_quantity !== undefined && product.stock_quantity <= 0;
+
                     return (
                       <div
                         key={product.id}
@@ -137,8 +141,10 @@ export function WishlistDrawer() {
                         }}
                       >
                         {img && (
-                          <div 
-                            className="w-18 h-18 rounded-xl overflow-hidden border shrink-0 p-1 flex items-center justify-center transition-colors"
+                          <Link
+                            href={`/products/${product.slug}`}
+                            onClick={closeWishlist}
+                            className="w-18 h-18 rounded-xl overflow-hidden border shrink-0 p-1 flex items-center justify-center transition-colors group relative"
                             style={{
                               backgroundColor: "var(--theme-card-bg, #ffffff)",
                               borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))"
@@ -147,19 +153,28 @@ export function WishlistDrawer() {
                             <img
                               src={img}
                               alt={product.name}
-                              className="w-full h-full object-cover rounded-lg"
+                              className={`w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform ${isOutOfStock ? "grayscale" : ""}`}
                             />
-                          </div>
+                            {isOutOfStock && (
+                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-lg">
+                                <span className="text-[9px] font-black text-white uppercase tracking-wider px-1 py-0.5 bg-rose-500 rounded">
+                                  Sold Out
+                                </span>
+                              </div>
+                            )}
+                          </Link>
                         )}
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                           <div>
                             <div className="flex items-start justify-between gap-1">
-                              <h4 
-                                className="text-xs font-bold truncate"
+                              <Link
+                                href={`/products/${product.slug}`}
+                                onClick={closeWishlist}
+                                className="text-xs font-bold truncate hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors"
                                 style={{ color: "var(--theme-text-heading, #0f172a)" }}
                               >
                                 {product.name}
-                              </h4>
+                              </Link>
                               <button
                                 onClick={() => toggleWishlist(product)}
                                 className="hover:text-rose-500 transition-colors p-1 cursor-pointer"
@@ -186,16 +201,35 @@ export function WishlistDrawer() {
                             >
                               {formatPrice(product.price)}
                             </span>
-                            <button
-                              onClick={() => handleMoveToCart(product)}
-                              className="flex items-center gap-1 px-3 py-1 rounded-lg text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
-                              style={{
-                                backgroundColor: "var(--theme-primary, #6366f1)",
-                                color: "var(--theme-btn-primary-text, #ffffff)"
-                              }}
-                            >
-                              <ShoppingBag className="w-3 h-3" /> Move to Cart
-                            </button>
+                            {isOutOfStock ? (
+                              <span className="text-[10px] font-bold text-rose-500 py-1 px-2.5 rounded bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30">
+                                Sold Out
+                              </span>
+                            ) : hasVariants ? (
+                              <Link
+                                href={`/products/${product.slug}`}
+                                onClick={closeWishlist}
+                                className="flex items-center gap-1 px-3 py-1 rounded-lg text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
+                                style={{
+                                  backgroundColor: "var(--theme-primary, #6366f1)",
+                                  color: "var(--theme-btn-primary-text, #ffffff)"
+                                }}
+                              >
+                                <SlidersHorizontal className="w-3 h-3" /> Select Options
+                              </Link>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleMoveToCart(product)}
+                                className="flex items-center gap-1 px-3 py-1 rounded-lg text-[11px] font-bold transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer"
+                                style={{
+                                  backgroundColor: "var(--theme-primary, #6366f1)",
+                                  color: "var(--theme-btn-primary-text, #ffffff)"
+                                }}
+                              >
+                                <ShoppingBag className="w-3 h-3" /> Move to Cart
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

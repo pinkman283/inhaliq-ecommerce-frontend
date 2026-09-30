@@ -106,7 +106,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const serverTheme = await getServerTheme();
-  let initialTheme = { ...serverTheme };
+  const initialTheme = { ...serverTheme };
 
   try {
     const cookieStore = await cookies();

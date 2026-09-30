@@ -74,16 +74,44 @@ function OrdersContent() {
   const [salesSummary, setSalesSummary] = useState<SalesSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Filters
+  // Filters & Pagination
   const [statusTab, setStatusTab] = useState("all");
   const [channelTab, setChannelTab] = useState<string>(initialChannel);
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("all");
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [minTotal, setMinTotal] = useState("");
   const [maxTotal, setMaxTotal] = useState("");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [orderCounts, setOrderCounts] = useState<{
+    all: number;
+    pending: number;
+    confirmed: number;
+    processing: number;
+    shipped: number;
+    delivered: number;
+    cancelled: number;
+    refunded: number;
+    payment_pending: number;
+    payment_paid: number;
+  }>({
+    all: 0,
+    pending: 0,
+    confirmed: 0,
+    processing: 0,
+    shipped: 0,
+    delivered: 0,
+    cancelled: 0,
+    refunded: 0,
+    payment_pending: 0,
+    payment_paid: 0,
+  });
 
   // Commercial Invoice Modal State
   const [selectedInvoice, setSelectedInvoice] = useState<SalesInvoice | null>(null);
@@ -393,27 +421,39 @@ function OrdersContent() {
     }
   };
 
-  const loadOrders = async () => {
+  const loadOrders = async (targetPage = currentPage) => {
     setLoading(true);
     try {
-      const [ordRes, prodRes, salesRes] = await Promise.all([
+      const [ordRes, prodRes, salesRes, countsRes] = await Promise.all([
         adminApi.getOrders({
           status: statusTab !== "all" ? statusTab : undefined,
           payment_status: paymentStatusFilter !== "all" ? paymentStatusFilter : undefined,
+          payment_method: paymentMethodFilter !== "all" ? paymentMethodFilter : undefined,
           source: channelTab !== "all" ? channelTab : undefined,
           search: search.trim() || undefined,
-          page: 1,
-          per_page: 50,
+          date_from: dateFrom || undefined,
+          date_to: dateTo || undefined,
+          min_total: minTotal || undefined,
+          max_total: maxTotal || undefined,
+          page: targetPage,
+          per_page: 25,
         }),
         adminApi.getProducts({ per_page: 100 }),
         adminApi.getSales({ per_page: 1 }).catch(() => null),
+        adminApi.getOrderCounts().catch(() => null),
       ]);
       setOrders(ordRes.data || []);
+      setCurrentPage(ordRes.current_page || 1);
+      setLastPage(ordRes.last_page || 1);
+      setTotalOrders(ordRes.total || 0);
       setProducts(prodRes.data || []);
       if (salesRes?.summary) {
         setSalesSummary(salesRes.summary);
       }
-    } catch (err) {
+      if (countsRes) {
+        setOrderCounts(countsRes);
+      }
+    } catch {
       toast.error("Failed to load orders.");
     } finally {
       setLoading(false);
@@ -421,27 +461,75 @@ function OrdersContent() {
   };
 
   useEffect(() => {
-    loadOrders();
-  }, [statusTab, paymentStatusFilter, channelTab]);
+    setCurrentPage(1);
+    loadOrders(1);
+  }, [statusTab, paymentStatusFilter, paymentMethodFilter, channelTab, dateFrom, dateTo, minTotal, maxTotal]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    loadOrders();
+    setCurrentPage(1);
+    loadOrders(1);
   };
 
   const handleResetFilters = () => {
     setStatusTab("all");
     setSearch("");
     setPaymentStatusFilter("all");
+    setPaymentMethodFilter("all");
     setDateFrom("");
     setDateTo("");
     setMinTotal("");
     setMaxTotal("");
     setShowAdvancedFilters(false);
-    adminApi.getOrders({ per_page: 50 }).then((res) => {
-      setOrders(res.data || []);
-    });
+    setCurrentPage(1);
+    loadOrders(1);
     toast.success("Filters reset.");
+  };
+
+  const handleQuickStatusChange = async (orderId: number, newStatus: string) => {
+    if (newStatus === "cancelled") {
+      if (!confirm("Are you sure you want to cancel this order? This will safely restore inventory to stock, reverse promotions, and post accounting adjustments.")) {
+        return;
+      }
+    }
+
+    setIsUpdatingStatus(true);
+    try {
+      const res = await adminApi.updateOrderStatus(orderId, { order_status: newStatus });
+      toast.success(res.message || `Order status updated to ${newStatus}.`);
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? res.order : o)));
+      if (selectedOrder?.id === orderId) {
+        setSelectedOrder(res.order);
+      }
+      adminApi.getOrderCounts().then(setOrderCounts).catch(() => null);
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } }; message?: string };
+      toast.error(error.response?.data?.message || error.message || "Failed to update status.");
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
+  const handleRecordCodPayment = async (orderId: number) => {
+    if (!confirm("Confirm cash on delivery payment collection for this order?")) {
+      return;
+    }
+
+    setIsUpdatingStatus(true);
+    try {
+      const res = await adminApi.recordOrderPayment(orderId);
+      toast.success(res.message || "COD payment recorded successfully.");
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? res.order : o)));
+      if (selectedOrder?.id === orderId) {
+        setSelectedOrder(res.order);
+      }
+      adminApi.getOrderCounts().then(setOrderCounts).catch(() => null);
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } }; message?: string };
+      toast.error(error.response?.data?.message || error.message || "Failed to record payment.");
+    } finally {
+      setIsUpdatingStatus(false);
+    }
   };
 
   const handleAddItem = () => {
@@ -818,6 +906,40 @@ function OrdersContent() {
         </div>
       </div>
 
+      {/* Quick Operational Status Pills */}
+      {orderCounts && (
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+          {[
+            { id: "all", label: "All Orders", count: orderCounts.all },
+            { id: "pending", label: "Pending", count: orderCounts.pending, color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
+            { id: "confirmed", label: "Confirmed", count: orderCounts.confirmed, color: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
+            { id: "processing", label: "Processing", count: orderCounts.processing, color: "text-purple-400 bg-purple-500/10 border-purple-500/20" },
+            { id: "shipped", label: "Shipped", count: orderCounts.shipped, color: "text-sky-400 bg-sky-500/10 border-sky-500/20" },
+            { id: "delivered", label: "Delivered", count: orderCounts.delivered, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+            { id: "cancelled", label: "Cancelled", count: orderCounts.cancelled, color: "text-rose-400 bg-rose-500/10 border-rose-500/20" },
+            { id: "refunded", label: "Refunded", count: orderCounts.refunded, color: "text-pink-400 bg-pink-500/10 border-pink-500/20" },
+          ].map((pill) => (
+            <button
+              key={pill.id}
+              onClick={() => {
+                setStatusTab(pill.id);
+                setCurrentPage(1);
+              }}
+              className={`px-2.5 py-1 rounded-lg font-semibold shrink-0 border transition-all cursor-pointer flex items-center gap-1.5 ${
+                statusTab === pill.id
+                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-xs"
+                  : "bg-white/[0.02] text-slate-400 hover:text-white border-white/[0.06] hover:bg-white/[0.04]"
+              }`}
+            >
+              <span>{pill.label}</span>
+              <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${pill.color || "bg-white/10 text-slate-300"}`}>
+                {pill.count ?? 0}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Filter & Search Bar */}
       <div className="p-2.5 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-2.5">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-2.5">
@@ -836,7 +958,10 @@ function OrdersContent() {
           <div className="flex items-center gap-2 w-full lg:w-auto flex-wrap">
             <AdminDropdown
               value={statusTab}
-              onChange={(val) => setStatusTab(val)}
+              onChange={(val) => {
+                setStatusTab(val);
+                setCurrentPage(1);
+              }}
               options={[
                 { value: "all", label: "All Statuses" },
                 { value: "pending", label: "Pending" },
@@ -852,7 +977,10 @@ function OrdersContent() {
 
             <AdminDropdown
               value={paymentStatusFilter}
-              onChange={(val) => setPaymentStatusFilter(val)}
+              onChange={(val) => {
+                setPaymentStatusFilter(val);
+                setCurrentPage(1);
+              }}
               options={[
                 { value: "all", label: "All Payments" },
                 { value: "paid", label: "Paid" },
@@ -862,6 +990,21 @@ function OrdersContent() {
                 { value: "partially_refunded", label: "Partially Refunded" },
                 { value: "refunded", label: "Refunded" },
                 { value: "failed", label: "Failed" },
+              ]}
+            />
+
+            <AdminDropdown
+              value={paymentMethodFilter}
+              onChange={(val) => {
+                setPaymentMethodFilter(val);
+                setCurrentPage(1);
+              }}
+              options={[
+                { value: "all", label: "All Methods" },
+                { value: "cash_on_delivery", label: "COD" },
+                { value: "online", label: "Online Gateway" },
+                { value: "cash", label: "POS Cash" },
+                { value: "card", label: "POS Card" },
               ]}
             />
 
@@ -1284,6 +1427,37 @@ function OrdersContent() {
           </table>
       </ScrollableTableCard>
 
+      {/* Server-Side Pagination Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-2 py-3 text-xs text-slate-400">
+        <div className="flex items-center gap-2">
+          <span>
+            Showing page <strong className="text-white font-mono">{currentPage}</strong> of{" "}
+            <strong className="text-white font-mono">{lastPage}</strong> ({totalOrders} total orders)
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            disabled={currentPage <= 1 || loading}
+            onClick={() => loadOrders(currentPage - 1)}
+            className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium transition cursor-pointer flex items-center gap-1"
+          >
+            Previous
+          </button>
+          <span className="px-2 font-mono text-slate-300">
+            {currentPage} / {lastPage}
+          </span>
+          <button
+            type="button"
+            disabled={currentPage >= lastPage || loading}
+            onClick={() => loadOrders(currentPage + 1)}
+            className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium transition cursor-pointer flex items-center gap-1"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
       {/* ORDER DETAILS MODAL */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm">
@@ -1321,53 +1495,236 @@ function OrdersContent() {
 
             {/* Scrollable Content Body with Sleek Scrollbar */}
             <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Customer</span>
-                <span className="font-bold text-white block">{selectedOrder.customer_name}</span>
-                <span className="text-slate-400 block">{selectedOrder.customer_email}</span>
-                {selectedOrder.customer_phone && (
-                  <span className="text-slate-400 block font-mono">{selectedOrder.customer_phone}</span>
-                )}
-              </div>
-
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Shipping Address</span>
-                <span className="text-white block">
-                  {selectedOrder.shipping_address?.address_line1 || "No street address recorded"}
-                </span>
-                <span className="text-slate-400 block">
-                  {selectedOrder.shipping_address?.city}, {selectedOrder.shipping_address?.country}
-                </span>
-                {selectedOrder.carrier && (
-                  <span className="text-cyan-400 text-[11px] block font-mono pt-1">
-                    Carrier: {selectedOrder.carrier} {selectedOrder.tracking_code ? `(${selectedOrder.tracking_code})` : ""}
+              {/* Order Status & Financial State Header */}
+              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status:</span>
+                  <span className={`px-2.5 py-1 rounded-md text-xs font-bold uppercase ${
+                    selectedOrder.order_status === "delivered" ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" :
+                    selectedOrder.order_status === "shipped" ? "bg-sky-500/20 text-sky-300 border border-sky-500/30" :
+                    selectedOrder.order_status === "processing" ? "bg-purple-500/20 text-purple-300 border border-purple-500/30" :
+                    selectedOrder.order_status === "confirmed" ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" :
+                    selectedOrder.order_status === "cancelled" ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" :
+                    selectedOrder.order_status === "returned" ? "bg-pink-500/20 text-pink-300 border border-pink-500/30" :
+                    "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                  }`}>
+                    {selectedOrder.order_status}
                   </span>
+
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-2">Payment:</span>
+                  <span className={`px-2 py-0.5 rounded text-[10.5px] font-bold uppercase ${
+                    selectedOrder.payment_status === "paid" ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" :
+                    selectedOrder.payment_status === "refunded" ? "bg-purple-500/15 text-purple-400 border border-purple-500/30" :
+                    "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                  }`}>
+                    {selectedOrder.payment_status}
+                  </span>
+
+                  <span className="text-[10.5px] font-mono text-slate-400 px-2 py-0.5 rounded bg-white/5 border border-white/5 uppercase">
+                    {selectedOrder.payment_method?.replace(/_/g, " ") || "COD"}
+                  </span>
+                </div>
+
+                {/* COD Record Cash Collection */}
+                {selectedOrder.payment_method === "cash_on_delivery" && selectedOrder.payment_status !== "paid" && selectedOrder.order_status !== "cancelled" && (
+                  <button
+                    type="button"
+                    disabled={isUpdatingStatus}
+                    onClick={() => handleRecordCodPayment(selectedOrder.id)}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Record COD Cash Collection
+                  </button>
                 )}
               </div>
-            </div>
 
-            {/* Items List */}
-            <div className="space-y-2">
-              <span className="text-[11px] font-bold text-slate-300 block">Ordered Items</span>
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 divide-y divide-white/5 text-xs">
-                {(selectedOrder.items || []).map((item, idx) => (
-                  <div key={idx} className="py-2 first:pt-0 last:pb-0 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-white block">{item.product_name || `Product #${item.product_id}`}</span>
-                      <span className="text-[10px] text-slate-400">Qty: {item.quantity} × {formatPrice(item.unit_price)}</span>
-                    </div>
-                    <span className="font-bold font-mono text-white">{formatPrice(item.quantity * item.unit_price)}</span>
+              {/* Status Workflow Action Transitions */}
+              {selectedOrder.order_status !== "cancelled" && selectedOrder.order_status !== "refunded" && (
+                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      Authoritative State Transitions
+                    </span>
+                    {isUpdatingStatus && <span className="text-[10px] text-amber-400 animate-pulse">Updating order...</span>}
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {selectedOrder.order_status === "pending" && (
+                      <>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "confirmed")}
+                          className="px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Confirm Order &rarr;
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "processing")}
+                          className="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Start Processing &rarr;
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "cancelled")}
+                          className="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Cancel Order
+                        </button>
+                      </>
+                    )}
+                    {selectedOrder.order_status === "confirmed" && (
+                      <>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "processing")}
+                          className="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Start Processing &rarr;
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "shipped")}
+                          className="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Mark Shipped &rarr;
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "cancelled")}
+                          className="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Cancel Order
+                        </button>
+                      </>
+                    )}
+                    {selectedOrder.order_status === "processing" && (
+                      <>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "shipped")}
+                          className="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Mark Shipped &rarr;
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "cancelled")}
+                          className="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Cancel Order
+                        </button>
+                      </>
+                    )}
+                    {selectedOrder.order_status === "shipped" && (
+                      <>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "delivered")}
+                          className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Confirm Delivered &#10003;
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isUpdatingStatus}
+                          onClick={() => handleQuickStatusChange(selectedOrder.id, "returned")}
+                          className="px-3 py-1.5 rounded-lg bg-pink-500/15 hover:bg-pink-500/25 text-pink-300 border border-pink-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        >
+                          Mark Returned
+                        </button>
+                      </>
+                    )}
+                    {selectedOrder.order_status === "delivered" && (
+                      <span className="text-xs text-slate-400 italic">
+                        Order is delivered. You may initiate a return if customer requests it.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
 
-            {/* Total Summary */}
-            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 text-xs font-bold text-white">
-              <span>Total Amount</span>
-              <span className="text-base text-cyan-400 font-mono font-black">{formatPrice(selectedOrder.total_amount)}</span>
-            </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Customer</span>
+                  <span className="font-bold text-white block">{selectedOrder.customer_name}</span>
+                  <span className="text-slate-400 block">{selectedOrder.customer_email}</span>
+                  {selectedOrder.customer_phone && (
+                    <span className="text-slate-400 block font-mono">{selectedOrder.customer_phone}</span>
+                  )}
+                </div>
+
+                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Shipping Address</span>
+                  <span className="text-white block">
+                    {selectedOrder.shipping_address?.address_line1 || "No street address recorded"}
+                  </span>
+                  <span className="text-slate-400 block">
+                    {selectedOrder.shipping_address?.city}, {selectedOrder.shipping_address?.country}
+                  </span>
+                  {selectedOrder.carrier && (
+                    <span className="text-cyan-400 text-[11px] block font-mono pt-1">
+                      Carrier: {selectedOrder.carrier} {selectedOrder.tracking_code ? `(${selectedOrder.tracking_code})` : ""}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Items List */}
+              <div className="space-y-2">
+                <span className="text-[11px] font-bold text-slate-300 block">Ordered Items</span>
+                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 divide-y divide-white/5 text-xs">
+                  {(selectedOrder.items || []).map((item, idx) => (
+                    <div key={idx} className="py-2 first:pt-0 last:pb-0 flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-white block">{item.product_name || `Product #${item.product_id}`}</span>
+                        {item.variant_name && (
+                          <span className="text-[10px] text-amber-300 block font-medium">Variant: {item.variant_name}</span>
+                        )}
+                        {item.sku && (
+                          <span className="text-[10px] text-slate-500 font-mono block">SKU: {item.sku}</span>
+                        )}
+                        <span className="text-[10px] text-slate-400">Qty: {item.quantity} × {formatPrice(item.unit_price)}</span>
+                      </div>
+                      <span className="font-bold font-mono text-white">{formatPrice(item.quantity * item.unit_price)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Total Summary */}
+              <div className="p-3 rounded-xl bg-white/5 space-y-1.5 text-xs">
+                <div className="flex justify-between text-slate-400">
+                  <span>Subtotal</span>
+                  <span className="font-mono text-white">{formatPrice(selectedOrder.subtotal || selectedOrder.items?.reduce((s, i) => s + (i.quantity * i.unit_price), 0) || selectedOrder.total_amount)}</span>
+                </div>
+                {Number(selectedOrder.discount_amount) > 0 && (
+                  <div className="flex justify-between text-emerald-400">
+                    <span>Discount {selectedOrder.coupon_code ? `(${selectedOrder.coupon_code})` : ""}</span>
+                    <span className="font-mono">-{formatPrice(selectedOrder.discount_amount)}</span>
+                  </div>
+                )}
+                {Number(selectedOrder.shipping_amount) > 0 && (
+                  <div className="flex justify-between text-slate-400">
+                    <span>Shipping</span>
+                    <span className="font-mono text-white">+{formatPrice(selectedOrder.shipping_amount)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center pt-2 border-t border-white/10 font-bold text-white">
+                  <span className="text-sm">Total Authoritative Amount</span>
+                  <span className="text-base text-cyan-400 font-mono font-black">{formatPrice(selectedOrder.total_amount)}</span>
+                </div>
+              </div>
 
             {/* Return / RTO Status Banner & Deep-Link */}
             {selectedOrder.return_status && selectedOrder.return_status !== 'none' && (

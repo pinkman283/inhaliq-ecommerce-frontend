@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Address, AdminAnalytics, Brand, Category, CouponValidation, HomepageBannersResponse, Order, Product, User } from "@/types";
+import { Address, AdminAnalytics, Brand, CartValidationResponse, Category, CouponValidation, HomepageBannersResponse, Order, PaymentMethodOption, Product, ProductVariant, User } from "@/types";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const API_BASE_URL = typeof window !== "undefined"
@@ -236,8 +236,22 @@ export const api = {
   },
 
   // Coupon (Live Validation - Direct to Laravel)
-  async validateCoupon(code: string, subtotal: number): Promise<CouponValidation> {
-    const res = await apiClient.post("/coupons/validate", { code, subtotal });
+  async validateCoupon(
+    code: string,
+    subtotal: number,
+    items?: Array<{ product_id: number; variant_id?: number | null; quantity: number; price?: number }>
+  ): Promise<CouponValidation> {
+    const res = await apiClient.post("/coupons/validate", { code, subtotal, items });
+    return res.data;
+  },
+
+  // Cart Validation (Live Server-Side Stock & Price Verification)
+  async validateCart(
+    items: { product_id: number; variant_id?: number | null; quantity: number; price?: number }[],
+    coupon_code?: string | null,
+    claimed_coupon_id?: number | null
+  ): Promise<CartValidationResponse> {
+    const res = await apiClient.post("/cart/validate", { items, coupon_code, claimed_coupon_id });
     return res.data;
   },
 
@@ -271,6 +285,114 @@ export const api = {
 
   async trackOrder(orderNumber: string): Promise<any> {
     const res = await apiClient.get(`/orders/track/${orderNumber}`);
+    return res.data;
+  },
+
+  async cancelOrder(orderNumber: string): Promise<{ message: string; order: Order }> {
+    const res = await apiClient.post(`/orders/${orderNumber}/cancel`);
+    return res.data;
+  },
+
+  async requestOrderReturn(orderNumber: string, data: { return_reason: string; notes?: string }): Promise<{ message: string; return: any; order: Order }> {
+    const res = await apiClient.post(`/orders/${orderNumber}/return`, data);
+    return res.data;
+  },
+
+  async getPaymentMethods(): Promise<{
+    methods: PaymentMethodOption[];
+    default: string;
+  }> {
+    const res = await apiClient.get("/payment-methods");
+    return res.data;
+  },
+
+  // Customer Cart Persistence (Sanctum Authenticated)
+  async getCustomerCart(): Promise<{
+    items: Array<{
+      id: number;
+      product_id: number;
+      variant_id: number | null;
+      quantity: number;
+      available_stock: number;
+      product: Product;
+      variant: ProductVariant | null;
+    }>;
+    summary: {
+      total_items: number;
+      total_quantity: number;
+      subtotal: number;
+      notices: string[];
+    };
+  }> {
+    const res = await apiClient.get("/customer/cart");
+    return res.data;
+  },
+
+  async syncCustomerCart(items: Array<{ product_id: number; variant_id?: number | null; quantity: number }>): Promise<{
+    items: Array<{
+      id: number;
+      product_id: number;
+      variant_id: number | null;
+      quantity: number;
+      available_stock: number;
+      product: Product;
+      variant: ProductVariant | null;
+    }>;
+    summary: {
+      total_items: number;
+      total_quantity: number;
+      subtotal: number;
+      notices: string[];
+    };
+  }> {
+    const res = await apiClient.post("/customer/cart/sync", { items });
+    return res.data;
+  },
+
+  async mergeCustomerCart(guestItems: Array<{ product_id: number; variant_id?: number | null; quantity: number }>): Promise<{
+    items: Array<{
+      id: number;
+      product_id: number;
+      variant_id: number | null;
+      quantity: number;
+      available_stock: number;
+      product: Product;
+      variant: ProductVariant | null;
+    }>;
+    summary: {
+      total_items: number;
+      total_quantity: number;
+      subtotal: number;
+      notices: string[];
+    };
+  }> {
+    const res = await apiClient.post("/customer/cart/merge", { guest_items: guestItems });
+    return res.data;
+  },
+
+  async clearCustomerCart(): Promise<{ message: string }> {
+    const res = await apiClient.delete("/customer/cart");
+    return res.data;
+  },
+
+  // Customer Wishlist Persistence (Sanctum Authenticated)
+  async getCustomerWishlist(): Promise<{ products: Product[]; total: number }> {
+    const res = await apiClient.get("/customer/wishlist");
+    return res.data;
+  },
+
+  async toggleCustomerWishlist(productId: number): Promise<{ message: string; in_wishlist: boolean; product_id: number }> {
+    const res = await apiClient.post("/customer/wishlist/toggle", { product_id: productId });
+    return res.data;
+  },
+
+  async mergeCustomerWishlist(guestProductIds: number[]): Promise<{ products: Product[]; total: number }> {
+    const res = await apiClient.post("/customer/wishlist/merge", { guest_product_ids: guestProductIds });
+    return res.data;
+  },
+
+  async clearCustomerWishlist(): Promise<{ message: string }> {
+    const res = await apiClient.delete("/customer/wishlist");
     return res.data;
   },
 

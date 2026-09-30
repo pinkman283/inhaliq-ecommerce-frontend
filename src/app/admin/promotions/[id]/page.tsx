@@ -7,6 +7,7 @@ import { Promotion } from "@/types";
 import { PromotionForm } from "@/components/admin/promotions/PromotionForm";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export default function EditPromotionPage() {
   const params = useParams();
@@ -61,12 +62,12 @@ export default function EditPromotionPage() {
           The requested promotion campaign (ID: {rawId}) could not be located or may have been deleted.
         </p>
         <div>
-          <a
+          <Link
             href="/admin/promotions"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-colors"
           >
             Return to All Promotions
-          </a>
+          </Link>
         </div>
       </div>
     );

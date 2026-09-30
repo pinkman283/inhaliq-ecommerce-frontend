@@ -13,6 +13,8 @@ export interface Category {
   meta_description?: string | null;
   image_alt?: string | null;
   products_count?: number;
+  subcategory_products_count?: number;
+  children_count?: number;
   parent?: Category | null;
   children?: Category[];
 }
@@ -27,6 +29,7 @@ export interface Brand {
   is_featured: boolean;
   display_order: number;
   products_count?: number;
+  categories_count?: number;
   products?: Product[];
   created_at?: string;
   updated_at?: string;
@@ -37,6 +40,7 @@ export interface ProductImage {
   product_id: number;
   image_url: string;
   alt_text?: string | null;
+  color_name?: string | null;
   is_primary: boolean;
   display_order: number;
 }
@@ -100,9 +104,114 @@ export interface Product {
   thumbnail?: string | null;
   primary_image?: ProductImage | null;
   images?: ProductImage[];
+  images_count?: number;
   variants?: ProductVariant[];
   reviews?: Review[];
   created_at: string;
+}
+
+export interface ProductCatalogStats {
+  total_products: number;
+  total_warehouse_units: number;
+  total_categories: number;
+  low_stock_count: number;
+  out_of_stock_count: number;
+  products_without_images_count?: number;
+}
+
+export interface ImportSummary {
+  total_rows: number;
+  creates: number;
+  updates: number;
+  unchanged: number;
+  errors_count: number;
+}
+
+export interface ImportRowDiff {
+  old: string;
+  new: string;
+  from?: string;
+  to?: string;
+}
+
+export interface ImportRowPreview {
+  row_number: number;
+  sku: string;
+  name: string;
+  action: "create" | "update" | "unchanged" | "error" | "CREATE" | "UPDATE" | "UNCHANGED" | "ERROR";
+  diff?: Record<string, ImportRowDiff> | null;
+  changes?: Record<string, ImportRowDiff> | null;
+  data?: Record<string, unknown> | null;
+  errors?: string[];
+}
+
+export interface ImportValidationReport {
+  import_token: string;
+  filename: string;
+  summary: ImportSummary;
+  rows: ImportRowPreview[];
+  can_commit: boolean;
+  notice?: string;
+}
+
+export interface ImportCommitResult {
+  message: string;
+  summary: {
+    import_token: string;
+    filename: string;
+    rows_processed: number;
+    products_created: number;
+    products_updated: number;
+    products_unchanged: number;
+    variants_created: number;
+    variants_updated: number;
+    committed_at: string;
+  };
+}
+
+export interface ProductFormImage {
+  id?: number;
+  image_url: string;
+  is_primary: boolean;
+  alt_text?: string;
+  color_name?: string | null;
+  display_order?: number;
+  source?: "upload" | "url";
+}
+
+export interface ProductFormVariant {
+  id?: number;
+  name: string;
+  size?: string | null;
+  color_name?: string | null;
+  color_hex?: string | null;
+  stock_quantity: number;
+  price_modifier?: number;
+  cost_price?: number | null;
+  barcode?: string | null;
+  sku?: string | null;
+}
+
+export interface ProductFormData {
+  name: string;
+  category_id: string;
+  subcategory_id: string;
+  brand_id: string;
+  brand: string;
+  price: string;
+  compare_at_price: string;
+  cost_price: string;
+  stock_quantity: string;
+  short_description: string;
+  description: string;
+  meta_title: string;
+  meta_description: string;
+  is_featured: boolean;
+  is_new_arrival: boolean;
+  is_best_seller: boolean;
+  is_active: boolean;
+  images: ProductFormImage[];
+  variants: ProductFormVariant[];
 }
 
 export interface Address {
@@ -127,6 +236,52 @@ export interface CartItem {
   quantity: number;
   selectedColor?: string | null;
   selectedSize?: string | null;
+  availableStock?: number;
+  validationStatus?: 'valid' | 'quantity_adjusted' | 'price_changed' | 'out_of_stock' | 'inactive' | 'product_not_found' | 'variant_not_found' | 'variant_mismatch';
+  validationMessage?: string | null;
+}
+
+export interface CartValidationItem {
+  product_id: number;
+  variant_id?: number | null;
+  status: 'valid' | 'quantity_adjusted' | 'price_changed' | 'out_of_stock' | 'inactive' | 'product_not_found' | 'variant_not_found' | 'variant_mismatch';
+  is_valid: boolean;
+  requested_quantity: number;
+  available_stock: number;
+  normalized_quantity: number;
+  unit_price: number;
+  price_modifier?: number;
+  total_price?: number;
+  price_changed?: boolean;
+  original_client_price?: number | null;
+  message: string;
+  product?: Product | null;
+  variant?: ProductVariant | null;
+}
+
+export interface CartValidationResponse {
+  is_valid: boolean;
+  has_changes: boolean;
+  items: CartValidationItem[];
+  summary: {
+    total_items: number;
+    subtotal: number;
+    discount_amount?: number;
+    total?: number;
+    has_out_of_stock: boolean;
+    has_price_changes: boolean;
+    has_inactive_items: boolean;
+    notices: string[];
+  };
+  coupon?: {
+    valid: boolean;
+    code?: string | null;
+    type?: string;
+    discount_amount: number;
+    promotion_id?: number | null;
+    promotion_name?: string | null;
+    message?: string;
+  } | null;
 }
 
 export interface OrderItem {
@@ -136,6 +291,7 @@ export interface OrderItem {
   variant_id?: number | null;
   product_name: string;
   product_sku?: string | null;
+  sku?: string | null;
   product_image?: string | null;
   variant_name?: string | null;
   unit_price: number;
@@ -238,6 +394,14 @@ export interface Order {
   latest_shipment?: Shipment | null;
   shipments?: Shipment[];
   returns?: OrderReturn[];
+}
+
+export interface PaymentMethodOption {
+  code: string;
+  name: string;
+  description: string;
+  available: boolean;
+  notice: string | null;
 }
 
 export interface OrderReturnItem {
@@ -454,6 +618,15 @@ export interface AdminAnalytics {
     total_customers: number;
     total_products: number;
     low_stock_count: number;
+    pending_orders?: number;
+    confirmed_orders?: number;
+    processing_orders?: number;
+    shipped_orders?: number;
+    delivered_orders?: number;
+    cancelled_orders?: number;
+    refunded_orders?: number;
+    pending_payments?: number;
+    paid_payments?: number;
   };
   recent_orders: Order[];
   top_products: Product[];
@@ -1324,8 +1497,11 @@ export interface AccountingReportsResponse {
 export interface Color {
   id: number;
   name: string;
+  slug?: string;
   hex_code: string;
   status: 'active' | 'inactive';
+  sort_order?: number;
+  variants_count?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -1490,7 +1666,10 @@ export interface NavbarItem {
   subcategory_id?: number | null;
   brand_id?: number | null;
   url?: string | null;
-  computed_url?: string;
+  computed_url?: string | null;
+  is_valid?: boolean;
+  invalid_reason?: string | null;
+  depth?: number;
   icon?: string | null;
   badge?: string | null;
   badge_color?: string | null;
@@ -1520,7 +1699,7 @@ export interface NavigationOptions {
   subcategories: Array<{ id: number; name: string; slug: string; parent_id: number }>;
   brands: Array<{ id: number; name: string; slug: string; logo?: string | null }>;
   pages: Array<{ id: number; title: string; slug: string; url: string }>;
-  potential_parents: Array<{ id: number; title: string; type: string }>;
+  potential_parents: Array<{ id: number; title: string; type: string; depth?: number; path?: string }>;
 }
 
 // ==========================================

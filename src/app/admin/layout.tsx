@@ -55,6 +55,11 @@ import {
   Sparkles,
   RotateCcw,
   Mail,
+  Bell,
+  MessageSquare,
+  MessageCircle,
+  Smartphone,
+  Briefcase,
 } from "lucide-react";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
 import { useThemeStore, resolveLogo } from "@/store/useThemeStore";
@@ -192,125 +197,127 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navSections: NavSection[] = [
     {
-      title: "Overview",
+      title: "Core Store",
       items: [
-        { kind: "single", label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-      ],
-    },
-    {
-      title: "Operations",
-      items: [
-        { kind: "single", label: "POS Terminal", href: "/admin/pos", icon: Receipt, permission: "orders.create" },
         {
-          kind: "group",
-          label: "Orders & Fulfillment",
-          icon: ShoppingBag,
-          items: [
-            { label: "Orders & Invoices", href: "/admin/orders", icon: ShoppingBag, permission: "orders.view" },
-            { label: "Returns & RTO", href: "/admin/orders/returns", icon: RotateCcw, permission: "orders.view" },
-            { label: "Customers Directory", href: "/admin/customers", icon: Users, permission: "customers.view" },
-            { label: "Leads & Abandoned", href: "/admin/leads", icon: Magnet, permission: "leads.view" },
-            { label: "Reviews & Ratings", href: "/admin/reviews", icon: Star, permission: "reviews.view" },
-          ],
+          kind: "single",
+          label: "Dashboard",
+          href: "/admin",
+          icon: LayoutDashboard,
         },
         {
           kind: "group",
-          label: "Catalog & Inventory",
+          label: "Products",
           icon: Boxes,
           items: [
             { label: "Products", href: "/admin/products", icon: Boxes, permission: "products.view" },
             { label: "Categories", href: "/admin/categories", icon: FolderTree, permission: "categories.view" },
             { label: "Brands", href: "/admin/brands", icon: Building2, permission: "products.view" },
-            { label: "Color Swatches", href: "/admin/products/colors", icon: Palette, permission: "products.view" },
-            { label: "Inventory & Stock", href: "/admin/inventory", icon: Layers, permission: "products.view" },
-            { label: "FIFO Cost Ledger", href: "/admin/inventory-valuation", icon: Calculator, permission: "procurement.fifo" },
+            { label: "Colors", href: "/admin/products/colors", icon: Palette, permission: "products.view" },
+            { label: "Stock & Inventory", href: "/admin/inventory", icon: Layers, permission: "products.view" },
+            { label: "Reviews", href: "/admin/reviews", icon: Star, permission: "reviews.view" },
           ],
         },
         {
           kind: "group",
-          label: "Purchasing",
-          icon: Truck,
+          label: "Orders",
+          icon: ShoppingBag,
           items: [
-            { label: "Vendors", href: "/admin/vendors", icon: Truck, permission: "procurement.vendors" },
-            { label: "Purchase Orders", href: "/admin/purchase-orders", icon: FileText, permission: "procurement.orders" },
-            { label: "Goods Receiving", href: "/admin/goods-receipts", icon: PackageCheck, permission: "procurement.receive" },
+            { label: "Orders", href: "/admin/orders", icon: ShoppingBag, permission: "orders.view" },
+            { label: "Order Status", href: "/admin/orders/statuses", icon: SlidersHorizontal, permission: "settings.manage" },
+            { label: "Shipping", href: "/admin/orders/shipping", icon: Truck, permission: "settings.manage" },
+            { label: "Returns & RTO", href: "/admin/orders/returns", icon: RotateCcw, permission: "orders.view" },
+            { label: "Abandoned Checkouts", href: "/admin/orders/abandoned-checkouts", icon: Magnet, permission: "leads.view" },
+            { label: "Sales Invoices", href: "/admin/orders/sales-invoices", icon: BadgeDollarSign, permission: "orders.view" },
           ],
         },
         {
           kind: "group",
-          label: "Promotions & Marketing",
-          icon: Percent,
+          label: "Customers",
+          icon: Users,
           items: [
-            { label: "All Promotions", href: "/admin/promotions", icon: Percent, permission: "coupons.view" },
-            { label: "Discount Codes", href: "/admin/promotions/codes", icon: Ticket, permission: "coupons.view" },
-            { label: "Claimable Coupons", href: "/admin/promotions/claimable", icon: Gift, permission: "coupons.view" },
-            { label: "Automatic Discounts", href: "/admin/promotions/automatic", icon: Zap, permission: "coupons.view" },
-            { label: "Customer Rewards", href: "/admin/promotions/rewards", icon: Award, permission: "coupons.view" },
-            { label: "Store Credit", href: "/admin/promotions/store-credit", icon: CreditCard, permission: "coupons.view" },
-            { label: "Promotional Banners", href: "/admin/marketing/banners", icon: Sparkles, permission: "theme.manage" },
-            { label: "Redemptions Log", href: "/admin/promotions/redemptions", icon: History, permission: "coupons.view" },
-            { label: "Marketing Analytics", href: "/admin/promotions/analytics", icon: BarChart3, permission: "analytics.view" },
+            { label: "Customers", href: "/admin/customers", icon: Users, permission: "customers.view" },
+            { label: "Staff & Roles", href: "/admin/customers/staff", icon: UserCog, permission: "staff.view" },
+            { label: "Risk & Security", href: "/admin/customers/risk-security", icon: ShieldAlert, permission: "security.ip_block" },
           ],
         },
         {
           kind: "group",
-          label: "Financials & Accounting",
-          icon: Landmark,
+          label: "Content / CMS",
+          icon: Layers,
           items: [
-            { label: "Financial Overview (P&L)", href: "/admin/finance", icon: TrendingUp, permission: "finance.view" },
-            { label: "Operating Expenses", href: "/admin/expenses", icon: Coins, permission: "expenses.view" },
-            { label: "Courier Settlements", href: "/admin/accounting/settlements", icon: BadgeDollarSign, permission: "accounting.view" },
-            { label: "Customer Dues (A/R)", href: "/admin/accounting/receivables", icon: Users, permission: "accounting.view" },
-            { label: "Supplier Dues (A/P)", href: "/admin/accounting/payables", icon: Truck, permission: "accounting.view" },
-            { label: "Bank & Cash", href: "/admin/accounting/banking", icon: Wallet, permission: "accounting.view" },
-            { label: "Financial Report Center", href: "/admin/reports", icon: BarChart3, permission: "analytics.view" },
-            { label: "Advanced Accounting (GL/COA)", href: "/admin/accounting", icon: Landmark, permission: "accounting.view" },
+            { label: "Homepage", href: "/admin/content/homepage", icon: Layers, permission: "theme.manage" },
+            { label: "Banners & Ads", href: "/admin/content/banners", icon: Sparkles, permission: "theme.manage" },
+            { label: "Pages", href: "/admin/content/pages", icon: FileText, permission: "theme.manage" },
+            { label: "Navigation", href: "/admin/content/navigation", icon: ListTree, permission: "theme.manage" },
+            { label: "Footer", href: "/admin/content/footer", icon: Layers, permission: "theme.manage" },
+            { label: "Social Media", href: "/admin/content/social", icon: ExternalLink, permission: "theme.manage" },
+            { label: "Blog", href: "/admin/content/blog", icon: BookOpen, permission: "theme.manage" },
+            { label: "Theme & Storefront", href: "/admin/content/theme", icon: Palette, permission: "theme.manage" },
+            { label: "Branding", href: "/admin/content/branding", icon: Store, permission: "theme.manage" },
           ],
         },
-      ],
-    },
-    {
-      title: "Settings",
-      items: [
         {
           kind: "group",
-          label: "Store Settings",
+          label: "Marketing",
+          icon: Megaphone,
+          items: [
+            { label: "Campaigns", href: "/admin/marketing/campaigns", icon: Megaphone, permission: "coupons.view" },
+            { label: "Coupons", href: "/admin/marketing/coupons", icon: Ticket, permission: "coupons.view" },
+            { label: "Customer Rewards", href: "/admin/marketing/rewards", icon: CreditCard, permission: "coupons.view" },
+          ],
+        },
+        {
+          kind: "group",
+          label: "Integrations",
+          icon: Puzzle,
+          items: [
+            { label: "Payment Gateways", href: "/admin/integrations?category=payment", icon: CreditCard, permission: "settings.manage" },
+            { label: "SMS Gateway", href: "/admin/integrations?category=sms", icon: MessageSquare, permission: "settings.manage" },
+            { label: "Email / SMTP", href: "/admin/integrations?category=email", icon: Mail, permission: "settings.manage" },
+            { label: "Courier Gateways", href: "/admin/integrations?category=courier", icon: Truck, permission: "settings.manage" },
+            { label: "Other Integrations", href: "/admin/integrations?category=other", icon: Puzzle, permission: "settings.manage" },
+          ],
+        },
+        {
+          kind: "single",
+          label: "Reports",
+          href: "/admin/reports",
+          icon: BarChart3,
+          permission: "analytics.view",
+        },
+        {
+          kind: "group",
+          label: "Settings",
           icon: Settings,
           items: [
-            { label: "Settings Hub", href: "/admin/settings", icon: Settings, permission: "settings.manage" },
-            { label: "Theme & UI", href: "/admin/settings/appearance", icon: Palette, permission: "theme.manage" },
-            { label: "Branding & Logo", href: "/admin/settings/branding", icon: Store, permission: "theme.manage" },
-            { label: "Storefront Layout", href: "/admin/settings/storefront", icon: LayoutDashboard, permission: "theme.manage" },
-            { label: "Homepage Sections", href: "/admin/settings/homepage", icon: Layers, permission: "theme.manage" },
-            { label: "CMS Static Pages", href: "/admin/online-store/pages", icon: FileText, permission: "theme.manage" },
-            { label: "Blog & Editorial", href: "/admin/blog", icon: BookOpen },
-            { label: "Header Navigation", href: "/admin/online-store/navigation", icon: ListTree, permission: "theme.manage" },
-            { label: "Navigation & Footer", href: "/admin/online-store/footer", icon: Layers, permission: "theme.manage" },
-            { label: "Social Links", href: "/admin/online-store/social", icon: ExternalLink, permission: "theme.manage" },
-            { label: "Shipping Zones", href: "/admin/settings/shipping", icon: Truck, permission: "settings.manage" },
-            { label: "Order Pipeline", href: "/admin/settings/statuses", icon: SlidersHorizontal, permission: "settings.manage" },
-            { label: "SEO & Search", href: "/admin/settings/seo", icon: Search, permission: "settings.manage" },
-            { label: "Mobile & PWA", href: "/admin/settings/pwa", icon: LayoutDashboard, permission: "settings.manage" },
-            { label: "Notification Templates", href: "/admin/settings/notifications", icon: FileText, permission: "settings.manage" },
-            { label: "Mail Configuration", href: "/admin/settings/mail", icon: Mail, permission: "settings.manage" },
-            { label: "Integrations Hub", href: "/admin/integrations", icon: Puzzle, permission: "settings.manage" },
-            { label: "System & Cache", href: "/admin/settings/system", icon: Settings, permission: "settings.manage" },
+            { label: "General Settings", href: "/admin/settings", icon: Settings, permission: "settings.manage" },
+            { label: "SEO Settings", href: "/admin/settings/seo", icon: Search, permission: "settings.manage" },
+            { label: "PWA Settings", href: "/admin/settings/pwa", icon: Smartphone, permission: "settings.manage" },
+            { label: "Notifications", href: "/admin/settings/notifications", icon: Bell, permission: "settings.manage" },
+            { label: "System & Cache", href: "/admin/settings/system", icon: Zap, permission: "settings.manage" },
+            { label: "Audit Trail", href: "/admin/audit-logs", icon: ScrollText, permission: "audit_logs.view" },
           ],
         },
       ],
     },
     {
-      title: "Administration",
+      title: "Operations (Advanced)",
       items: [
         {
           kind: "group",
-          label: "System Governance",
-          icon: UserCog,
+          label: "Operations",
+          icon: Briefcase,
+          badge: "Advanced",
           items: [
-            { label: "Staff & RBAC", href: "/admin/staff", icon: UserCog, permission: "staff.view" },
-            { label: "Security & Blocked IPs", href: "/admin/blocked-ips", icon: ShieldAlert, permission: "security.ip_block" },
-            { label: "Audit Logs", href: "/admin/audit-logs", icon: ScrollText, permission: "audit_logs.view" },
-            { label: "My Profile", href: "/admin/profile", icon: ShieldCheck },
+            { label: "POS Terminal", href: "/admin/pos", icon: Receipt, permission: "orders.create" },
+            { label: "Vendors & Suppliers", href: "/admin/vendors", icon: Truck, permission: "procurement.vendors" },
+            { label: "Purchase Orders", href: "/admin/purchase-orders", icon: FileSpreadsheet, permission: "procurement.orders" },
+            { label: "Goods Receiving (GRN)", href: "/admin/goods-receipts", icon: PackageCheck, permission: "procurement.receive" },
+            { label: "Inventory Valuation", href: "/admin/inventory-valuation", icon: Calculator, permission: "procurement.fifo" },
+            { label: "Operating Expenses", href: "/admin/expenses", icon: Coins, permission: "expenses.view" },
+            { label: "Financial Accounting", href: "/admin/accounting", icon: Landmark, permission: "accounting.view" },
+            { label: "Courier Settlements", href: "/admin/accounting/settlements", icon: BadgeDollarSign, permission: "accounting.view" },
           ],
         },
       ],
@@ -326,20 +333,59 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const companyBrandName = theme?.store_brand_name || "INHALIQ";
   const companyBrandLogo = resolveLogo(theme, "admin_sidebar", "/branding/logo.png") || theme?.store_brand_logo || "/branding/logo.png";
 
-  // Additional sub-pages for breadcrumb and command palette indexing
+  // Backward-compatibility alias definitions for breadcrumbs & command palette
   const additionalSubPages = [
-    { label: "Sales & Invoices (Unified into Orders)", href: "/admin/sales", icon: BadgeDollarSign, section: "Orders & Fulfillment", permission: "orders.view" },
-    { label: "Legacy Coupons Bridge", href: "/admin/coupons", icon: Tag, section: "Promotions & Marketing", permission: "coupons.view" },
-    { label: "Marketing Banners (Alias)", href: "/admin/banners", icon: Sparkles, section: "Promotions & Marketing", permission: "theme.manage" },
-    { label: "Theme Studio (Alias)", href: "/admin/theme", icon: Palette, section: "Settings", permission: "theme.manage" },
-    { label: "Promotion Builder", href: "/admin/promotions/new", icon: Percent, section: "Promotions & Marketing", permission: "coupons.manage" },
-    { label: "General Ledger", href: "/admin/accounting/ledger", icon: BookOpen, section: "Financials & Accounting", permission: "accounting.view" },
-    { label: "Chart of Accounts", href: "/admin/accounting/accounts", icon: ListTree, section: "Financials & Accounting", permission: "accounting.view" },
-    { label: "Financial Accounting Reports", href: "/admin/accounting/reports", icon: FileSpreadsheet, section: "Financials & Accounting", permission: "accounting.view" },
-    { label: "Blog Articles", href: "/admin/blog/posts", icon: FileText, section: "Store Settings" },
-    { label: "Blog Categories", href: "/admin/blog/categories", icon: FolderTree, section: "Store Settings" },
-    { label: "Blog Tags", href: "/admin/blog/tags", icon: Tag, section: "Store Settings" },
-    { label: "Blog Comments", href: "/admin/blog/comments", icon: Star, section: "Store Settings" },
+    // Legacy Content / CMS aliases
+    { label: "Homepage", href: "/admin/settings/homepage", icon: Layers, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Banners & Ads", href: "/admin/banners", icon: Sparkles, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Banners & Ads", href: "/admin/marketing/banners", icon: Sparkles, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Banners & Ads", href: "/admin/online-store/banners", icon: Sparkles, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Theme & Storefront", href: "/admin/content/theme", icon: Palette, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Theme & Styling", href: "/admin/theme", icon: Palette, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Theme & Appearance", href: "/admin/settings/appearance", icon: Palette, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Branding Studio", href: "/admin/content/branding", icon: Store, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Branding & Logos", href: "/admin/settings/branding", icon: Store, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Pages", href: "/admin/content/pages", icon: FileText, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Navigation", href: "/admin/online-store/navigation", icon: ListTree, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Footer", href: "/admin/online-store/footer", icon: Layers, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Social Media", href: "/admin/online-store/social", icon: ExternalLink, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Blog", href: "/admin/content/blog", icon: BookOpen, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Blog Articles", href: "/admin/content/blog?tab=posts", icon: FileText, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Blog Categories", href: "/admin/content/blog?tab=categories", icon: FolderTree, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Blog Tags", href: "/admin/content/blog?tab=tags", icon: Tag, section: "Content / CMS", permission: "theme.manage" },
+    { label: "Blog Comments", href: "/admin/content/blog?tab=comments", icon: Star, section: "Content / CMS", permission: "theme.manage" },
+
+    // Legacy Orders aliases
+    { label: "Order Status", href: "/admin/settings/statuses", icon: SlidersHorizontal, section: "Orders", permission: "settings.manage" },
+    { label: "Shipping", href: "/admin/settings/shipping", icon: Truck, section: "Orders", permission: "settings.manage" },
+    { label: "Abandoned Checkouts", href: "/admin/leads", icon: Magnet, section: "Orders", permission: "leads.view" },
+    { label: "Sales Invoices", href: "/admin/sales", icon: BadgeDollarSign, section: "Orders", permission: "orders.view" },
+
+    // Legacy Customers aliases
+    { label: "Staff & Roles", href: "/admin/staff", icon: UserCog, section: "Customers", permission: "staff.view" },
+    { label: "Risk & Security", href: "/admin/blocked-ips", icon: ShieldAlert, section: "Customers", permission: "security.ip_block" },
+
+    // Legacy Marketing aliases
+    { label: "Campaigns", href: "/admin/promotions", icon: Megaphone, section: "Marketing", permission: "coupons.view" },
+    { label: "Coupons", href: "/admin/coupons", icon: Tag, section: "Marketing", permission: "coupons.view" },
+    { label: "Coupons", href: "/admin/promotions/codes", icon: Ticket, section: "Marketing", permission: "coupons.view" },
+    { label: "Customer Rewards", href: "/admin/promotions/store-credit", icon: CreditCard, section: "Marketing", permission: "coupons.view" },
+    { label: "Promotion Builder", href: "/admin/promotions/new", icon: Percent, section: "Marketing", permission: "coupons.manage" },
+    { label: "Promotion Analytics", href: "/admin/promotions/analytics", icon: BarChart3, section: "Marketing", permission: "coupons.view" },
+
+    // Operations / Accounting Subpages
+    { label: "General Ledger", href: "/admin/accounting/ledger", icon: BookOpen, section: "Operations", permission: "accounting.view" },
+    { label: "Chart of Accounts", href: "/admin/accounting/accounts", icon: ListTree, section: "Operations", permission: "accounting.view" },
+    { label: "Customer Dues (A/R)", href: "/admin/accounting/receivables", icon: Users, section: "Operations", permission: "accounting.view" },
+    { label: "Supplier Dues (A/P)", href: "/admin/accounting/payables", icon: Truck, section: "Operations", permission: "accounting.view" },
+    { label: "Bank & Cash", href: "/admin/accounting/banking", icon: Wallet, section: "Operations", permission: "accounting.view" },
+    { label: "Financial Reports", href: "/admin/accounting/reports", icon: FileSpreadsheet, section: "Operations", permission: "accounting.view" },
+    { label: "Financial Overview (P&L)", href: "/admin/finance", icon: TrendingUp, section: "Operations", permission: "finance.view" },
+
+    // Settings sub-pages
+    { label: "Mail / SMTP Settings", href: "/admin/settings/mail", icon: Mail, section: "Settings", permission: "settings.manage" },
+    { label: "Settings Integrations", href: "/admin/settings/integrations", icon: Puzzle, section: "Settings", permission: "settings.manage" },
+    { label: "My Profile", href: "/admin/profile", icon: ShieldCheck, section: "Settings" },
   ];
 
   // Breadcrumb current item detection
@@ -355,9 +401,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ...additionalSubPages,
   ];
 
-  const currentNavItem = allNavAndSubItems.find(
-    (item) => item.href === pathname || (item.href !== "/admin" && pathname.startsWith(item.href))
-  );
+  // Exact match first, then startsWith for nested routes
+  const currentNavItem =
+    allNavAndSubItems.find((item) => item.href === pathname) ||
+    allNavAndSubItems.find((item) => item.href !== "/admin" && pathname.startsWith(item.href.split("?")[0]));
 
   // Command palette items filter
   const allFlattenedItems = allNavAndSubItems.filter((item) => hasItemAccess(item.permission));
@@ -431,10 +478,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 return item.items.some((child) => hasItemAccess(child.permission));
               });
 
-              if (visibleSectionItems.length === 0) return null;
+              const isOperations = section.title.toLowerCase().includes("operations");
 
               return (
-                <div key={section.title} className="space-y-1">
+                <div key={section.title} className={`space-y-1 ${isOperations ? "pt-2.5 mt-2.5 border-t border-white/[0.08]" : ""}`}>
                   {/* Category Header */}
                   {!sidebarCollapsed && (
                     <div className="animate-in fade-in duration-150 mb-1">
@@ -647,8 +694,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
               if (visibleSectionItems.length === 0) return null;
 
+              const isOperations = section.title.toLowerCase().includes("operations");
+
               return (
-                <div key={section.title} className="space-y-1">
+                <div key={section.title} className={`space-y-1 ${isOperations ? "pt-2.5 mt-2.5 border-t border-white/[0.08]" : ""}`}>
                   <span className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500 px-3 block">
                     {section.title}
                   </span>

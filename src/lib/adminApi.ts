@@ -26,6 +26,8 @@ import {
   PosRegister, 
   PosRegisterSession, 
   Product, 
+  ImportValidationReport,
+  ImportCommitResult,
   ProductProfitabilityItem, 
   ProductValuation, 
   PurchaseOrder, 
@@ -183,7 +185,10 @@ export const adminApi = {
   async getProducts(params?: {
     search?: string;
     category_id?: number | string;
+    brand_id?: number | string;
     stock_status?: string;
+    media_filter?: "all" | "has_images" | "no_images";
+    sort?: string;
     is_active?: boolean;
     page?: number;
     per_page?: number;
@@ -200,6 +205,7 @@ export const adminApi = {
       total_categories: number;
       low_stock_count: number;
       out_of_stock_count: number;
+      products_without_images_count?: number;
     };
   }> {
     const res = await adminClient.get("/admin/products", { params });
@@ -220,6 +226,11 @@ export const adminApi = {
     return res.data;
   },
 
+  async deleteUncommittedImage(payload: { path?: string; image_url?: string }): Promise<{ message: string; path?: string }> {
+    const res = await adminClient.post("/admin/products/delete-uncommitted-image", payload);
+    return res.data;
+  },
+
   async createProduct(data: any): Promise<{ message: string; product: Product }> {
     const res = await adminClient.post("/admin/products", data);
     return res.data;
@@ -235,8 +246,94 @@ export const adminApi = {
     return res.data;
   },
 
-  async bulkDeleteProducts(ids: number[]): Promise<{ message: string; deleted_count: number }> {
+  async bulkDeleteProducts(ids: number[]): Promise<{
+    message: string;
+    deleted_count: number;
+    blocked_count?: number;
+    blocked?: Array<{ id: number; name: string; sku?: string; conflicts: any }>;
+  }> {
     const res = await adminClient.post("/admin/products/bulk-delete", { ids });
+    return res.data;
+  },
+
+  async bulkUpdateProducts(payload: {
+    product_ids: number[];
+    operation: "activate" | "deactivate" | "category" | "brand" | "price";
+    category_id?: number;
+    brand_id?: number;
+    adjustment_type?: "percentage" | "fixed";
+    value?: number;
+    rounding?: "none" | "round" | "ceil" | "floor" | "round_99";
+  }): Promise<{
+    message: string;
+    operation: string;
+    affected_count: number;
+    product_ids: number[];
+  }> {
+    const res = await adminClient.post("/admin/products/bulk-update", payload);
+    return res.data;
+  },
+
+  async exportProducts(params?: {
+    search?: string;
+    category_id?: number | string;
+    brand_id?: number | string;
+    stock_status?: string;
+    media_filter?: "all" | "has_images" | "no_images";
+    badge?: string;
+    is_active?: boolean | string;
+    status?: string;
+    sort?: string;
+  }): Promise<{ blob: Blob; filename: string }> {
+    try {
+      const res = await adminClient.get("/admin/products/export", {
+        params,
+        responseType: "blob",
+      });
+
+      let filename = `products-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      const disposition = res.headers?.["content-disposition"];
+      if (disposition && typeof disposition === "string") {
+        const match = disposition.match(/filename="?([^";]+)"?/i);
+        if (match && match[1]) {
+          filename = match[1];
+        }
+      }
+
+      return { blob: res.data as Blob, filename };
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: unknown }; message?: string };
+      if (err?.response?.data instanceof Blob) {
+        try {
+          const text = await err.response.data.text();
+          const parsed = JSON.parse(text);
+          if (parsed && (parsed.message || parsed.error)) {
+            err.message = parsed.message || parsed.error;
+          }
+        } catch {
+          // ignore parsing error
+        }
+      }
+      throw error;
+    }
+  },
+
+  async validateProductImport(file: File): Promise<ImportValidationReport> {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await adminClient.post("/admin/products/import/validate", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      timeout: 60000,
+    });
+    return res.data;
+  },
+
+  async commitProductImport(importToken: string): Promise<ImportCommitResult> {
+    const res = await adminClient.post(
+      "/admin/products/import/commit",
+      { import_token: importToken },
+      { timeout: 60000 }
+    );
     return res.data;
   },
 
@@ -312,19 +409,49 @@ export const adminApi = {
     return res.data;
   },
 
+  async uploadBrandLogo(file: File): Promise<{ message: string; logo_url: string; image_url: string; path: string; filename: string }> {
+    const formData = new FormData();
+    formData.append("logo", file);
+    const res = await adminClient.post("/admin/brands/upload-logo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  },
+
   // ==========================================
   // ORDERS
   // ==========================================
+  async getOrderCounts(): Promise<{
+    all: number;
+    pending: number;
+    confirmed: number;
+    processing: number;
+    shipped: number;
+    delivered: number;
+    cancelled: number;
+    refunded: number;
+    payment_pending: number;
+    payment_paid: number;
+  }> {
+    const res = await adminClient.get("/admin/orders/counts");
+    return res.data;
+  },
+
   async getOrders(params?: {
     search?: string;
     status?: string;
     payment_status?: string;
+    payment_method?: string;
     source?: string;
     carrier?: string;
     date_from?: string;
     date_to?: string;
     min_total?: string;
     max_total?: string;
+    sort_by?: string;
+    sort_order?: string;
     page?: number;
     per_page?: number;
   }): Promise<{ data: Order[]; total: number; current_page: number; last_page: number }> {
@@ -365,6 +492,15 @@ export const adminApi = {
     notes?: string;
   }): Promise<{ message: string; order: Order }> {
     const res = await adminClient.patch(`/admin/orders/${id}/status`, data);
+    return res.data;
+  },
+
+  async recordOrderPayment(id: number, data?: { amount?: number; notes?: string }): Promise<{
+    message: string;
+    payment: any;
+    order: Order;
+  }> {
+    const res = await adminClient.post(`/admin/orders/${id}/payments`, data || {});
     return res.data;
   },
 
@@ -1728,6 +1864,11 @@ export const adminApi = {
     return res.data;
   },
 
+  async getColor(id: number): Promise<Color> {
+    const res = await adminClient.get(`/admin/colors/${id}`);
+    return res.data;
+  },
+
   async createColor(data: { name: string; hex_code: string; status?: 'active' | 'inactive' }): Promise<{ message: string; color: Color }> {
     const res = await adminClient.post("/admin/colors", data);
     return res.data;
@@ -2151,6 +2292,18 @@ export const adminApi = {
 
   async reorderNavbarItems(items: Array<{ id: number; display_order: number; parent_id?: number | null }>): Promise<{ message: string }> {
     const res = await adminClient.post("/admin/navigation/reorder", { items });
+    if (typeof window !== "undefined") {
+      fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tags: ["navigation"] }),
+      }).catch(() => {});
+    }
+    return res.data;
+  },
+
+  async duplicateNavbarItem(id: number): Promise<{ message: string; item: NavbarItem }> {
+    const res = await adminClient.post(`/admin/navigation/${id}/duplicate`);
     if (typeof window !== "undefined") {
       fetch("/api/revalidate", {
         method: "POST",

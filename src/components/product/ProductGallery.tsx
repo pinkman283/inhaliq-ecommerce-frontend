@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Maximize2, 
@@ -8,7 +8,6 @@ import {
   ChevronLeft, 
   ChevronRight, 
   ZoomIn, 
-  ZoomOut,
   RotateCcw
 } from "lucide-react";
 import { ProductImage } from "@/types";
@@ -18,12 +17,14 @@ interface ProductGalleryProps {
   productName: string;
 }
 
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=85";
+
 export function ProductGallery({ images = [], productName }: ProductGalleryProps) {
   const defaultImages = images.length > 0 ? images : [
     {
       id: 1,
       product_id: 0,
-      image_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=85",
+      image_url: FALLBACK_IMAGE,
       is_primary: true,
       display_order: 0,
     },
@@ -92,17 +93,17 @@ export function ProductGallery({ images = [], productName }: ProductGalleryProps
     setZoomOrigin({ x, y });
   };
 
-  const handlePrevImage = useCallback((e?: React.MouseEvent) => {
+  const handlePrevImage = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     setIsZoomed(false);
     setActiveIndex((prev) => (prev > 0 ? prev - 1 : defaultImages.length - 1));
-  }, [defaultImages.length]);
+  };
 
-  const handleNextImage = useCallback((e?: React.MouseEvent) => {
+  const handleNextImage = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     setIsZoomed(false);
     setActiveIndex((prev) => (prev < defaultImages.length - 1 ? prev + 1 : 0));
-  }, [defaultImages.length]);
+  };
 
   return (
     <div className="space-y-3 select-none w-full max-w-[530px] mx-auto lg:mx-0">

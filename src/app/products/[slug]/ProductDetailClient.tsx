@@ -149,6 +149,33 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
   const isOutOfStock = availableStock <= 0;
   const isStockExceeded = quantity > availableStock;
 
+  // Phase 3H: Variant/Color-aware storefront gallery resolution
+  // 1. If a color is selected and images exist for that color -> show color-specific images
+  // 2. Fall back to general product images (color_name is null/empty)
+  // 3. Fall back to all product images so the gallery is never empty
+  const activeColor = selectedColor || selectedVariant?.color_name || null;
+  const galleryImages = (() => {
+    if (!product.images || product.images.length === 0) {
+      return [];
+    }
+    if (activeColor) {
+      const normalizedColor = activeColor.trim().toLowerCase();
+      const colorImages = product.images.filter(
+        (img) => img.color_name && img.color_name.trim().toLowerCase() === normalizedColor
+      );
+      if (colorImages.length > 0) {
+        return colorImages;
+      }
+    }
+    const generalImages = product.images.filter(
+      (img) => !img.color_name || img.color_name.trim() === ""
+    );
+    if (generalImages.length > 0) {
+      return generalImages;
+    }
+    return product.images;
+  })();
+
   const handleQuantityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitized = e.target.value.replace(/\D/g, "");
     setQuantityInput(sanitized);
@@ -221,8 +248,16 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
       return;
     }
     setHasVariantError(false);
-    addItem(product, selectedVariant, quantity);
-    toast.success(`Added ${quantity}x ${product.name}${selectedVariant ? ` (${selectedVariant.name})` : ""} to cart`);
+    const result = addItem(product, selectedVariant, quantity);
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
+    if (result.message && result.message.includes("maximum available stock")) {
+      toast.warning(result.message);
+    } else {
+      toast.success(`Added ${result.addedQuantity ?? quantity}x ${product.name}${selectedVariant ? ` (${selectedVariant.name})` : ""} to cart`);
+    }
   };
 
   const handleBuyNow = () => {
@@ -247,7 +282,11 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
       return;
     }
     setHasVariantError(false);
-    addItem(product, selectedVariant, quantity);
+    const result = addItem(product, selectedVariant, quantity);
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
     router.push("/checkout");
   };
 
@@ -282,7 +321,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Left Column: Image Gallery */}
         <div className="lg:col-span-6 max-w-[530px] w-full mx-auto lg:mx-0">
-          <ProductGallery images={product.images} productName={product.name} />
+          <ProductGallery key={activeColor || "default"} images={galleryImages} productName={product.name} />
         </div>
 
         {/* Right Info & Actions Panel */}
@@ -762,7 +801,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
             },
             offers: {
               "@type": "Offer",
-              priceCurrency: "BDT",
+              priceCurrency: "USD",
               price: product.price,
               availability: isOutOfStock
                 ? "https://schema.org/OutOfStock"

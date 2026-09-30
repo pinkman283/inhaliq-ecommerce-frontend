@@ -48,7 +48,12 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 export default function AdminInventoryPage() {
   const [inventory, setInventory] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [summary, setSummary] = useState<any>({
+  const [summary, setSummary] = useState<{
+    total_skus: number;
+    total_units: number;
+    low_stock_count: number;
+    out_of_stock_count: number;
+  }>({
     total_skus: 0,
     total_units: 0,
     low_stock_count: 0,
@@ -119,7 +124,9 @@ export default function AdminInventoryPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadInventory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, perPage, stockLevelFilter, categoryId, sortBy]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -161,8 +168,9 @@ export default function AdminInventoryPage() {
       if (adjustingProduct && selectedIds.includes(adjustingProduct.id)) setAdjustingProduct(null);
       setSelectedIds([]);
       toast.success(res.message || `Deleted ${selectedIds.length} inventory SKU(s).`);
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to delete selected inventory items.");
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      toast.error(errorObj.response?.data?.message || "Failed to delete selected inventory items.");
     } finally {
       setIsBulkDeleting(false);
     }
@@ -227,8 +235,9 @@ export default function AdminInventoryPage() {
       toast.success(res.message);
       setAdjustingProduct(null);
       loadInventory();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to adjust inventory.");
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      toast.error(errorObj.response?.data?.message || "Failed to adjust inventory.");
     } finally {
       setSaving(false);
     }
@@ -345,6 +354,18 @@ export default function AdminInventoryPage() {
           </button>
         </div>
       </div>
+
+      {/* Bulk Action Bar */}
+      {selectedIds.length > 0 && (
+        <BulkActionBar
+          selectedCount={selectedIds.length}
+          totalCount={displayedInventory.length}
+          onClearSelection={() => setSelectedIds([])}
+          onConfirmDelete={handleBulkDelete}
+          isDeleting={isBulkDeleting}
+          itemName="inventory item"
+        />
+      )}
 
       {/* Inventory Table with Scrollable Dragging Card */}
       <ScrollableTableCard className="bg-[#0f121b] border-white/[0.08]">

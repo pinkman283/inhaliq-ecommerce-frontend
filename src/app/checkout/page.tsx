@@ -30,12 +30,12 @@ import {
   Wallet,
   Gift
 } from "lucide-react";
-import { useCartStore } from "@/store/useCartStore";
+import { useCartStore, getAvailableStock } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useThemeStore } from "@/store/useThemeStore";
 import { formatPrice } from "@/lib/utils";
 import { api } from "@/lib/api";
-import { Address, PromotionClaim } from "@/types";
+import { Address, PaymentMethodOption, PromotionClaim } from "@/types";
 import { toast } from "sonner";
 
 export default function CheckoutPage() {
@@ -55,6 +55,11 @@ export default function CheckoutPage() {
     setUseStoreCredit,
     getSubtotal,
     getDiscount,
+    validationNotices,
+    dismissNotices,
+    validateCartWithServer,
+    hasInvalidItems,
+    isValidating,
   } = useCartStore();
   const { user, isAuthenticated, openAuthModal } = useAuthStore();
 
@@ -75,13 +80,42 @@ export default function CheckoutPage() {
   const [orderNotes, setOrderNotes] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
 
-  // Payment Method
-  const [paymentMethod, setPaymentMethod] = useState<"cash_on_delivery" | "credit_card">("cash_on_delivery");
+  // Payment Method Architecture (Canonical: cash_on_delivery)
+  const [paymentMethod, setPaymentMethod] = useState<string>("cash_on_delivery");
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethodOption[]>([
+    {
+      code: "cash_on_delivery",
+      name: "Cash On Delivery (COD)",
+      description: "Pay in cash when your parcel arrives at your doorstep",
+      available: true,
+      notice: null,
+    },
+    {
+      code: "online_payment",
+      name: "Online Payment (Cards / MFS)",
+      description: "Debit / Credit Cards, bKash, Nagad",
+      available: false,
+      notice: "Online payment — Coming soon",
+    },
+  ]);
 
-  // Card Simulation (Optional for instant card testing)
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardExpiry, setCardExpiry] = useState("");
-  const [cardCvc, setCardCvc] = useState("");
+  // Load active payment methods from server
+  useEffect(() => {
+    let mounted = true;
+    api.getPaymentMethods().then((res) => {
+      if (mounted && res?.methods?.length) {
+        setPaymentMethods(res.methods);
+        if (res.default) {
+          setPaymentMethod(res.default);
+        }
+      }
+    }).catch(() => {
+      // Retain secure default fallback
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Promo Code State
   const [couponInput, setCouponInput] = useState("");
@@ -103,6 +137,13 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [leadId, setLeadId] = useState<number | null>(null);
+
+  // Validate cart against server on checkout mount
+  useEffect(() => {
+    if (items.length > 0) {
+      validateCartWithServer();
+    }
+  }, [items.length, validateCartWithServer]);
 
   // Sync logged in user details & wallet
   useEffect(() => {
@@ -453,10 +494,25 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (hasInvalidItems()) {
+      toast.error("Please remove or adjust unavailable items in your cart before placing your order.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
+      // Authoritative pre-order server validation
+      const valResult = await validateCartWithServer();
+      if (valResult && (!valResult.is_valid || valResult.summary?.has_out_of_stock || valResult.summary?.has_inactive_items)) {
+        const errorMsg = "Some items in your cart need your attention before proceeding.";
+        setError(errorMsg);
+        toast.error(errorMsg);
+        setLoading(false);
+        return;
+      }
+
       const idempotencyKey = typeof crypto !== "undefined" && crypto.randomUUID
         ? crypto.randomUUID()
         : `ord-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -580,6 +636,38 @@ export default function CheckoutPage() {
         </div>
       )}
 
+      {/* Cart Validation Notices Banner */}
+      {validationNotices.length > 0 && (
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-500 space-y-1">
+          <div className="flex items-center justify-between font-bold">
+            <span className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>Cart Updated Due to Inventory or Price Changes</span>
+            </span>
+            <button
+              type="button"
+              onClick={dismissNotices}
+              className="text-[11px] underline hover:opacity-80 cursor-pointer font-medium"
+            >
+              Dismiss
+            </button>
+          </div>
+          <ul className="list-disc pl-5 text-[11px] space-y-0.5 pt-1">
+            {validationNotices.map((n, idx) => (
+              <li key={idx}>{n}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Cart Has Invalid Items Warning */}
+      {hasInvalidItems() && (
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          <span>Some items in your cart are no longer available or exceed available stock. Please remove or adjust them in the Order Review list before placing your order.</span>
+        </div>
+      )}
+
       <form onSubmit={handlePlaceOrder}>
         {/* Main 2-Column Responsive Checkout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
@@ -609,19 +697,40 @@ export default function CheckoutPage() {
                 {items.map((item) => {
                   const itemPrice = Number(item.product.price) + (item.variant ? Number(item.variant.price_modifier) : 0);
                   const imageUrl = item.product.primary_image?.image_url || item.product.images?.[0]?.image_url || "/placeholder.png";
+                  const availableStock = item.availableStock !== undefined
+                    ? item.availableStock
+                    : getAvailableStock(item.product, item.variant);
+                  const isOutOfStock = availableStock <= 0 || item.validationStatus === "out_of_stock";
+                  const isUnavailable =
+                    item.validationStatus === "inactive" ||
+                    item.validationStatus === "product_not_found" ||
+                    item.validationStatus === "variant_not_found" ||
+                    item.validationStatus === "variant_mismatch";
+                  const isExceeded = !isUnavailable && !isOutOfStock && item.quantity > availableStock;
+                  const isPriceChanged = item.validationStatus === "price_changed" || (item.validationMessage && item.validationMessage.includes("Price updated"));
+                  const isQuantityAdjusted = item.validationStatus === "quantity_adjusted";
 
                   return (
                     <div
                       key={`${item.product.id}-${item.variant?.id ?? "none"}`}
-                      className="pt-3 first:pt-0 flex items-center gap-3 sm:gap-4"
+                      className={`pt-3 first:pt-0 flex items-center gap-3 sm:gap-4 ${
+                        isOutOfStock || isUnavailable ? "opacity-70" : ""
+                      }`}
                     >
                       {/* Product Thumbnail */}
                       <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-white/5 border border-white/10 shrink-0">
                         <img
                           src={imageUrl}
                           alt={item.product.name}
-                          className="w-full h-full object-cover"
+                          className={`w-full h-full object-cover ${isOutOfStock || isUnavailable ? "grayscale" : ""}`}
                         />
+                        {(isOutOfStock || isUnavailable) && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <span className="text-[8px] font-black text-white uppercase tracking-wider px-1 py-0.5 bg-rose-500 rounded">
+                              {isOutOfStock ? "Out of Stock" : "Unavailable"}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Product Details & Variant */}
@@ -647,6 +756,33 @@ export default function CheckoutPage() {
                           </div>
                         )}
 
+                        {/* Item Status Messages */}
+                        {isOutOfStock ? (
+                          <span className="inline-block text-[10px] font-bold text-rose-500">
+                            Out of stock
+                          </span>
+                        ) : isUnavailable ? (
+                          <span className="inline-block text-[10px] font-bold text-amber-500">
+                            Product unavailable
+                          </span>
+                        ) : isExceeded ? (
+                          <span className="inline-block text-[10px] font-bold text-rose-500">
+                            Only {availableStock} available in stock
+                          </span>
+                        ) : null}
+
+                        {isQuantityAdjusted && item.validationMessage && (
+                          <p className="text-[10px] text-amber-500 font-medium">
+                            {item.validationMessage}
+                          </p>
+                        )}
+
+                        {isPriceChanged && item.validationMessage && (
+                          <p className="text-[10px] text-cyan-500 font-medium">
+                            {item.validationMessage}
+                          </p>
+                        )}
+
                         {/* Inline Quantity Stepper */}
                         <div className="flex items-center gap-2 pt-0.5">
                           <span 
@@ -658,8 +794,13 @@ export default function CheckoutPage() {
                           <div className="flex items-center border border-black/15 dark:border-white/15 rounded-lg bg-black/5 dark:bg-white/5 overflow-hidden shadow-xs">
                             <button
                               type="button"
-                              onClick={() => updateQuantity(item.product.id, item.variant?.id, item.quantity - 1)}
-                              className="px-2 py-1 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                              disabled={item.quantity <= 1 || isOutOfStock || isUnavailable}
+                              onClick={() => {
+                                if (item.quantity > 1) {
+                                  updateQuantity(item.product.id, item.variant?.id, item.quantity - 1);
+                                }
+                              }}
+                              className="px-2 py-1 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                               title="Decrease quantity"
                             >
                               <Minus className="w-2.5 h-2.5" />
@@ -672,9 +813,15 @@ export default function CheckoutPage() {
                             </span>
                             <button
                               type="button"
-                              onClick={() => updateQuantity(item.product.id, item.variant?.id, item.quantity + 1)}
-                              className="px-2 py-1 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-                              title="Increase quantity"
+                              disabled={item.quantity >= availableStock || isOutOfStock || isUnavailable}
+                              onClick={() => {
+                                const res = updateQuantity(item.product.id, item.variant?.id, item.quantity + 1);
+                                if (!res.success && res.message) {
+                                  toast.warning(res.message);
+                                }
+                              }}
+                              className="px-2 py-1 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                              title={item.quantity >= availableStock ? "Maximum available stock reached" : "Increase quantity"}
                             >
                               <Plus className="w-2.5 h-2.5" />
                             </button>
@@ -907,33 +1054,89 @@ export default function CheckoutPage() {
 
               {/* Payment Selectable Cards */}
               <div className="space-y-3 text-xs">
-                {/* Cash On Delivery Option */}
-                <div
-                  className="p-3.5 rounded-xl border border-cyan-400 bg-cyan-500/10 shadow-md shadow-cyan-500/10 flex items-center justify-between text-left"
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 shrink-0">
-                      <Banknote className="w-4 h-4 text-emerald-500" />
-                    </div>
-                    <div>
-                      <span 
-                        className="font-black block text-xs"
-                        style={{ color: "var(--theme-text-heading, #0f172a)" }}
+                {paymentMethods.map((method) => {
+                  const isSelected = paymentMethod === method.code;
+                  const isAvailable = method.available;
+
+                  if (isAvailable) {
+                    return (
+                      <button
+                        key={method.code}
+                        type="button"
+                        onClick={() => setPaymentMethod(method.code)}
+                        className={`w-full p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                          isSelected
+                            ? "border-cyan-400 bg-cyan-500/10 shadow-md shadow-cyan-500/10"
+                            : "border-black/10 dark:border-white/10 hover:border-cyan-400/50"
+                        }`}
                       >
-                        Cash On Delivery (COD)
-                      </span>
-                      <span 
-                        className="text-[10px]"
-                        style={{ color: "var(--theme-text-body, #64748b)" }}
-                      >
-                        Pay in cash when your parcel arrives at your doorstep
-                      </span>
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 shrink-0">
+                            <Banknote className="w-4 h-4 text-emerald-500" />
+                          </div>
+                          <div>
+                            <span 
+                              className="font-black block text-xs"
+                              style={{ color: "var(--theme-text-heading, #0f172a)" }}
+                            >
+                              {method.name}
+                            </span>
+                            <span 
+                              className="text-[10px]"
+                              style={{ color: "var(--theme-text-body, #64748b)" }}
+                            >
+                              {method.description}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
+                          isSelected
+                            ? "border-cyan-400 bg-cyan-400"
+                            : "border-slate-300 dark:border-slate-600"
+                        }`}>
+                          {isSelected && <Check className="w-2.5 h-2.5 text-slate-950 stroke-3" />}
+                        </div>
+                      </button>
+                    );
+                  }
+
+                  // Unavailable online payment option (clearly disabled & coming soon)
+                  return (
+                    <div
+                      key={method.code}
+                      className="p-3.5 rounded-xl border border-dashed border-black/15 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02] opacity-60 cursor-not-allowed flex items-center justify-between text-left select-none"
+                      title={method.notice || "Online payment is currently unavailable"}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="p-2 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 border border-slate-300/30 dark:border-slate-700/30 shrink-0">
+                          <CreditCard className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span 
+                              className="font-bold text-xs"
+                              style={{ color: "var(--theme-text-heading, #0f172a)" }}
+                            >
+                              {method.name}
+                            </span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold uppercase tracking-wide bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                              Coming soon
+                            </span>
+                          </div>
+                          <span 
+                            className="text-[10px] block"
+                            style={{ color: "var(--theme-text-body, #64748b)" }}
+                          >
+                            {method.notice || method.description}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-1 rounded bg-black/5 dark:bg-white/5 text-slate-400 shrink-0">
+                        <Lock className="w-3.5 h-3.5" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="w-4 h-4 rounded-full border border-cyan-400 bg-cyan-400 flex items-center justify-center shrink-0">
-                    <Check className="w-2.5 h-2.5 text-slate-950 stroke-3" />
-                  </div>
-                </div>
+                  );
+                })}
 
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 text-[11px] text-slate-500">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
@@ -1234,13 +1437,18 @@ export default function CheckoutPage() {
               {/* High-Conversion Confirm Order CTA */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full py-3.5 rounded-xl theme-btn-primary hover:opacity-95 text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-xl cursor-pointer disabled:opacity-50"
+                disabled={loading || hasInvalidItems() || isValidating}
+                className="w-full py-3.5 rounded-xl theme-btn-primary hover:opacity-95 text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? (
+                {loading || isValidating ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Processing Order...</span>
+                    <span>{isValidating ? "Validating Cart..." : "Processing Order..."}</span>
+                  </>
+                ) : hasInvalidItems() ? (
+                  <>
+                    <AlertCircle className="w-3.5 h-3.5 text-rose-300" />
+                    <span>Fix Unavailable Items to Order</span>
                   </>
                 ) : (
                   <>

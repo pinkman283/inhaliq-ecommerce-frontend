@@ -5,55 +5,82 @@ import { usePathname } from "next/navigation";
 import { 
   Settings, 
   Truck, 
-  GitCommit, 
+  SlidersHorizontal, 
   Search, 
   Smartphone, 
   Bell, 
   Cpu, 
-  Puzzle, 
   Palette, 
   Store, 
-  LayoutTemplate,
+  LayoutTemplate, 
+  Layers, 
+  ListTree, 
+  Sparkles,
   FileText,
   BookOpen,
-  Layers,
-  ListTree,
-  ExternalLink,
-  Mail
+  ExternalLink
 } from "lucide-react";
 
 export function SettingsNavTabs() {
   const pathname = usePathname();
 
-  const tabs = [
-    { label: "General Store", href: "/admin/settings", icon: Settings },
-    { label: "Theme & UI", href: "/admin/settings/appearance", icon: Palette },
-    { label: "Branding & Logo", href: "/admin/settings/branding", icon: Store },
-    { label: "Storefront Layout", href: "/admin/settings/storefront", icon: LayoutTemplate },
-    { label: "Homepage Sections", href: "/admin/settings/homepage", icon: Layers },
-    { label: "CMS Static Pages", href: "/admin/online-store/pages", icon: FileText },
-    { label: "Blog & Editorial", href: "/admin/blog", icon: BookOpen },
-    { label: "Header Nav", href: "/admin/online-store/navigation", icon: ListTree },
-    { label: "Navigation & Footer", href: "/admin/online-store/footer", icon: Layers },
-    { label: "Social Links", href: "/admin/online-store/social", icon: ExternalLink },
-    { label: "Shipping Zones", href: "/admin/settings/shipping", icon: Truck },
-    { label: "Order Pipeline", href: "/admin/settings/statuses", icon: GitCommit },
+  // Determine domain context: Appearance / Storefront vs System Settings
+  const isAppearanceContext = 
+    pathname.includes("/content") ||
+    pathname.includes("/appearance") ||
+    pathname.includes("/theme") ||
+    pathname.includes("/branding") ||
+    pathname.includes("/storefront") ||
+    pathname.includes("/homepage") ||
+    pathname.includes("/blog") ||
+    pathname.includes("/online-store");
+
+  const appearanceTabs = [
+    { label: "Theme & Storefront", href: "/admin/content/theme", icon: Palette },
+    { label: "Branding & Logos", href: "/admin/content/branding", icon: Store },
+    { label: "Homepage Sections", href: "/admin/content/homepage", icon: Layers },
+    { label: "Banners & Ads", href: "/admin/content/banners", icon: Sparkles },
+    { label: "Navigation", href: "/admin/content/navigation", icon: ListTree },
+    { label: "Blog & Editorial", href: "/admin/content/blog", icon: BookOpen },
+    { label: "Pages (CMS)", href: "/admin/content/pages", icon: FileText },
+    { label: "Footer & Social", href: "/admin/content/footer", icon: ExternalLink },
+  ];
+
+  const systemTabs = [
+    { label: "General Settings", href: "/admin/settings", icon: Settings },
+    { label: "Shipping & Delivery", href: "/admin/orders/shipping", icon: Truck },
+    { label: "Order Status Pipeline", href: "/admin/orders/statuses", icon: SlidersHorizontal },
+    { label: "Notifications", href: "/admin/settings/notifications", icon: Bell },
     { label: "SEO & Search", href: "/admin/settings/seo", icon: Search },
     { label: "Mobile & PWA", href: "/admin/settings/pwa", icon: Smartphone },
-    { label: "Notifications", href: "/admin/settings/notifications", icon: Bell },
-    { label: "Integrations Hub", href: "/admin/integrations", icon: Puzzle },
-    { label: "Mail Config", href: "/admin/settings/mail", icon: Mail },
     { label: "System & Cache", href: "/admin/settings/system", icon: Cpu },
   ];
 
+  const activeTabs = isAppearanceContext ? appearanceTabs : systemTabs;
+
   return (
     <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-white/10 no-scrollbar">
-      {tabs.map((tab) => {
+      {activeTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = 
           tab.href === "/admin/settings" 
             ? pathname === "/admin/settings"
-            : pathname.startsWith(tab.href) || (tab.href === "/admin/settings/appearance" && pathname === "/admin/theme");
+            : pathname.startsWith(tab.href) || 
+              (tab.href === "/admin/content/theme" && (
+                pathname === "/admin/content/theme" ||
+                pathname === "/admin/theme" ||
+                pathname.startsWith("/admin/settings/appearance") ||
+                pathname.startsWith("/admin/settings/storefront")
+              )) ||
+              (tab.href === "/admin/content/branding" && pathname.startsWith("/admin/settings/branding")) ||
+              (tab.href === "/admin/content/homepage" && pathname.startsWith("/admin/settings/homepage")) ||
+              (tab.href === "/admin/content/banners" && (pathname.startsWith("/admin/online-store/banners") || pathname.startsWith("/admin/banners") || pathname.startsWith("/admin/marketing/banners"))) ||
+              (tab.href === "/admin/content/navigation" && pathname.startsWith("/admin/online-store/navigation")) ||
+              (tab.href === "/admin/content/blog" && (pathname.startsWith("/admin/content/blog") || pathname.startsWith("/admin/blog"))) ||
+              (tab.href === "/admin/content/pages" && pathname.startsWith("/admin/online-store/pages")) ||
+              (tab.href === "/admin/content/footer" && (pathname.startsWith("/admin/online-store/footer") || pathname.startsWith("/admin/online-store/social") || pathname.startsWith("/admin/content/social"))) ||
+              (tab.href === "/admin/orders/shipping" && pathname.startsWith("/admin/settings/shipping")) ||
+              (tab.href === "/admin/orders/statuses" && pathname.startsWith("/admin/settings/statuses"));
 
         return (
           <Link

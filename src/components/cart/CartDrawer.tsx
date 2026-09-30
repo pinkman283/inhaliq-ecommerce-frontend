@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -11,19 +10,19 @@ import {
   Minus, 
   ShoppingBag, 
   ArrowRight, 
-  Sparkles,
+  Sparkles, 
   Tag, 
   CheckCircle2, 
-  AlertCircle 
+  AlertCircle,
+  Loader2 
 } from "lucide-react";
-import { useCartStore } from "@/store/useCartStore";
-import { useThemeStore } from "@/store/useThemeStore";
+import { useCartStore, getAvailableStock } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/utils";
 import { api } from "@/lib/api";
+import { toast } from "sonner";
 
 export function CartDrawer() {
   const router = useRouter();
-  const { theme } = useThemeStore();
   const {
     items,
     isCartOpen,
@@ -39,7 +38,19 @@ export function CartDrawer() {
     getSubtotal,
     getDiscount,
     getItemCount,
+    validationNotices,
+    dismissNotices,
+    validateCartWithServer,
+    hasInvalidItems,
+    isValidating,
   } = useCartStore();
+
+  // Validate cart against server on drawer open
+  useEffect(() => {
+    if (isCartOpen && items.length > 0) {
+      validateCartWithServer();
+    }
+  }, [isCartOpen, items.length, validateCartWithServer]);
 
   const [couponInput, setCouponInput] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
@@ -61,7 +72,7 @@ export function CartDrawer() {
             product_id: i.product.id,
             quantity: i.quantity,
             price: Number(i.product.price) + (i.variant ? Number(i.variant.price_modifier) : 0),
-            category_id: (i.product as any).category_id,
+            category_id: (i.product as { category_id?: number }).category_id,
           })),
           code: appliedCoupon?.code || undefined,
         };
@@ -69,7 +80,7 @@ export function CartDrawer() {
         if (isMounted && res.valid) {
           setPromotionEvaluation(res);
         }
-      } catch (e) {
+      } catch {
         // silent fallback
       }
     };
@@ -92,7 +103,7 @@ export function CartDrawer() {
           product_id: i.product.id,
           quantity: i.quantity,
           price: Number(i.product.price) + (i.variant ? Number(i.variant.price_modifier) : 0),
-          category_id: (i.product as any).category_id,
+          category_id: (i.product as { category_id?: number }).category_id,
         })),
         code: couponInput.trim(),
       };
@@ -102,7 +113,7 @@ export function CartDrawer() {
         applyCoupon({
           valid: true,
           code: couponInput.trim().toUpperCase(),
-          discount_type: (result.applied_promotions?.[0]?.discount_type as any) || "fixed",
+          discount_type: (result.applied_promotions?.[0]?.discount_type as "percentage" | "fixed") || "fixed",
           value: result.total_discount,
           discount_amount: result.total_discount,
           message: result.message || "Promotion applied!",
@@ -111,16 +122,34 @@ export function CartDrawer() {
       } else {
         setCouponError(result.error_message || "Invalid or ineligible promotion code.");
       }
-    } catch (err: any) {
-      setCouponError(err.response?.data?.message || "Failed to validate coupon.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to validate coupon.";
+      setCouponError(message);
     } finally {
       setCouponLoading(false);
     }
   };
 
-  const handleCheckout = () => {
-    closeCart();
-    router.push("/checkout");
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    if (hasInvalidItems()) {
+      toast.error("Please remove or adjust unavailable items before proceeding to checkout.");
+      return;
+    }
+
+    setCheckoutLoading(true);
+    try {
+      const valResult = await validateCartWithServer();
+      if (valResult && (!valResult.is_valid || valResult.summary?.has_out_of_stock || valResult.summary?.has_inactive_items)) {
+        toast.error("Some items in your cart need your attention before checking out.");
+        return;
+      }
+      closeCart();
+      router.push("/checkout");
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -170,10 +199,13 @@ export function CartDrawer() {
                   </div>
                   <div>
                     <h3 
-                      className="text-sm font-bold leading-none mb-1"
+                      className="text-sm font-bold leading-none mb-1 flex items-center gap-1.5"
                       style={{ color: "var(--theme-text-heading, #0f172a)" }}
                     >
                       Your Studio Cart
+                      {isValidating && (
+                        <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
+                      )}
                     </h3>
                     <span 
                       className="text-[11px]"
@@ -206,6 +238,28 @@ export function CartDrawer() {
 
               {/* Item List */}
               <div className="flex-1 overflow-y-auto p-5 space-y-4">
+                {/* Server Validation Notices Banner */}
+                {validationNotices.length > 0 && (
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400 space-y-1">
+                    <div className="flex items-center justify-between font-bold">
+                      <span className="flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5" /> Cart Updated
+                      </span>
+                      <button
+                        onClick={dismissNotices}
+                        className="text-[10px] underline hover:opacity-80 cursor-pointer font-medium"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
+                    <ul className="list-disc pl-4 text-[11px] space-y-0.5">
+                      {validationNotices.map((n, idx) => (
+                        <li key={idx}>{n}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {items.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center py-16">
                     <div 
@@ -248,6 +302,18 @@ export function CartDrawer() {
                   items.map((item) => {
                     const img = item.product.primary_image?.image_url || item.product.images?.[0]?.image_url;
                     const itemPrice = Number(item.product.price) + (item.variant ? Number(item.variant.price_modifier) : 0);
+                    const availableStock = item.availableStock !== undefined
+                      ? item.availableStock
+                      : getAvailableStock(item.product, item.variant);
+                    const isOutOfStock = availableStock <= 0 || item.validationStatus === "out_of_stock";
+                    const isUnavailable =
+                      item.validationStatus === "inactive" ||
+                      item.validationStatus === "product_not_found" ||
+                      item.validationStatus === "variant_not_found" ||
+                      item.validationStatus === "variant_mismatch";
+                    const isExceeded = !isUnavailable && !isOutOfStock && item.quantity > availableStock;
+                    const isPriceChanged = item.validationStatus === "price_changed" || (item.validationMessage && item.validationMessage.includes("Price updated"));
+                    const isQuantityAdjusted = item.validationStatus === "quantity_adjusted";
 
                     return (
                       <motion.div
@@ -256,16 +322,24 @@ export function CartDrawer() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="flex gap-3.5 p-3 rounded-2xl border transition-all"
+                        className={`flex gap-3.5 p-3 rounded-2xl border transition-all ${
+                          isOutOfStock || isUnavailable
+                            ? "opacity-75 bg-rose-500/5 border-rose-500/20"
+                            : ""
+                        }`}
                         style={{
-                          backgroundColor: "color-mix(in srgb, var(--theme-card-bg, #ffffff) 92%, var(--theme-bg, #f8fafc))",
-                          borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.08))"
+                          backgroundColor: isOutOfStock || isUnavailable
+                            ? undefined
+                            : "color-mix(in srgb, var(--theme-card-bg, #ffffff) 92%, var(--theme-bg, #f8fafc))",
+                          borderColor: isOutOfStock || isUnavailable
+                            ? undefined
+                            : "var(--theme-card-border, rgba(255, 255, 255, 0.08))"
                         }}
                       >
                         {/* Thumbnail */}
                         {img && (
                           <div 
-                            className="w-18 h-18 rounded-xl overflow-hidden border shrink-0 p-1 flex items-center justify-center transition-colors"
+                            className="w-18 h-18 rounded-xl overflow-hidden border shrink-0 p-1 flex items-center justify-center transition-colors relative"
                             style={{
                               backgroundColor: "var(--theme-card-bg, #ffffff)",
                               borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))"
@@ -274,8 +348,15 @@ export function CartDrawer() {
                             <img
                               src={img}
                               alt={item.product.name}
-                              className="w-full h-full object-cover rounded-lg"
+                              className={`w-full h-full object-cover rounded-lg ${isOutOfStock || isUnavailable ? "grayscale" : ""}`}
                             />
+                            {(isOutOfStock || isUnavailable) && (
+                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-xl">
+                                <span className="text-[9px] font-black text-white uppercase tracking-wider px-1 py-0.5 bg-rose-500 rounded">
+                                  {isOutOfStock ? "Sold Out" : "Unavailable"}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         )}
 
@@ -291,8 +372,9 @@ export function CartDrawer() {
                               </h4>
                               <button
                                 onClick={() => removeItem(item.product.id, item.variant?.id)}
-                                className="hover:text-rose-500 transition-colors p-1 cursor-pointer"
+                                className="hover:text-rose-500 transition-colors p-1 cursor-pointer shrink-0"
                                 style={{ color: "var(--theme-text-body, #64748b)" }}
+                                title="Remove item"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
@@ -318,6 +400,33 @@ export function CartDrawer() {
                                 </span>
                               </div>
                             )}
+
+                            {/* Status Badges & Notices */}
+                            {isOutOfStock ? (
+                              <span className="inline-block mt-1 text-[10px] font-bold text-rose-500">
+                                Out of stock
+                              </span>
+                            ) : isUnavailable ? (
+                              <span className="inline-block mt-1 text-[10px] font-bold text-amber-500">
+                                Product unavailable
+                              </span>
+                            ) : isExceeded ? (
+                              <span className="inline-block mt-1 text-[10px] font-bold text-rose-500">
+                                Only {availableStock} available in stock
+                              </span>
+                            ) : null}
+
+                            {isQuantityAdjusted && item.validationMessage && (
+                              <p className="text-[10px] text-amber-500 mt-1 font-medium">
+                                {item.validationMessage}
+                              </p>
+                            )}
+
+                            {isPriceChanged && item.validationMessage && (
+                              <p className="text-[10px] text-cyan-500 mt-1 font-medium">
+                                {item.validationMessage}
+                              </p>
+                            )}
                           </div>
 
                           {/* Price & Quantity Controls */}
@@ -340,9 +449,16 @@ export function CartDrawer() {
                               }}
                             >
                               <button
-                                onClick={() => updateQuantity(item.product.id, item.variant?.id, item.quantity - 1)}
-                                className="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                                type="button"
+                                disabled={item.quantity <= 1 || isOutOfStock || isUnavailable}
+                                onClick={() => {
+                                  if (item.quantity > 1) {
+                                    updateQuantity(item.product.id, item.variant?.id, item.quantity - 1);
+                                  }
+                                }}
+                                className="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                                 style={{ color: "var(--theme-text-body, #64748b)" }}
+                                title="Decrease quantity"
                               >
                                 <Minus className="w-3 h-3" />
                               </button>
@@ -353,9 +469,17 @@ export function CartDrawer() {
                                 {item.quantity}
                               </span>
                               <button
-                                onClick={() => updateQuantity(item.product.id, item.variant?.id, item.quantity + 1)}
-                                className="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                                type="button"
+                                disabled={item.quantity >= availableStock || isOutOfStock || isUnavailable}
+                                onClick={() => {
+                                  const res = updateQuantity(item.product.id, item.variant?.id, item.quantity + 1);
+                                  if (!res.success && res.message) {
+                                    toast.warning(res.message);
+                                  }
+                                }}
+                                className="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                                 style={{ color: "var(--theme-text-body, #64748b)" }}
+                                title={item.quantity >= availableStock ? "Maximum available stock reached" : "Increase quantity"}
                               >
                                 <Plus className="w-3 h-3" />
                               </button>
@@ -511,17 +635,35 @@ export function CartDrawer() {
                     )}
                   </div>
 
+                  {/* Invalid Cart Notice */}
+                  {hasInvalidItems() && (
+                    <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[11px] flex items-center gap-2 font-medium">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>Please remove or adjust unavailable items to proceed.</span>
+                    </div>
+                  )}
+
                   {/* Checkout CTA */}
                   <button
                     onClick={handleCheckout}
-                    className="w-full py-3.5 rounded-xl text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl"
+                    disabled={checkoutLoading || hasInvalidItems()}
+                    className="w-full py-3.5 rounded-xl text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
                       background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #6366f1)), var(--theme-secondary, var(--theme-primary, #6366f1)))",
                       color: "var(--theme-btn-primary-text, #ffffff)",
                       boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #6366f1) 40%, transparent)"
                     }}
                   >
-                    Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                    {checkoutLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Validating Cart...</span>
+                      </>
+                    ) : (
+                      <>
+                        Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
 
                   {/* Cart Trust Reassurance Strip */}

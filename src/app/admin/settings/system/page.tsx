@@ -245,7 +245,7 @@ export default function AdminSystemSettingsPage() {
                 <span className="text-[11px] font-mono text-slate-400">/api/sitemap.xml</span>
               </div>
               <a
-                href="http://localhost:8000/api/sitemap.xml"
+                href={`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"}/sitemap.xml`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10"

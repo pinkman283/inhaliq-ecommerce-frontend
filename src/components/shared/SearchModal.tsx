@@ -107,6 +107,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && query.trim()) {
+                    onClose();
+                    router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+                  }
+                }}
                 placeholder="Search studio headphones, mechanical boards, tech packs..."
                 className="w-full bg-transparent text-sm text-white placeholder:text-slate-300 font-medium focus:outline-none"
               />
@@ -132,9 +138,21 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 </div>
               ) : results.length > 0 ? (
                 <div className="space-y-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block px-2">
-                    Matching Gear ({results.length})
-                  </span>
+                  <div className="flex items-center justify-between px-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                      Matching Gear ({results.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+                      }}
+                      className="text-xs font-bold text-cyan-400 hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      View all results <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
                   {results.map((product) => {
                     const img = product.primary_image?.image_url || product.images?.[0]?.image_url;
                     return (
@@ -169,10 +187,22 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       </div>
                     );
                   })}
+                  <div className="pt-2 text-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+                      }}
+                      className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white transition-colors cursor-pointer"
+                    >
+                      See all products matching &ldquo;{query}&rdquo;
+                    </button>
+                  </div>
                 </div>
               ) : query.trim() ? (
                 <div className="py-12 text-center text-slate-400 text-sm">
-                  No hardware matching <span className="text-white font-semibold">"{query}"</span> found.
+                  No hardware matching <span className="text-white font-semibold">&ldquo;{query}&rdquo;</span> found.
                 </div>
               ) : (
                 <div>

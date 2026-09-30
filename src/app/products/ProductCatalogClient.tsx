@@ -189,6 +189,17 @@ function ProductCatalogContent({
     router.push(queryStr ? `/products?${queryStr}` : "/products");
   };
 
+  const syncSearchToUrl = (val: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (val.trim()) {
+      newParams.set("search", val.trim());
+    } else {
+      newParams.delete("search");
+    }
+    const queryStr = newParams.toString();
+    router.push(queryStr ? `/products?${queryStr}` : "/products");
+  };
+
   const clearAllFilters = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
@@ -366,6 +377,11 @@ function ProductCatalogContent({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  syncSearchToUrl(search);
+                }
+              }}
               placeholder="Search keywords or specs..."
               className="w-full rounded-xl pl-9.5 pr-8 py-2 text-xs border transition-colors focus:outline-none"
               style={{
@@ -376,7 +392,12 @@ function ProductCatalogContent({
             />
             {search && (
               <button
-                onClick={() => setSearch("")}
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  syncSearchToUrl("");
+                }}
+                aria-label="Clear search"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
@@ -498,8 +519,18 @@ function ProductCatalogContent({
                 borderColor: "var(--theme-card-border, #e5e7eb)"
               }}
             >
-              Search: "{search}"
-              <button onClick={() => setSearch("")} className="cursor-pointer hover:opacity-75"><X className="w-3 h-3 ml-0.5" /></button>
+              Search: &ldquo;{search}&rdquo;
+              <button 
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  syncSearchToUrl("");
+                }} 
+                aria-label="Remove search filter"
+                className="cursor-pointer hover:opacity-75"
+              >
+                <X className="w-3 h-3 ml-0.5" />
+              </button>
             </span>
           )}
           {minPrice !== "" && (

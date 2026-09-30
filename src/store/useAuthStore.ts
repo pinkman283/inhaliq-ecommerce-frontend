@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { User } from "@/types";
+import { useCartStore } from "./useCartStore";
+import { useWishlistStore } from "./useWishlistStore";
 
 interface AuthState {
   user: User | null;
@@ -30,6 +32,14 @@ export const useAuthStore = create<AuthState>()(
           localStorage.setItem("auth_token", token);
         }
         set({ user, token, isAuthenticated: true, isAuthModalOpen: false });
+
+        // Trigger safe guest -> customer cart & wishlist merge
+        try {
+          useCartStore.getState().mergeWithServerCart();
+          useWishlistStore.getState().mergeWithServerWishlist();
+        } catch (e) {
+          console.warn("Post-auth sync notice:", e);
+        }
       },
 
       updateUser: (updatedData: Partial<User>) => {
@@ -42,6 +52,11 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         if (typeof window !== "undefined") {
           localStorage.removeItem("auth_token");
+        }
+        try {
+          useWishlistStore.getState().clearWishlist();
+        } catch (e) {
+          console.warn("Post-logout wishlist reset notice:", e);
         }
         set({ user: null, token: null, isAuthenticated: false });
       },

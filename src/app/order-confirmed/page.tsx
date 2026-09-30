@@ -10,8 +10,7 @@ import {
   MapPin, 
   ArrowRight, 
   Copy,
-  Clock,
-  ShoppingBag
+  Clock
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Order } from "@/types";
@@ -261,10 +260,12 @@ function OrderConfirmedContent() {
           <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-white/10">
             <div>
               <span className="text-sm font-bold text-slate-900 dark:text-white block">
-                Total Paid
+                {order?.payment_status === "paid" ? "Total Paid" : "Amount Due on Delivery"}
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 capitalize">
-                {order?.payment_method === "cash_on_delivery" ? "Cash on Delivery" : (order?.payment_status || "Pending")}
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                {order?.payment_method === "cash_on_delivery"
+                  ? (order?.payment_status === "paid" ? "Cash on Delivery • Paid" : "Cash on Delivery • Due upon receipt")
+                  : (order?.payment_status === "paid" ? "Online Payment • Paid" : "Payment Pending")}
               </span>
             </div>
             <span className="text-xl font-bold text-slate-900 dark:text-white">

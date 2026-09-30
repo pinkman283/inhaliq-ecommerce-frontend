@@ -137,6 +137,97 @@ export default function AdminDashboardOverview() {
         ]}
       />
 
+      {/* Operational Order & Fulfillment Pipeline */}
+      <div className="p-4 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+              Operational Order & Fulfillment Pipeline
+            </h3>
+            <p className="text-[11px] text-slate-500">Live order state distribution and pending fulfillment tasks</p>
+          </div>
+          <Link
+            href="/admin/orders"
+            className="text-[11px] font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1"
+          >
+            All Orders <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+          {[
+            {
+              label: "Pending",
+              count: stats.pending_orders ?? 0,
+              status: "pending",
+              badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/30",
+              hint: "Needs review",
+            },
+            {
+              label: "Confirmed",
+              count: stats.confirmed_orders ?? 0,
+              status: "confirmed",
+              badgeColor: "text-blue-400 bg-blue-500/10 border-blue-500/30",
+              hint: "Ready to pick",
+            },
+            {
+              label: "Processing",
+              count: stats.processing_orders ?? 0,
+              status: "processing",
+              badgeColor: "text-purple-400 bg-purple-500/10 border-purple-500/30",
+              hint: "In fulfillment",
+            },
+            {
+              label: "Shipped",
+              count: stats.shipped_orders ?? 0,
+              status: "shipped",
+              badgeColor: "text-sky-400 bg-sky-500/10 border-sky-500/30",
+              hint: "In transit",
+            },
+            {
+              label: "Delivered",
+              count: stats.delivered_orders ?? 0,
+              status: "delivered",
+              badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+              hint: "Completed",
+            },
+            {
+              label: "Cancelled",
+              count: stats.cancelled_orders ?? 0,
+              status: "cancelled",
+              badgeColor: "text-rose-400 bg-rose-500/10 border-rose-500/30",
+              hint: "Restocked",
+            },
+            {
+              label: "Pending Pay",
+              count: stats.pending_payments ?? 0,
+              status: "all",
+              paymentStatus: "pending",
+              badgeColor: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+              hint: "COD / Unpaid",
+            },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href={`/admin/orders?status=${item.status}${item.paymentStatus ? `&payment_status=${item.paymentStatus}` : ""}`}
+              className="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/15 transition-all group block"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                  {item.label}
+                </span>
+                <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded border font-bold ${item.badgeColor}`}>
+                  {item.count}
+                </span>
+              </div>
+              <span className="text-[10px] text-slate-500 group-hover:text-slate-300 transition-colors block">
+                {item.hint}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* Sales Velocity Chart & Top Products */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         

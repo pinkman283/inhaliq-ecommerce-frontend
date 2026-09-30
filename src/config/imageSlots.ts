@@ -150,6 +150,16 @@ export const IMAGE_SLOTS: Record<string, ImageSlotConfig> = {
     tip: "High-resolution square or horizontal brand mark. Aspect ratio is key.",
     desktopRecommended: "Recommended: 512 × 512 px · 1:1",
   },
+  admin_brand_logo: {
+    key: "admin_brand_logo",
+    name: "Admin Brand Logo",
+    width: 512,
+    height: 512,
+    aspectRatio: "1:1",
+    ratioValue: 1.0,
+    tip: "Square manufacturer brand emblem or wordmark. Transparent PNG, WEBP, or JPG recommended.",
+    desktopRecommended: "Recommended: 512 × 512 px · 1:1",
+  },
   navbar_logo: {
     key: "navbar_logo",
     name: "Desktop Navbar Logo",

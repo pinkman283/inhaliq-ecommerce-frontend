@@ -11,6 +11,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useThemeStore } from "@/store/useThemeStore";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
@@ -34,8 +35,18 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isOutOfStock) return;
-    addItem(product, product.variants?.[0] || null, 1);
+    if (isOutOfStock) {
+      toast.error("This product is currently out of stock.");
+      return;
+    }
+    const result = addItem(product, product.variants?.[0] || null, 1);
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
+    if (result.message && result.message.includes("maximum available stock")) {
+      toast.warning(result.message);
+    }
     setAddedAnim(true);
     setTimeout(() => setAddedAnim(false), 1200);
   };
@@ -43,8 +54,15 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleBuyNow = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isOutOfStock) return;
-    addItem(product, product.variants?.[0] || null, 1);
+    if (isOutOfStock) {
+      toast.error("This product is currently out of stock.");
+      return;
+    }
+    const result = addItem(product, product.variants?.[0] || null, 1);
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
     closeCart();
     router.push("/checkout");
   };

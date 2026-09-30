@@ -22,11 +22,15 @@ import {
   ShoppingBag,
   Pencil,
   ChevronRight,
-  Camera
+  Camera,
+  Heart,
+  RotateCcw
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
 import { api } from "@/lib/api";
-import { Order } from "@/types";
+import { Order, Product, ProductVariant } from "@/types";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { ImageUploadAvatar } from "@/components/ui/ImageUploadAvatar";
 import { PasswordInput } from "@/components/ui/PasswordInput";
@@ -36,9 +40,81 @@ import { useAppTheme } from "@/components/providers/ThemeProvider";
 export default function CustomerDashboardPage() {
   const { theme } = useAppTheme();
   const { user, isAuthenticated, logout, openAuthModal, updateUser } = useAuthStore();
+  const { addItem, openCart, validateCartWithServer } = useCartStore();
+  const { items: wishlistItems, openWishlist } = useWishlistStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState({ total_orders: 0, total_spent: 0 });
   const [loading, setLoading] = useState(true);
+
+  const handleReorder = async (ord: Order) => {
+    if (!ord.items || ord.items.length === 0) {
+      toast.error("This order contains no items to reorder.");
+      return;
+    }
+
+    let addedCount = 0;
+    for (const item of ord.items) {
+      if (item.product_id) {
+        addItem(
+          {
+            id: item.product_id,
+            name: item.product_name,
+            slug: (item as unknown as { product_slug?: string }).product_slug || "",
+            sku: item.product_sku || "",
+            price: Number(item.unit_price),
+            is_active: true,
+            stock_quantity: 99,
+            primary_image: item.product_image ? { id: 0, product_id: item.product_id, image_url: item.product_image, is_primary: true, display_order: 0 } : null,
+          } as unknown as Product,
+          item.variant_id ? ({ id: item.variant_id, product_id: item.product_id, name: item.variant_name, stock_quantity: 99, price_modifier: 0 } as unknown as ProductVariant) : null,
+          item.quantity || 1
+        );
+        addedCount++;
+      }
+    }
+
+    if (addedCount > 0) {
+      await validateCartWithServer();
+      openCart();
+      toast.success(`Items from Order #${ord.order_number} added to cart with live prices and stock.`);
+    }
+  };
+
+  const [cancellingOrderNumber, setCancellingOrderNumber] = useState<string | null>(null);
+
+  const handleCancelOrder = async (orderNumber: string) => {
+    if (!window.confirm(`Are you sure you want to cancel Order #${orderNumber}? This will release the reserved inventory.`)) {
+      return;
+    }
+    setCancellingOrderNumber(orderNumber);
+    try {
+      const res = await api.cancelOrder(orderNumber);
+      toast.success(res.message || "Order cancelled successfully.");
+      setOrders((prev) =>
+        prev.map((o) => (o.order_number === orderNumber ? { ...o, order_status: "cancelled" } : o))
+      );
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      toast.error(error.response?.data?.message || "Failed to cancel order.");
+    } finally {
+      setCancellingOrderNumber(null);
+    }
+  };
+
+  const handleRequestReturn = async (ord: Order) => {
+    const reason = window.prompt(`Please enter the reason for returning Order #${ord.order_number}:`);
+    if (!reason || !reason.trim()) return;
+
+    try {
+      const res = await api.requestOrderReturn(ord.order_number, {
+        return_reason: reason.trim(),
+      });
+      toast.success(res.message || "Return request submitted successfully.");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      toast.error(error.response?.data?.message || "Failed to submit return request.");
+    }
+  };
 
   // Edit Profile Form
   const [isEditing, setIsEditing] = useState(false);
@@ -85,14 +161,15 @@ export default function CustomerDashboardPage() {
           setPhone(profileData.user.phone || "");
           setAvatar(profileData.user.avatar || null);
         }
-      } catch (err: any) {
-        if (err?.response?.status === 401) {
+      } catch (err: unknown) {
+        const error = err as { response?: { status?: number; data?: { message?: string } }; message?: string };
+        if (error?.response?.status === 401) {
           logout();
           toast.error("Your session has expired. Please sign in again.");
           openAuthModal("login");
         } else {
-          console.warn("Failed to load profile:", err?.message || err);
-          toast.error(err?.response?.data?.message || "Failed to load profile");
+          console.warn("Failed to load profile:", error?.message || error);
+          toast.error(error?.response?.data?.message || "Failed to load profile");
         }
       } finally {
         setLoading(false);
@@ -172,7 +249,7 @@ export default function CustomerDashboardPage() {
     setSaving(true);
     try {
       const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
-      const payload: any = {
+      const payload: Record<string, unknown> = {
         name: fullName,
         phone: phone || null,
         avatar: avatar
@@ -202,8 +279,9 @@ export default function CustomerDashboardPage() {
       setCurrentPassword("");
       setPassword("");
       setConfirmPassword("");
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || err.response?.data?.errors?.current_password?.[0] || err.response?.data?.errors?.email?.[0] || "Failed to save profile changes.");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string; errors?: Record<string, string[]> } } };
+      toast.error(error.response?.data?.message || error.response?.data?.errors?.current_password?.[0] || error.response?.data?.errors?.email?.[0] || "Failed to save profile changes.");
     } finally {
       setSaving(false);
     }
@@ -537,7 +615,7 @@ export default function CustomerDashboardPage() {
       )}
 
       {/* 2. Key Metrics Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
         {/* Total Orders */}
         <div className="p-5 rounded-2xl bg-white dark:bg-[#0f131f] border border-gray-200/80 dark:border-white/10 shadow-sm flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
@@ -560,6 +638,26 @@ export default function CustomerDashboardPage() {
           </div>
         </div>
 
+        {/* Wishlist */}
+        <button
+          type="button"
+          onClick={openWishlist}
+          className="p-5 rounded-2xl bg-white dark:bg-[#0f131f] border border-gray-200/80 dark:border-white/10 shadow-sm flex items-center justify-between gap-2 hover:border-rose-300 dark:hover:border-rose-500/30 transition-all group text-left cursor-pointer"
+        >
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+              <Heart className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 truncate">Wishlist</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-white truncate mt-0.5 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                {wishlistItems.length} {wishlistItems.length === 1 ? "item" : "items"}
+              </p>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
+        </button>
+
         {/* Saved Addresses */}
         <Link
           href="/dashboard/addresses"
@@ -580,7 +678,7 @@ export default function CustomerDashboardPage() {
         {/* Coupons & Rewards */}
         <Link
           href="/dashboard/coupons"
-          className="p-5 rounded-2xl bg-white dark:bg-[#0f131f] border border-gray-200/80 dark:border-white/10 shadow-sm flex items-center justify-between gap-2 hover:border-gray-300 dark:hover:border-white/20 transition-all group"
+          className="p-5 rounded-2xl bg-white dark:bg-[#0f131f] border border-gray-200/80 dark:border-white/10 shadow-sm flex items-center justify-between gap-2 hover:border-gray-300 dark:hover:border-white/20 transition-all group col-span-2 sm:col-span-1"
         >
           <div className="flex items-center gap-3.5 min-w-0">
             <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
@@ -698,6 +796,36 @@ export default function CustomerDashboardPage() {
                   </span>
 
                   <div className="flex items-center gap-2">
+                    {ord.order_status === "pending" && (
+                      <button
+                        type="button"
+                        onClick={() => handleCancelOrder(ord.order_number)}
+                        disabled={cancellingOrderNumber === ord.order_number}
+                        className="px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+                        title="Cancel this order"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                        {cancellingOrderNumber === ord.order_number ? "Cancelling..." : "Cancel"}
+                      </button>
+                    )}
+                    {ord.order_status === "delivered" && (
+                      <button
+                        type="button"
+                        onClick={() => handleRequestReturn(ord)}
+                        className="px-3 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-500/10 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                        title="Request Return"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" /> Return
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleReorder(ord)}
+                      className="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                      title="Reorder items with live stock & prices"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" /> Reorder
+                    </button>
                     {ord.tracking_code && (
                       <Link
                         href={`/track?number=${ord.tracking_code}`}

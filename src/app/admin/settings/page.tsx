@@ -24,7 +24,12 @@ import {
   BookOpen,
   Layers,
   ExternalLink,
-  Mail
+  Mail,
+  Boxes,
+  ShoppingBag,
+  Phone,
+  MapPin,
+  SlidersHorizontal,
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { SettingsNavTabs } from "@/components/admin/settings/SettingsNavTabs";
@@ -39,12 +44,20 @@ export default function AdminSettingsPage() {
   // Settings State
   const [storeName, setStoreName] = useState("AETHER Hardware Labs");
   const [supportEmail, setSupportEmail] = useState("ops@aether-audio.test");
+  const [supportPhone, setSupportPhone] = useState("+1 (555) 019-2834");
+  const [storeAddress, setStoreAddress] = useState("San Francisco, CA, USA");
   const [currency, setCurrency] = useState("USD");
   const [vatEnabled, setVatEnabled] = useState(true);
   const [vatRate, setVatRate] = useState("8.0");
   const [freeShippingThreshold, setFreeShippingThreshold] = useState("100.0");
   const [standardShippingRate, setStandardShippingRate] = useState("15.0");
   const [priorityShippingRate, setPriorityShippingRate] = useState("25.0");
+
+  // Product & Order Rules
+  const [lowStockThreshold, setLowStockThreshold] = useState("5");
+  const [reviewsAutoApprove, setReviewsAutoApprove] = useState(false);
+  const [guestCheckoutEnabled, setGuestCheckoutEnabled] = useState(true);
+  const [orderInvoicePrefix, setOrderInvoicePrefix] = useState("INV-");
 
   const [initialSettings, setInitialSettings] = useState<any>(null);
 
@@ -61,26 +74,42 @@ export default function AdminSettingsPage() {
               ? (data.tax_enabled?.value === "true" || data.tax_enabled?.value === "1" || data.tax_enabled?.value === true)
               : true);
         const loadedVatRate = data.vat_rate?.value || data.tax_rate?.value || "8.0";
+        const isReviewsAutoOn = data.reviews_auto_approve?.value === "true" || data.reviews_auto_approve?.value === "1" || data.reviews_auto_approve?.value === true;
+        const isGuestCheckoutOn = data.guest_checkout_enabled !== undefined 
+          ? (data.guest_checkout_enabled?.value === "true" || data.guest_checkout_enabled?.value === "1" || data.guest_checkout_enabled?.value === true)
+          : true;
 
         const init = {
           store_name: data.store_name?.value || "AETHER Sound Systems",
           support_email: data.support_email?.value || "support@aether-audio.test",
+          support_phone: data.support_phone?.value || "+1 (555) 019-2834",
+          store_address: data.store_address?.value || "San Francisco, CA, USA",
           currency: data.currency?.value || "USD",
           vat_enabled: isVatOn,
           vat_rate: loadedVatRate,
           free_shipping_threshold: data.free_shipping_threshold?.value || "150",
           standard_shipping_rate: data.standard_shipping_rate?.value || "15",
           priority_shipping_rate: data.priority_shipping_rate?.value || "35",
+          low_stock_threshold: data.low_stock_threshold?.value || "5",
+          reviews_auto_approve: isReviewsAutoOn,
+          guest_checkout_enabled: isGuestCheckoutOn,
+          order_invoice_prefix: data.order_invoice_prefix?.value || "INV-",
         };
         setInitialSettings(init);
         if (data.store_name?.value) setStoreName(data.store_name.value);
         if (data.support_email?.value) setSupportEmail(data.support_email.value);
+        if (data.support_phone?.value) setSupportPhone(data.support_phone.value);
+        if (data.store_address?.value) setStoreAddress(data.store_address.value);
         if (data.currency?.value) setCurrency(data.currency.value);
         setVatEnabled(isVatOn);
         setVatRate(loadedVatRate);
         if (data.free_shipping_threshold?.value) setFreeShippingThreshold(data.free_shipping_threshold.value);
         if (data.standard_shipping_rate?.value) setStandardShippingRate(data.standard_shipping_rate.value);
         if (data.priority_shipping_rate?.value) setPriorityShippingRate(data.priority_shipping_rate.value);
+        if (data.low_stock_threshold?.value) setLowStockThreshold(data.low_stock_threshold.value);
+        setReviewsAutoApprove(isReviewsAutoOn);
+        setGuestCheckoutEnabled(isGuestCheckoutOn);
+        if (data.order_invoice_prefix?.value) setOrderInvoicePrefix(data.order_invoice_prefix.value);
       } catch (err: any) {
         if (err?.response?.status !== 401 && err?.response?.status !== 403) {
           console.error("Failed to load settings:", err);
@@ -96,12 +125,18 @@ export default function AdminSettingsPage() {
     initialSettings && (
       storeName !== initialSettings.store_name ||
       supportEmail !== initialSettings.support_email ||
+      supportPhone !== initialSettings.support_phone ||
+      storeAddress !== initialSettings.store_address ||
       currency !== initialSettings.currency ||
       vatEnabled !== initialSettings.vat_enabled ||
       vatRate !== initialSettings.vat_rate ||
       freeShippingThreshold !== initialSettings.free_shipping_threshold ||
       standardShippingRate !== initialSettings.standard_shipping_rate ||
-      priorityShippingRate !== initialSettings.priority_shipping_rate
+      priorityShippingRate !== initialSettings.priority_shipping_rate ||
+      lowStockThreshold !== initialSettings.low_stock_threshold ||
+      reviewsAutoApprove !== initialSettings.reviews_auto_approve ||
+      guestCheckoutEnabled !== initialSettings.guest_checkout_enabled ||
+      orderInvoicePrefix !== initialSettings.order_invoice_prefix
     )
   );
 
@@ -109,12 +144,18 @@ export default function AdminSettingsPage() {
     if (!isDirty || !initialSettings) return;
     setStoreName(initialSettings.store_name);
     setSupportEmail(initialSettings.support_email);
+    setSupportPhone(initialSettings.support_phone);
+    setStoreAddress(initialSettings.store_address);
     setCurrency(initialSettings.currency);
     setVatEnabled(initialSettings.vat_enabled);
     setVatRate(initialSettings.vat_rate);
     setFreeShippingThreshold(initialSettings.free_shipping_threshold);
     setStandardShippingRate(initialSettings.standard_shipping_rate);
     setPriorityShippingRate(initialSettings.priority_shipping_rate);
+    setLowStockThreshold(initialSettings.low_stock_threshold);
+    setReviewsAutoApprove(initialSettings.reviews_auto_approve);
+    setGuestCheckoutEnabled(initialSettings.guest_checkout_enabled);
+    setOrderInvoicePrefix(initialSettings.order_invoice_prefix);
     toast.info("Settings reverted.");
   };
 
@@ -129,6 +170,8 @@ export default function AdminSettingsPage() {
     const payload = {
       store_name: storeName,
       support_email: supportEmail,
+      support_phone: supportPhone,
+      store_address: storeAddress,
       currency,
       vat_enabled: vatEnabled ? "true" : "false",
       vat_rate: vatRate,
@@ -137,6 +180,10 @@ export default function AdminSettingsPage() {
       free_shipping_threshold: freeShippingThreshold,
       standard_shipping_rate: standardShippingRate,
       priority_shipping_rate: priorityShippingRate,
+      low_stock_threshold: lowStockThreshold,
+      reviews_auto_approve: reviewsAutoApprove ? "true" : "false",
+      guest_checkout_enabled: guestCheckoutEnabled ? "true" : "false",
+      order_invoice_prefix: orderInvoicePrefix,
     };
 
     try {
@@ -144,6 +191,8 @@ export default function AdminSettingsPage() {
       setInitialSettings({
         ...payload,
         vat_enabled: vatEnabled,
+        reviews_auto_approve: reviewsAutoApprove,
+        guest_checkout_enabled: guestCheckoutEnabled,
       });
       toast.success("Store configurations updated successfully.");
     } catch (err: any) {
@@ -208,6 +257,96 @@ export default function AdminSettingsPage() {
                 onChange={(e) => setSupportEmail(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
               />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-slate-300 block">Support Phone Number</label>
+              <input
+                type="text"
+                value={supportPhone}
+                onChange={(e) => setSupportPhone(e.target.value)}
+                placeholder="+1 (555) 000-0000"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-slate-300 block">Store Physical / Operating Address</label>
+              <input
+                type="text"
+                value={storeAddress}
+                onChange={(e) => setStoreAddress(e.target.value)}
+                placeholder="Street address, city, country"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 2. Product & Inventory Rules */}
+        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
+            <Boxes className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-bold text-white">Product & Review Settings</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-slate-300 block">Low Stock Warning Threshold</label>
+              <input
+                type="number"
+                min="0"
+                value={lowStockThreshold}
+                onChange={(e) => setLowStockThreshold(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+              />
+              <p className="text-[10px] text-slate-500">Alert admin when product variant inventory drops below this level</p>
+            </div>
+
+            <div className="space-y-1 flex flex-col justify-center">
+              <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
+                <div>
+                  <span className="text-[11px] font-bold text-slate-200 block">Auto-Approve Customer Reviews</span>
+                  <span className="text-[10px] text-slate-400">Instantly publish verified customer reviews without manual moderation</span>
+                </div>
+                <Switch
+                  checked={reviewsAutoApprove}
+                  onCheckedChange={(checked) => setReviewsAutoApprove(checked)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Order & Checkout Rules */}
+        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
+            <ShoppingBag className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-sm font-bold text-white">Order & Checkout Rules</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-slate-300 block">Invoice / Order Number Prefix</label>
+              <input
+                type="text"
+                value={orderInvoicePrefix}
+                onChange={(e) => setOrderInvoicePrefix(e.target.value)}
+                placeholder="e.g. INV-"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+              />
+              <p className="text-[10px] text-slate-500">Appended to generated invoice numbers (e.g. INV-2026-0001)</p>
+            </div>
+
+            <div className="space-y-1 flex flex-col justify-center">
+              <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
+                <div>
+                  <span className="text-[11px] font-bold text-slate-200 block">Allow Guest Checkout</span>
+                  <span className="text-[10px] text-slate-400">Permit customers to place orders without creating an account</span>
+                </div>
+                <Switch
+                  checked={guestCheckoutEnabled}
+                  onCheckedChange={(checked) => setGuestCheckoutEnabled(checked)}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -335,70 +474,70 @@ export default function AdminSettingsPage() {
             {
               title: "Theme & UI Studio",
               desc: "Color palette, dark/light mode, typography, button styles & radius",
-              href: "/admin/settings/appearance",
+              href: "/admin/content/theme",
               icon: Palette,
               color: "text-amber-400",
             },
             {
               title: "Branding & Store Logo",
               desc: "Store mark, brand typography, favicon, and brand metadata",
-              href: "/admin/settings/branding",
+              href: "/admin/content/branding",
               icon: Store,
               color: "text-cyan-400",
             },
             {
               title: "Storefront & Hero Layout",
               desc: "Announcement bar, hero headline, trust ribbon & flash deals",
-              href: "/admin/settings/storefront",
+              href: "/admin/content/theme?tab=messaging",
               icon: LayoutTemplate,
               color: "text-emerald-400",
             },
             {
               title: "Homepage Showcase Sections",
               desc: "Configure dynamic category & product show carousels, tabs, sorting, and ordering",
-              href: "/admin/settings/homepage",
+              href: "/admin/content/homepage",
               icon: Layers,
               color: "text-cyan-400",
             },
             {
               title: "CMS Static Pages",
               desc: "Manage legal notices, terms of service, privacy policy, FAQ & about pages",
-              href: "/admin/online-store/pages",
+              href: "/admin/content/pages",
               icon: FileText,
               color: "text-cyan-400",
             },
             {
               title: "Blog & Editorial",
               desc: "Manage published articles, knowledge base, categories, tags & reader comments",
-              href: "/admin/blog",
+              href: "/admin/content/blog",
               icon: BookOpen,
               color: "text-amber-400",
             },
             {
               title: "Navigation & Footer",
               desc: "Header navigation menus, footer link columns, copyright & badges",
-              href: "/admin/online-store/footer",
+              href: "/admin/content/footer",
               icon: Layers,
               color: "text-violet-400",
             },
             {
               title: "Social Links & Outreach",
               desc: "Configure WhatsApp, Instagram, Facebook, Twitter & support channels",
-              href: "/admin/online-store/social",
+              href: "/admin/content/social",
               icon: ExternalLink,
               color: "text-pink-400",
             },
             {
               title: "Shipping Zones & Rates",
               desc: "Regional delivery fees, courier integrations, and free shipping triggers",
-              href: "/admin/settings/shipping",
+              href: "/admin/orders/shipping",
               icon: Truck,
               color: "text-blue-400",
             },
             {
               title: "Order Pipeline Statuses",
               desc: "Lifecycle stages, notification triggers, and fulfillment states",
-              href: "/admin/settings/statuses",
+              href: "/admin/orders/statuses",
               icon: GitCommit,
               color: "text-purple-400",
             },

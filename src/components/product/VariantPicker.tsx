@@ -27,15 +27,10 @@ export function VariantPicker({
   availableStock = 0,
   hasError = false,
 }: VariantPickerProps) {
-  // If product has no variants configured, render nothing
-  if (!variants || variants.length === 0) {
-    return null;
-  }
-
   // Extract distinct colors from variants
   const distinctColors = useMemo(() => {
     const map = new Map<string, { name: string; hex?: string | null; inStock: boolean; minPriceMod: number }>();
-    variants.forEach((v) => {
+    (variants || []).forEach((v) => {
       const colorKey = v.color_name?.trim();
       if (colorKey) {
         const existing = map.get(colorKey);
@@ -58,7 +53,7 @@ export function VariantPicker({
   // Extract distinct sizes from variants
   const distinctSizes = useMemo(() => {
     const map = new Map<string, { size: string; inStock: boolean }>();
-    variants.forEach((v) => {
+    (variants || []).forEach((v) => {
       const sizeKey = v.size?.trim();
       if (sizeKey) {
         const inStock = v.stock_quantity > 0;
@@ -80,41 +75,111 @@ export function VariantPicker({
   const activeColor = selectedColor || selectedVariant?.color_name || (distinctColors[0]?.name ?? null);
   const activeSize = selectedSize || selectedVariant?.size || (distinctSizes[0]?.size ?? null);
 
-  // Helper to match the variant given current color + size selections
-  const findMatchingVariant = (color: string | null, size: string | null) => {
-    if (isGenericVariantList) return selectedVariant;
+  // If product has no variants configured, render nothing
+  if (!variants || variants.length === 0) {
+    return null;
+  }
 
-    let match = variants.find((v) => {
-      const matchColor = !color || (v.color_name && v.color_name.toLowerCase() === color.toLowerCase());
-      const matchSize = !size || (v.size && v.size.toLowerCase() === size.toLowerCase());
-      return matchColor && matchSize;
-    });
+  // Check availability of a specific size given currently active color
+  const getSizeAvailability = (sizeKey: string) => {
+    const trimmedSize = sizeKey.trim().toLowerCase();
 
-    if (!match && color) {
-      match = variants.find((v) => v.color_name && v.color_name.toLowerCase() === color.toLowerCase());
+    // 1. If product is size-only (no colors configured)
+    if (distinctColors.length === 0) {
+      const v = variants.find((item) => (item.size || "").trim().toLowerCase() === trimmedSize);
+      return {
+        exists: !!v,
+        inStock: !!v && v.stock_quantity > 0,
+        variant: v || null,
+      };
     }
-    if (!match && size) {
-      match = variants.find((v) => v.size && v.size.toLowerCase() === size.toLowerCase());
+
+    // 2. If product has colors, check combination with activeColor
+    if (!activeColor) {
+      return { exists: false, inStock: false, variant: null };
     }
-    return match || variants[0] || null;
+
+    const trimmedColor = activeColor.trim().toLowerCase();
+    const v = variants.find(
+      (item) =>
+        (item.color_name || "").trim().toLowerCase() === trimmedColor &&
+        (item.size || "").trim().toLowerCase() === trimmedSize
+    );
+
+    return {
+      exists: !!v,
+      inStock: !!v && v.stock_quantity > 0,
+      variant: v || null,
+    };
   };
 
+  // Select color with auto-selection of valid size
   const handleSelectColor = (colorName: string) => {
     onSelectColor?.(colorName);
-    const matched = findMatchingVariant(colorName, activeSize);
-    if (matched) {
+
+    const colorVariants = variants.filter(
+      (v) => (v.color_name || "").trim().toLowerCase() === colorName.trim().toLowerCase()
+    );
+
+    if (distinctSizes.length > 0) {
+      // 1. Check if the currently active size is available and in stock for this new color
+      const currentSizeMatch = colorVariants.find(
+        (v) =>
+          (v.size || "").trim().toLowerCase() === (activeSize || "").trim().toLowerCase() &&
+          v.stock_quantity > 0
+      );
+
+      if (currentSizeMatch) {
+        onSelectVariant(currentSizeMatch);
+      } else {
+        // 2. Auto-select first in-stock size for this color
+        const firstInStock = colorVariants.find((v) => v.stock_quantity > 0);
+        if (firstInStock && firstInStock.size) {
+          onSelectSize?.(firstInStock.size);
+          onSelectVariant(firstInStock);
+        } else if (colorVariants.length > 0) {
+          // Fall back to first configured size for this color (even if 0 stock) rather than cross-color
+          const firstConfigured = colorVariants[0];
+          onSelectSize?.(firstConfigured.size || null);
+          onSelectVariant(firstConfigured);
+        } else {
+          onSelectSize?.(null);
+          onSelectVariant(null);
+        }
+      }
+    } else {
+      // Color-only product
+      const matched = colorVariants[0] || null;
       onSelectVariant(matched);
     }
   };
 
+  // Select size
   const handleSelectSize = (sizeValue: string) => {
     onSelectSize?.(sizeValue);
-    const matched = findMatchingVariant(activeColor, sizeValue);
+
+    let matched: ProductVariant | null = null;
+    const trimmedSize = sizeValue.trim().toLowerCase();
+
+    if (distinctColors.length > 0 && activeColor) {
+      const trimmedColor = activeColor.trim().toLowerCase();
+      matched =
+        variants.find(
+          (v) =>
+            (v.color_name || "").trim().toLowerCase() === trimmedColor &&
+            (v.size || "").trim().toLowerCase() === trimmedSize
+        ) || null;
+    } else {
+      matched =
+        variants.find((v) => (v.size || "").trim().toLowerCase() === trimmedSize) || null;
+    }
+
     if (matched) {
       onSelectVariant(matched);
     }
   };
 
+  // Generic option selection
   const handleSelectGenericVariant = (v: ProductVariant) => {
     onSelectVariant(v);
     if (v.color_name) onSelectColor?.(v.color_name);
@@ -191,22 +256,30 @@ export function VariantPicker({
           </div>
 
           <div className="flex flex-wrap gap-2 items-center">
-            {distinctSizes.map((s, idx) => {
+            {distinctSizes.map((s) => {
               const isSelected = activeSize?.toLowerCase() === s.size.toLowerCase();
-              const isOutOfStock = !s.inStock;
-              const isLowStock = availableStock <= 8 && idx === 0 && !isOutOfStock;
+              const availability = getSizeAvailability(s.size);
+              const isDisabled = !availability.exists || !availability.inStock;
+              const isLowStock = availableStock <= 8 && isSelected && availability.inStock;
 
               return (
                 <button
                   key={s.size}
                   type="button"
-                  disabled={isOutOfStock}
+                  disabled={isDisabled}
                   onClick={() => handleSelectSize(s.size)}
+                  title={
+                    !availability.exists
+                      ? `Option '${s.size}' not available in ${activeColor || "selected color"}`
+                      : !availability.inStock
+                      ? `Option '${s.size}' is currently out of stock`
+                      : undefined
+                  }
                   className={`relative min-w-[42px] h-10 px-3.5 rounded-lg border text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center ${
-                    isSelected
+                    isSelected && !isDisabled
                       ? "border-2 border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/10 shadow-xs font-bold"
-                      : isOutOfStock
-                      ? "opacity-40 border-dashed border-gray-200 dark:border-white/10 bg-transparent text-slate-400 cursor-not-allowed"
+                      : isDisabled
+                      ? "opacity-30 border-dashed border-gray-200 dark:border-white/10 bg-transparent text-slate-400 cursor-not-allowed line-through"
                       : "border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-gray-300 dark:hover:border-white/20 bg-white dark:bg-white/[0.03] font-medium"
                   }`}
                 >

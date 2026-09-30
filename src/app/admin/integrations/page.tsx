@@ -231,6 +231,12 @@ export default function AdminIntegrationsPage() {
 
   useEffect(() => {
     loadData();
+    if (typeof window !== "undefined") {
+      const cat = new URLSearchParams(window.location.search).get("category");
+      if (cat) {
+        setSelectedCategory(cat);
+      }
+    }
   }, []);
 
   const handleToggle = async (integration: Integration) => {

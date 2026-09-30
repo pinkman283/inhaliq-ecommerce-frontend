@@ -1,12 +1,11 @@
 "use client";
 
-import AdminAppearancePage from "@/app/admin/settings/appearance/page";
+import AdminContentThemePage from "@/app/admin/content/theme/page";
 
 /**
- * Direct route alias for /admin/theme
- * Seamlessly renders the modular AdminAppearancePage under the Settings architecture.
- * Preserves 100% backward compatibility for direct links, bookmarks, and APIs.
+ * Direct route alias for /admin/theme -> /admin/content/theme
+ * Preserves 100% backward compatibility for bookmarks and direct links.
  */
-export default function AdminThemePageAlias() {
-  return <AdminAppearancePage />;
+export default function AdminThemeLegacyPage() {
+  return <AdminContentThemePage />;
 }

@@ -31,6 +31,10 @@ import { CustomerAccountDropdown } from "@/components/shared/CustomerAccountDrop
 import { useAppTheme } from "@/components/providers/ThemeProvider";
 import { api } from "@/lib/api";
 import { NavbarItem } from "@/types";
+import { CascadingNavDropdown } from "@/components/shared/navigation/CascadingNavDropdown";
+import { CategoryBrandGridMenu } from "@/components/shared/navigation/CategoryBrandGridMenu";
+import { MultiColumnNavMenu } from "@/components/shared/navigation/MultiColumnNavMenu";
+import { MobileNavTree } from "@/components/shared/navigation/MobileNavTree";
 
 interface NavbarProps {
   onOpenSearch: () => void;
@@ -248,7 +252,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
       <nav
         ref={navContainerRef}
         onMouseLeave={handleMouseLeave}
-        className={`sticky top-0 z-40 transition-all duration-300 border-b theme-sticky-subnav ${
+        className={`sticky top-0 z-50 transition-all duration-300 border-b theme-sticky-subnav ${
           isScrolled
             ? "bg-white/95 dark:bg-[#070911]/95 backdrop-blur-xl shadow-md dark:shadow-2xl border-gray-200 dark:border-white/10 py-1.5"
             : "bg-white/90 dark:bg-[#090b14]/90 backdrop-blur-md border-gray-200 dark:border-white/5 py-1.5"
@@ -283,13 +287,37 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
               ) : (
                 navItems.map((item, itemIdx, arr) => {
                   const isHovered = activeHoverId === item.id;
-                  const hasDropdownContent =
-                    (item.mega_menu_type && item.mega_menu_type !== "none") ||
-                    (item.subcategories && item.subcategories.length > 0) ||
-                    (item.brands && item.brands.length > 0) ||
-                    (item.children && item.children.length > 0);
+                  const dropdownItems: NavbarItem[] =
+                    item.children && item.children.length > 0
+                      ? item.children
+                      : item.subcategories && item.subcategories.length > 0
+                      ? item.subcategories.map((s) => ({
+                          id: 100000 + s.id,
+                          parent_id: item.id,
+                          title: s.name,
+                          type: "subcategory" as const,
+                          url: s.url,
+                          computed_url: s.url,
+                          icon: s.icon || null,
+                          badge: s.badge || null,
+                          badge_color: null,
+                          is_active: true,
+                          open_in_new_tab: false,
+                          mega_menu_type: "none" as const,
+                          display_order: 0,
+                          children: [],
+                          is_valid: true,
+                        }))
+                      : [];
+
+                  const hasDropdown =
+                    dropdownItems.length > 0 ||
+                    (item.mega_menu_type === "category_brand_grid" &&
+                      Boolean(item.brands && item.brands.length > 0));
 
                   const isRightSide = itemIdx >= Math.ceil(arr.length / 2) || itemIdx >= 3;
+                  const targetUrl = item.computed_url || item.url;
+                  const isGroupHeader = item.type === "dropdown_group";
 
                   return (
                     <div
@@ -298,222 +326,105 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                       onMouseLeave={handleMouseLeave}
                       className="relative shrink-0"
                     >
-                      <Link
-                        href={item.computed_url || item.url || "#"}
-                        target={item.open_in_new_tab ? "_blank" : undefined}
-                        rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                          isHovered
-                            ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
-                            : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-                        }`}
-                      >
-                        <span>{item.title}</span>
+                      {isGroupHeader ? (
+                        <div
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all select-none ${
+                            isHovered
+                              ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                              : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white"
+                          }`}
+                        >
+                          <span>{item.title}</span>
+                          {item.badge && (
+                            <span
+                              className="text-[9px] px-1.5 py-0.2 rounded font-black tracking-wide text-white uppercase shadow-xs"
+                              style={{ backgroundColor: item.badge_color || "#EF4444" }}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                          {hasDropdown && (
+                            <ChevronDown
+                              className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
+                                isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                              }`}
+                            />
+                          )}
+                        </div>
+                      ) : targetUrl ? (
+                        <Link
+                          href={targetUrl}
+                          target={item.open_in_new_tab ? "_blank" : undefined}
+                          rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                            isHovered
+                              ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                              : "text-slate-700 dark:text-slate-300 hover:text-[#005826] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                          }`}
+                        >
+                          <span>{item.title}</span>
 
-                        {/* Configurable Badge */}
-                        {item.badge && (
-                          <span
-                            className="text-[9px] px-1.5 py-0.2 rounded font-black tracking-wide text-white uppercase shadow-xs"
-                            style={{ backgroundColor: item.badge_color || "#EF4444" }}
-                          >
-                            {item.badge}
-                          </span>
-                        )}
+                          {item.badge && (
+                            <span
+                              className="text-[9px] px-1.5 py-0.2 rounded font-black tracking-wide text-white uppercase shadow-xs"
+                              style={{ backgroundColor: item.badge_color || "#EF4444" }}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
 
-                        {hasDropdownContent && (
-                          <ChevronDown
-                            className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
-                              isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
-                            }`}
-                          />
-                        )}
-                      </Link>
+                          {hasDropdown && (
+                            <ChevronDown
+                              className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
+                                isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                              }`}
+                            />
+                          )}
+                        </Link>
+                      ) : (
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-semibold transition-all whitespace-nowrap ${
+                            isHovered
+                              ? "text-[#005826] dark:text-cyan-400 bg-emerald-50/80 dark:bg-white/10"
+                              : "text-slate-700 dark:text-slate-300"
+                          }`}
+                        >
+                          <span>{item.title}</span>
+                          {hasDropdown && (
+                            <ChevronDown
+                              className={`w-3 h-3 text-slate-400 transition-transform duration-200 shrink-0 ${
+                                isHovered ? "rotate-180 text-[#005826] dark:text-cyan-400" : ""
+                              }`}
+                            />
+                          )}
+                        </span>
+                      )}
 
-                      {/* ===================== DYNAMIC MEGA-MENU / DROPDOWN POPOVER ===================== */}
+                      {/* Presentation Renderers */}
                       <AnimatePresence>
-                        {isHovered && hasDropdownContent && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 4, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 4, scale: 0.98 }}
-                            transition={{ duration: 0.12, ease: "easeOut" }}
-                            onMouseEnter={() => {
-                              if (hoverTimeoutRef.current) {
-                                clearTimeout(hoverTimeoutRef.current);
-                                hoverTimeoutRef.current = null;
-                              }
-                            }}
-                            onMouseLeave={handleMouseLeave}
-                            className={`absolute top-full mt-1 z-50 bg-white dark:bg-[#0e121e] rounded-2xl border border-gray-200/80 dark:border-white/10 shadow-[0_14px_45px_rgba(0,0,0,0.14)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.7)] overflow-hidden transition-all duration-150 text-left max-w-[calc(100vw-32px)] ${
-                              item.mega_menu_type === "category_brand_grid"
-                                ? "w-[680px] sm:w-[740px]"
-                                : item.mega_menu_type === "columns"
-                                ? "w-[500px]"
-                                : "w-[240px]"
-                            } ${isRightSide ? "right-0 origin-top-right" : "left-0 origin-top-left"}`}
-                          >
-                            {/* CASE 1: Mega Menu with Subcategories + Category Brands Grid */}
-                            {item.mega_menu_type === "category_brand_grid" && (
-                              <div className="p-4 space-y-4">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                  {/* Left Column: Subcategories */}
-                                  <div className="space-y-2 border-r border-gray-100 dark:border-white/[0.08] pr-4">
-                                    <div className="flex items-center justify-between pb-1.5 border-b border-gray-100 dark:border-white/[0.06]">
-                                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                                        <FolderTree className="w-3 h-3 text-cyan-400" />
-                                        Subcategories
-                                      </span>
-                                    </div>
-
-                                    <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
-                                      {item.subcategories && item.subcategories.length > 0 ? (
-                                        item.subcategories.map((sub) => (
-                                          <Link
-                                            key={sub.id}
-                                            href={sub.url || `/category/${item.category_slug}/${sub.slug}`}
-                                            onClick={() => setActiveHoverId(null)}
-                                            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-white hover:bg-cyan-600/10 dark:hover:bg-white/5 transition-colors group"
-                                          >
-                                            <span className="group-hover:text-cyan-400 transition-colors">{sub.name}</span>
-                                            <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-cyan-400 transition-colors" />
-                                          </Link>
-                                        ))
-                                      ) : item.children && item.children.length > 0 ? (
-                                        item.children.map((child) => (
-                                          <Link
-                                            key={child.id}
-                                            href={child.computed_url || child.url || "#"}
-                                            onClick={() => setActiveHoverId(null)}
-                                            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-white hover:bg-cyan-600/10 dark:hover:bg-white/5 transition-colors group"
-                                          >
-                                            <span className="group-hover:text-cyan-400 transition-colors">{child.title}</span>
-                                            <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-cyan-400 transition-colors" />
-                                          </Link>
-                                        ))
-                                      ) : (
-                                        <div className="text-[11px] text-slate-500 py-3 text-center">
-                                          Browse full catalog collection
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-
-                                  {/* Right Column: Authorized Brands Matrix */}
-                                  <div className="space-y-2 pl-1">
-                                    <div className="flex items-center justify-between pb-1.5 border-b border-gray-100 dark:border-white/[0.06]">
-                                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                                        <Building2 className="w-3 h-3 text-purple-400" />
-                                        Featured Brands
-                                      </span>
-                                      <Link
-                                        href="/brands"
-                                        onClick={() => setActiveHoverId(null)}
-                                        className="text-[10px] text-cyan-400 hover:underline"
-                                      >
-                                        All Brands →
-                                      </Link>
-                                    </div>
-
-                                    {item.brands && item.brands.length > 0 ? (
-                                      <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
-                                        {item.brands.map((brand) => (
-                                          <Link
-                                            key={brand.id}
-                                            href={`/brand/${brand.slug}`}
-                                            onClick={() => setActiveHoverId(null)}
-                                            className="p-2.5 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] hover:bg-purple-500/10 hover:border-purple-500/30 transition-all flex items-center gap-2.5 group"
-                                          >
-                                            <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center font-bold text-xs text-purple-400 group-hover:scale-105 transition-transform overflow-hidden shrink-0">
-                                              {brand.logo ? (
-                                                // eslint-disable-next-line @next/next/no-img-element
-                                                <img src={brand.logo} alt={brand.name} className="w-full h-full object-contain p-0.5" />
-                                              ) : (
-                                                brand.name.charAt(0)
-                                              )}
-                                            </div>
-                                            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover:text-purple-300 truncate">
-                                              {brand.name}
-                                            </span>
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    ) : (
-                                      <div className="py-8 text-center text-slate-500 text-xs">
-                                        <Building2 className="w-5 h-5 mx-auto mb-1 text-slate-600" />
-                                        Authorized partner brands
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-
-                                {/* Bottom Bar */}
-                                <div className="pt-3 border-t border-gray-100 dark:border-white/[0.08] flex items-center justify-between text-xs">
-                                  <span className="text-slate-400 text-[11px]">
-                                    Discover verified items under {item.title}
-                                  </span>
-                                  <Link
-                                    href={item.computed_url || item.url || "#"}
-                                    onClick={() => setActiveHoverId(null)}
-                                    className="font-semibold text-[#005826] dark:text-cyan-400 hover:underline flex items-center gap-1"
-                                  >
-                                    View All {item.title} Products
-                                    <ArrowRight className="w-3.5 h-3.5" />
-                                  </Link>
-                                </div>
-                              </div>
-                            )}
-
-                            {/* CASE 2: Multi-Column Subcategories */}
-                            {item.mega_menu_type === "columns" && (
-                              <div className="p-4 space-y-3">
-                                <div className="grid grid-cols-2 gap-2">
-                                  {(item.subcategories || item.children || []).map((sub: any) => (
-                                    <Link
-                                      key={sub.id}
-                                      href={sub.url || sub.computed_url || "#"}
-                                      onClick={() => setActiveHoverId(null)}
-                                      className="p-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-cyan-400 transition-colors"
-                                    >
-                                      {sub.name || sub.title}
-                                    </Link>
-                                  ))}
-                                </div>
-                                <div className="pt-2 border-t border-gray-100 dark:border-white/10 text-right">
-                                  <Link
-                                    href={item.computed_url || item.url || "#"}
-                                    onClick={() => setActiveHoverId(null)}
-                                    className="text-xs font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1"
-                                  >
-                                    Browse all {item.title} →
-                                  </Link>
-                                </div>
-                              </div>
-                            )}
-
-                            {/* CASE 3: Standard Compact Dropdown */}
-                            {(item.mega_menu_type === "standard_dropdown" || item.mega_menu_type === "none") && (
-                              <div className="p-2 space-y-0.5">
-                                {(item.children || item.subcategories || []).map((sub: any) => (
-                                  <Link
-                                    key={sub.id}
-                                    href={sub.url || sub.computed_url || "#"}
-                                    onClick={() => setActiveHoverId(null)}
-                                    className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-cyan-400 transition-colors"
-                                  >
-                                    <span>{sub.title || sub.name}</span>
-                                    {sub.badge && (
-                                      <span
-                                        className="text-[9px] px-1 rounded font-bold text-white uppercase"
-                                        style={{ backgroundColor: sub.badge_color || "#EF4444" }}
-                                      >
-                                        {sub.badge}
-                                      </span>
-                                    )}
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
-                          </motion.div>
+                        {isHovered && hasDropdown && (
+                          item.mega_menu_type === "category_brand_grid" && item.brands && item.brands.length > 0 ? (
+                            <CategoryBrandGridMenu
+                              item={item}
+                              isOpen={isHovered}
+                              onClose={() => setActiveHoverId(null)}
+                              align={isRightSide ? "right" : "left"}
+                            />
+                          ) : item.mega_menu_type === "columns" && dropdownItems.length > 0 ? (
+                            <MultiColumnNavMenu
+                              item={item}
+                              isOpen={isHovered}
+                              onClose={() => setActiveHoverId(null)}
+                              align={isRightSide ? "right" : "left"}
+                            />
+                          ) : dropdownItems.length > 0 ? (
+                            <CascadingNavDropdown
+                              items={dropdownItems}
+                              isOpen={isHovered}
+                              onClose={() => setActiveHoverId(null)}
+                              align={isRightSide ? "right" : "left"}
+                            />
+                          ) : null
                         )}
                       </AnimatePresence>
                     </div>
@@ -546,115 +457,34 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
               Navigation Menu
             </div>
 
-            {navItems.map((item) => {
-              const isExpanded = mobileExpandedId === item.id;
-              const hasChildren =
-                (item.subcategories && item.subcategories.length > 0) ||
-                (item.brands && item.brands.length > 0) ||
-                (item.children && item.children.length > 0);
-
-              return (
-                <div key={item.id} className="rounded-lg bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 overflow-hidden">
-                  <div className="w-full flex items-center justify-between p-2.5 text-xs font-bold text-slate-800 dark:text-slate-200">
-                    <Link
-                      href={item.computed_url || item.url || "#"}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 flex-1"
-                    >
-                      <span>{item.title}</span>
-                      {item.badge && (
-                        <span
-                          className="text-[9px] px-1.5 py-0.2 rounded font-bold text-white uppercase"
-                          style={{ backgroundColor: item.badge_color || "#EF4444" }}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-
-                    {hasChildren && (
-                      <button
-                        onClick={() => setMobileExpandedId(isExpanded ? null : item.id)}
-                        className="p-1 text-slate-400 hover:text-white"
-                        aria-label={`Toggle ${item.title} sub-items`}
-                      >
-                        <ChevronDown
-                          className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180 text-cyan-400" : ""}`}
-                        />
-                      </button>
-                    )}
-                  </div>
-
-                  {isExpanded && hasChildren && (
-                    <div className="p-2 pt-0 border-t border-gray-200 dark:border-white/5 space-y-2 bg-white/50 dark:bg-white/[0.01]">
-                      <Link
-                        href={item.computed_url || item.url || "#"}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block px-2.5 py-1.5 rounded-md text-xs font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-500/10"
-                      >
-                        View All {item.title} →
-                      </Link>
-
-                      {/* Subcategories */}
-                      {item.subcategories && item.subcategories.length > 0 && (
-                        <div className="space-y-1 pl-2 border-l border-white/10">
-                          <span className="text-[10px] font-mono uppercase text-slate-500 block pt-1">
-                            Subcategories:
-                          </span>
-                          {item.subcategories.map((sub) => (
-                            <Link
-                              key={sub.id}
-                              href={sub.url || `/category/${item.category_slug}/${sub.slug}`}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="block text-xs text-slate-600 dark:text-slate-300 hover:text-cyan-400 py-1"
-                            >
-                              • {sub.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Brands */}
-                      {item.brands && item.brands.length > 0 && (
-                        <div className="space-y-1 pl-2 border-l border-purple-500/30">
-                          <span className="text-[10px] font-mono uppercase text-purple-400 block pt-1">
-                            Brands:
-                          </span>
-                          <div className="grid grid-cols-2 gap-1.5 pt-0.5">
-                            {item.brands.map((brand) => (
-                              <Link
-                                key={brand.id}
-                                href={`/brand/${brand.slug}`}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:text-purple-300 p-1.5 rounded bg-white/5 flex items-center gap-1.5"
-                              >
-                                {brand.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Custom Children */}
-                      {item.children && item.children.length > 0 && (
-                        <div className="space-y-1 pl-2 border-l border-white/10">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.id}
-                              href={child.computed_url || child.url || "#"}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="block text-xs text-slate-600 dark:text-slate-300 hover:text-cyan-400 py-1"
-                            >
-                              • {child.title}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            <MobileNavTree
+              items={navItems.map((item) => ({
+                ...item,
+                children:
+                  item.children && item.children.length > 0
+                    ? item.children
+                    : item.subcategories && item.subcategories.length > 0
+                    ? item.subcategories.map((s) => ({
+                        id: 100000 + s.id,
+                        parent_id: item.id,
+                        title: s.name,
+                        type: "subcategory" as const,
+                        url: s.url,
+                        computed_url: s.url,
+                        icon: s.icon || null,
+                        badge: s.badge || null,
+                        badge_color: null,
+                        is_active: true,
+                        open_in_new_tab: false,
+                        mega_menu_type: "none" as const,
+                        display_order: 0,
+                        children: [],
+                        is_valid: true,
+                      }))
+                    : item.children || [],
+              }))}
+              onItemClick={() => setMobileMenuOpen(false)}
+            />
 
             <div className="pt-3 border-t border-gray-200 dark:border-white/10 flex gap-2">
               <Link
