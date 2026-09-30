@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cachedFetch, createDeterministicHash, getRedisClient } from "@/lib/redis";
 
-const LARAVEL_API_URL =
-  process.env.INTERNAL_API_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://127.0.0.1:8000/api";
+function getUpstreamConfig() {
+  const provider = (process.env.BACKEND_PROVIDER || process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior").toLowerCase();
+  const isSenior = provider === "senior";
+
+  const baseUrl = isSenior
+    ? (process.env.SENIOR_API_BASE_URL || "http://127.0.0.1:8000/api/v1")
+    : (process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api");
+
+  // Private secret key - injected server-side only, NEVER sent to client
+  const apiKey = isSenior ? (process.env.SENIOR_API_KEY || "") : "";
+
+  return {
+    isSenior,
+    baseUrl: baseUrl.replace(/\/+$/, ""),
+    apiKey,
+  };
+}
 
 interface CacheRule {
   key: (path: string[], searchParams: URLSearchParams) => string;
@@ -16,8 +29,8 @@ interface CacheRule {
 function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRule | null {
   const pathStr = path.join("/");
 
-  // 0. Header Navigation
-  if (pathStr === "navigation/header") {
+  // 0. Header Navigation & Init Settings
+  if (pathStr === "navigation/header" || pathStr === "nav-menu") {
     return {
       key: () => "aether:navigation:header",
       ttl: 86400, // 24 hours
@@ -25,12 +38,20 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
     };
   }
 
+  if (pathStr === "init-settings") {
+    return {
+      key: () => "aether:settings:init",
+      ttl: 86400, // 24 hours
+      tags: ["settings"],
+    };
+  }
+
   // 1. Homepage Banners
-  if (pathStr === "homepage/banners") {
+  if (pathStr === "homepage/banners" || pathStr === "home") {
     return {
       key: () => "aether:banners:homepage",
-      ttl: 7200, // 2 hours
-      tags: ["banners"],
+      ttl: 3600, // 1 hour
+      tags: ["banners", "homepage"],
     };
   }
 
@@ -71,7 +92,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
       tags: ["categories"],
     };
   }
-  if (path.length === 2 && path[0] === "categories") {
+  if (path.length === 2 && (path[0] === "categories" || path[0] === "category")) {
     const slug = path[1];
     return {
       key: () => `aether:category:${slug}`,
@@ -88,7 +109,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
       tags: ["brands"],
     };
   }
-  if (path.length === 2 && path[0] === "brands") {
+  if (path.length === 2 && (path[0] === "brands" || path[0] === "brand")) {
     const slug = path[1];
     return {
       key: () => `aether:brand:${slug}`,
@@ -99,8 +120,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
 
   // 7. Products Listing vs Single Product
   if (pathStr === "products") {
-    // If search term is present, we keep TTL very short (60s) for freshness
-    const hasSearch = Boolean(searchParams.get("search"));
+    const hasSearch = Boolean(searchParams.get("search") || searchParams.get("keyword"));
     const queryHash = createDeterministicHash(searchParams);
     return {
       key: () => `aether:products:list:${queryHash}`,
@@ -108,7 +128,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
       tags: ["products"],
     };
   }
-  if (path.length === 2 && path[0] === "products") {
+  if (path.length === 2 && (path[0] === "products" || path[0] === "product")) {
     const slug = path[1];
     return {
       key: () => `aether:product:${slug}`,
@@ -127,7 +147,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
   }
 
   // 9. CMS Pages: pages/{slug}
-  if (path.length === 2 && path[0] === "pages") {
+  if (path.length === 2 && (path[0] === "pages" || path[0] === "page")) {
     const slug = path[1];
     return {
       key: () => `aether:cms:page:${slug}`,
@@ -136,8 +156,8 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
     };
   }
 
-  // 10. Blog Posts Listing: blog/posts
-  if (pathStr === "blog/posts") {
+  // 10. Blog Posts Listing: blog/posts or blogs
+  if (pathStr === "blog/posts" || pathStr === "blogs") {
     const queryHash = createDeterministicHash(searchParams);
     return {
       key: () => `aether:blog:list:${queryHash}`,
@@ -146,28 +166,56 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
     };
   }
 
-  // 11. Shipping Zones
-  if (pathStr === "shipping-zones") {
+  // 11. Shipping & Payment Gateways
+  if (pathStr === "shipping-zones" || pathStr === "shipping-charge") {
     return {
-      key: () => "aether:shipping:zones",
+      key: () => "aether:shipping:charges",
       ttl: 43200, // 12 hours
       tags: ["shipping"],
     };
   }
 
-  // 12. Store Navigation & Footer
-  if (pathStr === "store-navigation") {
+  if (pathStr === "payment-gateways" || pathStr === "payment-methods") {
     return {
-      key: () => "aether:store:navigation",
-      ttl: 21600, // 6 hours
-      tags: ["navigation", "footer"],
+      key: () => "aether:payment:gateways",
+      ttl: 43200, // 12 hours
+      tags: ["payments"],
     };
   }
 
-  // NOTE: blog/posts/{slug} is intentionally EXCLUDED to ensure view counter increment runs on Laravel.
-  // NOTE: promotions/claimable is intentionally EXCLUDED to prevent cross-user state leaks.
-
   return null;
+}
+
+function buildForwardHeaders(request: NextRequest, apiKey: string): HeadersInit {
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
+
+  const authHeader = request.headers.get("authorization");
+  if (authHeader) headers["Authorization"] = authHeader;
+
+  // Pass-through tracking headers (Meta CAPI & Client Device)
+  const eventSourceUrl = request.headers.get("x-event-source-url");
+  if (eventSourceUrl) headers["X-Event-Source-Url"] = eventSourceUrl;
+
+  const fbp = request.headers.get("x-fbp");
+  if (fbp) headers["X-FBP"] = fbp;
+
+  const fbc = request.headers.get("x-fbc");
+  if (fbc) headers["X-FBC"] = fbc;
+
+  const deviceId = request.headers.get("x-device-id");
+  if (deviceId) headers["X-Device-ID"] = deviceId;
+
+  const idempotencyKey = request.headers.get("x-idempotency-key");
+  if (idempotencyKey) headers["X-Idempotency-Key"] = idempotencyKey;
+
+  // Inject secure server-side API Key
+  if (apiKey) {
+    headers["X-API-KEY"] = apiKey;
+  }
+
+  return headers;
 }
 
 export async function GET(
@@ -178,21 +226,18 @@ export async function GET(
   const searchParams = request.nextUrl.searchParams;
   const pathStr = path.join("/");
   const searchStr = searchParams.toString() ? `?${searchParams.toString()}` : "";
-  const targetUrl = `${LARAVEL_API_URL}/${pathStr}${searchStr}`;
+  const { baseUrl, apiKey } = getUpstreamConfig();
+  const targetUrl = `${baseUrl}/${pathStr}${searchStr}`;
 
   const rule = matchCacheRule(path, searchParams);
 
-  // If endpoint is not configured for caching, pass through directly to Laravel API
-  if (!rule) {
+  // If endpoint is not configured for caching or user is authenticated, pass through
+  const hasAuth = Boolean(request.headers.get("authorization"));
+  if (!rule || hasAuth) {
     try {
       const response = await fetch(targetUrl, {
-        headers: {
-          Accept: "application/json",
-          ...(request.headers.get("authorization")
-            ? { Authorization: request.headers.get("authorization")! }
-            : {}),
-        },
-        signal: AbortSignal.timeout(8000),
+        headers: buildForwardHeaders(request, apiKey),
+        signal: AbortSignal.timeout(10000),
       });
 
       const contentType = response.headers.get("content-type") || "";
@@ -227,7 +272,6 @@ export async function GET(
   const cacheKey = rule.key(path, searchParams);
   const redis = getRedisClient();
 
-  // Fast path: Check Redis if available
   if (redis) {
     try {
       const cached = await redis.get(cacheKey);
@@ -246,16 +290,14 @@ export async function GET(
     }
   }
 
-  // On Cache Miss -> Fetch upstream with cachedFetch logic
+  // Cache Miss
   try {
     const data = await cachedFetch(
       cacheKey,
       async () => {
         const res = await fetch(targetUrl, {
-          headers: {
-            Accept: "application/json",
-          },
-          signal: AbortSignal.timeout(8000),
+          headers: buildForwardHeaders(request, apiKey),
+          signal: AbortSignal.timeout(10000),
         });
 
         if (!res.ok) {
@@ -285,4 +327,92 @@ export async function GET(
       { status: 502 }
     );
   }
+}
+
+async function forwardMutation(
+  method: string,
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
+) {
+  const { path } = await context.params;
+  const searchParams = request.nextUrl.searchParams;
+  const pathStr = path.join("/");
+  const searchStr = searchParams.toString() ? `?${searchParams.toString()}` : "";
+  const { baseUrl, apiKey } = getUpstreamConfig();
+  const targetUrl = `${baseUrl}/${pathStr}${searchStr}`;
+
+  const forwardHeaders = buildForwardHeaders(request, apiKey) as Record<string, string>;
+  const reqContentType = request.headers.get("content-type");
+  if (reqContentType) {
+    forwardHeaders["Content-Type"] = reqContentType;
+  }
+
+  let body: any = undefined;
+  if (method !== "GET" && method !== "HEAD") {
+    try {
+      if (reqContentType?.includes("application/json")) {
+        const json = await request.json();
+        body = JSON.stringify(json);
+      } else {
+        body = await request.text();
+      }
+    } catch {
+      // Body may be empty
+    }
+  }
+
+  try {
+    const upstreamRes = await fetch(targetUrl, {
+      method,
+      headers: forwardHeaders,
+      body,
+      signal: AbortSignal.timeout(15000),
+    });
+
+    const contentType = upstreamRes.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      const data = await upstreamRes.json();
+      return NextResponse.json(data, { status: upstreamRes.status });
+    }
+
+    const text = await upstreamRes.text();
+    return new NextResponse(text, {
+      status: upstreamRes.status,
+      headers: { "Content-Type": contentType || "text/plain" },
+    });
+  } catch (err: any) {
+    console.error(`[Proxy] Mutation error for ${method} ${targetUrl}:`, err);
+    return NextResponse.json(
+      { error: "Upstream service error during mutation", details: err?.message },
+      { status: 502 }
+    );
+  }
+}
+
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
+) {
+  return forwardMutation("POST", request, context);
+}
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
+) {
+  return forwardMutation("PUT", request, context);
+}
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
+) {
+  return forwardMutation("PATCH", request, context);
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
+) {
+  return forwardMutation("DELETE", request, context);
 }

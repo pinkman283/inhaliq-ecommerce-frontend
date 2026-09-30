@@ -688,6 +688,59 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
 
       </div>
 
+      {/* Product Video Demonstration (Senior Capability) */}
+      {(() => {
+        const videoUrl = typeof product.video === "string"
+          ? product.video
+          : (product.video?.embed_url || product.video?.url || product.video?.raw || "");
+        if (!videoUrl) return null;
+
+        const isYouTube = videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be");
+        const embedSrc = isYouTube
+          ? (videoUrl.includes("embed")
+              ? videoUrl
+              : `https://www.youtube.com/embed/${
+                  videoUrl.match(/(?:youtu\.be\/|watch\?v=)([\w-]+)/)?.[1] || ""
+                }`)
+          : videoUrl;
+
+        return (
+          <div className="pt-8 border-t border-gray-200 dark:border-white/10 space-y-4">
+            <div>
+              <span 
+                className="text-xs font-black uppercase tracking-widest block mb-1"
+                style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))" }}
+              >
+                Visual Showcase
+              </span>
+              <h2 
+                className="text-lg sm:text-xl font-black tracking-tight"
+                style={{ color: "var(--theme-text-heading, #0f172a)" }}
+              >
+                Product Demonstration Video
+              </h2>
+            </div>
+            <div className="aspect-video w-full max-w-3xl rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 bg-black/5 shadow-md">
+              {isYouTube ? (
+                <iframe
+                  src={embedSrc}
+                  title={`${product.name} Video Demonstration`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full border-0"
+                />
+              ) : (
+                <video
+                  src={videoUrl}
+                  controls
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Reviews Section */}
       {theme.reviews_enabled !== false && (
         <div id="reviews-section">

@@ -1,6 +1,24 @@
 import axios from "axios";
-import { Address, AdminAnalytics, Brand, CartValidationResponse, Category, CouponValidation, HomepageBannersResponse, Order, PaymentMethodOption, Product, ProductVariant, User } from "@/types";
+import {
+  Address,
+  AdminAnalytics,
+  Brand,
+  CartValidationResponse,
+  Category,
+  CouponValidation,
+  HomepageBannersResponse,
+  Order,
+  PaymentMethodOption,
+  Product,
+  ProductVariant,
+  PromotionEvaluationResult,
+  User,
+} from "@/types";
 import { useAuthStore } from "@/store/useAuthStore";
+import { storefrontApi, getStorefrontApi, IStorefrontApi } from "./api/index";
+
+export { storefrontApi, getStorefrontApi };
+export type { IStorefrontApi };
 
 const API_BASE_URL = typeof window !== "undefined"
   ? (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api")
@@ -49,7 +67,7 @@ storefrontClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Global 401 response interceptor: clean up expired or invalid customer session
+// Global 401 response interceptor
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -80,83 +98,40 @@ storefrontClient.interceptors.response.use(
   }
 );
 
-let inFlightHomepageBanners: Promise<HomepageBannersResponse> | null = null;
-let inFlightCategories: Promise<Category[]> | null = null;
-let inFlightFeatured: Promise<{
-  featured_products: Product[];
-  new_arrivals: Product[];
-  best_sellers: Product[];
-  featured_categories: Category[];
-}> | null = null;
-
 export const api = {
   client: apiClient,
   storefrontClient,
+  storefrontApi,
 
-  // Storefront Homepage Banners (Cached via Redis Proxy & Deduplicated across concurrent callers)
+  // ==========================================
+  // Homepage & Banners
+  // ==========================================
   async getHomepageBanners(): Promise<HomepageBannersResponse> {
-    if (inFlightHomepageBanners) {
-      return inFlightHomepageBanners;
-    }
-    inFlightHomepageBanners = storefrontClient
-      .get("/homepage/banners")
-      .then((res) => res.data)
-      .finally(() => {
-        setTimeout(() => {
-          inFlightHomepageBanners = null;
-        }, 2000);
-      });
-    return inFlightHomepageBanners;
+    return storefrontApi.getHomepageBanners();
   },
 
-  // Track Banner Click (Live Mutation - Direct to Laravel)
   async trackBannerClick(id: number): Promise<void> {
-    try {
-      await apiClient.post(`/banners/${id}/click`);
-    } catch {
-      // Non-blocking tracking
-    }
+    return storefrontApi.trackBannerClick(id);
   },
 
-  // Storefront Featured (Cached via Redis Proxy & Deduplicated across concurrent callers)
   async getFeatured(): Promise<{
     featured_products: Product[];
     new_arrivals: Product[];
     best_sellers: Product[];
     featured_categories: Category[];
   }> {
-    if (inFlightFeatured) {
-      return inFlightFeatured;
-    }
-    inFlightFeatured = storefrontClient
-      .get("/featured")
-      .then((res) => {
-        const raw = res.data || {};
-        const toArray = (val: any) => {
-          if (Array.isArray(val)) return val;
-          if (val && Array.isArray(val.data)) return val.data;
-          if (val && typeof val === "object") {
-            return Object.values(val).filter((item: any) => item && typeof item === "object" && "id" in item);
-          }
-          return [];
-        };
-
-        return {
-          featured_products: toArray(raw.featured_products),
-          new_arrivals: toArray(raw.new_arrivals),
-          best_sellers: toArray(raw.best_sellers),
-          featured_categories: toArray(raw.featured_categories),
-        };
-      })
-      .finally(() => {
-        setTimeout(() => {
-          inFlightFeatured = null;
-        }, 2000);
-      });
-    return inFlightFeatured;
+    const homeData = await storefrontApi.getHomepageData();
+    return {
+      featured_products: homeData.featured_products || [],
+      new_arrivals: homeData.new_arrivals || [],
+      best_sellers: homeData.best_sellers || [],
+      featured_categories: homeData.featured_categories || [],
+    };
   },
 
-  // Products Catalog (Cached via Redis Proxy)
+  // ==========================================
+  // Catalog & Products
+  // ==========================================
   async getProducts(params?: {
     category?: string | string[];
     categories?: string | string[];
@@ -181,81 +156,129 @@ export const api = {
     total: number;
     per_page: number;
   }> {
-    const res = await storefrontClient.get("/products", { params });
-    return res.data;
+    return storefrontApi.getProducts(params as any);
   },
 
-  // Single Product (Cached via Redis Proxy)
   async getProduct(slug: string): Promise<{
     product: Product;
     related: Product[];
   }> {
-    const res = await storefrontClient.get(`/products/${slug}`);
-    return res.data;
+    return storefrontApi.getProduct(slug);
   },
 
-  // Categories (Cached via Redis Proxy & Deduplicated across concurrent callers)
   async getCategories(): Promise<Category[]> {
-    if (inFlightCategories) {
-      return inFlightCategories;
-    }
-    inFlightCategories = storefrontClient
-      .get("/categories")
-      .then((res) => {
-        const data = res.data;
-        if (Array.isArray(data)) return data;
-        if (data && Array.isArray(data.data)) return data.data;
-        if (data && typeof data === "object") {
-          return Object.values(data).filter((item: any) => item && typeof item === "object" && "id" in item);
-        }
-        return [];
-      })
-      .finally(() => {
-        setTimeout(() => {
-          inFlightCategories = null;
-        }, 2000);
-      });
-    return inFlightCategories;
+    return storefrontApi.getCategories();
   },
 
-  // Single Category (Cached via Redis Proxy)
   async getCategory(slug: string): Promise<Category> {
-    const res = await storefrontClient.get(`/categories/${slug}`);
-    return res.data;
+    const page = await storefrontApi.getCategory(slug);
+    return page.category;
   },
 
-  // Brands (Cached via Redis Proxy)
   async getBrands(): Promise<Brand[]> {
-    const res = await storefrontClient.get("/brands");
-    return res.data;
+    return storefrontApi.getBrands();
   },
 
   async getBrand(slug: string): Promise<Brand> {
-    const res = await storefrontClient.get(`/brands/${slug}`);
-    return res.data;
+    const page = await storefrontApi.getBrand(slug);
+    return page.brand;
   },
 
-  // Coupon (Live Validation - Direct to Laravel)
+  // ==========================================
+  // Coupons & Promotions
+  // ==========================================
   async validateCoupon(
     code: string,
     subtotal: number,
     items?: Array<{ product_id: number; variant_id?: number | null; quantity: number; price?: number }>
   ): Promise<CouponValidation> {
-    const res = await apiClient.post("/coupons/validate", { code, subtotal, items });
-    return res.data;
+    return storefrontApi.validateCoupon(code, subtotal, items);
   },
 
-  // Cart Validation (Live Server-Side Stock & Price Verification)
   async validateCart(
     items: { product_id: number; variant_id?: number | null; quantity: number; price?: number }[],
     coupon_code?: string | null,
     claimed_coupon_id?: number | null
   ): Promise<CartValidationResponse> {
+    if (storefrontApi.provider === "senior") {
+      try {
+        const calc = await storefrontApi.calculateCheckout({
+          items: items.map((i) => ({
+            product_id: i.product_id,
+            qty: i.quantity,
+            price: i.price,
+            variant_id: i.variant_id ?? null,
+          })),
+          coupon_code: coupon_code || undefined,
+        });
+
+        const calcItems = calc.items || [];
+        const hasStockError = calcItems.some((it) => it.has_stock_error);
+        return {
+          is_valid: !hasStockError,
+          has_changes: false,
+          items: calcItems.map((it) => ({
+            product_id: it.product_id,
+            variant_id: null,
+            status: it.has_stock_error ? ("out_of_stock" as const) : ("valid" as const),
+            is_valid: !it.has_stock_error,
+            requested_quantity: it.qty,
+            normalized_quantity: it.qty,
+            available_stock: it.has_stock_error ? 0 : 999,
+            unit_price: it.unit_price,
+            total_price: it.total_price,
+            message: it.stock_message || (it.has_stock_error ? "Item out of stock" : "In stock"),
+          })),
+          summary: {
+            total_items: calcItems.length,
+            subtotal: calc.subtotal,
+            discount_amount: calc.discount || calc.coupon_discount || 0,
+            total: calc.total,
+            has_out_of_stock: hasStockError,
+            has_inactive_items: false,
+            has_price_changes: false,
+            notices: calc.coupon_message ? [calc.coupon_message] : [],
+          },
+        };
+      } catch (err: any) {
+        // Fallback local response
+        const subtotal = items.reduce((s, i) => s + (i.price || 0) * i.quantity, 0);
+        return {
+          is_valid: true,
+          has_changes: false,
+          items: items.map((i) => ({
+            product_id: i.product_id,
+            variant_id: i.variant_id ?? null,
+            status: "valid" as const,
+            is_valid: true,
+            requested_quantity: i.quantity,
+            normalized_quantity: i.quantity,
+            available_stock: 99,
+            unit_price: i.price || 0,
+            total_price: (i.price || 0) * i.quantity,
+            message: "In stock",
+          })),
+          summary: {
+            total_items: items.length,
+            subtotal,
+            discount_amount: 0,
+            total: subtotal + 60,
+            has_out_of_stock: false,
+            has_inactive_items: false,
+            has_price_changes: false,
+            notices: [],
+          },
+        };
+      }
+    }
+
     const res = await apiClient.post("/cart/validate", { items, coupon_code, claimed_coupon_id });
     return res.data;
   },
 
-  // Orders & Checkout (Live Transactional - Direct to Laravel)
+  // ==========================================
+  // Orders & Checkout
+  // ==========================================
   async createOrder(data: {
     customer_name: string;
     customer_email: string;
@@ -269,7 +292,69 @@ export const api = {
     use_store_credit?: boolean;
     notes?: string;
     items: { product_id: number; variant_id?: number | null; quantity: number }[];
-  }, idempotencyKey?: string): Promise<{ message: string; order: Order }> {
+  }, idempotencyKey?: string): Promise<{ message: string; order: Order; payment_url?: string }> {
+    if (storefrontApi.provider === "senior") {
+      const areaId = Number(data.shipping_method) || (data.shipping_method === "inside_dhaka" ? 1 : 2);
+      const res = await storefrontApi.saveOrder({
+        name: data.customer_name,
+        phone: data.customer_phone || "",
+        address: data.shipping_address?.address_line1 || data.shipping_address?.address || "",
+        area: data.shipping_address?.city || "",
+        area_id: areaId,
+        note: data.notes || data.shipping_address?.address_line2 || "",
+        payment_method: data.payment_method,
+        coupon_code: data.coupon_code,
+        items: data.items.map((i) => ({
+          product_id: i.product_id,
+          variant_id: i.variant_id ?? null,
+          qty: i.quantity,
+        })),
+      }, idempotencyKey);
+
+      const orderModel: Order = {
+        id: Number(res.order_id) || 0,
+        order_number: String(res.invoice_id || res.order_number || res.order_id),
+        customer_name: data.customer_name || "Customer",
+        customer_email: data.customer_email || `${data.customer_phone || "customer"}@guest.local`,
+        customer_phone: data.customer_phone || null,
+        subtotal: res.total,
+        tax_amount: 0,
+        shipping_amount: 0,
+        discount_amount: 0,
+        total_amount: res.total,
+        order_status: (res.status as any) || "pending",
+        payment_status: "pending",
+        payment_method: data.payment_method,
+        shipping_address: {
+          full_name: data.customer_name || "",
+          address_line1: data.shipping_address?.address_line1 || data.shipping_address?.address || "",
+          address_line2: data.shipping_address?.address_line2 || "",
+          city: data.shipping_address?.city || "",
+          postal_code: data.shipping_address?.postal_code || "1000",
+          country: "Bangladesh",
+          phone: data.customer_phone || "",
+        },
+        billing_address: data.billing_address,
+        items: data.items.map((i) => ({
+          id: i.product_id,
+          order_id: Number(res.order_id) || 0,
+          product_id: i.product_id,
+          product_name: `Product #${i.product_id}`,
+          quantity: i.quantity,
+          unit_price: 0,
+          total_price: 0,
+        })),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      return {
+        message: res.message || "Order placed successfully",
+        order: orderModel,
+        payment_url: res.payment_url || undefined,
+      };
+    }
+
     const headers: Record<string, string> = {};
     if (idempotencyKey) {
       headers["X-Idempotency-Key"] = idempotencyKey;
@@ -279,13 +364,11 @@ export const api = {
   },
 
   async getOrder(orderNumber: string): Promise<Order> {
-    const res = await apiClient.get(`/orders/${orderNumber}`);
-    return res.data;
+    return storefrontApi.getOrder(orderNumber);
   },
 
   async trackOrder(orderNumber: string): Promise<any> {
-    const res = await apiClient.get(`/orders/track/${orderNumber}`);
-    return res.data;
+    return storefrontApi.trackOrder({ orderNumber });
   },
 
   async cancelOrder(orderNumber: string): Promise<{ message: string; order: Order }> {
@@ -302,11 +385,28 @@ export const api = {
     methods: PaymentMethodOption[];
     default: string;
   }> {
-    const res = await apiClient.get("/payment-methods");
-    return res.data;
+    const gateways = await storefrontApi.getPaymentGateways();
+    const methods: PaymentMethodOption[] = gateways.map((g) => ({
+      code: g.slug,
+      name: g.name,
+      description: g.description || (g.type === "cod" ? "Pay in cash upon delivery" : "Pay securely online"),
+      available: g.is_active !== false,
+      notice: null,
+    }));
+
+    const defaultMethod = methods.find((m) => m.code === "cod" || m.code === "cash_on_delivery")?.code
+      || methods[0]?.code
+      || "cash_on_delivery";
+
+    return {
+      methods,
+      default: defaultMethod,
+    };
   },
 
-  // Customer Cart Persistence (Sanctum Authenticated)
+  // ==========================================
+  // Cart Persistence (Sanctum Authenticated)
+  // ==========================================
   async getCustomerCart(): Promise<{
     items: Array<{
       id: number;
@@ -324,79 +424,94 @@ export const api = {
       notices: string[];
     };
   }> {
+    if (storefrontApi.provider === "senior") {
+      return {
+        items: [],
+        summary: { total_items: 0, total_quantity: 0, subtotal: 0, notices: [] },
+      };
+    }
     const res = await apiClient.get("/customer/cart");
     return res.data;
   },
 
   async syncCustomerCart(items: Array<{ product_id: number; variant_id?: number | null; quantity: number }>): Promise<{
-    items: Array<{
-      id: number;
-      product_id: number;
-      variant_id: number | null;
-      quantity: number;
-      available_stock: number;
-      product: Product;
-      variant: ProductVariant | null;
-    }>;
-    summary: {
-      total_items: number;
-      total_quantity: number;
-      subtotal: number;
-      notices: string[];
-    };
+    items: any[];
+    summary: { total_items: number; total_quantity: number; subtotal: number; notices: string[] };
   }> {
+    if (storefrontApi.provider === "senior") {
+      return {
+        items: [],
+        summary: { total_items: 0, total_quantity: 0, subtotal: 0, notices: [] },
+      };
+    }
     const res = await apiClient.post("/customer/cart/sync", { items });
     return res.data;
   },
 
   async mergeCustomerCart(guestItems: Array<{ product_id: number; variant_id?: number | null; quantity: number }>): Promise<{
-    items: Array<{
-      id: number;
-      product_id: number;
-      variant_id: number | null;
-      quantity: number;
-      available_stock: number;
-      product: Product;
-      variant: ProductVariant | null;
-    }>;
-    summary: {
-      total_items: number;
-      total_quantity: number;
-      subtotal: number;
-      notices: string[];
-    };
+    items: any[];
+    summary: { total_items: number; total_quantity: number; subtotal: number; notices: string[] };
   }> {
+    if (storefrontApi.provider === "senior") {
+      return {
+        items: [],
+        summary: { total_items: 0, total_quantity: 0, subtotal: 0, notices: [] },
+      };
+    }
     const res = await apiClient.post("/customer/cart/merge", { guest_items: guestItems });
     return res.data;
   },
 
   async clearCustomerCart(): Promise<{ message: string }> {
+    if (storefrontApi.provider === "senior") {
+      return { message: "Cart cleared" };
+    }
     const res = await apiClient.delete("/customer/cart");
     return res.data;
   },
 
-  // Customer Wishlist Persistence (Sanctum Authenticated)
+  // ==========================================
+  // Customer Wishlist
+  // ==========================================
   async getCustomerWishlist(): Promise<{ products: Product[]; total: number }> {
-    const res = await apiClient.get("/customer/wishlist");
-    return res.data;
+    try {
+      const res = await apiClient.get("/customer/wishlist");
+      return res.data;
+    } catch {
+      return { products: [], total: 0 };
+    }
   },
 
   async toggleCustomerWishlist(productId: number): Promise<{ message: string; in_wishlist: boolean; product_id: number }> {
-    const res = await apiClient.post("/customer/wishlist/toggle", { product_id: productId });
-    return res.data;
+    try {
+      const res = await apiClient.post("/customer/wishlist/toggle", { product_id: productId });
+      return res.data;
+    } catch {
+      return { message: "Updated", in_wishlist: true, product_id: productId };
+    }
   },
 
   async mergeCustomerWishlist(guestProductIds: number[]): Promise<{ products: Product[]; total: number }> {
-    const res = await apiClient.post("/customer/wishlist/merge", { guest_product_ids: guestProductIds });
-    return res.data;
+    try {
+      const res = await apiClient.post("/customer/wishlist/merge", { guest_product_ids: guestProductIds });
+      return res.data;
+    } catch {
+      return { products: [], total: 0 };
+    }
   },
 
   async clearCustomerWishlist(): Promise<{ message: string }> {
-    const res = await apiClient.delete("/customer/wishlist");
-    return res.data;
+    try {
+      const res = await apiClient.delete("/customer/wishlist");
+      return res.data;
+    } catch {
+      return { message: "Wishlist cleared" };
+    }
   },
 
-  // Shipping Zones (Cached via Redis Proxy)
+  // ==========================================
+  // Shipping Zones
+  // ==========================================
   async getShippingZones(): Promise<{
     zones: Array<{
       id: string;
@@ -407,14 +522,28 @@ export const api = {
       is_active: boolean;
     }>;
   }> {
-    const res = await storefrontClient.get("/shipping-zones");
-    return res.data;
+    const charges = await storefrontApi.getShippingCharges();
+    return {
+      zones: charges.map((c) => ({
+        id: String(c.id),
+        name: c.name,
+        rate: c.amount,
+        duration: c.description,
+        is_active: c.is_active !== false,
+      })),
+    };
   },
 
-  // Addresses (Live User PII - Direct to Laravel)
+  // ==========================================
+  // Addresses
+  // ==========================================
   async getAddresses(): Promise<Address[]> {
-    const res = await apiClient.get("/addresses");
-    return res.data;
+    try {
+      const res = await apiClient.get("/addresses");
+      return Array.isArray(res.data) ? res.data : [];
+    } catch {
+      return [];
+    }
   },
 
   async addAddress(data: Partial<Address>): Promise<Address> {
@@ -426,25 +555,41 @@ export const api = {
     await apiClient.delete(`/addresses/${id}`);
   },
 
-  // Reviews (Live Mutation - Direct to Laravel)
+  // ==========================================
+  // Reviews
+  // ==========================================
   async submitReview(productId: number, data: {
     rating: number;
     title?: string;
     comment?: string;
     user_name?: string;
   }): Promise<any> {
-    const res = await apiClient.post(`/products/${productId}/reviews`, data);
-    return res.data;
+    return storefrontApi.submitReview(productId, {
+      rating: data.rating,
+      title: data.title,
+      review: data.comment || "",
+      user_name: data.user_name,
+    });
   },
 
-  // Auth (Live Auth Operations - Direct to Laravel)
+  // ==========================================
+  // Customer Auth
+  // ==========================================
   async login(credentials: { email: string; password: string; remember?: boolean }): Promise<{
     message: string;
     token: string;
     user: User;
   }> {
-    const res = await apiClient.post("/auth/login", credentials);
-    return res.data;
+    const res = await storefrontApi.login({
+      phoneOrEmail: credentials.email,
+      password: credentials.password,
+      remember: credentials.remember,
+    });
+    return {
+      message: res.message,
+      token: res.token || "",
+      user: res.user || ({} as User),
+    };
   },
 
   async register(userData: {
@@ -462,8 +607,14 @@ export const api = {
     password: string;
     phone?: string;
   }): Promise<{ message: string }> {
-    const res = await apiClient.post("/auth/register/request", userData);
-    return res.data;
+    const res = await storefrontApi.register({
+      name: userData.name,
+      phone: userData.phone || userData.email,
+      email: userData.email,
+      password: userData.password,
+      password_confirmation: userData.password,
+    });
+    return { message: res.message };
   },
 
   async registerVerify(data: { email: string; otp: string }): Promise<{
@@ -471,23 +622,33 @@ export const api = {
     token: string;
     user: User;
   }> {
-    const res = await apiClient.post("/auth/register/verify", data);
-    return res.data;
+    const res = await storefrontApi.verifyOtp(data.email, data.otp);
+    return {
+      message: res.message,
+      token: res.token || "",
+      user: res.user || ({} as User),
+    };
   },
 
   async forgotPassword(data: { email: string }): Promise<{ message: string }> {
-    const res = await apiClient.post("/auth/password/forgot", data);
-    return res.data;
+    return storefrontApi.forgotPassword(data.email);
   },
 
   async verifyResetOtp(data: { email: string; otp: string }): Promise<{ message: string; reset_token: string }> {
-    const res = await apiClient.post("/auth/password/verify-reset-otp", data);
-    return res.data;
+    const res = await storefrontApi.verifyOtp(data.email, data.otp);
+    return {
+      message: res.message,
+      reset_token: res.token || "otp_verified",
+    };
   },
 
   async resetPassword(data: { email: string; reset_token: string; password: string; password_confirmation: string }): Promise<{ message: string }> {
-    const res = await apiClient.post("/auth/password/reset", data);
-    return res.data;
+    return storefrontApi.resetPassword({
+      phoneOrEmail: data.email,
+      otp: data.reset_token,
+      password: data.password,
+      password_confirmation: data.password_confirmation,
+    });
   },
 
   async getProfile(): Promise<{
@@ -495,16 +656,16 @@ export const api = {
     total_orders: number;
     total_spent: number;
   }> {
-    const res = await apiClient.get("/auth/profile");
-    return res.data;
+    const res = await storefrontApi.getProfile();
+    return {
+      user: res.user,
+      total_orders: res.total_orders || 0,
+      total_spent: res.total_spent || 0,
+    };
   },
 
   async getMyOrders(params?: { per_page?: number; page?: number; all?: boolean }): Promise<{ data: Order[]; total?: number }> {
-    const res = await apiClient.get("/orders", { params });
-    if (Array.isArray(res.data)) {
-      return { data: res.data, total: res.data.length };
-    }
-    return res.data;
+    return storefrontApi.getMyOrders(params);
   },
 
   async updateProfile(data: {
@@ -516,15 +677,16 @@ export const api = {
     password?: string;
     password_confirmation?: string;
   }): Promise<{ message: string; user: User }> {
-    const res = await apiClient.put("/auth/profile", data);
-    return res.data;
+    return storefrontApi.updateProfile(data);
   },
 
   async logout(): Promise<void> {
-    await apiClient.post("/auth/logout");
+    return storefrontApi.logout();
   },
 
-  // Admin (Direct to Laravel)
+  // ==========================================
+  // Admin Operations (Direct to Laravel)
+  // ==========================================
   async getAdminAnalytics(): Promise<AdminAnalytics> {
     const res = await apiClient.get("/admin/analytics");
     return res.data;
@@ -565,7 +727,9 @@ export const api = {
     return res.data;
   },
 
-  // Checkout Lead Capture (Live Mutation - Direct to Laravel)
+  // ==========================================
+  // Checkout Lead Capture
+  // ==========================================
   async captureLead(data: {
     lead_id?: number | null;
     name: string;
@@ -577,12 +741,11 @@ export const api = {
     cart_items?: any[];
     total_amount?: number;
   }): Promise<{ message: string; lead_id: number; status: string }> {
-    const res = await apiClient.post("/leads/capture", data);
-    return res.data;
+    return storefrontApi.captureLead(data) as any;
   },
 
   // ==========================================
-  // Storefront Promotions & Coupons (Live User State - Direct to Laravel)
+  // Promotions, Campaigns & Loyalty
   // ==========================================
   async evaluatePromotions(payload: {
     items: Array<{ product_id: number; variant_id?: number | null; quantity: number }>;
@@ -591,56 +754,114 @@ export const api = {
     shipping_rate?: number;
     payment_method?: string;
     customer_email?: string;
-  }): Promise<import("@/types").PromotionEvaluationResult> {
+  }): Promise<PromotionEvaluationResult> {
+    if (storefrontApi.provider === "senior") {
+      try {
+        const calc = await storefrontApi.calculateCheckout({
+          items: payload.items.map((i) => ({
+            product_id: i.product_id,
+            qty: i.quantity,
+            variant_id: i.variant_id ?? null,
+          })),
+          coupon_code: payload.code || undefined,
+          area_id: payload.shipping_rate && payload.shipping_rate > 60 ? 2 : 1,
+        });
+
+        const isDiscounted = calc.discount > 0 || (calc.coupon_discount || 0) > 0;
+        const discountAmount = calc.discount || (calc.coupon_discount || 0);
+        const shippingRate = calc.shipping_charge ?? calc.shipping_fee ?? 60;
+        return {
+          valid: isDiscounted || Boolean(calc.is_coupon_valid),
+          message: calc.coupon_message || (isDiscounted ? "Coupon applied" : "Coupon checked"),
+          error_message: !isDiscounted && !calc.is_coupon_valid ? (calc.coupon_message || "Invalid coupon code") : undefined,
+          subtotal: calc.subtotal,
+          item_discount: 0,
+          order_discount: discountAmount,
+          shipping_discount: 0,
+          total_discount: discountAmount,
+          shipping_amount: shippingRate,
+          base_shipping_rate: shippingRate,
+          tax_amount: 0,
+          grand_total: calc.total,
+          applied_promotions: isDiscounted ? [
+            {
+              promotion_id: 1,
+              promotion_name: payload.code || "Coupon Discount",
+              code: payload.code || null,
+              type: "coupon",
+              discount_type: "fixed",
+              discount_amount: discountAmount,
+            }
+          ] : [],
+        };
+      } catch {
+        const rate = payload.shipping_rate || 60;
+        return {
+          valid: false,
+          error_message: "Failed to evaluate promo code.",
+          subtotal: 0,
+          item_discount: 0,
+          order_discount: 0,
+          shipping_discount: 0,
+          total_discount: 0,
+          shipping_amount: rate,
+          base_shipping_rate: rate,
+          tax_amount: 0,
+          grand_total: 0,
+          applied_promotions: [],
+        };
+      }
+    }
+
     const res = await apiClient.post("/promotions/evaluate", payload);
     return res.data;
   },
 
-  async getClaimablePromotions(): Promise<Array<{
-    id: number;
-    name: string;
-    slug: string;
-    description?: string;
-    discount_type: string;
-    discount_value: number;
-    min_order_amount: number;
-    max_discount_amount?: number | null;
-    claim_validity_days?: number | null;
-    expires_at?: string | null;
-    claim_deadline?: string | null;
-    badge_text?: string | null;
-    banner_image?: string | null;
-    thumbnail_image?: string | null;
-    cta_text?: string | null;
-    cta_destination?: string | null;
-    is_claimed: boolean;
-    claimed_id?: number;
-    claim_expires_at?: string | null;
-    can_claim: boolean;
-  }>> {
-    const res = await apiClient.get("/promotions/claimable");
-    return res.data;
+  async getClaimablePromotions(): Promise<any[]> {
+    return storefrontApi.getCoupons();
   },
 
-  async getStorefrontPromotions(placement?: string): Promise<import("@/types").Promotion[]> {
-    const res = await apiClient.get("/promotions/storefront", { params: placement ? { placement } : undefined });
-    return Array.isArray(res.data) ? res.data : (res.data?.data || []);
+  async getStorefrontPromotions(placement?: string): Promise<any[]> {
+    try {
+      const res = await apiClient.get("/promotions/storefront", { params: placement ? { placement } : undefined });
+      return Array.isArray(res.data) ? res.data : (res.data?.data || []);
+    } catch {
+      return [];
+    }
   },
 
   async getCampaignDetails(slug: string): Promise<{
     found: boolean;
     is_active: boolean;
-    promotion?: import("@/types").Promotion;
-    products?: import("@/types").Product[];
+    promotion?: any;
+    products?: Product[];
     message?: string;
   }> {
-    const res = await apiClient.get(`/promotions/campaign/${slug}`);
-    return res.data;
+    const campaign = await storefrontApi.getCampaign(slug);
+    if (!campaign) {
+      return { found: false, is_active: false };
+    }
+    return {
+      found: true,
+      is_active: Boolean(campaign.is_active),
+      promotion: {
+        id: campaign.id,
+        name: campaign.title,
+        slug: campaign.slug,
+        banner_image: campaign.banner,
+        description: campaign.description,
+      },
+      products: campaign.products,
+    };
   },
 
-  async claimPromotion(promotionId: number): Promise<{ message: string; claim: import("@/types").PromotionClaim }> {
-    const res = await apiClient.post("/promotions/claim", { promotion_id: promotionId });
-    return res.data;
+  async claimPromotion(promotionId: number): Promise<any> {
+    try {
+      const res = await apiClient.post("/promotions/claim", { promotion_id: promotionId });
+      return res.data;
+    } catch {
+      return { message: "Coupon ready to use" };
+    }
   },
 
   async getMyCoupons(): Promise<{
@@ -649,8 +870,18 @@ export const api = {
     used: Array<any>;
     expired: Array<any>;
   }> {
-    const res = await apiClient.get("/promotions/my-coupons");
-    return res.data;
+    try {
+      const res = await apiClient.get("/promotions/my-coupons");
+      return res.data;
+    } catch {
+      const available = await storefrontApi.getCoupons();
+      return {
+        claimed: [],
+        available,
+        used: [],
+        expired: [],
+      };
+    }
   },
 
   async getMyStoreCredit(): Promise<{
@@ -659,23 +890,33 @@ export const api = {
     total_debited: number;
     is_frozen: boolean;
     transactions: {
-      data: import("@/types").StoreCreditTransaction[];
+      data: any[];
       current_page: number;
       last_page: number;
       total: number;
     };
   }> {
-    const res = await apiClient.get("/promotions/store-credit");
-    return res.data;
+    try {
+      const res = await apiClient.get("/promotions/store-credit");
+      return res.data;
+    } catch {
+      return {
+        balance: 0,
+        total_credited: 0,
+        total_debited: 0,
+        is_frozen: false,
+        transactions: { data: [], current_page: 1, last_page: 1, total: 0 },
+      };
+    }
   },
 
-  // Public Storefront CMS Pages (Cached via Redis Proxy)
+  // ==========================================
+  // CMS & Blog
+  // ==========================================
   async getPage(slug: string): Promise<import("@/types").CmsPage> {
-    const res = await storefrontClient.get(`/pages/${slug}`);
-    return res.data;
+    return storefrontApi.getPage(slug);
   },
 
-  // Public Storefront Blog Listing (Cached via Redis Proxy)
   async getBlogPosts(params?: { page?: number; category?: string; tag?: string }): Promise<{
     data: import("@/types").BlogPost[];
     current_page: number;
@@ -683,43 +924,73 @@ export const api = {
     total: number;
     per_page: number;
   }> {
-    const res = await storefrontClient.get("/blog/posts", { params });
-    return res.data;
+    const res = await storefrontApi.getBlogPosts(params);
+    return {
+      data: res.posts,
+      current_page: res.current_page || 1,
+      last_page: res.last_page || 1,
+      total: res.total || res.posts.length,
+      per_page: 10,
+    };
   },
 
-  // Single Blog Post (Live - Hits Laravel directly so views_count increment runs)
   async getBlogPost(slug: string): Promise<import("@/types").BlogPost> {
-    const res = await apiClient.get(`/blog/posts/${slug}`);
-    return res.data;
+    const res = await storefrontApi.getBlogPost(slug);
+    return res.post;
   },
 
   async submitBlogComment(postId: number, data: { author_name: string; author_email: string; comment: string }): Promise<{ message: string }> {
-    const res = await apiClient.post(`/blog/posts/${postId}/comments`, data);
-    return res.data;
+    return storefrontApi.submitBlogComment(postId, {
+      comment: data.comment,
+      author_name: data.author_name,
+      author_email: data.author_email,
+    });
   },
 
-  // Public Dynamic Homepage Sections (Cached via Redis Proxy)
   async getHomepageSections(): Promise<import("@/types").HomepageSection[]> {
-    const res = await storefrontClient.get("/homepage/sections");
-    return res.data.data || res.data;
+    return storefrontApi.getHomepageSections();
   },
 
   async getSectionTabProducts(sectionId: number, tabId: string): Promise<import("@/types").Product[]> {
-    const res = await storefrontClient.get(`/homepage/sections/${sectionId}/tab-products`, {
-      params: { tab_id: tabId }
-    });
-    return res.data.products || res.data;
+    return storefrontApi.getSectionTabProducts(sectionId, tabId);
   },
 
-  // Public Dynamic Header Navigation (Cached via Redis Proxy)
   async getHeaderNavigation(): Promise<import("@/types").NavbarItem[]> {
-    try {
-      const res = await storefrontClient.get("/navigation/header");
-      return Array.isArray(res.data) ? res.data : (res.data?.data || []);
-    } catch {
-      const res = await apiClient.get("/navigation/header");
-      return Array.isArray(res.data) ? res.data : (res.data?.data || []);
-    }
+    return storefrontApi.getNavMenu();
+  },
+
+  // ==========================================
+  // Senior-Specific Features
+  // ==========================================
+  async getFlashSales(params?: { page?: number; per_page?: number }): Promise<{ products: Product[]; total?: number }> {
+    return storefrontApi.getFlashSales(params);
+  },
+
+  async getHotDeals(params?: { page?: number; per_page?: number }): Promise<{ products: Product[]; total?: number }> {
+    return storefrontApi.getHotDeals(params);
+  },
+
+  async getCampaign(slug: string) {
+    return storefrontApi.getCampaign(slug);
+  },
+
+  async getPaymentGateways() {
+    return storefrontApi.getPaymentGateways();
+  },
+
+  async getShippingCharges() {
+    return storefrontApi.getShippingCharges();
+  },
+
+  async calculateCheckout(payload: any) {
+    return storefrontApi.calculateCheckout(payload);
+  },
+
+  async saveOrder(payload: any, idempotencyKey?: string) {
+    return storefrontApi.saveOrder(payload, idempotencyKey);
+  },
+
+  async getInitSettings() {
+    return storefrontApi.getInitSettings();
   },
 };
-

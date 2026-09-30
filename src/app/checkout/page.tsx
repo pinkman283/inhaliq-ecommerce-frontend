@@ -564,6 +564,12 @@ export default function CheckoutPage() {
       } catch (e) {}
 
       clearCart();
+      if (res.payment_url) {
+        toast.success("Order registered. Redirecting to secure payment...");
+        window.location.href = res.payment_url;
+        return;
+      }
+
       toast.success("Order placed successfully!");
       router.push(`/order-confirmed?order_number=${res.order.order_number}`);
     } catch (err: any) {

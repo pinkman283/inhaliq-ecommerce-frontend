@@ -17,6 +17,8 @@ export interface Category {
   children_count?: number;
   parent?: Category | null;
   children?: Category[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Brand {
@@ -107,7 +109,27 @@ export interface Product {
   images_count?: number;
   variants?: ProductVariant[];
   reviews?: Review[];
+  sale_price?: number | null;
+  in_stock?: boolean;
+  related_products?: Product[];
+  video?: string | StorefrontVideoMetadata | null;
+  video_link?: string | null;
+  cover_image?: string | null;
+  sizes?: any[];
+  colors?: any[];
+  event_id?: string | null;
+  has_variants?: boolean;
+  discount_percentage?: number;
+  is_flash_deal?: boolean;
   created_at: string;
+  updated_at?: string;
+}
+
+export interface StorefrontVideoMetadata {
+  raw?: string;
+  type?: "youtube" | "facebook";
+  url?: string;
+  embed_url?: string;
 }
 
 export interface ProductCatalogStats {
@@ -385,6 +407,7 @@ export interface Order {
   cash_received?: number;
   change_returned?: number;
   created_at: string;
+  updated_at?: string;
   shipped_at?: string | null;
   delivered_at?: string | null;
   items?: OrderItem[];
@@ -394,6 +417,12 @@ export interface Order {
   latest_shipment?: Shipment | null;
   shipments?: Shipment[];
   returns?: OrderReturn[];
+
+  // Senior API Extension & Compatibility Fields
+  order_id?: number;
+  invoice_id?: string;
+  total?: number;
+  payment_url?: string | null;
 }
 
 export interface PaymentMethodOption {
@@ -1661,6 +1690,7 @@ export interface NavbarItem {
   id: number;
   parent_id?: number | null;
   title: string;
+  name?: string;
   type: NavbarItemType;
   category_id?: number | null;
   subcategory_id?: number | null;
