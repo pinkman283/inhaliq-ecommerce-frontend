@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cachedFetch, createDeterministicHash, getRedisClient } from "@/lib/redis";
 
+// In-memory cache & in-flight promise registry to deduplicate simultaneous upstream fetches
+const inFlightRequests = new Map<string, Promise<{ data: any; status: number; contentType: string; isText?: boolean }>>();
+const memoryCache = new Map<string, { data: any; expiresAt: number }>();
+
 function getUpstreamConfig() {
   const provider = (process.env.BACKEND_PROVIDER || process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior").toLowerCase();
   const isSenior = provider === "senior";
@@ -293,7 +297,7 @@ export async function GET(
     try {
       const response = await fetch(targetUrl, {
         headers: buildForwardHeaders(request, apiKey),
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(25000),
       });
 
       const contentType = response.headers.get("content-type") || "";
@@ -326,16 +330,32 @@ export async function GET(
 
   // Cacheable endpoint
   const cacheKey = rule.key(path, searchParams);
-  const redis = getRedisClient();
+  const now = Date.now();
 
+  // 1. Check in-memory cache
+  const memCached = memoryCache.get(cacheKey);
+  if (memCached && now < memCached.expiresAt) {
+    return NextResponse.json(memCached.data, {
+      status: 200,
+      headers: {
+        "X-Cache": "HIT-MEM",
+        "X-Cache-Key": cacheKey,
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
+  }
+
+  // 2. Check Redis cache
+  const redis = getRedisClient();
   if (redis) {
     try {
       const cached = await redis.get(cacheKey);
       if (cached !== null && cached !== undefined) {
+        memoryCache.set(cacheKey, { data: cached, expiresAt: now + Math.min(rule.ttl, 60) * 1000 });
         return NextResponse.json(cached, {
           status: 200,
           headers: {
-            "X-Cache": "HIT",
+            "X-Cache": "HIT-REDIS",
             "X-Cache-Key": cacheKey,
             "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
           },
@@ -346,33 +366,59 @@ export async function GET(
     }
   }
 
-  // Cache Miss
-  try {
-    const upstreamRes = await fetch(targetUrl, {
-      headers: buildForwardHeaders(request, apiKey),
-      signal: AbortSignal.timeout(10000),
+  // 3. Deduplicate in-flight upstream fetch for the same cacheKey
+  let pendingFetch = inFlightRequests.get(cacheKey);
+  if (!pendingFetch) {
+    pendingFetch = (async () => {
+      const upstreamRes = await fetch(targetUrl, {
+        headers: buildForwardHeaders(request, apiKey),
+        signal: AbortSignal.timeout(25000),
+      });
+
+      const contentType = upstreamRes.headers.get("content-type") || "";
+      if (!upstreamRes.ok) {
+        const errorBody = contentType.includes("application/json") ? await upstreamRes.json() : await upstreamRes.text();
+        return {
+          status: upstreamRes.status,
+          contentType,
+          data: typeof errorBody === "object" ? errorBody : { error: errorBody || upstreamRes.statusText },
+          isText: false,
+        };
+      }
+
+      const data = await upstreamRes.json();
+      return {
+        status: 200,
+        contentType,
+        data,
+        isText: false,
+      };
+    })().finally(() => {
+      inFlightRequests.delete(cacheKey);
     });
 
-    const contentType = upstreamRes.headers.get("content-type") || "";
-    if (!upstreamRes.ok) {
-      const errorBody = contentType.includes("application/json") ? await upstreamRes.json() : await upstreamRes.text();
-      return NextResponse.json(
-        typeof errorBody === "object" ? errorBody : { error: errorBody || upstreamRes.statusText },
-        { status: upstreamRes.status }
-      );
-    }
+    inFlightRequests.set(cacheKey, pendingFetch);
+  }
 
-    const data = await upstreamRes.json();
-    if (redis) {
-      try {
-        await redis.set(cacheKey, data, { ex: rule.ttl });
-      } catch (cacheErr) {
-        console.warn(`[Proxy] Redis write error for ${cacheKey}:`, cacheErr);
+  try {
+    const result = await pendingFetch;
+
+    if (result.status === 200 && result.data) {
+      // Save to memory cache
+      memoryCache.set(cacheKey, { data: result.data, expiresAt: now + Math.min(rule.ttl, 60) * 1000 });
+
+      // Save to Redis
+      if (redis) {
+        try {
+          await redis.set(cacheKey, result.data, { ex: rule.ttl });
+        } catch (cacheErr) {
+          console.warn(`[Proxy] Redis write error for ${cacheKey}:`, cacheErr);
+        }
       }
     }
 
-    return NextResponse.json(data, {
-      status: 200,
+    return NextResponse.json(result.data, {
+      status: result.status,
       headers: {
         "X-Cache": "MISS",
         "X-Cache-Key": cacheKey,
@@ -425,7 +471,7 @@ async function forwardMutation(
       method,
       headers: forwardHeaders,
       body,
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(25000),
     });
 
     const contentType = upstreamRes.headers.get("content-type") || "";

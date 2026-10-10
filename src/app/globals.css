@@ -204,7 +204,6 @@ body.theme-light-mode:not(.admin-body) .theme-tab-pill-inactive:hover {
   color: #ffffff !important;
   border-color: var(--theme-primary, #006B45) !important;
   box-shadow: 0 12px 28px -4px color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent) !important;
-  transform: translateY(-50%) scale(1.08) !important;
 }
 
 .theme-carousel-btn:hover * {
@@ -1008,4 +1007,17 @@ select option {
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.02);
+}
+
+/* iOS & Mobile Safe Area Inset Helpers */
+.safe-area-inset-bottom {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.safe-area-inset-top {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+.safe-area-margin-bottom {
+  margin-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }

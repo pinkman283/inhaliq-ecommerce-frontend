@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useThemeStore } from "@/store/useThemeStore";
+import { trackSearch } from "@/lib/metaPixel";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -55,8 +56,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        const data = await api.getProducts({ search: query, per_page: 6 });
+        const cleanQuery = query.trim();
+        const data = await api.getProducts({ search: cleanQuery, per_page: 6 });
         setResults(data.data || []);
+        if (cleanQuery.length >= 2) {
+          trackSearch({ searchString: cleanQuery });
+        }
       } catch (err) {
         console.error("Search error:", err);
       } finally {
@@ -93,7 +98,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:pt-20 px-3 sm:px-4">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}

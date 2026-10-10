@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { CartItem, CartValidationItem, CartValidationResponse, CouponValidation, Product, ProductVariant, PromotionEvaluationResult } from "@/types";
 import { api } from "@/lib/api";
+import { trackAddToCart } from "@/lib/metaPixel";
 
 /**
  * Authoritatively resolve available stock for a product or variant from available data.
@@ -177,6 +178,16 @@ export const useCartStore = create<CartState>()(
           set({ items: newItems, isCartOpen: true });
           syncServerCart(newItems);
         }
+
+        const itemPrice = Number(product.price || 0) + (variant ? Number(variant.price_modifier || 0) : 0);
+        trackAddToCart({
+          id: product.id,
+          name: product.name,
+          category: product.category?.name,
+          price: itemPrice,
+          quantity: actualToAdd,
+          currency: "USD",
+        });
 
         if (actualToAdd < requestedQty) {
           return {

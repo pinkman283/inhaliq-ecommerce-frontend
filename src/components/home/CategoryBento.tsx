@@ -168,7 +168,7 @@ export function CategoryBento({ categories }: CategoryBentoProps) {
             {categoryPairs.map((pair, idx) => (
               <CarouselItem
                 key={idx}
-                className="pl-3 sm:pl-3.5 basis-[230px] sm:basis-[250px] md:basis-[270px] lg:basis-[290px]"
+                className="pl-3 sm:pl-3.5 basis-[185px] min-[380px]:basis-[210px] sm:basis-[250px] md:basis-[270px] lg:basis-[290px]"
               >
                 <div className="flex flex-col gap-2.5 sm:gap-3 h-full">
                   {pair.top && renderCard(pair.top)}

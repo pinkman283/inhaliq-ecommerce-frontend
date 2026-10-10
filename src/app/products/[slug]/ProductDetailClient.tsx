@@ -22,6 +22,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useThemeStore } from "@/store/useThemeStore";
+import { trackViewContent } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 interface ProductDetailClientProps {
@@ -70,8 +71,27 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
         } else {
           setSelectedVariant(null);
         }
+
+        // Track Meta Pixel ViewContent event
+        trackViewContent({
+          id: data.product.id,
+          name: data.product.name,
+          category: data.product.category?.name,
+          price: Number(data.product.price || 0),
+          currency: "USD",
+          eventId: (data as any).event_id,
+        });
       } catch (err) {
         console.error("Failed to load product:", err);
+        if (initialProduct) {
+          trackViewContent({
+            id: initialProduct.id,
+            name: initialProduct.name,
+            category: initialProduct.category?.name,
+            price: Number(initialProduct.price || 0),
+            currency: "USD",
+          });
+        }
       } finally {
         setLoading(false);
       }

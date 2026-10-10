@@ -22,6 +22,7 @@ import { Brand, Category, Product } from "@/types";
 import { ProductCard } from "@/components/product/ProductCard";
 import { formatPrice } from "@/lib/utils";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
+import { trackSearch } from "@/lib/metaPixel";
 
 function ProductCatalogContent({
   overrideCategory,
@@ -136,6 +137,13 @@ function ProductCatalogContent({
         if (res.current_page) setCurrentPage(res.current_page);
         if (res.last_page) setLastPage(res.last_page);
         if (res.total !== undefined) setTotalCount(res.total);
+
+        if (search.trim().length >= 2) {
+          trackSearch({
+            searchString: search.trim(),
+            category: selectedCategories[0],
+          });
+        }
       } catch (err) {
         console.warn("Notice: Products catalog fetch fallback:", err);
       } finally {

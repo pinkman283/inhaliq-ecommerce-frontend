@@ -38,10 +38,10 @@ const PLACEMENT_CONFIG: Record<
   }
 > = {
   navbar: {
-    // Large, clear, authoritative logo like modern e-commerce sites (e.g. dcsbd.net)
-    container: "h-full max-h-[56px] sm:max-h-[64px] lg:max-h-[72px] w-auto max-w-[200px] sm:max-w-[260px] md:max-w-[300px] lg:max-w-[340px] flex items-center shrink-0",
-    image: "h-full max-h-[56px] sm:max-h-[64px] lg:max-h-[72px] w-auto max-w-full object-contain object-left",
-    fallback: "font-black text-xl sm:text-2xl lg:text-3xl tracking-tight text-slate-900 dark:text-white leading-none",
+    // Large, clear, authoritative logo like modern e-commerce sites (e.g. dcsbd.net) with mobile auto-fit
+    container: "h-full max-h-[44px] min-[380px]:max-h-[52px] sm:max-h-[64px] lg:max-h-[72px] w-auto max-w-[125px] min-[360px]:max-w-[150px] min-[400px]:max-w-[180px] sm:max-w-[260px] md:max-w-[300px] lg:max-w-[340px] flex items-center shrink-0",
+    image: "h-full max-h-[44px] min-[380px]:max-h-[52px] sm:max-h-[64px] lg:max-h-[72px] w-auto max-w-full object-contain object-left",
+    fallback: "font-black text-lg min-[380px]:text-xl sm:text-2xl lg:text-3xl tracking-tight text-slate-900 dark:text-white leading-none",
   },
   mobile_navbar: {
     container: "h-full max-h-[44px] sm:max-h-[50px] w-auto max-w-[170px] sm:max-w-[200px] flex items-center shrink-0",

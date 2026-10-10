@@ -139,7 +139,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
 
       {/* ===================== NON-STICKY TIER 1: BRAND LOGO + CENTER SEARCH + UTILITIES ===================== */}
       <div className="bg-white dark:bg-[#090b14]/95 border-b border-gray-200 dark:border-white/5 text-slate-900 dark:text-slate-100 transition-colors">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 sm:h-[82px] lg:h-[88px] flex items-center justify-between gap-3 sm:gap-4 lg:gap-8">
+        <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-16 sm:h-[82px] lg:h-[88px] flex items-center justify-between gap-1.5 sm:gap-4 lg:gap-8">
           {/* Left: Brand Identity Logo */}
           <Link href="/" suppressHydrationWarning className="h-full flex items-center group select-none shrink-0 py-1 -translate-y-0.5">
             <BrandLogoImage placement="navbar" priority={true} />
@@ -167,11 +167,11 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
           </div>
 
           {/* Right: Mobile Search + Wishlist + Cart + Account Profile */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
             {/* Mobile Search Trigger */}
             <button
               onClick={onOpenSearch}
-              className="md:hidden p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs transition-all cursor-pointer"
+              className="md:hidden p-1.5 sm:p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs transition-all cursor-pointer"
               title="Search catalog (Cmd+K)"
             >
               <Search className="w-4 h-4" />
@@ -180,7 +180,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Wishlist Icon */}
             <button
               onClick={openWishlist}
-              className="relative p-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-[#fb2c5c] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 border border-transparent transition-all cursor-pointer group"
+              className="relative p-1.5 sm:p-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-[#fb2c5c] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 border border-transparent transition-all cursor-pointer group"
               title="Saved Wishlist"
             >
               <Heart
@@ -204,7 +204,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Shopping Cart Drawer Trigger */}
             <button
               onClick={openCart}
-              className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-md border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#006B45] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-md border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#006B45] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
               title="Shopping Cart"
             >
               {mounted && cartCount > 0 && (
@@ -230,10 +230,10 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
               ) : (
                 <Link
                   href="/login"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-xs font-bold text-slate-800 dark:text-white hover:border-[#006B45] transition-all cursor-pointer"
+                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-[11px] sm:text-xs font-bold text-slate-800 dark:text-white hover:border-[#006B45] transition-all cursor-pointer"
                 >
                   <UserIcon className="w-3.5 h-3.5 text-[#006B45] dark:text-indigo-400" />
-                  <span>Sign In</span>
+                  <span className="hidden min-[360px]:inline">Sign In</span>
                 </Link>
               )}
             </div>
@@ -241,7 +241,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Mobile Navigation Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-md text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
+              className="lg:hidden p-1 sm:p-1.5 rounded-md text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

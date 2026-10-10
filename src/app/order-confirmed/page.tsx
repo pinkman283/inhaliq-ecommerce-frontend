@@ -15,6 +15,7 @@ import {
 import { api } from "@/lib/api";
 import { Order } from "@/types";
 import { formatPrice, formatDate } from "@/lib/utils";
+import { trackPurchase } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 function OrderConfirmedContent() {
@@ -33,6 +34,22 @@ function OrderConfirmedContent() {
       try {
         const data = await api.getOrder(orderNumber);
         setOrder(data);
+
+        // Track Meta Pixel Purchase event with verified order details
+        if (data) {
+          trackPurchase({
+            orderNumber: data.order_number || orderNumber,
+            totalValue: Number(data.total_amount || 0),
+            currency: "USD",
+            items: (data.items || []).map((i: any) => ({
+              id: i.product_id || i.id,
+              name: i.product_name,
+              price: Number(i.unit_price || 0),
+              quantity: Number(i.quantity || 1),
+            })),
+            eventId: (data as any).event_id,
+          });
+        }
       } catch (err) {
         console.warn("Order fetch warning:", err);
       } finally {

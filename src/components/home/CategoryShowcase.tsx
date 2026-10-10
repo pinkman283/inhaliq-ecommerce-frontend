@@ -207,7 +207,7 @@ function SingleCategoryRow({ section }: { section: CategorySectionData }) {
             {limitedProducts.map((product) => (
               <CarouselItem
                 key={product.id}
-                className="pl-3 sm:pl-3.5 basis-[200px] sm:basis-[220px] md:basis-[230px] lg:basis-[240px]"
+                className="pl-3 sm:pl-3.5 basis-[160px] min-[380px]:basis-[180px] sm:basis-[220px] md:basis-[230px] lg:basis-[240px]"
               >
                 <ProductCard product={product} />
               </CarouselItem>

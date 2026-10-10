@@ -36,6 +36,7 @@ import { useThemeStore } from "@/store/useThemeStore";
 import { formatPrice } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { Address, PaymentMethodOption, PromotionClaim } from "@/types";
+import { trackInitiateCheckout, trackAddPaymentInfo } from "@/lib/metaPixel";
 import { toast } from "sonner";
 
 export default function CheckoutPage() {
@@ -138,12 +139,22 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
   const [leadId, setLeadId] = useState<number | null>(null);
 
-  // Validate cart against server on checkout mount
+  // Validate cart against server on checkout mount and track InitiateCheckout
   useEffect(() => {
     if (items.length > 0) {
       validateCartWithServer();
+      trackInitiateCheckout({
+        items: items.map((i) => ({
+          id: i.product.id,
+          name: i.product.name,
+          price: Number(i.product.price) + (i.variant ? Number(i.variant.price_modifier || 0) : 0),
+          quantity: i.quantity,
+        })),
+        totalValue: getSubtotal(),
+        currency: "USD",
+      });
     }
-  }, [items.length, validateCartWithServer]);
+  }, [items.length, validateCartWithServer, getSubtotal]);
 
   // Sync logged in user details & wallet
   useEffect(() => {
@@ -550,6 +561,17 @@ export default function CheckoutPage() {
           quantity: item.quantity,
         })),
       };
+
+      // Track Meta Pixel AddPaymentInfo event
+      trackAddPaymentInfo({
+        items: items.map((i) => ({
+          id: i.product.id,
+          quantity: i.quantity,
+        })),
+        totalValue: total,
+        paymentMethod: paymentMethod,
+        currency: "USD",
+      });
 
       const res = await api.createOrder(orderPayload, idempotencyKey);
 

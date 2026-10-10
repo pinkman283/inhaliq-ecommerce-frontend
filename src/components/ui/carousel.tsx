@@ -183,7 +183,7 @@ function CarouselPrevious({
       type="button"
       data-slot="carousel-previous"
       className={cn(
-        "theme-carousel-btn absolute z-30 flex items-center justify-center rounded-full border shadow-xl backdrop-blur-md select-none cursor-pointer outline-none transition-all duration-300",
+        "theme-carousel-btn absolute z-30 hidden sm:flex items-center justify-center rounded-full border shadow-xl backdrop-blur-md select-none cursor-pointer outline-none transition-all duration-300",
         orientation === "horizontal"
           ? "top-1/2 -translate-y-1/2 -left-12"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -215,7 +215,7 @@ function CarouselNext({
       type="button"
       data-slot="carousel-next"
       className={cn(
-        "theme-carousel-btn absolute z-30 flex items-center justify-center rounded-full border shadow-xl backdrop-blur-md select-none cursor-pointer outline-none transition-all duration-300",
+        "theme-carousel-btn absolute z-30 hidden sm:flex items-center justify-center rounded-full border shadow-xl backdrop-blur-md select-none cursor-pointer outline-none transition-all duration-300",
         orientation === "horizontal"
           ? "top-1/2 -translate-y-1/2 -right-12"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",

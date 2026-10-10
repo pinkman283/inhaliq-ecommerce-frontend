@@ -40,6 +40,8 @@ import {
 export class SeniorApiAdapter implements IStorefrontApi {
   readonly provider = "senior" as const;
   private client: AxiosInstance;
+  private homepageDataPromise: Promise<StorefrontHomepageData> | null = null;
+  private homepageDataCache: { data: StorefrontHomepageData; timestamp: number } | null = null;
 
   constructor(clientInstance?: AxiosInstance) {
     if (clientInstance) {
@@ -58,7 +60,7 @@ export class SeniorApiAdapter implements IStorefrontApi {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        timeout: 12000,
+        timeout: 25000,
       });
 
       // Interceptor to attach Sanctum token and Facebook CAPI headers
@@ -116,25 +118,67 @@ export class SeniorApiAdapter implements IStorefrontApi {
   // Homepage & Banners
   // ==========================================
   async getHomepageData(): Promise<StorefrontHomepageData> {
-    const res = await this.client.get("/home");
-    const rawData = res.data?.data || res.data || {};
-    const banners = mapSeniorHomeToBanners(rawData);
+    const now = Date.now();
+    if (this.homepageDataCache && now - this.homepageDataCache.timestamp < 60000) {
+      return this.homepageDataCache.data;
+    }
 
-    const flashSales = Array.isArray(rawData.flash_sales)
-      ? rawData.flash_sales.map(mapSeniorProduct)
-      : [];
+    if (this.homepageDataPromise) {
+      return this.homepageDataPromise;
+    }
 
-    const hotDeals = Array.isArray(rawData.hot_deals)
-      ? rawData.hot_deals.map(mapSeniorProduct)
-      : [];
+    const fetchPromise: Promise<StorefrontHomepageData> = (async () => {
+      try {
+        const res = await this.client.get("/home");
+        const rawData = res.data?.data || res.data || {};
+        const banners = mapSeniorHomeToBanners(rawData);
 
-    return {
-      banners,
-      sliders: rawData.sliders || [],
-      flash_sales: flashSales,
-      hot_deals: hotDeals,
-      popup_banners: rawData.popup_banners || [],
-    };
+        const flashSales = Array.isArray(rawData.flash_sales)
+          ? rawData.flash_sales.map(mapSeniorProduct)
+          : [];
+
+        const hotDeals = Array.isArray(rawData.hot_deals)
+          ? rawData.hot_deals.map(mapSeniorProduct)
+          : [];
+
+        const result: StorefrontHomepageData = {
+          banners,
+          sliders: rawData.sliders || [],
+          flash_sales: flashSales,
+          hot_deals: hotDeals,
+          popup_banners: rawData.popup_banners || [],
+        };
+
+        this.homepageDataCache = {
+          data: result,
+          timestamp: Date.now(),
+        };
+
+        return result;
+      } catch (err) {
+        console.warn("Notice: SeniorApiAdapter.getHomepageData fallback:", err);
+        return {
+          banners: {
+            primary_banners: [],
+            secondary_banners: [],
+            middle_banners: [],
+            bottom_banners: [],
+            top_strip: null,
+            grid_banners: [],
+            all_active_count: 0,
+          },
+          sliders: [],
+          flash_sales: [],
+          hot_deals: [],
+          popup_banners: [],
+        };
+      } finally {
+        this.homepageDataPromise = null;
+      }
+    })();
+
+    this.homepageDataPromise = fetchPromise;
+    return fetchPromise;
   }
 
   async getHomepageBanners(): Promise<HomepageBannersResponse> {
