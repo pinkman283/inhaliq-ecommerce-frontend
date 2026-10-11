@@ -5,7 +5,15 @@ import { UploadCloud, Loader2, Trash2, CheckCircle2, Image as ImageIcon, Palette
 import { ProductFormImage } from "@/types";
 import { ImageUploadGuidance } from "@/components/admin/ui/ImageUploadGuidance";
 import { optimizeImageForUpload } from "@/lib/imageOptimizer";
-import { adminApi } from "@/lib/adminApi";
+import { adminApi, OptimizationError } from "@/lib/adminApi";
+import {
+  formatByteSize,
+  notifyOptimizationSuccess,
+  notifyUploadSuccess,
+  notifyOptimizationUnavailable,
+  notifyOptimizationFailed,
+  notifyUploadFailed,
+} from "@/lib/uploadFeedback";
 import { toast } from "sonner";
 
 interface ProductMediaTabProps {
@@ -28,7 +36,21 @@ export function ProductMediaTab({
   const [inputMode, setInputMode] = useState<"upload" | "url">("upload");
   const [newImageUrl, setNewImageUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadStage, setUploadStage] = useState<"idle" | "preparing" | "optimizing" | "uploading">("idle");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const getUploadProgressText = () => {
+    switch (uploadStage) {
+      case "preparing":
+        return "Preparing image…";
+      case "optimizing":
+        return "Optimizing image…";
+      case "uploading":
+        return "Uploading image…";
+      default:
+        return "Uploading & optimizing image…";
+    }
+  };
 
   const handleAddImageUrl = () => {
     const url = newImageUrl.trim();
@@ -62,7 +84,7 @@ export function ProductMediaTab({
   };
 
   const handleFiles = async (files: FileList | File[]) => {
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0 || isUploading) return;
 
     const remainingSlots = 5 - images.length;
     if (remainingSlots <= 0) {
@@ -72,26 +94,140 @@ export function ProductMediaTab({
 
     const filesToUpload = Array.from(files).slice(0, remainingSlots);
     setIsUploading(true);
+    setUploadStage("preparing");
+
     try {
       const uploadedImages: ProductFormImage[] = [];
-      for (const file of filesToUpload) {
-        if (!file.type.startsWith("image/")) continue;
-        const fileToUpload = await optimizeImageForUpload(file, {
-          maxDimension: 1600,
-          maxSizeBytes: 1.5 * 1024 * 1024,
-          quality: 0.88,
-        });
-        const res = await adminApi.uploadProductImage(fileToUpload);
-        onImageUploaded?.(res.image_url, res.path);
 
-        uploadedImages.push({
-          image_url: res.image_url,
-          is_primary: images.length === 0 && uploadedImages.length === 0,
-          source: "upload",
-          alt_text: file.name.replace(/\.[^/.]+$/, ""),
-          color_name: null,
-          display_order: images.length + uploadedImages.length,
-        });
+      for (const file of filesToUpload) {
+        // 1. Frontend Validation: File type must be an image
+        if (!file.type.startsWith("image/")) {
+          toast.error(`"${file.name}" is not a valid image file.`);
+          continue;
+        }
+
+        // 2. Frontend Validation: Reject animated GIFs
+        if (file.type === "image/gif") {
+          toast.error("Animated GIF images are not supported for product catalog.");
+          continue;
+        }
+
+        // 3. Frontend Validation: Reject files exceeding 10MB server limit
+        if (file.size > 10 * 1024 * 1024) {
+          toast.error("Image upload failed", {
+            description: `File "${file.name}" (${formatByteSize(file.size)}) exceeds the server 10MB upload limit.`,
+            duration: 5000,
+          });
+          continue;
+        }
+
+        let fileToUpload: File = file;
+        let isFallbackOriginal = false;
+        let optimizationSucceeded = false;
+
+        // 4. Pre-scale large image if > 4.2MB to fit Vercel proxy ceiling
+        let candidateForProxy: File = file;
+        if (file.size > 4.2 * 1024 * 1024) {
+          setUploadStage("preparing");
+          try {
+            candidateForProxy = await optimizeImageForUpload(file, {
+              maxDimension: 2000,
+              maxSizeBytes: 3.8 * 1024 * 1024,
+              quality: 0.90,
+            });
+          } catch {
+            candidateForProxy = file;
+          }
+        }
+
+        // 5. Send to Next.js optimization proxy if within proxy boundary
+        if (candidateForProxy.size <= 4.2 * 1024 * 1024) {
+          setUploadStage("optimizing");
+          try {
+            const optResult = await adminApi.optimizeImage(candidateForProxy, { profile: "product" });
+            fileToUpload = optResult.file;
+            optimizationSucceeded = true;
+            isFallbackOriginal = false;
+
+            // Phase 3A: Immediate success toast for optimization with size metrics
+            notifyOptimizationSuccess(optResult.originalBytes, optResult.optimizedBytes);
+          } catch (optErr: unknown) {
+            console.warn("[ProductMediaTab] Optimization failed, evaluating fallback:", optErr);
+
+            if (optErr instanceof OptimizationError && optErr.isAuthError) {
+              // Outcome 7: Authentication / authorization failed.
+              // Do NOT fall back to upload! Stop immediately.
+              toast.error("You are not authorized to upload or optimize images.", {
+                description: "Please sign in with administrative privileges.",
+                duration: 5000,
+              });
+              continue;
+            }
+
+            optimizationSucceeded = false;
+            isFallbackOriginal = true;
+
+            if (optErr instanceof OptimizationError && optErr.isServiceUnavailable) {
+              // Phase 3C: Service unavailable warning
+              notifyOptimizationUnavailable();
+            } else {
+              // Phase 3D: Optimization rejected or failed
+              const failureReason = optErr instanceof Error ? optErr.message : undefined;
+              notifyOptimizationFailed(failureReason);
+            }
+
+            // Safe fallback preparation: canvas scale if needed, or original file
+            try {
+              fileToUpload = await optimizeImageForUpload(file, {
+                maxDimension: 1600,
+                maxSizeBytes: 1.5 * 1024 * 1024,
+                quality: 0.88,
+              });
+            } catch {
+              fileToUpload = file;
+            }
+          }
+        } else {
+          // File > 4.2MB and could not be pre-scaled under 4.2MB, but <= 10MB
+          // Fall back to uploading directly to Laravel's 10MB endpoint
+          isFallbackOriginal = true;
+          optimizationSucceeded = false;
+          notifyOptimizationUnavailable();
+
+          try {
+            fileToUpload = await optimizeImageForUpload(file, {
+              maxDimension: 1600,
+              maxSizeBytes: 1.5 * 1024 * 1024,
+              quality: 0.88,
+            });
+          } catch {
+            fileToUpload = file;
+          }
+        }
+
+        // 6. Upload to Laravel (Single Upload Invariant)
+        setUploadStage("uploading");
+        try {
+          const res = await adminApi.uploadProductImage(fileToUpload);
+          onImageUploaded?.(res.image_url, res.path);
+
+          // Phase 3B & 3E: Notify upload success
+          notifyUploadSuccess(isFallbackOriginal);
+
+          uploadedImages.push({
+            image_url: res.image_url,
+            is_primary: images.length === 0 && uploadedImages.length === 0,
+            source: "upload",
+            alt_text: file.name.replace(/\.[^/.]+$/, ""),
+            color_name: null,
+            display_order: images.length + uploadedImages.length,
+          });
+        } catch (uploadErr: unknown) {
+          console.error("[ProductMediaTab] Laravel upload failed:", uploadErr);
+          // Phase 3F: Notify upload failure with exact Laravel error
+          notifyUploadFailed(uploadErr, optimizationSucceeded);
+          // Never retry duplicate upload to Laravel on error
+        }
       }
 
       if (uploadedImages.length > 0) {
@@ -100,17 +236,10 @@ export function ProductMediaTab({
           next[0].is_primary = true;
         }
         onImagesChange(next);
-        toast.success(`Uploaded ${uploadedImages.length} image(s).`);
       }
-    } catch (err: unknown) {
-      const errorObj = err as { response?: { data?: { errors?: { image?: string[] }; message?: string } } };
-      const errMsg =
-        errorObj.response?.data?.errors?.image?.[0] ||
-        errorObj.response?.data?.message ||
-        "Failed to upload image.";
-      toast.error(errMsg);
     } finally {
       setIsUploading(false);
+      setUploadStage("idle");
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
@@ -260,7 +389,7 @@ export function ProductMediaTab({
           <div>
             <p className="text-xs font-semibold text-slate-200">
               {isUploading
-                ? "Uploading & optimizing image..."
+                ? getUploadProgressText()
                 : images.length >= 5
                 ? "Maximum 5 images limit reached"
                 : "Click to browse or drag and drop image files here"}

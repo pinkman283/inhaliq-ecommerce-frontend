@@ -117,6 +117,55 @@ adminClient.interceptors.response.use(
   }
 );
 
+export class OptimizationError extends Error {
+  status: number;
+  code: string;
+  upstreamStatus?: number;
+
+  constructor(message: string, status: number, code: string = "OPTIMIZATION_FAILED", upstreamStatus?: number) {
+    super(message);
+    this.name = "OptimizationError";
+    this.status = status;
+    this.code = code;
+    this.upstreamStatus = upstreamStatus;
+  }
+
+  get isAuthError(): boolean {
+    return (
+      this.status === 401 ||
+      this.status === 403 ||
+      this.code === "AUTH_REQUIRED" ||
+      this.code === "AUTH_INVALID" ||
+      this.code === "FORBIDDEN"
+    );
+  }
+
+  get isServiceUnavailable(): boolean {
+    return (
+      this.status === 502 ||
+      this.status === 503 ||
+      this.status === 504 ||
+      this.code === "SERVICE_UNCONFIGURED" ||
+      this.code === "UPSTREAM_UNAVAILABLE" ||
+      this.code === "UPSTREAM_TIMEOUT" ||
+      this.code === "AUTH_SERVICE_UNAVAILABLE" ||
+      this.code === "NETWORK_ERROR"
+    );
+  }
+
+  get isPayloadTooLarge(): boolean {
+    return this.status === 413 || this.code === "PAYLOAD_TOO_LARGE";
+  }
+}
+
+export interface OptimizeImageResult {
+  file: File;
+  reductionPercent?: string;
+  originalBytes: number;
+  optimizedBytes: number;
+  outputFormat: string;
+}
+
 export const adminApi = {
   client: adminClient,
 
@@ -215,6 +264,85 @@ export const adminApi = {
   async getProduct(id: number): Promise<Product> {
     const res = await adminClient.get(`/admin/products/${id}`);
     return res.data;
+  },
+
+  async optimizeImage(
+    file: File,
+    options: {
+      profile?: "product" | "thumbnail" | "banner" | "brand" | "lossless";
+      outputFormat?: "auto" | "webp" | "jpeg" | "png" | "preserve";
+      quality?: number;
+      maxWidth?: number;
+      maxHeight?: number;
+    } = {}
+  ): Promise<OptimizeImageResult> {
+    const token = typeof window !== "undefined" ? localStorage.getItem("aether_admin_token") : null;
+    const formData = new FormData();
+    formData.append("file", file);
+    if (options.profile) formData.append("profile", options.profile);
+    if (options.outputFormat) formData.append("output_format", options.outputFormat);
+    if (options.quality) formData.append("quality", String(options.quality));
+    if (options.maxWidth) formData.append("max_width", String(options.maxWidth));
+    if (options.maxHeight) formData.append("max_height", String(options.maxHeight));
+
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    let response: Response;
+    try {
+      response = await fetch("/api/admin/optimize", {
+        method: "POST",
+        headers,
+        body: formData,
+      });
+    } catch (networkErr: unknown) {
+      const msg = networkErr instanceof Error ? networkErr.message : "Network error contacting optimization proxy";
+      throw new OptimizationError(`Optimization service unreachable: ${msg}`, 502, "NETWORK_ERROR");
+    }
+
+    if (!response.ok) {
+      let errorMsg = `Optimization failed with status ${response.status}`;
+      let errorCode = "OPTIMIZATION_FAILED";
+      let upstreamStatus: number | undefined;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMsg = errorData.error;
+        if (errorData.code) errorCode = errorData.code;
+        if (errorData.upstreamStatus) upstreamStatus = errorData.upstreamStatus;
+      } catch {
+        // use fallback message
+      }
+      throw new OptimizationError(errorMsg, response.status, errorCode, upstreamStatus);
+    }
+
+    const contentType = response.headers.get("content-type") || "image/webp";
+    const reductionPercent = response.headers.get("x-image-reduction-percent") || undefined;
+    const originalBytes = Number(response.headers.get("x-image-original-bytes")) || file.size;
+    const blob = await response.blob();
+    const optimizedBytes = Number(response.headers.get("x-image-optimized-bytes")) || blob.size;
+    const outputFormat = response.headers.get("x-image-output-format") || "webp";
+
+    const baseName = file.name.replace(/\.[^/.]+$/, "");
+    let ext = "webp";
+    if (contentType.includes("png") || outputFormat.toLowerCase() === "png") ext = "png";
+    else if (contentType.includes("jpeg") || outputFormat.toLowerCase() === "jpeg") ext = "jpg";
+    else if (contentType.includes("svg") || outputFormat.toLowerCase() === "svg") ext = "svg";
+    else if (contentType.includes("icon") || outputFormat.toLowerCase() === "ico") ext = "ico";
+
+    const optimizedFile = new File([blob], `${baseName}.${ext}`, {
+      type: contentType,
+      lastModified: Date.now(),
+    });
+
+    return {
+      file: optimizedFile,
+      reductionPercent,
+      originalBytes,
+      optimizedBytes,
+      outputFormat,
+    };
   },
 
   async uploadProductImage(file: File): Promise<{ message: string; image_url: string; path: string }> {
