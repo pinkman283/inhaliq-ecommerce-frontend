@@ -87,6 +87,18 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent background body scroll when mobile menu drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const handleMouseEnter = (item: NavbarItem) => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
@@ -452,65 +464,99 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
         </div>
       </nav>
 
-      {/* ===================== DYNAMIC MOBILE DRAWER (100% ADMIN-CONTROLLED) ===================== */}
+      {/* ===================== DYNAMIC MOBILE RIGHT SLIDE-OVER DRAWER (100% ADMIN-CONTROLLED) ===================== */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white dark:bg-[#090b14] border-b border-gray-200 dark:border-white/10 px-4 py-4 space-y-3 max-h-[80vh] overflow-y-auto text-left shadow-2xl"
-          >
-            <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider pb-1 border-b border-white/5">
-              Navigation Menu
-            </div>
-
-            <MobileNavTree
-              items={navItems.map((item) => ({
-                ...item,
-                children:
-                  item.children && item.children.length > 0
-                    ? item.children
-                    : item.subcategories && item.subcategories.length > 0
-                    ? item.subcategories.map((s) => ({
-                        id: 100000 + s.id,
-                        parent_id: item.id,
-                        title: s.name,
-                        type: "subcategory" as const,
-                        url: s.url,
-                        computed_url: s.url,
-                        icon: s.icon || null,
-                        badge: s.badge || null,
-                        badge_color: null,
-                        is_active: true,
-                        open_in_new_tab: false,
-                        mega_menu_type: "none" as const,
-                        display_order: 0,
-                        children: [],
-                        is_valid: true,
-                      }))
-                    : item.children || [],
-              }))}
-              onItemClick={() => setMobileMenuOpen(false)}
+          <div className="fixed inset-0 z-[60] lg:hidden">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             />
 
-            <div className="pt-3 border-t border-gray-200 dark:border-white/10 flex gap-2">
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-500 dark:text-amber-300 text-xs font-bold"
+            {/* Right Slide-over Sheet */}
+            <div className="fixed inset-y-0 right-0 max-w-full flex">
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 28, stiffness: 260 }}
+                className="w-screen max-w-[320px] min-[380px]:max-w-[360px] h-full bg-white dark:bg-[#090b14] border-l border-gray-200 dark:border-white/10 flex flex-col justify-between shadow-2xl z-10 select-none"
               >
-                Admin Portal
-              </Link>
-              <Link
-                href="/track"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 text-xs font-bold"
-              >
-                Track Order
-              </Link>
+                {/* Header */}
+                <div className="px-4 py-3.5 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <BrandLogoImage placement="mobile_navbar" />
+                  </div>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                    aria-label="Close menu"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Navigation Items Tree */}
+                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 text-left">
+                  <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider pb-1 border-b border-gray-100 dark:border-white/5">
+                    Navigation Menu
+                  </div>
+
+                  <MobileNavTree
+                    items={navItems.map((item) => ({
+                      ...item,
+                      children:
+                        item.children && item.children.length > 0
+                          ? item.children
+                          : item.subcategories && item.subcategories.length > 0
+                          ? item.subcategories.map((s) => ({
+                              id: 100000 + s.id,
+                              parent_id: item.id,
+                              title: s.name,
+                              type: "subcategory" as const,
+                              url: s.url,
+                              computed_url: s.url,
+                              icon: s.icon || null,
+                              badge: s.badge || null,
+                              badge_color: null,
+                              is_active: true,
+                              open_in_new_tab: false,
+                              mega_menu_type: "none" as const,
+                              display_order: 0,
+                              children: [],
+                              is_valid: true,
+                            }))
+                          : item.children || [],
+                    }))}
+                    onItemClick={() => setMobileMenuOpen(false)}
+                  />
+                </div>
+
+                {/* Footer Portal Links */}
+                <div className="p-4 border-t border-gray-200 dark:border-white/10 bg-gray-50/70 dark:bg-white/[0.02] flex gap-2">
+                  <Link
+                    href="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 text-center py-2.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs font-bold transition-colors"
+                  >
+                    Admin Portal
+                  </Link>
+                  <Link
+                    href="/track"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 text-center py-2.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 text-xs font-bold transition-colors"
+                  >
+                    Track Order
+                  </Link>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>
