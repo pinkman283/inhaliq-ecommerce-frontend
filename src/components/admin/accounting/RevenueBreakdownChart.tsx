@@ -136,7 +136,7 @@ export const RevenueBreakdownChart: React.FC<RevenueBreakdownChartProps> = ({
             {chartData.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div key={idx} className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-900/40 border border-white/5">
+                <div key={idx} className="flex items-center gap-2 p-1.5 rounded-md bg-slate-900/40 border border-white/5">
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md" style={{ backgroundColor: `${item.color}20`, color: item.color }}>
                     <Icon className="h-3.5 w-3.5" />
                   </div>

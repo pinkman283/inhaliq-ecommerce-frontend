@@ -24,7 +24,7 @@ export function ProductPagination({
   const toIndex = Math.min(currentPage * perPage, totalItems);
 
   return (
-    <div className="p-3 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
+    <div className="p-3 rounded-md bg-[#0f121b] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
       <div className="flex items-center gap-3">
         <span>
           Showing <span className="font-semibold text-white">{fromIndex}</span> to{" "}
@@ -39,7 +39,7 @@ export function ProductPagination({
             onChange={(e) => {
               onPerPageChange(Number(e.target.value));
             }}
-            className="bg-white/[0.04] border border-white/[0.08] rounded-md px-2 py-1 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+            className="bg-white/[0.04] border border-white/[0.08] rounded-md px-2 py-1 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 cursor-pointer"
           >
             <option value={25} className="bg-[#0f121b]">25</option>
             <option value={50} className="bg-[#0f121b]">50</option>
@@ -53,7 +53,7 @@ export function ProductPagination({
           type="button"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage <= 1 || loading}
-          className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer flex items-center gap-1"
+          className="px-2.5 py-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer flex items-center gap-1"
           title="Previous Page"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
@@ -69,7 +69,7 @@ export function ProductPagination({
           type="button"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage >= totalPages || loading}
-          className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer flex items-center gap-1"
+          className="px-2.5 py-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer flex items-center gap-1"
           title="Next Page"
         >
           <span className="hidden sm:inline">Next</span>

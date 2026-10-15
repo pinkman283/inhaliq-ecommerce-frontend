@@ -55,7 +55,7 @@ export default function AdminOrdersPage() {
   return (
     <Suspense fallback={
       <div className="p-12 text-center text-slate-500">
-        <Loader2 className="w-6 h-6 animate-spin mx-auto text-amber-400 mb-2" />
+        <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#A78BFA] mb-2" />
         Loading Orders & Fulfillment...
       </div>
     }>
@@ -839,7 +839,7 @@ function OrdersContent() {
           <button
             type="button"
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
+            className="px-3.5 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
           >
             <Plus className="w-3.5 h-3.5" /> Create Order
           </button>
@@ -894,9 +894,9 @@ function OrdersContent() {
             <button
               key={tab.id}
               onClick={() => setChannelTab(tab.id)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                 channelTab === tab.id
-                  ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-xs"
+                  ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-xs"
                   : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
               }`}
             >
@@ -925,9 +925,9 @@ function OrdersContent() {
                 setStatusTab(pill.id);
                 setCurrentPage(1);
               }}
-              className={`px-2.5 py-1 rounded-lg font-semibold shrink-0 border transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-2.5 py-1 rounded-md font-semibold shrink-0 border transition-all cursor-pointer flex items-center gap-1.5 ${
                 statusTab === pill.id
-                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-xs"
+                  ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-xs"
                   : "bg-white/[0.02] text-slate-400 hover:text-white border-white/[0.06] hover:bg-white/[0.04]"
               }`}
             >
@@ -941,7 +941,7 @@ function OrdersContent() {
       )}
 
       {/* Filter & Search Bar */}
-      <div className="p-2.5 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-2.5">
+      <div className="p-2.5 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-2.5">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-2.5">
           <form onSubmit={handleSearch} className="relative w-full lg:w-72">
             <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -950,7 +950,7 @@ function OrdersContent() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by order #, customer, email..."
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-8.5 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-md pl-8.5 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
             />
           </form>
 
@@ -1011,23 +1011,23 @@ function OrdersContent() {
             <button
               type="button"
               onClick={() => setShowAdvancedFilters(true)}
-              className={`px-2.5 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-md border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                 dateFrom || dateTo || minTotal || maxTotal
-                  ? "bg-amber-400/20 text-amber-300 border-amber-400/40"
+                  ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                   : "bg-white/5 text-slate-400 hover:text-white border-white/10"
               }`}
             >
               <Filter className="w-3.5 h-3.5" />
               <span>Filters</span>
               {(dateFrom || dateTo || minTotal || maxTotal) && (
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />
               )}
             </button>
 
             <button
               type="button"
               onClick={handleResetFilters}
-              className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer"
+              className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
@@ -1090,7 +1090,7 @@ function OrdersContent() {
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition [color-scheme:dark]"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition [color-scheme:dark]"
                 />
               </div>
               <div>
@@ -1099,7 +1099,7 @@ function OrdersContent() {
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition [color-scheme:dark]"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition [color-scheme:dark]"
                 />
               </div>
             </div>
@@ -1117,7 +1117,7 @@ function OrdersContent() {
                     value={minTotal}
                     onChange={(e) => setMinTotal(e.target.value)}
                     placeholder="0"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none transition"
                   />
                 </div>
                 <div>
@@ -1127,7 +1127,7 @@ function OrdersContent() {
                     value={maxTotal}
                     onChange={(e) => setMaxTotal(e.target.value)}
                     placeholder="10000"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none transition"
                   />
                 </div>
               </div>
@@ -1201,7 +1201,7 @@ function OrdersContent() {
                   <tr
                     key={order.id}
                     className={`group transition-colors ${
-                      isSelected ? "bg-amber-500/10" : "hover:bg-white/[0.02]"
+                      isSelected ? "bg-[#211B32]" : "hover:bg-white/[0.02]"
                     }`}
                   >
                     <td
@@ -1313,7 +1313,7 @@ function OrdersContent() {
                                   <button
                                     type="button"
                                     onClick={() => handlePrintLabel(order.id, shipment.id)}
-                                    className="text-slate-400 hover:text-amber-400 transition-colors p-0.5"
+                                    className="text-slate-400 hover:text-[#A78BFA] transition-colors p-0.5"
                                     title="Print 4x6 Thermal Label"
                                   >
                                     <Printer className="w-2.5 h-2.5" />
@@ -1337,7 +1337,7 @@ function OrdersContent() {
                             <button
                               type="button"
                               onClick={() => handleOpenBookCourier(order)}
-                              className="px-2 py-1 rounded-md bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-[10.5px] font-bold inline-flex items-center gap-1 transition-all cursor-pointer"
+                              className="px-2 py-1 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 text-[10.5px] font-bold inline-flex items-center gap-1 transition-all cursor-pointer"
                             >
                               <Truck className="w-3 h-3" /> Book Courier
                             </button>
@@ -1372,7 +1372,7 @@ function OrdersContent() {
                               return (
                                 <button
                                   onClick={() => handlePrintLabel(order.id, s.id)}
-                                  className="p-1.5 rounded-md text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                                  className="p-1.5 rounded-md text-slate-400 hover:text-[#A78BFA] hover:bg-[#211B32] transition-colors cursor-pointer"
                                   title="Print 4x6 Thermal Shipping Label"
                                 >
                                   <Printer className="w-3.5 h-3.5" />
@@ -1391,7 +1391,7 @@ function OrdersContent() {
                           })()}
                           <button
                             onClick={() => openInvoiceModal(order.id)}
-                            className="p-1.5 rounded-md text-slate-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-[#A78BFA] hover:bg-[#211B32] transition-colors cursor-pointer"
                             title="View & Print Commercial Invoice"
                           >
                             <Receipt className="w-3.5 h-3.5" />
@@ -1405,7 +1405,7 @@ function OrdersContent() {
                           </button>
                           <button
                             onClick={() => handleOpenEdit(order)}
-                            className="p-1.5 rounded-md text-slate-400 hover:text-amber-400 hover:bg-white/10 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-[#A78BFA] hover:bg-white/10 transition-colors cursor-pointer"
                             title="Edit order details"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -1440,7 +1440,7 @@ function OrdersContent() {
             type="button"
             disabled={currentPage <= 1 || loading}
             onClick={() => loadOrders(currentPage - 1)}
-            className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium transition cursor-pointer flex items-center gap-1"
+            className="px-3 py-1.5 rounded-md bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium transition cursor-pointer flex items-center gap-1"
           >
             Previous
           </button>
@@ -1451,7 +1451,7 @@ function OrdersContent() {
             type="button"
             disabled={currentPage >= lastPage || loading}
             onClick={() => loadOrders(currentPage + 1)}
-            className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium transition cursor-pointer flex items-center gap-1"
+            className="px-3 py-1.5 rounded-md bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium transition cursor-pointer flex items-center gap-1"
           >
             Next
           </button>
@@ -1461,7 +1461,7 @@ function OrdersContent() {
       {/* ORDER DETAILS MODAL */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#0e121e] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#0e121e] border border-white/15 rounded-lg shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             {/* Pinned Modal Header */}
             <div className="flex items-center justify-between p-4 sm:p-5 pb-3.5 border-b border-white/10 shrink-0 bg-[#0e121e]">
               <div>
@@ -1471,7 +1471,7 @@ function OrdersContent() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => openInvoiceModal(selectedOrder.id)}
-                  className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500/25 transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="px-2.5 py-1 rounded-md bg-[#211B32] border border-[#A78BFA]/30 text-[#A78BFA] text-xs font-bold hover:bg-amber-500/25 transition-colors cursor-pointer flex items-center gap-1.5"
                   title="Generate Commercial Invoice"
                 >
                   <Receipt className="w-3.5 h-3.5" /> Commercial Invoice
@@ -1479,14 +1479,14 @@ function OrdersContent() {
                 {selectedOrder.payment_status === "paid" && (
                   <button
                     onClick={() => setIsRefundModalOpen(true)}
-                    className="px-2.5 py-1 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold hover:bg-purple-500/25 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 rounded-md bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold hover:bg-purple-500/25 transition-colors cursor-pointer"
                   >
                     Issue Refund
                   </button>
                 )}
                 <button
                   onClick={() => setSelectedOrder(null)}
-                  className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+                  className="p-1 text-slate-400 hover:text-white rounded-md hover:bg-white/5 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1496,7 +1496,7 @@ function OrdersContent() {
             {/* Scrollable Content Body with Sleek Scrollbar */}
             <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               {/* Order Status & Financial State Header */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex flex-wrap items-center justify-between gap-3">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status:</span>
                   <span className={`px-2.5 py-1 rounded-md text-xs font-bold uppercase ${
@@ -1515,7 +1515,7 @@ function OrdersContent() {
                   <span className={`px-2 py-0.5 rounded text-[10.5px] font-bold uppercase ${
                     selectedOrder.payment_status === "paid" ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" :
                     selectedOrder.payment_status === "refunded" ? "bg-purple-500/15 text-purple-400 border border-purple-500/30" :
-                    "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                    "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                   }`}>
                     {selectedOrder.payment_status}
                   </span>
@@ -1531,7 +1531,7 @@ function OrdersContent() {
                     type="button"
                     disabled={isUpdatingStatus}
                     onClick={() => handleRecordCodPayment(selectedOrder.id)}
-                    className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     Record COD Cash Collection
@@ -1541,12 +1541,12 @@ function OrdersContent() {
 
               {/* Status Workflow Action Transitions */}
               {selectedOrder.order_status !== "cancelled" && selectedOrder.order_status !== "refunded" && (
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                       Authoritative State Transitions
                     </span>
-                    {isUpdatingStatus && <span className="text-[10px] text-amber-400 animate-pulse">Updating order...</span>}
+                    {isUpdatingStatus && <span className="text-[10px] text-[#A78BFA] animate-pulse">Updating order...</span>}
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     {selectedOrder.order_status === "pending" && (
@@ -1555,7 +1555,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "confirmed")}
-                          className="px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Confirm Order &rarr;
                         </button>
@@ -1563,7 +1563,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "processing")}
-                          className="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Start Processing &rarr;
                         </button>
@@ -1571,7 +1571,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "cancelled")}
-                          className="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Cancel Order
                         </button>
@@ -1583,7 +1583,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "processing")}
-                          className="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Start Processing &rarr;
                         </button>
@@ -1591,7 +1591,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "shipped")}
-                          className="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Mark Shipped &rarr;
                         </button>
@@ -1599,7 +1599,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "cancelled")}
-                          className="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Cancel Order
                         </button>
@@ -1611,7 +1611,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "shipped")}
-                          className="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Mark Shipped &rarr;
                         </button>
@@ -1619,7 +1619,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "cancelled")}
-                          className="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Cancel Order
                         </button>
@@ -1631,7 +1631,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "delivered")}
-                          className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Confirm Delivered &#10003;
                         </button>
@@ -1639,7 +1639,7 @@ function OrdersContent() {
                           type="button"
                           disabled={isUpdatingStatus}
                           onClick={() => handleQuickStatusChange(selectedOrder.id, "returned")}
-                          className="px-3 py-1.5 rounded-lg bg-pink-500/15 hover:bg-pink-500/25 text-pink-300 border border-pink-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-md bg-pink-500/15 hover:bg-pink-500/25 text-pink-300 border border-pink-500/30 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Mark Returned
                         </button>
@@ -1655,7 +1655,7 @@ function OrdersContent() {
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Customer</span>
                   <span className="font-bold text-white block">{selectedOrder.customer_name}</span>
                   <span className="text-slate-400 block">{selectedOrder.customer_email}</span>
@@ -1664,7 +1664,7 @@ function OrdersContent() {
                   )}
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Shipping Address</span>
                   <span className="text-white block">
                     {selectedOrder.shipping_address?.address_line1 || "No street address recorded"}
@@ -1683,13 +1683,13 @@ function OrdersContent() {
               {/* Items List */}
               <div className="space-y-2">
                 <span className="text-[11px] font-bold text-slate-300 block">Ordered Items</span>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 divide-y divide-white/5 text-xs">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 divide-y divide-white/5 text-xs">
                   {(selectedOrder.items || []).map((item, idx) => (
                     <div key={idx} className="py-2 first:pt-0 last:pb-0 flex items-center justify-between">
                       <div>
                         <span className="font-bold text-white block">{item.product_name || `Product #${item.product_id}`}</span>
                         {item.variant_name && (
-                          <span className="text-[10px] text-amber-300 block font-medium">Variant: {item.variant_name}</span>
+                          <span className="text-[10px] text-[#A78BFA] block font-medium">Variant: {item.variant_name}</span>
                         )}
                         {item.sku && (
                           <span className="text-[10px] text-slate-500 font-mono block">SKU: {item.sku}</span>
@@ -1703,7 +1703,7 @@ function OrdersContent() {
               </div>
 
               {/* Total Summary */}
-              <div className="p-3 rounded-xl bg-white/5 space-y-1.5 text-xs">
+              <div className="p-3 rounded-md bg-white/5 space-y-1.5 text-xs">
                 <div className="flex justify-between text-slate-400">
                   <span>Subtotal</span>
                   <span className="font-mono text-white">{formatPrice(selectedOrder.subtotal || selectedOrder.items?.reduce((s, i) => s + (i.quantity * i.unit_price), 0) || selectedOrder.total_amount)}</span>
@@ -1728,9 +1728,9 @@ function OrdersContent() {
 
             {/* Return / RTO Status Banner & Deep-Link */}
             {selectedOrder.return_status && selectedOrder.return_status !== 'none' && (
-              <div className="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-between gap-3">
+              <div className="p-3.5 rounded-md bg-purple-500/10 border border-purple-500/30 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-md bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0">
                     <RotateCcw className="w-4 h-4" />
                   </div>
                   <div>
@@ -1753,7 +1753,7 @@ function OrdersContent() {
                       ? `/admin/orders/returns?returnId=${encodeURIComponent(selectedOrder.latest_return.return_number)}`
                       : `/admin/orders/returns?search=${encodeURIComponent(selectedOrder.order_number)}`
                   }
-                  className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors shrink-0 shadow-sm"
+                  className="px-3 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors shrink-0 shadow-sm"
                 >
                   Inspect Return Details &rarr;
                 </Link>
@@ -1764,7 +1764,7 @@ function OrdersContent() {
             {(() => {
               const shipment = selectedOrder.latest_shipment || (selectedOrder.shipments && selectedOrder.shipments[0]);
               return (
-                <div className="p-3.5 rounded-xl bg-indigo-500/5 border border-indigo-500/20 space-y-3">
+                <div className="p-3.5 rounded-md bg-indigo-500/5 border border-indigo-500/20 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Truck className="w-4 h-4 text-indigo-400" />
@@ -1786,19 +1786,19 @@ function OrdersContent() {
                   {shipment ? (
                     <div className="space-y-3 text-xs">
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        <div className="p-2 rounded-lg bg-black/30 border border-white/5">
+                        <div className="p-2 rounded-md bg-black/30 border border-white/5">
                           <span className="text-[10px] text-slate-400 block">Courier</span>
                           <span className="font-bold text-white uppercase">{shipment.provider}</span>
                         </div>
-                        <div className="p-2 rounded-lg bg-black/30 border border-white/5">
+                        <div className="p-2 rounded-md bg-black/30 border border-white/5">
                           <span className="text-[10px] text-slate-400 block">Consignment ID</span>
                           <span className="font-mono font-bold text-cyan-400 block truncate">{shipment.consignment_id || 'N/A'}</span>
                         </div>
-                        <div className="p-2 rounded-lg bg-black/30 border border-white/5">
+                        <div className="p-2 rounded-md bg-black/30 border border-white/5">
                           <span className="text-[10px] text-slate-400 block">Tracking Code</span>
                           <span className="font-mono font-bold text-slate-300 block truncate">{shipment.tracking_code || 'N/A'}</span>
                         </div>
-                        <div className="p-2 rounded-lg bg-black/30 border border-white/5">
+                        <div className="p-2 rounded-md bg-black/30 border border-white/5">
                           <span className="text-[10px] text-slate-400 block">COD Collectable</span>
                           <span className="font-mono font-bold text-emerald-400">{formatPrice(shipment.cod_amount || 0)}</span>
                         </div>
@@ -1808,14 +1808,14 @@ function OrdersContent() {
                         <button
                           type="button"
                           onClick={() => handleTrackShipment(selectedOrder.id, shipment.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                          className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <RefreshCw className="w-3 h-3 text-cyan-400" /> Sync Tracking
                         </button>
                         <button
                           type="button"
                           onClick={() => handlePrintLabel(selectedOrder.id, shipment.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                          className="px-2.5 py-1.5 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <Printer className="w-3 h-3" /> Thermal Shipping Label
                         </button>
@@ -1824,7 +1824,7 @@ function OrdersContent() {
                             href={shipment.tracking_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-2.5 py-1.5 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
+                            className="px-2.5 py-1.5 rounded-md bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
                           >
                             <ExternalLink className="w-3 h-3" /> Courier Tracking Portal
                           </a>
@@ -1833,7 +1833,7 @@ function OrdersContent() {
                           <button
                             type="button"
                             onClick={() => handleCancelShipment(selectedOrder.id, shipment.id)}
-                            className="px-2.5 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors ml-auto cursor-pointer"
+                            className="px-2.5 py-1.5 rounded-md bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors ml-auto cursor-pointer"
                           >
                             <Ban className="w-3 h-3" /> Cancel Consignment
                           </button>
@@ -1852,7 +1852,7 @@ function OrdersContent() {
                           setSelectedOrder(null);
                           handleOpenBookCourier(ord);
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                        className="px-3 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
                       >
                         <Truck className="w-3.5 h-3.5" /> Book Courier
                       </button>
@@ -1863,10 +1863,10 @@ function OrdersContent() {
             })()}
 
             {/* ORDER LIFECYCLE AUDIT TRAIL & MILESTONES */}
-            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
+            <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-amber-400" />
+                  <Clock className="w-4 h-4 text-[#A78BFA]" />
                   <span className="text-xs font-bold text-white uppercase tracking-wider">Order Lifecycle Milestones</span>
                 </div>
                 <span className="text-[10px] text-slate-400 font-mono px-2 py-0.5 rounded bg-white/5">
@@ -1890,8 +1890,8 @@ function OrdersContent() {
                     return (
                       <div key={evt.id || idx} className="relative group">
                         {/* Dot indicator */}
-                        <div className={`absolute -left-7 top-0.5 w-5 h-5 rounded-full bg-[#0e121e] border flex items-center justify-center ${
-                          isLatest ? 'border-amber-400 text-amber-400 ring-2 ring-amber-400/20' : 'border-white/20 text-slate-400'
+                        <div className={`absolute -left-7 top-0.5 w-5 h-5 rounded bg-[#0e121e] border flex items-center justify-center ${
+                          isLatest ? 'border-[#A78BFA] text-[#A78BFA] ring-2 ring-[#A78BFA]/20' : 'border-white/20 text-slate-400'
                         }`}>
                           {(() => {
                             switch (evt.event_type) {
@@ -1913,7 +1913,7 @@ function OrdersContent() {
                               case 'restocked':
                                 return <RotateCcw className="w-3 h-3 text-purple-400" />;
                               case 'accounting_adjusted':
-                                return <BadgeDollarSign className="w-3 h-3 text-amber-400" />;
+                                return <BadgeDollarSign className="w-3 h-3 text-[#A78BFA]" />;
                               default:
                                 return <Clock className="w-3 h-3 text-slate-400" />;
                             }
@@ -1962,7 +1962,7 @@ function OrdersContent() {
       {/* EDIT ORDER MODAL */}
       {editingOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-lg bg-[#0e121e] border border-white/15 rounded-2xl p-5 space-y-4">
+          <div className="w-full max-w-lg bg-[#0e121e] border border-white/15 rounded-md p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-white/10">
               <h3 className="text-sm font-black text-white">Edit Order #{editingOrder.order_number}</h3>
               <button onClick={() => setEditingOrder(null)} className="text-slate-400 hover:text-white">
@@ -1977,7 +1977,7 @@ function OrdersContent() {
                     type="text"
                     value={editCustName}
                     onChange={(e) => setEditCustName(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                   />
                 </div>
                 <div className="space-y-1">
@@ -1986,7 +1986,7 @@ function OrdersContent() {
                     type="text"
                     value={editCustPhone}
                     onChange={(e) => setEditCustPhone(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-mono"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white font-mono"
                   />
                 </div>
               </div>
@@ -1997,7 +1997,7 @@ function OrdersContent() {
                   <select
                     value={editOrderStatus}
                     onChange={(e) => setEditOrderStatus(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                   >
                     <option value="pending" className="bg-[#0e121e]">Pending</option>
                     <option value="processing" className="bg-[#0e121e]">Processing</option>
@@ -2011,7 +2011,7 @@ function OrdersContent() {
                   <select
                     value={editPaymentStatus}
                     onChange={(e) => setEditPaymentStatus(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                   >
                     <option value="pending" className="bg-[#0e121e]">Pending</option>
                     <option value="paid" className="bg-[#0e121e]">Paid</option>
@@ -2029,7 +2029,7 @@ function OrdersContent() {
                     value={editCarrier}
                     onChange={(e) => setEditCarrier(e.target.value)}
                     placeholder="e.g. DHL Express / Pathao"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                   />
                 </div>
                 <div className="space-y-1">
@@ -2039,7 +2039,7 @@ function OrdersContent() {
                     value={editTracking}
                     onChange={(e) => setEditTracking(e.target.value)}
                     placeholder="Tracking #"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-mono"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white font-mono"
                   />
                 </div>
               </div>
@@ -2048,14 +2048,14 @@ function OrdersContent() {
                 <button
                   type="button"
                   onClick={() => setEditingOrder(null)}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold"
+                  className="px-3 py-1.5 rounded-md bg-white/5 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={savingEdit}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black"
+                  className="px-4 py-1.5 rounded-md bg-[#A78BFA] text-[#090B10] font-black"
                 >
                   {savingEdit ? "Saving..." : "Save Changes"}
                 </button>
@@ -2068,9 +2068,9 @@ function OrdersContent() {
       {/* IP RESTRICTION & BLOCK MODAL */}
       {ipBlockModalData && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0e121e] border border-white/15 rounded-2xl p-5 space-y-4">
+          <div className="w-full max-w-md bg-[#0e121e] border border-white/15 rounded-md p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <ShieldAlert className="w-4 h-4" />
                 <h3 className="text-sm font-black text-white">IP Security: {ipBlockModalData.ip}</h3>
               </div>
@@ -2081,7 +2081,7 @@ function OrdersContent() {
 
             {ipBlockModalData.isBlocked ? (
               <div className="space-y-3 text-xs">
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300">
+                <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-300">
                   <span className="font-bold block">Currently Blocked</span>
                   <span className="text-[11px] text-slate-400 block mt-1">Reason: {ipBlockModalData.existingReason}</span>
                 </div>
@@ -2089,7 +2089,7 @@ function OrdersContent() {
                   <button
                     type="button"
                     onClick={() => setIpBlockModalData(null)}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold"
+                    className="px-3 py-1.5 rounded-md bg-white/5 text-slate-300 font-bold"
                   >
                     Close
                   </button>
@@ -2097,7 +2097,7 @@ function OrdersContent() {
                     type="button"
                     onClick={handleExecuteUnblockIp}
                     disabled={isSubmittingIpBlock}
-                    className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
+                    className="px-4 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
                   >
                     {isSubmittingIpBlock ? "Unblocking..." : "Unblock IP"}
                   </button>
@@ -2110,7 +2110,7 @@ function OrdersContent() {
                   <select
                     value={blockDuration}
                     onChange={(e) => setBlockDuration(e.target.value as any)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                   >
                     <option value="permanent" className="bg-[#0e121e]">Permanent Block</option>
                     <option value="24_hours" className="bg-[#0e121e]">24 Hours</option>
@@ -2125,21 +2125,21 @@ function OrdersContent() {
                     required
                     value={blockReason}
                     onChange={(e) => setBlockReason(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
                   <button
                     type="button"
                     onClick={() => setIpBlockModalData(null)}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold"
+                    className="px-3 py-1.5 rounded-md bg-white/5 text-slate-300 font-bold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmittingIpBlock}
-                    className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold"
+                    className="px-4 py-1.5 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-bold"
                   >
                     {isSubmittingIpBlock ? "Blocking..." : "Block IP Address"}
                   </button>
@@ -2153,7 +2153,7 @@ function OrdersContent() {
       {/* REFUND MODAL */}
       {isRefundModalOpen && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0e121e] border border-purple-500/30 rounded-2xl p-5 space-y-4">
+          <div className="w-full max-w-md bg-[#0e121e] border border-purple-500/30 rounded-md p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-white/10">
               <h3 className="text-sm font-black text-white">Process Refund</h3>
               <button onClick={() => setIsRefundModalOpen(false)} className="text-slate-400 hover:text-white">
@@ -2167,7 +2167,7 @@ function OrdersContent() {
                   type="text"
                   value={refundReason}
                   onChange={(e) => setRefundReason(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white"
                 />
               </div>
               <label className="flex items-center gap-2 text-slate-300 cursor-pointer">
@@ -2181,7 +2181,7 @@ function OrdersContent() {
                 <button
                   type="button"
                   onClick={() => setIsRefundModalOpen(false)}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold"
+                  className="px-3 py-1.5 rounded-md bg-white/5 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
@@ -2189,7 +2189,7 @@ function OrdersContent() {
                   type="button"
                   onClick={handleExecuteRefund}
                   disabled={refunding}
-                  className="px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold"
+                  className="px-4 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold"
                 >
                   {refunding ? "Processing..." : "Confirm Refund"}
                 </button>
@@ -2202,7 +2202,7 @@ function OrdersContent() {
       {/* DELETE CONFIRM MODAL */}
       {deletingOrder && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0e121e] border border-rose-500/30 rounded-2xl p-5 space-y-4">
+          <div className="w-full max-w-md bg-[#0e121e] border border-rose-500/30 rounded-md p-5 space-y-4">
             <div className="flex items-center gap-2.5 text-rose-400">
               <AlertTriangle className="w-5 h-5" />
               <h3 className="text-sm font-black text-white">Delete Order?</h3>
@@ -2213,14 +2213,14 @@ function OrdersContent() {
             <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
               <button
                 onClick={() => setDeletingOrder(null)}
-                className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold text-xs"
+                className="px-3 py-1.5 rounded-md bg-white/5 text-slate-300 font-bold text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteOrder}
                 disabled={deleting}
-                className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs"
+                className="px-4 py-1.5 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs"
               >
                 {deleting ? "Deleting..." : "Confirm Delete"}
               </button>
@@ -2239,10 +2239,10 @@ function OrdersContent() {
       {/* BOOK COURIER MODAL */}
       {bookingOrder && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg max-h-[90vh] bg-[#0e121e] border border-amber-500/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-lg max-h-[90vh] bg-[#0e121e] border border-[#A78BFA]/30 rounded-lg shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between p-4 sm:p-5 pb-3.5 border-b border-white/10 shrink-0 bg-[#0e121e]">
               <div className="flex items-center gap-2">
-                <Truck className="w-5 h-5 text-amber-400" />
+                <Truck className="w-5 h-5 text-[#A78BFA]" />
                 <div>
                   <h3 className="text-sm font-black text-white">Book Courier Consignment</h3>
                   <span className="text-[11px] text-slate-400">Order #{bookingOrder.order_number}</span>
@@ -2250,7 +2250,7 @@ function OrdersContent() {
               </div>
               <button
                 onClick={() => setBookingOrder(null)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -2265,7 +2265,7 @@ function OrdersContent() {
               <form onSubmit={handleExecuteBookCourier} className="flex flex-col flex-1 overflow-hidden">
                 <div className="p-4 sm:p-5 space-y-4 text-xs overflow-y-auto flex-1 custom-scrollbar">
                   {/* Recipient Quick Summary */}
-                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.03] border border-white/10 space-y-1">
                     <div className="flex justify-between items-center text-slate-300">
                       <span className="font-bold text-white">{bookingOrder.customer_name}</span>
                       <span className="font-mono text-cyan-400">{bookingOrder.customer_phone}</span>
@@ -2291,9 +2291,9 @@ function OrdersContent() {
                           key={provider.id}
                           type="button"
                           onClick={() => setSelectedCourier(provider.id)}
-                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                          className={`p-2.5 rounded-md border text-left transition-all cursor-pointer ${
                             isSelected
-                              ? "bg-amber-500/15 border-amber-500 text-white shadow-sm"
+                              ? "bg-[#211B32] border-[#A78BFA] text-white shadow-sm"
                               : "bg-white/[0.02] border-white/10 text-slate-400 hover:bg-white/5 hover:text-slate-200"
                           }`}
                         >
@@ -2321,7 +2321,7 @@ function OrdersContent() {
                       max="50"
                       value={bookingWeight}
                       onChange={(e) => setBookingWeight(parseFloat(e.target.value) || 0.5)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400/50 focus:outline-none"
+                      className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white font-mono text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                       required
                     />
                   </div>
@@ -2333,7 +2333,7 @@ function OrdersContent() {
                       min="0"
                       value={bookingCod}
                       onChange={(e) => setBookingCod(parseFloat(e.target.value) || 0)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400/50 focus:outline-none"
+                      className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white font-mono text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                       required
                     />
                   </div>
@@ -2346,7 +2346,7 @@ function OrdersContent() {
                     <select
                       value={bookingPickupStore}
                       onChange={(e) => setBookingPickupStore(e.target.value)}
-                      className="w-full bg-[#0e121e] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none"
+                      className="w-full bg-[#0e121e] border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                     >
                       {courierOptions.providers.find((p: any) => p.provider === "pathao").stores.map((s: any) => (
                         <option key={s.store_id} value={s.store_id}>
@@ -2359,7 +2359,7 @@ function OrdersContent() {
 
                 {/* Pathao Dynamic City & Zone Selectors */}
                 {selectedCourier === "pathao" ? (
-                  <div className="space-y-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/15">
+                  <div className="space-y-3 p-3 rounded-md bg-[#211B32]/40 border border-[#A78BFA]/20">
                     <span className="text-[11px] font-bold text-amber-300 block">Pathao Geolocation Routing</span>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -2367,13 +2367,13 @@ function OrdersContent() {
                         <label className="font-bold text-slate-300 block">Recipient City</label>
                         {loadingCities ? (
                           <div className="flex items-center gap-1 text-slate-400 py-2">
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" /> Loading cities...
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#A78BFA]" /> Loading cities...
                           </div>
                         ) : pathaoCities.length > 0 ? (
                           <select
                             value={selectedCityId || ""}
                             onChange={(e) => handleCityChange(Number(e.target.value))}
-                            className="w-full bg-[#0e121e] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none"
+                            className="w-full bg-[#0e121e] border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                           >
                             <option value="">-- Select City --</option>
                             {pathaoCities.map((c) => (
@@ -2388,7 +2388,7 @@ function OrdersContent() {
                             value={bookingDeliveryArea}
                             onChange={(e) => setBookingDeliveryArea(e.target.value)}
                             placeholder="e.g. Dhaka"
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none"
+                            className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                           />
                         )}
                       </div>
@@ -2397,14 +2397,14 @@ function OrdersContent() {
                         <label className="font-bold text-slate-300 block">Recipient Zone</label>
                         {loadingZones ? (
                           <div className="flex items-center gap-1 text-slate-400 py-2">
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" /> Loading zones...
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#A78BFA]" /> Loading zones...
                           </div>
                         ) : (
                           <select
                             value={selectedZoneId || ""}
                             onChange={(e) => handleZoneChange(Number(e.target.value))}
                             disabled={!selectedCityId || pathaoZones.length === 0}
-                            className="w-full bg-[#0e121e] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none disabled:opacity-50"
+                            className="w-full bg-[#0e121e] border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none disabled:opacity-50"
                           >
                             <option value="">{selectedCityId ? "-- Select Zone --" : "Select City First"}</option>
                             {pathaoZones.map((z) => (
@@ -2423,7 +2423,7 @@ function OrdersContent() {
                         <select
                           value={selectedAreaId || ""}
                           onChange={(e) => setSelectedAreaId(Number(e.target.value))}
-                          className="w-full bg-[#0e121e] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none"
+                          className="w-full bg-[#0e121e] border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                         >
                           <option value="">-- Optional: Select Area --</option>
                           {pathaoAreas.map((a) => (
@@ -2436,23 +2436,23 @@ function OrdersContent() {
                     )}
 
                     {/* Pathao Price Plan Calculator */}
-                    <div className="pt-2 border-t border-amber-500/20 space-y-2">
+                    <div className="pt-2 border-t border-[#A78BFA]/20 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-medium text-slate-300">Delivery Cost Estimation</span>
                         <button
                           type="button"
                           onClick={handleCalculatePrice}
                           disabled={calculatingPrice || !selectedCityId || !selectedZoneId}
-                          className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-bold flex items-center gap-1 transition-all disabled:opacity-40 cursor-pointer"
+                          className="px-2.5 py-1 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 text-[11px] font-bold flex items-center gap-1 transition-all disabled:opacity-40 cursor-pointer"
                         >
                           {calculatingPrice ? (
                             <>
-                              <Loader2 className="w-3 h-3 animate-spin text-amber-400" />
+                              <Loader2 className="w-3 h-3 animate-spin text-[#A78BFA]" />
                               <span>Calculating...</span>
                             </>
                           ) : (
                             <>
-                              <Calculator className="w-3 h-3 text-amber-400" />
+                              <Calculator className="w-3 h-3 text-[#A78BFA]" />
                               <span>Calculate Price</span>
                             </>
                           )}
@@ -2460,10 +2460,10 @@ function OrdersContent() {
                       </div>
 
                       {estimatedPrice && (
-                        <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 space-y-1.5">
+                        <div className="p-2.5 rounded-md bg-[#211B32] border border-[#A78BFA]/30 space-y-1.5">
                           <div className="flex items-center justify-between text-[11px]">
                             <span className="text-slate-400">Plan:</span>
-                            <span className="font-bold text-amber-200">{estimatedPrice.plan}</span>
+                            <span className="font-bold text-[#A78BFA]">{estimatedPrice.plan}</span>
                           </div>
                           <div className="flex items-center justify-between text-[11px]">
                             <span className="text-slate-400">Delivery Fee:</span>
@@ -2483,7 +2483,7 @@ function OrdersContent() {
                       )}
 
                       {priceError && (
-                        <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300 flex items-center gap-1.5">
+                        <div className="p-2 rounded-md bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300 flex items-center gap-1.5">
                           <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-400" />
                           <span>{priceError}</span>
                         </div>
@@ -2498,7 +2498,7 @@ function OrdersContent() {
                       value={bookingDeliveryArea}
                       onChange={(e) => setBookingDeliveryArea(e.target.value)}
                       placeholder="e.g. Dhaka, Chittagong, Sylhet"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none"
+                      className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                     />
                   </div>
                 )}
@@ -2511,7 +2511,7 @@ function OrdersContent() {
                     value={bookingNotes}
                     onChange={(e) => setBookingNotes(e.target.value)}
                     placeholder="e.g. Call before delivery, handle with care"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400/50 focus:outline-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:border-[#A78BFA]/50 focus:outline-none"
                   />
                 </div>
 
@@ -2522,14 +2522,14 @@ function OrdersContent() {
                   <button
                     type="button"
                     onClick={() => setBookingOrder(null)}
-                    className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition-colors cursor-pointer"
+                    className="px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isBookingCourier}
-                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-md disabled:opacity-50"
+                    className="px-4 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-black inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-md disabled:opacity-50"
                   >
                     {isBookingCourier ? (
                       <>
@@ -2553,15 +2553,15 @@ function OrdersContent() {
       {/* THERMAL 4X6 SHIPPING LABEL MODAL */}
       {isLabelModalOpen && shippingLabelData && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md max-h-[90vh] bg-[#0e121e] border border-white/20 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-md max-h-[90vh] bg-[#0e121e] border border-white/20 rounded-lg shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between p-4 sm:p-5 pb-3.5 border-b border-white/10 shrink-0 bg-[#0e121e] print:hidden">
               <div className="flex items-center gap-2">
-                <Printer className="w-5 h-5 text-amber-400" />
+                <Printer className="w-5 h-5 text-[#A78BFA]" />
                 <h3 className="text-sm font-black text-white">Thermal Shipping Label (4" × 6")</h3>
               </div>
               <button
                 onClick={() => setIsLabelModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -2569,7 +2569,7 @@ function OrdersContent() {
 
             {/* Label Printable Container (White background, black text high-contrast thermal aesthetic) */}
             <div className="p-4 sm:p-5 overflow-y-auto flex-1 custom-scrollbar">
-              <div id="thermal-label" className="bg-white text-black p-5 rounded-lg border-2 border-black font-sans space-y-3 print:border-none print:m-0 print:p-2">
+              <div id="thermal-label" className="bg-white text-black p-5 rounded-md border-2 border-black font-sans space-y-3 print:border-none print:m-0 print:p-2">
               {/* Header */}
               <div className="flex justify-between items-start border-b-2 border-black pb-2">
                 <div>
@@ -2630,14 +2630,14 @@ function OrdersContent() {
               <button
                 type="button"
                 onClick={() => setIsLabelModalOpen(false)}
-                className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition-colors cursor-pointer"
+                className="px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition-colors cursor-pointer"
               >
                 Close
               </button>
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-md"
+                className="px-4 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-black text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-md"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Thermal Label</span>

@@ -45,7 +45,7 @@ export function ColorDeleteModal({
           {/* Header */}
           <div className="h-14 px-6 border-b border-white/[0.06] bg-[#0b0e17] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+              <div className="w-8 h-8 rounded-md bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
                 <AlertTriangle className="w-4 h-4" />
               </div>
               <div>
@@ -68,7 +68,7 @@ export function ColorDeleteModal({
           {/* Content */}
           <div className="p-6 space-y-4 flex-1 overflow-y-auto text-xs">
             {/* Color Swatch Card */}
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center gap-3">
+            <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-full border border-black/20 shadow-inner shrink-0 ring-2 ring-white/10"
                 style={{ backgroundColor: color.hex_code }}
@@ -84,7 +84,7 @@ export function ColorDeleteModal({
 
             {hasBlockingDependencies ? (
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-2">
+                <div className="p-3.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-2">
                   <div className="flex items-center gap-2 font-bold text-xs text-amber-400">
                     <ShieldAlert className="w-4 h-4 shrink-0" />
                     <span>Deletion Blocked by System</span>
@@ -99,7 +99,7 @@ export function ColorDeleteModal({
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Active Catalog Conflicts:
                   </span>
-                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Boxes className="w-4 h-4 text-cyan-400 shrink-0" />
                       <div>
@@ -123,7 +123,7 @@ export function ColorDeleteModal({
                   Are you sure you want to permanently delete the color swatch{" "}
                   <strong className="text-white font-bold">{color.name}</strong> ({color.hex_code})?
                 </p>
-                <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-400 leading-relaxed">
+                <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 text-[11px] text-slate-400 leading-relaxed">
                   <p className="text-slate-300 font-medium mb-1">
                     ✓ No active catalog dependencies detected:
                   </p>
@@ -152,7 +152,7 @@ export function ColorDeleteModal({
               type="button"
               disabled={deleting || hasBlockingDependencies}
               onClick={onConfirmDelete}
-              className={`h-8 px-4 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm ${
+              className={`h-8 px-4 rounded-md text-xs font-bold transition flex items-center gap-1.5 shadow-sm ${
                 hasBlockingDependencies
                   ? "bg-slate-800 text-slate-500 border border-white/5 cursor-not-allowed"
                   : "bg-rose-500 hover:bg-rose-600 text-white cursor-pointer disabled:opacity-50"

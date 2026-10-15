@@ -33,9 +33,9 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("all")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
             typeFilter === "all"
-              ? "bg-amber-400/10 text-amber-300 border border-amber-400/30"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
           }`}
         >
@@ -45,9 +45,9 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("root_only")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
             typeFilter === "root_only"
-              ? "bg-amber-400/10 text-amber-300 border border-amber-400/30"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
           }`}
         >
@@ -57,9 +57,9 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("sub_only")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
             typeFilter === "sub_only"
-              ? "bg-amber-400/10 text-amber-300 border border-amber-400/30"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
           }`}
         >
@@ -69,9 +69,9 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("level_3")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
             typeFilter === "level_3"
-              ? "bg-amber-400/10 text-amber-300 border border-amber-400/30"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
           }`}
         >
@@ -86,15 +86,15 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("all")}
-          className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+          className={`p-3.5 rounded-md border text-left transition-all cursor-pointer ${
             typeFilter === "all" && selectedRootId === "all" && selectedParentId === "all"
-              ? "bg-amber-500/10 border-amber-500/40 ring-1 ring-amber-500/30"
+              ? "bg-[#211B32] border-[#A78BFA]/40 ring-1 ring-[#A78BFA]/30"
               : "bg-[#0e121e] border-white/10 hover:border-white/20"
           }`}
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-400">Total Items</span>
-            <Boxes className="w-4 h-4 text-amber-400" />
+            <Boxes className="w-4 h-4 text-[#A78BFA]" />
           </div>
           <p className="text-xl font-black text-white mt-1">{stats.total}</p>
           <p className="text-[10px] text-slate-500 mt-0.5">All taxonomy items</p>
@@ -104,7 +104,7 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("root_only")}
-          className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+          className={`p-3.5 rounded-md border text-left transition-all cursor-pointer ${
             typeFilter === "root_only"
               ? "bg-emerald-500/10 border-emerald-500/40 ring-1 ring-emerald-500/30"
               : "bg-[#0e121e] border-white/10 hover:border-white/20"
@@ -122,7 +122,7 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("sub_only")}
-          className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+          className={`p-3.5 rounded-md border text-left transition-all cursor-pointer ${
             typeFilter === "sub_only"
               ? "bg-cyan-500/10 border-cyan-500/40 ring-1 ring-cyan-500/30"
               : "bg-[#0e121e] border-white/10 hover:border-white/20"
@@ -140,7 +140,7 @@ export function CategoriesKpiCards({
         <button
           type="button"
           onClick={() => onSelectFilter("level_3")}
-          className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+          className={`p-3.5 rounded-md border text-left transition-all cursor-pointer ${
             typeFilter === "level_3"
               ? "bg-indigo-500/10 border-indigo-500/40 ring-1 ring-indigo-500/30"
               : "bg-[#0e121e] border-white/10 hover:border-white/20"
@@ -155,10 +155,10 @@ export function CategoriesKpiCards({
         </button>
 
         {/* Total Products Assigned */}
-        <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0e121e] text-left col-span-2 sm:col-span-1">
+        <div className="p-3.5 rounded-md border border-white/10 bg-[#0e121e] text-left col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-400">Total Products</span>
-            <Package className="w-4 h-4 text-amber-400" />
+            <Package className="w-4 h-4 text-[#A78BFA]" />
           </div>
           <p className="text-xl font-black text-white mt-1">{stats.totalProducts}</p>
           <p className="text-[10px] text-slate-500 mt-0.5">Assigned to catalog</p>

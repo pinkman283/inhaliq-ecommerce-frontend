@@ -117,18 +117,18 @@ export default function AdminPwaSettingsPage() {
       <SettingsNavTabs />
 
       {loading ? (
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-8 space-y-4 animate-pulse">
-          <div className="h-6 w-48 bg-[#161a26] rounded-xl" />
-          <div className="h-40 bg-[#161a26] rounded-xl" />
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-8 space-y-4 animate-pulse">
+          <div className="h-6 w-48 bg-[#161a26] rounded-md" />
+          <div className="h-40 bg-[#161a26] rounded-md" />
         </div>
       ) : (
         <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Controls */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Smartphone className="w-4 h-4 text-amber-400" />
+                  <Smartphone className="w-4 h-4 text-[#A78BFA]" />
                   App Manifest Specifications
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -144,7 +144,7 @@ export default function AdminPwaSettingsPage() {
                     value={pwa.name || ""}
                     onChange={(e) => setPwa({ ...pwa, name: e.target.value })}
                     placeholder="AETHER Audio Labs"
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
 
@@ -155,7 +155,7 @@ export default function AdminPwaSettingsPage() {
                     value={pwa.short_name || ""}
                     onChange={(e) => setPwa({ ...pwa, short_name: e.target.value })}
                     placeholder="AETHER"
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -168,13 +168,13 @@ export default function AdminPwaSettingsPage() {
                       type="color"
                       value={pwa.theme_color || "#090b10"}
                       onChange={(e) => setPwa({ ...pwa, theme_color: e.target.value })}
-                      className="w-8 h-8 rounded-lg bg-transparent border-0 cursor-pointer"
+                      className="w-8 h-8 rounded-md bg-transparent border-0 cursor-pointer"
                     />
                     <input
                       type="text"
                       value={pwa.theme_color || "#090b10"}
                       onChange={(e) => setPwa({ ...pwa, theme_color: e.target.value })}
-                      className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white font-mono"
+                      className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white font-mono"
                     />
                   </div>
                 </div>
@@ -186,13 +186,13 @@ export default function AdminPwaSettingsPage() {
                       type="color"
                       value={pwa.background_color || "#07090e"}
                       onChange={(e) => setPwa({ ...pwa, background_color: e.target.value })}
-                      className="w-8 h-8 rounded-lg bg-transparent border-0 cursor-pointer"
+                      className="w-8 h-8 rounded-md bg-transparent border-0 cursor-pointer"
                     />
                     <input
                       type="text"
                       value={pwa.background_color || "#07090e"}
                       onChange={(e) => setPwa({ ...pwa, background_color: e.target.value })}
-                      className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white font-mono"
+                      className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white font-mono"
                     />
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function AdminPwaSettingsPage() {
                   <select
                     value={pwa.display || "standalone"}
                     onChange={(e) => setPwa({ ...pwa, display: e.target.value })}
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="standalone">Standalone (App-like, hides browser UI)</option>
                     <option value="fullscreen">Fullscreen (Immersive kiosk)</option>
@@ -218,7 +218,7 @@ export default function AdminPwaSettingsPage() {
                   <select
                     value={pwa.orientation || "portrait-primary"}
                     onChange={(e) => setPwa({ ...pwa, orientation: e.target.value })}
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="portrait-primary">Portrait (Primary)</option>
                     <option value="landscape-primary">Landscape</option>
@@ -238,7 +238,7 @@ export default function AdminPwaSettingsPage() {
                     value={pwa.icon_192 || ""}
                     onChange={(e) => setPwa({ ...pwa, icon_192: e.target.value })}
                     placeholder="/icons/icon-192x192.png"
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
 
@@ -252,7 +252,7 @@ export default function AdminPwaSettingsPage() {
                     value={pwa.icon_512 || ""}
                     onChange={(e) => setPwa({ ...pwa, icon_512: e.target.value })}
                     placeholder="/icons/icon-512x512.png"
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
               </div>
@@ -261,18 +261,18 @@ export default function AdminPwaSettingsPage() {
 
           {/* Right Column: Mobile Home Screen Preview */}
           <div className="space-y-4">
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-5 space-y-3">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-5 space-y-3">
               <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5 border-b border-white/[0.06] pb-3">
-                <Smartphone className="w-3.5 h-3.5 text-amber-400" />
+                <Smartphone className="w-3.5 h-3.5 text-[#A78BFA]" />
                 Home Screen App Icon Simulator
               </span>
 
-              <div className="p-6 bg-[#07090e] rounded-xl border border-white/5 flex flex-col items-center justify-center gap-3">
+              <div className="p-6 bg-[#07090e] rounded-md border border-white/5 flex flex-col items-center justify-center gap-3">
                 <div 
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-xl shadow-black/60 border border-white/10"
+                  className="w-16 h-16 rounded-md flex items-center justify-center text-white font-bold text-lg shadow-xl shadow-black/60 border border-white/10"
                   style={{ backgroundColor: pwa.theme_color || "#090b10" }}
                 >
-                  <Sparkles className="w-8 h-8 text-amber-400" />
+                  <Sparkles className="w-8 h-8 text-[#A78BFA]" />
                 </div>
                 <div className="text-center">
                   <div className="text-xs font-bold text-white tracking-wide">
@@ -289,7 +289,7 @@ export default function AdminPwaSettingsPage() {
                 </div>
                 <div className="flex justify-between border-b border-white/5 pb-1">
                   <span>Display:</span>
-                  <span className="font-mono text-amber-300 capitalize">{pwa.display || "standalone"}</span>
+                  <span className="font-mono text-[#A78BFA] capitalize">{pwa.display || "standalone"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Theme:</span>

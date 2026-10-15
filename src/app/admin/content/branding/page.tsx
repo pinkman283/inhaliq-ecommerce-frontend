@@ -517,7 +517,7 @@ function BrandingStudioContent() {
             <span className="text-cyan-400 font-medium">Branding Studio</span>
           </nav>
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+            <div className="p-2 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
               <Store className="w-5 h-5" />
             </div>
             <div>
@@ -534,7 +534,7 @@ function BrandingStudioContent() {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-semibold bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 text-cyan-400" />
             <span>Add Logo</span>
@@ -544,7 +544,7 @@ function BrandingStudioContent() {
             type="button"
             onClick={handleSaveAll}
             disabled={saving}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold transition-all shadow-md cursor-pointer ${
               isDirty
                 ? "bg-gradient-to-r from-cyan-500 to-indigo-600 text-white hover:from-cyan-400 hover:to-indigo-500 shadow-cyan-500/20"
                 : "bg-white/10 text-slate-300 hover:bg-white/15"
@@ -557,7 +557,7 @@ function BrandingStudioContent() {
       </div>
 
       {/* SECTION 1: Brand Identity */}
-      <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+      <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
         <div>
           <h2 className="text-base font-bold text-white flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-cyan-400" />
@@ -576,7 +576,7 @@ function BrandingStudioContent() {
               value={brandName}
               onChange={(e) => setBrandName(e.target.value)}
               placeholder="e.g. INHALIQ"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
           </div>
 
@@ -587,7 +587,7 @@ function BrandingStudioContent() {
               value={brandTagline}
               onChange={(e) => setBrandTagline(e.target.value)}
               placeholder="e.g. ELEVATE EVERY INHALE"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
           </div>
         </div>
@@ -596,17 +596,17 @@ function BrandingStudioContent() {
       {/* SECTION 2: Key Visual Assets (Desktop Logo, Mobile Logo, Favicon) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Desktop Navbar Logo Card */}
-        <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md flex flex-col justify-between space-y-4">
+        <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md flex flex-col justify-between space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Store Logo</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                 Desktop
               </span>
             </div>
 
             {/* Preview Box */}
-            <div className="h-32 rounded-xl border border-white/10 bg-black/50 flex items-center justify-center p-4 relative group overflow-hidden">
+            <div className="h-32 rounded-md border border-white/10 bg-black/50 flex items-center justify-center p-4 relative group overflow-hidden">
               {desktopLogo?.image_url ? (
                 <img
                   src={desktopLogo.image_url}
@@ -634,7 +634,7 @@ function BrandingStudioContent() {
                   replaceFileInputRef.current?.click();
                 }
               }}
-              className="flex-1 py-1.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-200 border border-white/10 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              className="flex-1 py-1.5 px-3 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-200 border border-white/10 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Replace Image</span>
@@ -643,17 +643,17 @@ function BrandingStudioContent() {
         </div>
 
         {/* Mobile Navbar Logo Card */}
-        <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md flex flex-col justify-between space-y-4">
+        <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md flex flex-col justify-between space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Mobile Branding</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                 Mobile
               </span>
             </div>
 
             {/* Preview Box */}
-            <div className="h-32 rounded-xl border border-white/10 bg-black/50 flex items-center justify-center p-4 relative group overflow-hidden">
+            <div className="h-32 rounded-md border border-white/10 bg-black/50 flex items-center justify-center p-4 relative group overflow-hidden">
               {mobileLogo?.image_url ? (
                 <img
                   src={mobileLogo.image_url}
@@ -679,7 +679,7 @@ function BrandingStudioContent() {
                 const targetId = e.target.value ? parseInt(e.target.value) : null;
                 handleAssignPlacement("mobile_navbar", targetId);
               }}
-              className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+              className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
             >
               <option value="">Same as Desktop Logo (Fallback)</option>
               {logos.map((logo) => (
@@ -692,18 +692,18 @@ function BrandingStudioContent() {
         </div>
 
         {/* Favicon Card */}
-        <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md flex flex-col justify-between space-y-4">
+        <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md flex flex-col justify-between space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Favicon</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
                 Browser Tab
               </span>
             </div>
 
             {/* Browser Tab Mock Preview */}
-            <div className="h-32 rounded-xl border border-white/10 bg-black/50 flex flex-col justify-center px-4 py-2 space-y-2">
-              <div className="p-2.5 rounded-lg bg-[#1a1f2c] border border-white/10 flex items-center gap-2.5 shadow-md">
+            <div className="h-32 rounded-md border border-white/10 bg-black/50 flex flex-col justify-center px-4 py-2 space-y-2">
+              <div className="p-2.5 rounded-md bg-[#1a1f2c] border border-white/10 flex items-center gap-2.5 shadow-md">
                 {faviconUrl ? (
                   <img
                     src={faviconUrl}
@@ -740,7 +740,7 @@ function BrandingStudioContent() {
               type="button"
               disabled={uploadingFavicon}
               onClick={() => faviconInputRef.current?.click()}
-              className="flex-1 py-1.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-200 border border-white/10 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              className="flex-1 py-1.5 px-3 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-200 border border-white/10 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
               {uploadingFavicon ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
               <span>{faviconUrl ? "Replace Favicon" : "Upload Favicon"}</span>
@@ -750,7 +750,7 @@ function BrandingStudioContent() {
               <button
                 type="button"
                 onClick={() => setShowRemoveFaviconModal(true)}
-                className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-all cursor-pointer"
+                className="p-1.5 rounded-md bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-all cursor-pointer"
                 title="Remove Favicon"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -761,7 +761,7 @@ function BrandingStudioContent() {
       </div>
 
       {/* SECTION 3: Surface Placements Mapping */}
-      <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+      <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -786,7 +786,7 @@ function BrandingStudioContent() {
             return (
               <div
                 key={placement.id}
-                className="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col justify-between space-y-3 hover:border-white/20 transition-all"
+                className="p-4 rounded-md bg-white/[0.03] border border-white/10 flex flex-col justify-between space-y-3 hover:border-white/20 transition-all"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -796,7 +796,7 @@ function BrandingStudioContent() {
                   <p className="text-[11px] text-slate-400 line-clamp-1">{placement.description}</p>
 
                   {/* Surface Logo Preview */}
-                  <div className="h-16 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center p-2">
+                  <div className="h-16 rounded-md bg-black/40 border border-white/10 flex items-center justify-center p-2">
                     {assignedLogo?.image_url ? (
                       <img
                         src={assignedLogo.image_url}
@@ -817,7 +817,7 @@ function BrandingStudioContent() {
                       const targetId = e.target.value ? parseInt(e.target.value) : null;
                       handleAssignPlacement(placement.id, targetId);
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                    className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
                   >
                     <option value="">Unassigned</option>
                     {logos.map((l) => (
@@ -834,7 +834,7 @@ function BrandingStudioContent() {
       </div>
 
       {/* SECTION 4: Available Brand Logos */}
-      <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+      <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -849,7 +849,7 @@ function BrandingStudioContent() {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 hover:bg-cyan-500/20 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 hover:bg-cyan-500/20 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Upload New Logo</span>
@@ -865,11 +865,11 @@ function BrandingStudioContent() {
             return (
               <div
                 key={logo.id}
-                className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between space-y-3 group"
+                className="p-4 rounded-md bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between space-y-3 group"
               >
                 <div className="space-y-3">
                   {/* Image Display */}
-                  <div className="h-28 rounded-lg bg-black/60 border border-white/10 flex items-center justify-center p-3 relative overflow-hidden">
+                  <div className="h-28 rounded-md bg-black/60 border border-white/10 flex items-center justify-center p-3 relative overflow-hidden">
                     <img
                       src={logo.image_url}
                       alt={logo.name || `Logo #${logo.id}`}
@@ -948,7 +948,7 @@ function BrandingStudioContent() {
                       setReplacingLogoId(logo.id);
                       replaceFileInputRef.current?.click();
                     }}
-                    className="flex-1 py-1 px-2 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-medium text-slate-300 border border-white/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                    className="flex-1 py-1 px-2 rounded-md bg-white/5 hover:bg-white/10 text-[11px] font-medium text-slate-300 border border-white/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
                   >
                     <Upload className="w-3 h-3" />
                     <span>Replace</span>
@@ -958,7 +958,7 @@ function BrandingStudioContent() {
                     type="button"
                     disabled={logos.length <= 1}
                     onClick={() => setDeletingLogo(logo)}
-                    className={`p-1.5 rounded-lg border transition-all ${
+                    className={`p-1.5 rounded-md border transition-all ${
                       logos.length <= 1
                         ? "opacity-30 cursor-not-allowed border-transparent text-slate-600"
                         : "bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border-white/10 hover:border-rose-500/30 cursor-pointer"
@@ -987,10 +987,10 @@ function BrandingStudioContent() {
       {/* MODAL: Add New Logo */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="max-w-lg w-full p-6 rounded-2xl bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
+          <div className="max-w-lg w-full p-6 rounded-lg bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <div className="p-2 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                   <Plus className="w-4 h-4" />
                 </div>
                 <div>
@@ -1015,7 +1015,7 @@ function BrandingStudioContent() {
                   value={newLogoName}
                   onChange={(e) => setNewLogoName(e.target.value)}
                   placeholder="e.g. Light Mode Navbar Mark"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -1031,9 +1031,9 @@ function BrandingStudioContent() {
                 />
 
                 {newLogoUrl ? (
-                  <div className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between">
+                  <div className="p-4 rounded-md bg-black/50 border border-white/10 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-lg bg-black/60 border border-white/10 flex items-center justify-center p-2">
+                      <div className="w-14 h-14 rounded-md bg-black/60 border border-white/10 flex items-center justify-center p-2">
                         <img src={newLogoUrl} alt="New Logo Preview" className="max-h-full max-w-full object-contain" />
                       </div>
                       <div>
@@ -1044,7 +1044,7 @@ function BrandingStudioContent() {
                     <button
                       type="button"
                       onClick={() => setNewLogoUrl("")}
-                      className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10"
+                      className="p-1.5 rounded-md text-rose-400 hover:bg-rose-500/10"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -1052,7 +1052,7 @@ function BrandingStudioContent() {
                 ) : (
                   <div
                     onClick={() => newLogoFileRef.current?.click()}
-                    className="border-2 border-dashed border-white/15 hover:border-cyan-500/50 rounded-xl p-6 text-center cursor-pointer transition-all bg-white/[0.02] hover:bg-white/[0.04]"
+                    className="border-2 border-dashed border-white/15 hover:border-cyan-500/50 rounded-md p-6 text-center cursor-pointer transition-all bg-white/[0.02] hover:bg-white/[0.04]"
                   >
                     {uploadingNewLogo ? (
                       <Loader2 className="w-8 h-8 animate-spin text-cyan-400 mx-auto" />
@@ -1084,7 +1084,7 @@ function BrandingStudioContent() {
                             setNewLogoPlacements((prev) => [...prev, p.id]);
                           }
                         }}
-                        className={`p-2.5 rounded-lg border text-left text-xs transition-all flex items-center justify-between ${
+                        className={`p-2.5 rounded-md border text-left text-xs transition-all flex items-center justify-between ${
                           isChecked
                             ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
                             : "bg-black/30 border-white/10 text-slate-400 hover:text-white"
@@ -1103,7 +1103,7 @@ function BrandingStudioContent() {
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -1111,7 +1111,7 @@ function BrandingStudioContent() {
                 type="button"
                 disabled={creatingLogo || !newLogoUrl}
                 onClick={handleCreateLogo}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-white disabled:opacity-40 transition-all cursor-pointer shadow-lg shadow-cyan-500/20"
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-white disabled:opacity-40 transition-all cursor-pointer shadow-lg shadow-cyan-500/20"
               >
                 {creatingLogo ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 <span>{creatingLogo ? "Creating..." : "Create Logo"}</span>
@@ -1124,9 +1124,9 @@ function BrandingStudioContent() {
       {/* MODAL: Delete Logo Confirmation */}
       {deletingLogo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="max-w-md w-full p-6 rounded-2xl bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
+          <div className="max-w-md w-full p-6 rounded-lg bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+              <div className="p-2.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400">
                 <Trash2 className="w-5 h-5" />
               </div>
               <div>
@@ -1144,7 +1144,7 @@ function BrandingStudioContent() {
                 type="button"
                 onClick={() => setDeletingLogo(null)}
                 disabled={isDeleting}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -1152,7 +1152,7 @@ function BrandingStudioContent() {
                 type="button"
                 onClick={handleDeleteLogo}
                 disabled={isDeleting}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
               >
                 {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                 <span>{isDeleting ? "Deleting..." : "Yes, Delete Logo"}</span>
@@ -1165,9 +1165,9 @@ function BrandingStudioContent() {
       {/* MODAL: Remove Favicon Confirmation */}
       {showRemoveFaviconModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="max-w-md w-full p-6 rounded-2xl bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
+          <div className="max-w-md w-full p-6 rounded-lg bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+              <div className="p-2.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400">
                 <Globe className="w-5 h-5" />
               </div>
               <div>
@@ -1184,14 +1184,14 @@ function BrandingStudioContent() {
               <button
                 type="button"
                 onClick={() => setShowRemoveFaviconModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleRemoveFavicon}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
                 <span>Remove Favicon</span>

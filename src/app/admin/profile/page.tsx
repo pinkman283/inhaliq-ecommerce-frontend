@@ -229,7 +229,7 @@ export default function AdminProfilePage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-white tracking-tight">Admin Profile</h1>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-semibold bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
               <ShieldCheck className="w-3 h-3 text-amber-400" />
               {adminUser?.role === "super_admin" ? "Super Admin" : (adminUser?.role || "Admin").toUpperCase()}
             </span>
@@ -241,7 +241,7 @@ export default function AdminProfilePage() {
       {/* Main Profile Details Form */}
       <form id="admin-profile-form" onSubmit={handleMainFormSubmit} className="space-y-6">
         {/* Section 1: Personal Information */}
-        <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0f17] border border-white/[0.08] shadow-sm space-y-6">
+        <div className="p-6 sm:p-7 rounded-md bg-[#0c0f17] border border-white/[0.08] shadow-sm space-y-6">
           <div>
             <h2 className="text-sm font-semibold text-white">Personal Information</h2>
             <p className="text-xs text-slate-400 mt-0.5">Update your photo and administrator contact details.</p>
@@ -267,7 +267,7 @@ export default function AdminProfilePage() {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="First name"
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-md px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 focus:ring-1 focus:ring-[#A78BFA]/20 transition-all"
               />
             </div>
 
@@ -280,7 +280,7 @@ export default function AdminProfilePage() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Last name"
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-md px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 focus:ring-1 focus:ring-[#A78BFA]/20 transition-all"
               />
             </div>
 
@@ -301,7 +301,7 @@ export default function AdminProfilePage() {
                       setShowEmailDrawer(true);
                     }}
                     placeholder="admin@example.com"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-200 cursor-pointer focus:outline-none hover:bg-white/[0.05] hover:border-white/[0.12] transition-all"
+                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md pl-10 pr-3.5 py-2.5 text-sm text-slate-200 cursor-pointer focus:outline-none hover:bg-white/[0.05] hover:border-white/[0.12] transition-all"
                     title="Click to change email address via drawer"
                   />
                 </div>
@@ -312,9 +312,9 @@ export default function AdminProfilePage() {
                     setEmailCurrentPassword("");
                     setShowEmailDrawer(true);
                   }}
-                  className="px-3.5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-slate-200 hover:text-white transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                  className="px-3.5 py-2.5 rounded-md bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-slate-200 hover:text-white transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
                 >
-                  <Mail className="w-3.5 h-3.5 text-amber-400" />
+                  <Mail className="w-3.5 h-3.5 text-[#A78BFA]" />
                   <span>Change Email</span>
                 </button>
               </div>
@@ -334,7 +334,7 @@ export default function AdminProfilePage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-md pl-10 pr-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 focus:ring-1 focus:ring-[#A78BFA]/20 transition-all"
                 />
               </div>
               <p className="text-[11px] text-slate-500 mt-1.5">
@@ -345,10 +345,10 @@ export default function AdminProfilePage() {
         </div>
 
         {/* Section 2: Password & Security */}
-        <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0f17] border border-white/[0.08] shadow-sm">
+        <div className="p-6 sm:p-7 rounded-md bg-[#0c0f17] border border-white/[0.08] shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-start sm:items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center shrink-0 text-amber-400">
+              <div className="w-10 h-10 rounded-md bg-white/[0.04] border border-white/[0.08] flex items-center justify-center shrink-0 text-[#A78BFA]">
                 <KeyRound className="w-4 h-4" />
               </div>
               <div>
@@ -367,24 +367,24 @@ export default function AdminProfilePage() {
                 setPwdConfirm("");
                 setShowPasswordDrawer(true);
               }}
-              className="px-4 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-slate-200 hover:text-white transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+              className="px-4 py-2 rounded-md bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-slate-200 hover:text-white transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto"
             >
-              <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+              <KeyRound className="w-3.5 h-3.5 text-[#A78BFA]" />
               <span>Change Password</span>
             </button>
           </div>
         </div>
 
         {/* Section 3: Role & Access Privileges */}
-        <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0f17] border border-white/[0.08] shadow-sm space-y-4">
+        <div className="p-6 sm:p-7 rounded-md bg-[#0c0f17] border border-white/[0.08] shadow-sm space-y-4">
           <div>
             <h2 className="text-sm font-semibold text-white">Role & Access Privileges</h2>
             <p className="text-xs text-slate-400 mt-0.5">Permissions and administrative capabilities assigned to your account.</p>
           </div>
 
           {adminUser?.role === "super_admin" || adminUser?.role === "admin" ? (
-            <div className="flex items-start gap-3.5 p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 shrink-0">
+            <div className="flex items-start gap-3.5 p-4 rounded-md bg-white/[0.02] border border-white/[0.06]">
+              <div className="p-2 rounded-md bg-[#211B32] text-[#A78BFA] shrink-0 border border-[#A78BFA]/30">
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
@@ -397,7 +397,7 @@ export default function AdminProfilePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {ADMIN_PERMISSION_MODULES.map((mod) => (
-                <div key={mod.name} className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+                <div key={mod.name} className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06] space-y-2">
                   <span className="text-xs font-semibold text-slate-200 block">{mod.name}</span>
                   <div className="space-y-1">
                     {mod.permissions.map((p) => {
@@ -429,7 +429,7 @@ export default function AdminProfilePage() {
           {/* Header */}
           <div className="p-6 border-b border-white/[0.08] flex items-start justify-between gap-4 bg-[#0e121e]/80 shrink-0">
             <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-10 h-10 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shrink-0">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
@@ -446,7 +446,7 @@ export default function AdminProfilePage() {
                 setNewEmail("");
                 setEmailCurrentPassword("");
               }}
-              className="w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-md text-slate-400 hover:text-white hover:bg-white/[0.06] flex items-center justify-center transition-colors cursor-pointer shrink-0"
               title="Close drawer"
             >
               <X className="w-4 h-4" />
@@ -456,7 +456,7 @@ export default function AdminProfilePage() {
           {/* Form Body */}
           <form id="email-change-drawer-form" onSubmit={handleEmailUpdate} className="flex-1 overflow-y-auto p-6 space-y-5">
             {/* Notice Callout */}
-            <div className="p-4 rounded-xl bg-amber-500/[0.06] border border-amber-500/20 flex items-start gap-3">
+            <div className="p-4 rounded-md bg-amber-500/[0.06] border border-amber-500/20 flex items-start gap-3">
               <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <div className="text-xs text-amber-200/90 leading-relaxed">
                 <span className="font-semibold text-amber-300 block mb-0.5">Authorization Required</span>
@@ -465,7 +465,7 @@ export default function AdminProfilePage() {
             </div>
 
             {/* Current Email Display */}
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
+            <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06] space-y-1">
               <span className="text-[11px] font-medium text-slate-400 block">Current Registered Email</span>
               <div className="flex items-center gap-2 text-xs font-semibold text-white">
                 <Shield className="w-3.5 h-3.5 text-emerald-400" />
@@ -487,7 +487,7 @@ export default function AdminProfilePage() {
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                   placeholder="new-admin@example.com"
-                  className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-colors"
+                  className="w-full bg-white/[0.04] border border-white/[0.1] rounded-md pl-10 pr-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 focus:ring-1 focus:ring-[#A78BFA]/20 transition-colors"
                 />
               </div>
               <p className="text-[11px] text-slate-500">
@@ -505,7 +505,7 @@ export default function AdminProfilePage() {
                 value={emailCurrentPassword}
                 onChange={(e) => setEmailCurrentPassword(e.target.value)}
                 placeholder="Enter current password to verify"
-                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-xl py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 transition-colors"
+                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-md py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 transition-colors"
               />
               <p className="text-[11px] text-slate-500">
                 Enter your existing password to verify account ownership.
@@ -522,7 +522,7 @@ export default function AdminProfilePage() {
                 setNewEmail("");
                 setEmailCurrentPassword("");
               }}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -531,7 +531,7 @@ export default function AdminProfilePage() {
               type="submit"
               form="email-change-drawer-form"
               disabled={confirmingEmail || !newEmail.trim() || !emailCurrentPassword}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-amber-500/10"
+              className="px-4 py-2 rounded-md text-xs font-semibold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#A78BFA]/20 font-bold"
             >
               {confirmingEmail ? (
                 <>
@@ -559,7 +559,7 @@ export default function AdminProfilePage() {
           {/* Header */}
           <div className="p-6 border-b border-white/[0.08] flex items-start justify-between gap-4 bg-[#0e121e]/80 shrink-0">
             <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-10 h-10 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shrink-0">
                 <KeyRound className="w-5 h-5" />
               </div>
               <div>
@@ -577,7 +577,7 @@ export default function AdminProfilePage() {
                 setPwdNew("");
                 setPwdConfirm("");
               }}
-              className="w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-md text-slate-400 hover:text-white hover:bg-white/[0.06] flex items-center justify-center transition-colors cursor-pointer shrink-0"
               title="Close drawer"
             >
               <X className="w-4 h-4" />
@@ -587,8 +587,8 @@ export default function AdminProfilePage() {
           {/* Form Body */}
           <form id="password-change-drawer-form" onSubmit={handlePasswordUpdate} className="flex-1 overflow-y-auto p-6 space-y-5">
             {/* Notice Callout */}
-            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-start gap-3">
-              <Lock className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.06] flex items-start gap-3">
+              <Lock className="w-4 h-4 text-[#A78BFA] shrink-0 mt-0.5" />
               <div className="text-xs text-slate-300 leading-relaxed">
                 <span className="font-semibold text-white block mb-0.5">Password Security</span>
                 Ensure your password is at least 8 characters long. After changing your password, your current active browser session will stay authenticated.
@@ -606,7 +606,7 @@ export default function AdminProfilePage() {
                 value={pwdCurrent}
                 onChange={(e) => setPwdCurrent(e.target.value)}
                 placeholder="Enter current password"
-                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-xl py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 transition-colors"
+                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-md py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 transition-colors"
               />
             </div>
 
@@ -620,7 +620,7 @@ export default function AdminProfilePage() {
                 value={pwdNew}
                 onChange={(e) => setPwdNew(e.target.value)}
                 placeholder="Minimum 8 characters"
-                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-xl py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 transition-colors"
+                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-md py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 transition-colors"
               />
               {/* Length indicator */}
               <div className="flex items-center gap-1.5 pt-1 text-[11px]">
@@ -646,7 +646,7 @@ export default function AdminProfilePage() {
                 value={pwdConfirm}
                 onChange={(e) => setPwdConfirm(e.target.value)}
                 placeholder="Repeat new password"
-                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-xl py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 transition-colors"
+                inputClassName="bg-white/[0.04] border border-white/[0.1] rounded-md py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 transition-colors"
               />
               {/* Match indicator */}
               {pwdConfirm.length > 0 && (
@@ -656,7 +656,7 @@ export default function AdminProfilePage() {
                       <Check className="w-3 h-3" /> Passwords match
                     </span>
                   ) : (
-                    <span className="text-amber-400 flex items-center gap-1">
+                    <span className="text-[#A78BFA] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" /> Passwords do not match yet
                     </span>
                   )}
@@ -675,7 +675,7 @@ export default function AdminProfilePage() {
                 setPwdNew("");
                 setPwdConfirm("");
               }}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -684,7 +684,7 @@ export default function AdminProfilePage() {
               type="submit"
               form="password-change-drawer-form"
               disabled={savingPassword || !pwdCurrent || !pwdNew || !pwdConfirm || pwdNew !== pwdConfirm || pwdNew.length < 8}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-amber-500/10"
+              className="px-4 py-2 rounded-md text-xs font-semibold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#A78BFA]/20 font-bold"
             >
               {savingPassword ? (
                 <>

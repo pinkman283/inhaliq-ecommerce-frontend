@@ -125,7 +125,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-4xl max-h-[90vh] bg-[#0c0e14] border border-white/[0.08] rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-100"
+        className="w-full max-w-4xl max-h-[90vh] bg-[#0c0e14] border border-white/[0.08] rounded-lg shadow-2xl flex flex-col overflow-hidden text-slate-100"
         role="dialog"
         aria-modal="true"
         aria-labelledby="import-modal-title"
@@ -133,13 +133,13 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#0f121b]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <div className="w-9 h-9 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA]">
               <Upload className="w-4 h-4" />
             </div>
             <div>
               <h3 id="import-modal-title" className="text-base font-bold text-white flex items-center gap-2">
                 Catalog CSV Import
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
                   Dry-Run Verified
                 </span>
               </h3>
@@ -150,7 +150,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
           </div>
           <button
             onClick={handleClose}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition cursor-pointer"
+            className="p-2 text-slate-400 hover:text-white rounded-md hover:bg-white/5 transition cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -165,7 +165,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
               {/* Dropzone */}
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-white/20 hover:border-amber-400/50 rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-white/[0.02] hover:bg-white/[0.04] group"
+                className="border-2 border-dashed border-white/20 hover:border-[#A78BFA]/50 rounded-md p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-white/[0.02] hover:bg-white/[0.04] group"
               >
                 <input
                   type="file"
@@ -174,7 +174,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   accept=".csv,.txt"
                   className="hidden"
                 />
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform mb-3">
+                <div className="w-14 h-14 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] group-hover:scale-105 transition-transform mb-3">
                   <FileText className="w-7 h-7" />
                 </div>
                 <h4 className="text-sm font-bold text-white mb-1">
@@ -185,13 +185,13 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                     ? `File size: ${(selectedFile.size / 1024).toFixed(1)} KB`
                     : "Supports standard UTF-8 CSV exported from Phase 3I-B or compatible spreadsheets."}
                 </p>
-                <span className="text-[11px] font-semibold text-amber-400 underline underline-offset-2">
+                <span className="text-[11px] font-semibold text-[#A78BFA] underline underline-offset-2">
                   {selectedFile ? "Click to choose a different file" : "Browse file"}
                 </span>
               </div>
 
               {/* Import Guardrails Notice */}
-              <div className="p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20 space-y-2">
+              <div className="p-4 rounded-md bg-cyan-500/5 border border-cyan-500/20 space-y-2">
                 <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
                   <ShieldAlert className="w-4 h-4" /> Import Guardrails & Safety
                 </div>
@@ -209,7 +209,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
           {/* STAGE 2: VALIDATING SPINNER */}
           {stage === "validating" && (
             <div className="py-16 flex flex-col items-center justify-center text-center space-y-4">
-              <RefreshCw className="w-10 h-10 text-amber-400 animate-spin" />
+              <RefreshCw className="w-10 h-10 text-[#A78BFA] animate-spin" />
               <div>
                 <h4 className="text-base font-bold text-white mb-1">Analyzing Catalog CSV...</h4>
                 <p className="text-xs text-slate-400 max-w-sm">
@@ -224,23 +224,23 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
             <div className="space-y-6">
               {/* Summary KPIs */}
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                <div className="p-3 rounded-md bg-white/[0.04] border border-white/[0.08]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Rows</span>
                   <p className="text-lg font-black text-white">{validationReport.summary.total_rows}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                <div className="p-3 rounded-md bg-emerald-500/10 border border-emerald-500/20">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Creates</span>
                   <p className="text-lg font-black text-emerald-400">{validationReport.summary.creates}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+                <div className="p-3 rounded-md bg-cyan-500/10 border border-cyan-500/20">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400">Updates</span>
                   <p className="text-lg font-black text-cyan-400">{validationReport.summary.updates}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-500/10 border border-slate-500/20">
+                <div className="p-3 rounded-md bg-slate-500/10 border border-slate-500/20">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Unchanged</span>
                   <p className="text-lg font-black text-slate-300">{validationReport.summary.unchanged}</p>
                 </div>
-                <div className={`p-3 rounded-xl ${validationReport.summary.errors_count > 0 ? "bg-rose-500/20 border-rose-500/40" : "bg-white/[0.04] border-white/[0.08]"}`}>
+                <div className={`p-3 rounded-md ${validationReport.summary.errors_count > 0 ? "bg-rose-500/20 border-rose-500/40" : "bg-white/[0.04] border-white/[0.08]"}`}>
                   <span className={`text-[10px] font-bold uppercase tracking-wider ${validationReport.summary.errors_count > 0 ? "text-rose-400" : "text-slate-400"}`}>Errors</span>
                   <p className={`text-lg font-black ${validationReport.summary.errors_count > 0 ? "text-rose-400" : "text-slate-400"}`}>{validationReport.summary.errors_count}</p>
                 </div>
@@ -248,7 +248,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
 
               {/* Status Banner */}
               {validationReport.summary.errors_count > 0 ? (
-                <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
+                <div className="p-3.5 rounded-md bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <p className="font-bold text-rose-300">
@@ -260,7 +260,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   </div>
                 </div>
               ) : validationReport.can_commit ? (
-                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3">
+                <div className="p-3.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <p className="font-bold text-emerald-300">
@@ -272,7 +272,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   </div>
                 </div>
               ) : (
-                <div className="p-3.5 rounded-xl bg-slate-500/10 border border-slate-500/30 flex items-start gap-3">
+                <div className="p-3.5 rounded-md bg-slate-500/10 border border-slate-500/30 flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
                   <div className="text-xs text-slate-300">
                     All catalog rows are already up-to-date. No changes are required.
@@ -282,35 +282,35 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
 
               {/* Filter Tabs & Row Search */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.04] border border-white/[0.08] w-full sm:w-auto overflow-x-auto">
+                <div className="flex items-center gap-1.5 p-1 rounded-md bg-white/[0.04] border border-white/[0.08] w-full sm:w-auto overflow-x-auto">
                   <button
                     onClick={() => setActiveTab("all")}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${activeTab === "all" ? "bg-amber-500 text-slate-950" : "text-slate-400 hover:text-white"}`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition ${activeTab === "all" ? "bg-[#A78BFA] text-[#090B10]" : "text-slate-400 hover:text-white"}`}
                   >
                     All ({validationReport.summary.total_rows})
                   </button>
                   <button
                     onClick={() => setActiveTab("creates")}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${activeTab === "creates" ? "bg-emerald-500 text-slate-950" : "text-slate-400 hover:text-white"}`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition ${activeTab === "creates" ? "bg-emerald-500 text-slate-950" : "text-slate-400 hover:text-white"}`}
                   >
                     Creates ({validationReport.summary.creates})
                   </button>
                   <button
                     onClick={() => setActiveTab("updates")}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${activeTab === "updates" ? "bg-cyan-500 text-slate-950" : "text-slate-400 hover:text-white"}`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition ${activeTab === "updates" ? "bg-cyan-500 text-slate-950" : "text-slate-400 hover:text-white"}`}
                   >
                     Updates ({validationReport.summary.updates})
                   </button>
                   <button
                     onClick={() => setActiveTab("unchanged")}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${activeTab === "unchanged" ? "bg-slate-300 text-slate-950" : "text-slate-400 hover:text-white"}`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition ${activeTab === "unchanged" ? "bg-slate-300 text-slate-950" : "text-slate-400 hover:text-white"}`}
                   >
                     Unchanged ({validationReport.summary.unchanged})
                   </button>
                   {validationReport.summary.errors_count > 0 && (
                     <button
                       onClick={() => setActiveTab("errors")}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${activeTab === "errors" ? "bg-rose-500 text-white" : "text-rose-400 hover:text-rose-300"}`}
+                      className={`px-2.5 py-1 rounded-md text-xs font-bold transition ${activeTab === "errors" ? "bg-rose-500 text-white" : "text-rose-400 hover:text-rose-300"}`}
                     >
                       Errors ({validationReport.summary.errors_count})
                     </button>
@@ -322,12 +322,12 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   placeholder="Filter rows by SKU, name, or error..."
                   value={rowSearch}
                   onChange={(e) => setRowSearch(e.target.value)}
-                  className="px-3 py-1.5 text-xs bg-white/5 border border-white/[0.08] rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 w-full sm:w-64"
+                  className="px-3 py-1.5 text-xs bg-white/5 border border-white/[0.08] rounded-md text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 w-full sm:w-64"
                 />
               </div>
 
               {/* Rows Table */}
-              <div className="border border-white/[0.08] rounded-xl overflow-hidden max-h-80 overflow-y-auto">
+              <div className="border border-white/[0.08] rounded-md overflow-hidden max-h-80 overflow-y-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#0f121b] text-slate-400 uppercase tracking-wider text-[10px] sticky top-0 border-b border-white/[0.08] z-10">
                     <tr>
@@ -424,7 +424,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
           {/* STAGE 4: COMMITTING SPINNER */}
           {stage === "committing" && (
             <div className="py-16 flex flex-col items-center justify-center text-center space-y-4">
-              <RefreshCw className="w-10 h-10 text-amber-400 animate-spin" />
+              <RefreshCw className="w-10 h-10 text-[#A78BFA] animate-spin" />
               <div>
                 <h4 className="text-base font-bold text-white mb-1">Applying Catalog Import...</h4>
                 <p className="text-xs text-slate-400 max-w-sm">
@@ -437,7 +437,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
           {/* STAGE 5: COMPLETE */}
           {stage === "complete" && commitResult && (
             <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="w-14 h-14 rounded-md bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                 <FileCheck className="w-7 h-7" />
               </div>
               <div>
@@ -449,19 +449,19 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
 
               {/* Commit Summary Card */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-lg mt-4 text-left">
-                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                <div className="p-3 rounded-md bg-white/[0.04] border border-white/[0.08]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Products Created</span>
                   <p className="text-lg font-black text-emerald-400">{commitResult.summary.products_created}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                <div className="p-3 rounded-md bg-white/[0.04] border border-white/[0.08]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Products Updated</span>
                   <p className="text-lg font-black text-cyan-400">{commitResult.summary.products_updated}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                <div className="p-3 rounded-md bg-white/[0.04] border border-white/[0.08]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Variants Created</span>
-                  <p className="text-lg font-black text-amber-400">{commitResult.summary.variants_created}</p>
+                  <p className="text-lg font-black text-[#A78BFA]">{commitResult.summary.variants_created}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                <div className="p-3 rounded-md bg-white/[0.04] border border-white/[0.08]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Variants Updated</span>
                   <p className="text-lg font-black text-white">{commitResult.summary.variants_updated}</p>
                 </div>
@@ -477,7 +477,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
               <button
                 type="button"
                 onClick={() => setStage("select")}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
               >
                 Upload Different File
               </button>
@@ -490,7 +490,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                  className="px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -498,7 +498,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   type="button"
                   onClick={handleStartValidation}
                   disabled={!selectedFile}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-purple-500/20 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <span>Dry-Run Validation</span>
                   <ArrowRight className="w-4 h-4" />
@@ -511,7 +511,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                  className="px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -519,7 +519,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   type="button"
                   onClick={handleCommit}
                   disabled={!validationReport?.can_commit || validationReport?.summary.errors_count > 0}
-                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex items-center gap-2 px-5 py-2 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   title={validationReport?.summary.errors_count ? "Fix validation errors before committing" : "Apply all validated changes to store catalog"}
                 >
                   <CheckCircle2 className="w-4 h-4" />
@@ -535,7 +535,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
                   handleClose();
                   onSuccess();
                 }}
-                className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition cursor-pointer"
+                className="px-5 py-2 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition cursor-pointer"
               >
                 Close & Refresh Catalog
               </button>

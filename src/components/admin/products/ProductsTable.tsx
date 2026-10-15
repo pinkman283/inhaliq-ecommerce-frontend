@@ -59,7 +59,7 @@ export function ProductsTable({
           {loading ? (
             <tr>
               <td colSpan={7} className="p-12 text-center text-slate-500">
-                <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-amber-400" />
+                <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-[#A78BFA]" />
                 <span>Loading products catalog...</span>
               </td>
             </tr>
@@ -73,7 +73,7 @@ export function ProductsTable({
                     <button
                       type="button"
                       onClick={onResetFilters}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
+                      className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
                     >
                       Reset Filters
                     </button>

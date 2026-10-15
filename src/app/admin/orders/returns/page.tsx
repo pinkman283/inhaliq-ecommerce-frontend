@@ -42,7 +42,7 @@ export default function AdminReturnsPage() {
   return (
     <Suspense fallback={
       <div className="p-12 text-center text-slate-500">
-        <Loader2 className="w-6 h-6 animate-spin mx-auto text-amber-400 mb-2" />
+        <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#A78BFA] mb-2" />
         Loading Returns & RTO Management...
       </div>
     }>
@@ -575,7 +575,7 @@ function ReturnsContent() {
     // 1. In transit -> Receive
     if (ret.status === "in_transit") {
       return (
-        <div className="p-4 rounded-xl border border-purple-500/30 bg-purple-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="p-4 rounded-md border border-purple-500/30 bg-purple-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400">Next Action Required</span>
@@ -587,7 +587,7 @@ function ReturnsContent() {
           </div>
           <button
             onClick={() => handleMarkReceived(ret.id)}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-md text-xs font-semibold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm"
           >
             <PackageCheck className="w-4 h-4" />
             Mark Received
@@ -599,10 +599,10 @@ function ReturnsContent() {
     // 2. Received & QC pending -> Start QC
     if (ret.status === "received" && ret.inspection_status === "pending") {
       return (
-        <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="p-4 rounded-md border border-[#A78BFA]/30 bg-[#211B32] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">Next Action Required</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#A78BFA]">Next Action Required</span>
             </div>
             <h4 className="text-sm font-bold text-foreground">Start QC Inspection & Disposition</h4>
             <p className="text-xs text-muted-foreground">
@@ -611,7 +611,7 @@ function ReturnsContent() {
           </div>
           <button
             onClick={() => openQcModal(ret)}
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm"
+            className="px-4 py-2 bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] rounded-md text-xs font-semibold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm"
           >
             <ShieldAlert className="w-4 h-4" />
             Start QC
@@ -623,7 +623,7 @@ function ReturnsContent() {
     // 3. QC Completed & Refund pending -> Process Refund
     if (ret.status === "qc_completed" && ret.refund_status === "pending") {
       return (
-        <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="p-4 rounded-md border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Next Action Required</span>
@@ -635,7 +635,7 @@ function ReturnsContent() {
           </div>
           <button
             onClick={() => openRefundModal(ret)}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-xs font-semibold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm"
           >
             <DollarSign className="w-4 h-4" />
             Process Refund
@@ -647,8 +647,8 @@ function ReturnsContent() {
     // 4. Resolved -> Resolved confirmation state
     if (ret.status === "resolved") {
       return (
-        <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+        <div className="p-4 rounded-md border border-emerald-500/20 bg-emerald-500/[0.04] flex items-center gap-3">
+          <div className="w-8 h-8 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="space-y-0.5">
@@ -664,8 +664,8 @@ function ReturnsContent() {
     // 5. Cancelled or Rejected
     if (ret.status === "cancelled" || ret.status === "rejected") {
       return (
-        <div className="p-4 rounded-xl border border-border bg-muted/20 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center shrink-0">
+        <div className="p-4 rounded-md border border-border bg-muted/20 flex items-center gap-3">
+          <div className="w-8 h-8 rounded bg-muted text-muted-foreground flex items-center justify-center shrink-0">
             <X className="w-4 h-4" />
           </div>
           <div className="space-y-0.5">
@@ -687,7 +687,7 @@ function ReturnsContent() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <RotateCcw className="w-6 h-6 text-amber-500" />
+            <RotateCcw className="w-6 h-6 text-[#A78BFA]" />
             Returns & RTO Operations
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -697,14 +697,14 @@ function ReturnsContent() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => fetchReturns()}
-            className="p-2 border border-border rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition"
+            className="p-2 border border-border rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition"
             title="Refresh"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
           <button
             onClick={() => setNewReturnModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] rounded-md text-sm font-bold transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             New Return / RTO
@@ -714,23 +714,23 @@ function ReturnsContent() {
 
       {/* Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">All Returns</span>
           <div className="mt-1 text-2xl font-bold text-foreground">{stats.all_count}</div>
         </div>
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-amber-500 uppercase tracking-wider flex items-center gap-1">
             <Truck className="w-3.5 h-3.5" /> In-Transit RTO
           </span>
           <div className="mt-1 text-2xl font-bold text-amber-500">{stats.rto_count}</div>
         </div>
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-purple-400 uppercase tracking-wider flex items-center gap-1">
             <PackageCheck className="w-3.5 h-3.5" /> Awaiting Inspection
           </span>
           <div className="mt-1 text-2xl font-bold text-purple-400">{stats.awaiting_inspection_count}</div>
         </div>
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-emerald-500 uppercase tracking-wider flex items-center gap-1">
             <Coins className="w-3.5 h-3.5" /> Total Refunded
           </span>
@@ -753,16 +753,16 @@ function ReturnsContent() {
               <button
                 key={tab.key}
                 onClick={() => handleTabChange(tab.key)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition flex items-center gap-2 ${
+                className={`px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition flex items-center gap-2 ${
                   isActive
-                    ? "bg-amber-500/10 text-amber-500 border border-amber-500/30"
+                    ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 <span>{tab.label}</span>
                 {tab.count > 0 && (
-                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    isActive ? "bg-amber-500/20 text-amber-400" : "bg-muted text-muted-foreground"
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${
+                    isActive ? "bg-[#211B32] text-[#A78BFA]" : "bg-muted text-muted-foreground"
                   }`}>
                     {tab.count}
                   </span>
@@ -779,7 +779,7 @@ function ReturnsContent() {
             placeholder="Search return #, order #, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-1.5 text-sm bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-amber-500"
+            className="w-full pl-9 pr-8 py-1.5 text-sm bg-background border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#A78BFA]/40 focus:border-[#A78BFA]/50"
           />
           {searchQuery && (
             <button
@@ -796,7 +796,7 @@ function ReturnsContent() {
       <ScrollableTableCard>
         {loading ? (
           <div className="py-20 text-center text-muted-foreground">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-amber-400 mb-2" />
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#A78BFA] mb-2" />
             Loading records...
           </div>
         ) : returns.length === 0 ? (
@@ -836,7 +836,7 @@ function ReturnsContent() {
                 return (
                   <tr
                     key={ret.id}
-                    className={`transition ${isSelected ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-muted/30"}`}
+                    className={`transition ${isSelected ? "bg-[#211B32]" : "hover:bg-muted/30"}`}
                   >
                     <td className="w-12 px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <AdminCheckbox
@@ -848,7 +848,7 @@ function ReturnsContent() {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => openReturnDrawer(ret)}
-                        className="font-mono font-medium text-amber-500 hover:underline text-left block cursor-pointer"
+                        className="font-mono font-medium text-[#A78BFA] hover:underline text-left block cursor-pointer"
                       >
                         {ret.return_number}
                       </button>
@@ -865,7 +865,7 @@ function ReturnsContent() {
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/orders?search=${ret.order?.order_number || ""}`}
-                        className="font-medium text-foreground hover:text-amber-500 transition"
+                        className="font-medium text-foreground hover:text-[#A78BFA] transition"
                       >
                         #{ret.order?.order_number || ret.order_id}
                       </Link>
@@ -934,7 +934,7 @@ function ReturnsContent() {
                         {ret.status === "received" && ret.inspection_status === "pending" && (
                           <button
                             onClick={() => openQcModal(ret)}
-                            className="px-2 py-1 text-xs bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded transition font-medium"
+                            className="px-2 py-1 text-xs bg-[#211B32] text-[#A78BFA] hover:bg-[#A78BFA]/20 rounded transition font-medium"
                             title="Perform QC & disposition"
                           >
                             Inspect
@@ -1012,7 +1012,7 @@ function ReturnsContent() {
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-mono text-base font-bold text-foreground flex items-center gap-1.5">
-                    <RotateCcw className="w-4 h-4 text-amber-500" />
+                    <RotateCcw className="w-4 h-4 text-[#A78BFA]" />
                     {selectedReturn ? selectedReturn.return_number : String(selectedReturnId)}
                   </span>
                   {selectedReturn && (
@@ -1034,7 +1034,7 @@ function ReturnsContent() {
                     <span>Order:</span>
                     <Link
                       href={`/admin/orders?search=${encodeURIComponent(selectedReturn.order?.order_number || String(selectedReturn.order_id))}`}
-                      className="font-mono font-bold text-amber-500 hover:text-amber-400 hover:underline inline-flex items-center gap-1"
+                      className="font-mono font-bold text-[#A78BFA] hover:text-[#B9A3FF] hover:underline inline-flex items-center gap-1"
                       target="_blank"
                       title="Open order in new tab"
                     >
@@ -1052,7 +1052,7 @@ function ReturnsContent() {
               </div>
               <button
                 onClick={closeReturnDrawer}
-                className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition cursor-pointer"
+                className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition cursor-pointer"
                 title="Close drawer (Esc)"
               >
                 <X className="w-5 h-5" />
@@ -1061,24 +1061,24 @@ function ReturnsContent() {
 
             {drawerLoading ? (
               <div className="py-24 text-center text-muted-foreground">
-                <Loader2 className="w-7 h-7 animate-spin mx-auto text-amber-500 mb-3" />
+                <Loader2 className="w-7 h-7 animate-spin mx-auto text-[#A78BFA] mb-3" />
                 <p className="font-medium text-foreground">Loading return details...</p>
                 <p className="text-xs text-muted-foreground mt-1">Retrieving return record and QC audit</p>
               </div>
             ) : returnNotFound ? (
               <div className="py-20 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-rose-500/10 text-rose-400 mx-auto flex items-center justify-center">
+                <div className="w-12 h-12 rounded-md bg-rose-500/10 text-rose-400 mx-auto flex items-center justify-center">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-foreground">Return Record Not Found</h3>
                   <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
-                    No return or RTO record matching <span className="font-mono text-amber-400 font-semibold">{String(selectedReturnId)}</span> was found in the database.
+                    No return or RTO record matching <span className="font-mono text-[#A78BFA] font-semibold">{String(selectedReturnId)}</span> was found in the database.
                   </p>
                 </div>
                 <button
                   onClick={closeReturnDrawer}
-                  className="px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg text-xs font-semibold transition cursor-pointer"
+                  className="px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-md text-xs font-semibold transition cursor-pointer"
                 >
                   Close & View All Returns
                 </button>
@@ -1086,7 +1086,7 @@ function ReturnsContent() {
             ) : selectedReturn ? (
               <div className="space-y-5 text-sm">
                 {/* Three Compact Status Groups (Requirement 4) */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 bg-muted/40 rounded-xl border border-border">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 bg-muted/40 rounded-md border border-border">
                   {/* RETURN */}
                   {(() => {
                     const retStatus = getReturnStatusGroup(selectedReturn);
@@ -1143,7 +1143,7 @@ function ReturnsContent() {
                 {renderNextAction(selectedReturn)}
 
                 {/* Commercial Order Snapshot */}
-                <div className="border border-border rounded-xl p-4 space-y-3">
+                <div className="border border-border rounded-md p-4 space-y-3">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Commercial Order Snapshot
                   </h3>
@@ -1176,7 +1176,7 @@ function ReturnsContent() {
                     {selectedReturn.courier_tracking_code && (
                       <div className="col-span-2">
                         <span className="text-muted-foreground block">Courier Return Tracking</span>
-                        <span className="font-mono text-amber-400 font-semibold">
+                        <span className="font-mono text-[#A78BFA] font-semibold">
                           {selectedReturn.courier_tracking_code}
                         </span>
                       </div>
@@ -1185,7 +1185,7 @@ function ReturnsContent() {
                 </div>
 
                 {/* Items & QC Status */}
-                <div className="border border-border rounded-xl p-4 space-y-3">
+                <div className="border border-border rounded-md p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Return Items ({selectedReturn.items?.length || 0})
@@ -1193,7 +1193,7 @@ function ReturnsContent() {
                     {selectedReturn.status === "received" && selectedReturn.inspection_status === "pending" && (
                       <button
                         onClick={() => openQcModal(selectedReturn)}
-                        className="px-2.5 py-1 text-xs bg-amber-600 hover:bg-amber-500 text-white rounded font-medium transition cursor-pointer"
+                        className="px-2.5 py-1 text-xs bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] rounded font-bold transition cursor-pointer"
                       >
                         Start QC
                       </button>
@@ -1235,7 +1235,7 @@ function ReturnsContent() {
                 </div>
 
                 {/* Audit Timestamps & Return Reason */}
-                <div className="border border-border rounded-xl p-4 bg-muted/20 space-y-2 text-xs">
+                <div className="border border-border rounded-md p-4 bg-muted/20 space-y-2 text-xs">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
                     Audit Trail & Timestamps
                   </h3>
@@ -1280,10 +1280,10 @@ function ReturnsContent() {
       {/* QC Inspection Modal */}
       {qcModalOpen && selectedReturn && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-5">
+          <div className="bg-card border border-border rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-5">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-base font-bold text-foreground flex items-center gap-2">
-                <PackageCheck className="w-5 h-5 text-amber-500" />
+                <PackageCheck className="w-5 h-5 text-[#A78BFA]" />
                 QC Inspection & Stock Restock ({selectedReturn.return_number})
               </h2>
               <button onClick={() => setQcModalOpen(false)} className="text-muted-foreground hover:text-foreground">
@@ -1297,7 +1297,7 @@ function ReturnsContent() {
 
             <div className="space-y-4">
               {qcItems.map((item, idx) => (
-                <div key={item.id} className="p-3 border border-border rounded-lg bg-muted/20 space-y-2 text-sm">
+                <div key={item.id} className="p-3 border border-border rounded-md bg-muted/20 space-y-2 text-sm">
                   <div className="font-medium text-foreground">{item.product_name} (Qty: {item.quantity_returned})</div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -1309,7 +1309,7 @@ function ReturnsContent() {
                           updated[idx].disposition = e.target.value;
                           setQcItems(updated);
                         }}
-                        className="w-full text-xs p-2 bg-background border border-border rounded text-foreground focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        className="w-full text-xs p-2 bg-background border border-border rounded text-foreground focus:outline-none focus:ring-1 focus:ring-[#A78BFA]/40 focus:border-[#A78BFA]/50"
                       >
                         <option value="restock_sellable">Restock Sellable (+Stock & FIFO Layer)</option>
                         <option value="quarantine_damaged">Quarantine Damaged (Loss Write-Off)</option>
@@ -1326,7 +1326,7 @@ function ReturnsContent() {
                           updated[idx].condition = e.target.value;
                           setQcItems(updated);
                         }}
-                        className="w-full text-xs p-2 bg-background border border-border rounded text-foreground focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        className="w-full text-xs p-2 bg-background border border-border rounded text-foreground focus:outline-none focus:ring-1 focus:ring-[#A78BFA]/40 focus:border-[#A78BFA]/50"
                       >
                         <option value="unopened">Unopened / Brand New</option>
                         <option value="opened_intact">Opened Packaging (Intact)</option>
@@ -1358,7 +1358,7 @@ function ReturnsContent() {
               <button
                 type="button"
                 onClick={() => setQcModalOpen(false)}
-                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition"
+                className="px-4 py-2 border border-border rounded-md text-sm hover:bg-muted text-muted-foreground transition"
               >
                 Cancel
               </button>
@@ -1366,7 +1366,7 @@ function ReturnsContent() {
                 type="button"
                 disabled={qcSubmitting}
                 onClick={handleQcSubmit}
-                className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] rounded-md text-sm font-bold transition disabled:opacity-50 flex items-center gap-2"
               >
                 {qcSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Save QC & Update Stock
@@ -1379,7 +1379,7 @@ function ReturnsContent() {
       {/* Refund Processing Modal */}
       {refundModalOpen && selectedReturn && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl w-full max-w-md shadow-2xl p-6 space-y-4">
+          <div className="bg-card border border-border rounded-lg w-full max-w-md shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                 <Coins className="w-5 h-5 text-emerald-500" />
@@ -1402,7 +1402,7 @@ function ReturnsContent() {
                   step="0.01"
                   value={refundAmount}
                   onChange={(e) => setRefundAmount(parseFloat(e.target.value) || 0)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
 
@@ -1411,7 +1411,7 @@ function ReturnsContent() {
                 <select
                   value={refundMethod}
                   onChange={(e) => setRefundMethod(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 >
                   <option value="store_credit">Store Credit (Instant Wallet Credit)</option>
                   <option value="cash">Cash on Hand</option>
@@ -1429,7 +1429,7 @@ function ReturnsContent() {
                   placeholder="e.g. MFS TrxID or Store credit memo"
                   value={refundNotes}
                   onChange={(e) => setRefundNotes(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none"
                 />
               </div>
             </div>
@@ -1438,7 +1438,7 @@ function ReturnsContent() {
               <button
                 type="button"
                 onClick={() => setRefundModalOpen(false)}
-                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition"
+                className="px-4 py-2 border border-border rounded-md text-sm hover:bg-muted text-muted-foreground transition"
               >
                 Cancel
               </button>
@@ -1446,7 +1446,7 @@ function ReturnsContent() {
                 type="button"
                 disabled={refundSubmitting}
                 onClick={handleRefundSubmit}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
               >
                 {refundSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Confirm Refund
@@ -1459,10 +1459,10 @@ function ReturnsContent() {
       {/* Manual Return / RTO Modal */}
       {newReturnModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl w-full max-w-md shadow-2xl p-6 space-y-4">
+          <div className="bg-card border border-border rounded-lg w-full max-w-md shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-base font-bold text-foreground flex items-center gap-2">
-                <Plus className="w-5 h-5 text-amber-500" />
+                <Plus className="w-5 h-5 text-[#A78BFA]" />
                 Initiate New Return / RTO
               </h2>
               <button onClick={() => setNewReturnModalOpen(false)} className="text-muted-foreground hover:text-foreground">
@@ -1478,7 +1478,7 @@ function ReturnsContent() {
                   placeholder="e.g. 109"
                   value={newOrderId}
                   onChange={(e) => setNewOrderId(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-1 focus:ring-[#A78BFA]/40 focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -1487,7 +1487,7 @@ function ReturnsContent() {
                 <select
                   value={newReturnType}
                   onChange={(e) => setNewReturnType(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-1 focus:ring-[#A78BFA]/40 focus:border-[#A78BFA]/50"
                 >
                   <option value="rto">RTO (Customer Refusal / Unreachable)</option>
                   <option value="customer_return">Customer Return (After Delivery)</option>
@@ -1503,7 +1503,7 @@ function ReturnsContent() {
                   placeholder="e.g. Customer cancelled upon delivery call"
                   value={newReturnReason}
                   onChange={(e) => setNewReturnReason(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none"
                 />
               </div>
             </div>
@@ -1512,7 +1512,7 @@ function ReturnsContent() {
               <button
                 type="button"
                 onClick={() => setNewReturnModalOpen(false)}
-                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition"
+                className="px-4 py-2 border border-border rounded-md text-sm hover:bg-muted text-muted-foreground transition"
               >
                 Cancel
               </button>
@@ -1520,7 +1520,7 @@ function ReturnsContent() {
                 type="button"
                 disabled={newReturnCreating}
                 onClick={handleCreateNewReturn}
-                className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] rounded-md text-sm font-bold transition disabled:opacity-50 flex items-center gap-2"
               >
                 {newReturnCreating && <Loader2 className="w-4 h-4 animate-spin" />}
                 Initiate Return
@@ -1543,7 +1543,7 @@ function ReturnsContent() {
       {/* Single Return Delete Modal */}
       {deletingReturn && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl w-full max-w-md shadow-2xl p-6 space-y-4">
+          <div className="bg-card border border-border rounded-lg w-full max-w-md shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-base font-bold text-foreground flex items-center gap-2 text-rose-400">
                 <AlertTriangle className="w-5 h-5 text-rose-500" />
@@ -1564,7 +1564,7 @@ function ReturnsContent() {
               <button
                 type="button"
                 onClick={() => setDeletingReturn(null)}
-                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition cursor-pointer"
+                className="px-4 py-2 border border-border rounded-md text-sm hover:bg-muted text-muted-foreground transition cursor-pointer"
               >
                 Cancel
               </button>
@@ -1572,7 +1572,7 @@ function ReturnsContent() {
                 type="button"
                 disabled={isDeletingSingle}
                 onClick={handleSingleDelete}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2 cursor-pointer shadow-sm"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-sm font-medium transition disabled:opacity-50 flex items-center gap-2 cursor-pointer shadow-sm"
               >
                 {isDeletingSingle && <Loader2 className="w-4 h-4 animate-spin" />}
                 Delete Record

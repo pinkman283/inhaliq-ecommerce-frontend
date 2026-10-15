@@ -21,7 +21,7 @@ export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
 
   const getConfig = () => {
     switch (norm) {
-      // Success / Paid / Active / Completed
+      // Success / Paid / Active / Completed / Connected
       case "paid":
       case "active":
       case "completed":
@@ -32,14 +32,15 @@ export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
       case "settled":
       case "verified":
       case "confirmed":
+      case "connected":
         return {
-          bg: "bg-emerald-500/10",
-          text: "text-emerald-400",
-          border: "border-emerald-500/25",
-          dot: "bg-emerald-400",
+          bg: "bg-[#34D399]/10",
+          text: "text-[#34D399]",
+          border: "border-[#34D399]/25",
+          dot: "bg-[#34D399]",
         };
 
-      // Warning / Pending / Processing / Due Soon / Partial
+      // Warning / Pending / Processing / Due Soon / Partial / Sandbox
       case "pending":
       case "processing":
       case "low stock":
@@ -50,14 +51,16 @@ export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
       case "unpaid":
       case "partially paid":
       case "partially refunded":
+      case "sandbox":
+      case "sandbox mode":
         return {
-          bg: "bg-amber-500/10",
-          text: "text-amber-400",
-          border: "border-amber-500/25",
-          dot: "bg-amber-400",
+          bg: "bg-[#FBBF24]/10",
+          text: "text-[#FBBF24]",
+          border: "border-[#FBBF24]/25",
+          dot: "bg-[#FBBF24]",
         };
 
-      // Danger / Cancelled / Refunded / Out of Stock / Returned
+      // Danger / Cancelled / Refunded / Out of Stock / Returned / Failed
       case "cancelled":
       case "canceled":
       case "refunded":
@@ -69,13 +72,13 @@ export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
       case "returned":
       case "partially cancelled":
         return {
-          bg: "bg-rose-500/10",
-          text: "text-rose-400",
-          border: "border-rose-500/25",
-          dot: "bg-rose-400",
+          bg: "bg-[#F87171]/10",
+          text: "text-[#F87171]",
+          border: "border-[#F87171]/25",
+          dot: "bg-[#F87171]",
         };
 
-      // Informational / Cyan / Purple / Return Logistics
+      // Informational / Lavender / Return Logistics / Draft
       case "draft":
       case "pos":
       case "online":
@@ -85,19 +88,19 @@ export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
       case "qc completed":
       case "received":
         return {
-          bg: "bg-purple-500/10",
-          text: "text-purple-400",
-          border: "border-purple-500/25",
-          dot: "bg-purple-400",
+          bg: "bg-[#A78BFA]/10",
+          text: "text-[#A78BFA]",
+          border: "border-[#A78BFA]/25",
+          dot: "bg-[#A78BFA]",
         };
 
       // Default Neutral
       default:
         return {
-          bg: "bg-white/5",
-          text: "text-slate-300",
-          border: "border-white/10",
-          dot: "bg-slate-400",
+          bg: "bg-[#171B26]",
+          text: "text-[#929BAD]",
+          border: "border-[#272B35]",
+          dot: "bg-[#626B7B]",
         };
     }
   };
@@ -110,7 +113,7 @@ export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border font-mono font-semibold uppercase tracking-wider ${sizeClasses} ${config.bg} ${config.text} ${config.border} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded border font-mono font-semibold uppercase tracking-wider ${sizeClasses} ${config.bg} ${config.text} ${config.border} ${className}`}
     >
       {showDot && <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${config.dot}`} />}
       <span className="truncate">{label || status}</span>

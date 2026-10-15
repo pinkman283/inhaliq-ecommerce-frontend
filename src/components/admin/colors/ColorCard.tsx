@@ -26,7 +26,7 @@ export function ColorCard({
   const variantsCount = color.variants_count ?? 0;
 
   return (
-    <div className="group relative flex flex-col justify-between p-4 rounded-xl bg-[#0f121b] border border-white/[0.08] hover:border-white/[0.16] hover:bg-[#131722] transition-all shadow-sm">
+    <div className="group relative flex flex-col justify-between p-4 rounded-md bg-[#0f121b] border border-white/[0.08] hover:border-white/[0.16] hover:bg-[#131722] transition-all shadow-sm">
       {/* Top Details & Swatch */}
       <div>
         <div className="flex items-start justify-between gap-3">
@@ -38,7 +38,7 @@ export function ColorCard({
               title={color.hex_code}
             />
             <div className="min-w-0">
-              <h4 className="text-sm font-bold text-white truncate group-hover:text-amber-300 transition-colors">
+              <h4 className="text-sm font-bold text-white truncate group-hover:text-[#A78BFA] transition-colors">
                 {color.name}
               </h4>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -97,17 +97,17 @@ export function ColorCard({
         <button
           type="button"
           onClick={() => onEdit(color)}
-          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/5 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-md border border-white/5 transition-colors cursor-pointer"
           title="Edit Swatch"
         >
-          <Edit className="w-3 h-3 text-amber-400" />
+          <Edit className="w-3 h-3 text-[#A78BFA]" />
           <span>Edit</span>
         </button>
 
         <button
           type="button"
           onClick={() => onDelete(color)}
-          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg border border-rose-500/20 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 rounded-md border border-rose-500/20 transition-colors cursor-pointer"
           title="Delete Swatch"
         >
           <Trash2 className="w-3 h-3" />

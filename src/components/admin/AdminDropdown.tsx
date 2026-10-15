@@ -138,9 +138,9 @@ export function AdminDropdown({
   const selectedOption = options.find((opt) => opt.value === value);
 
   const sizeClasses = {
-    sm: "px-3 py-1.5 text-[11px] rounded-xl",
-    md: "px-3.5 py-2 text-xs rounded-xl",
-    lg: "px-4 py-2.5 text-xs rounded-2xl",
+    sm: "px-3 py-1.5 text-[11px] rounded-md",
+    md: "px-3.5 py-2 text-xs rounded-md",
+    lg: "px-4 py-2.5 text-xs rounded-md",
   };
 
   return (
@@ -160,8 +160,8 @@ export function AdminDropdown({
           sizeClasses[size]
         } ${
           isOpen
-            ? "bg-[#141824] border-amber-400 text-white shadow-lg shadow-amber-500/10"
-            : "bg-[#0e121e] hover:bg-[#141824] border-white/10 hover:border-white/20 text-slate-200 hover:text-white"
+            ? "bg-[#171B26] border-[#A78BFA] text-white shadow-lg shadow-[#A78BFA]/10"
+            : "bg-[#11141D] hover:bg-[#171B26] border-[#272B35] hover:border-[#A78BFA]/40 text-[#E5E7EB] hover:text-white"
         } border ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${buttonClassName}`}
       >
         <span className="truncate flex items-center gap-2">
@@ -169,8 +169,8 @@ export function AdminDropdown({
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <ChevronDown
-          className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ${
-            isOpen ? "rotate-180 text-amber-400" : ""
+          className={`w-3.5 h-3.5 text-[#929BAD] transition-transform duration-200 shrink-0 ${
+            isOpen ? "rotate-180 text-[#A78BFA]" : ""
           }`}
         />
       </button>
@@ -180,7 +180,7 @@ export function AdminDropdown({
         <div
           ref={menuRef}
           style={menuStyle}
-          className={`rounded-2xl bg-[#0c0e15]/95 backdrop-blur-2xl border border-amber-500/30 shadow-2xl p-1.5 space-y-0.5 overflow-y-auto animate-in fade-in zoom-in-95 duration-150 ${menuClassName}`}
+          className={`rounded-md bg-[#11141D]/98 backdrop-blur-2xl border border-[#272B35] shadow-2xl p-1.5 space-y-0.5 overflow-y-auto animate-in fade-in zoom-in-95 duration-150 ${menuClassName}`}
         >
           {options.map((opt) => {
             const isSelected = opt.value === value;
@@ -192,17 +192,17 @@ export function AdminDropdown({
                   onChange(opt.value);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer ${
+                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-md text-xs font-semibold transition-all text-left cursor-pointer ${
                   isSelected
-                    ? "bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30"
-                    : "text-slate-300 hover:text-white hover:bg-white/10"
+                    ? "bg-[#211B32] text-[#A78BFA] font-bold border border-[#A78BFA]/30"
+                    : "text-[#E5E7EB] hover:text-white hover:bg-[#171B26]"
                 }`}
               >
                 <span className="flex items-center gap-2 truncate">
                   {opt.icon}
                   {opt.label}
                 </span>
-                {isSelected && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
+                {isSelected && <Check className="w-3.5 h-3.5 text-[#A78BFA] shrink-0" />}
               </button>
             );
           })}

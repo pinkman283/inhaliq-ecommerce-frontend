@@ -66,12 +66,12 @@ export const BalanceSheetVisualizer: React.FC<BalanceSheetVisualizerProps> = ({
       action={
         <div className="flex items-center gap-2">
           {isBalanced ? (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
               <span>Identity Balanced</span>
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
               <AlertCircle className="h-3.5 w-3.5 text-rose-400" />
               <span>Discrepancy: ${discrepancy.toFixed(2)}</span>
             </div>
@@ -119,25 +119,25 @@ export const BalanceSheetVisualizer: React.FC<BalanceSheetVisualizerProps> = ({
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/[0.06] text-xs">
-          <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+          <div className="p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
             <div className="text-[10px] text-slate-400 mb-0.5">Total Assets</div>
             <div className="font-mono text-sm font-semibold text-white">
               ${assetsRounded.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
-          <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+          <div className="p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
             <div className="text-[10px] text-slate-400 mb-0.5">Total Liabilities</div>
             <div className="font-mono text-sm font-semibold text-slate-200">
               ${totalLiabilities.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
-          <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+          <div className="p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
             <div className="text-[10px] text-slate-400 mb-0.5">Owner's Equity</div>
             <div className="font-mono text-sm font-semibold text-slate-200">
               ${totalEquity.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
-          <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+          <div className="p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
             <div className="text-[10px] text-slate-400 mb-0.5">Equation Match</div>
             <div className="flex items-center gap-1 font-mono text-xs font-medium text-emerald-400 mt-1">
               <ShieldCheck className="h-3.5 w-3.5" />

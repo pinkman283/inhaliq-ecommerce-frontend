@@ -113,7 +113,7 @@ export default function DiscountCodesPage() {
         title="Discount Codes & Vouchers"
         description="Inspect, search, and generate individual or bulk voucher codes for active promotional campaigns."
         badge="Promo Code Registry"
-        badgeVariant="warning"
+        badgeVariant="purple"
         breadcrumbs={[
           { label: "Dashboard", href: "/admin" },
           { label: "Promotions & Discounts", href: "/admin/promotions" },
@@ -124,14 +124,14 @@ export default function DiscountCodesPage() {
             <button
               onClick={() => fetchCodes()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+              className="p-2 rounded-md bg-[#171B26] border border-[#272B35] hover:bg-[#272B35] text-[#929BAD] hover:text-[#E5E7EB] transition-colors"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-[#A78BFA]/10 transition-all"
             >
               <Sparkles className="w-4 h-4" />
               Batch Generate Codes
@@ -141,23 +141,23 @@ export default function DiscountCodesPage() {
       />
 
       {/* Filters */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-[#272B35] bg-[#11141D] flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
           <div className="relative flex-1 min-w-[200px] max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#929BAD]" />
             <input
               type="text"
               placeholder="Search code string..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+              className="w-full pl-9 pr-4 py-2 rounded-md bg-[#171B26] border border-[#272B35] text-xs text-[#E5E7EB] placeholder-[#929BAD] focus:border-[#A78BFA]/60 outline-none"
             />
           </div>
 
           <select
             value={selectedPromoId}
             onChange={(e) => setSelectedPromoId(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-amber-400 outline-none max-w-xs"
+            className="px-3 py-2 rounded-md bg-[#171B26] border border-[#272B35] text-xs text-[#E5E7EB] focus:border-[#A78BFA]/60 outline-none max-w-xs"
           >
             <option value="all">All Promotions</option>
             {promotions.map((p) => (
@@ -168,7 +168,7 @@ export default function DiscountCodesPage() {
           </select>
         </div>
 
-        <span className="text-xs text-slate-400 font-mono">
+        <span className="text-xs text-[#929BAD] font-mono">
           Total Codes: <strong className="text-white">{totalCount}</strong>
         </span>
       </div>
@@ -186,18 +186,18 @@ export default function DiscountCodesPage() {
               <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04]">
+          <tbody className="divide-y divide-[#272B35]">
             {loading ? (
               <tr>
-                <td colSpan={6} className="p-12 text-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                <td colSpan={6} className="p-12 text-center text-[#929BAD]">
+                  <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   Loading discount codes...
                 </td>
               </tr>
             ) : codes.length === 0 ? (
               <tr>
-                <td colSpan={6} className="p-12 text-center text-slate-500">
-                  <Tag className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                <td colSpan={6} className="p-12 text-center text-[#929BAD]">
+                  <Tag className="w-8 h-8 text-[#626B7B] mx-auto mb-2" />
                   No discount codes found.
                 </td>
               </tr>
@@ -206,17 +206,17 @@ export default function DiscountCodesPage() {
                 <tr key={c.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-amber-300 text-xs bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded">
+                      <span className="font-mono font-bold text-[#A78BFA] text-xs bg-[#211B32] border border-[#A78BFA]/30 px-2.5 py-1 rounded">
                         {c.code}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleCopy(c.code)}
-                        className="p-1 hover:text-white text-slate-500 transition-colors"
+                        className="p-1 hover:text-white text-[#929BAD] transition-colors"
                         title="Copy Code"
                       >
                         {copiedCode === c.code ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5 text-[#34D399]" />
                         ) : (
                           <Copy className="w-3.5 h-3.5" />
                         )}
@@ -227,14 +227,14 @@ export default function DiscountCodesPage() {
                   <td className="p-4">
                     <Link
                       href={`/admin/promotions/${c.promotion_id}`}
-                      className="font-bold text-white hover:text-amber-400 transition-colors"
+                      className="font-bold text-white hover:text-[#B9A3FF] transition-colors"
                     >
                       Promotion #{c.promotion_id}
                     </Link>
                   </td>
 
                   <td className="p-4 whitespace-nowrap">
-                    <span className="font-mono text-slate-300">
+                    <span className="font-mono text-[#E5E7EB]">
                       {c.used_count} / {c.usage_limit ?? "∞ Unlimited"}
                     </span>
                   </td>
@@ -243,14 +243,14 @@ export default function DiscountCodesPage() {
                     <AdminStatusBadge status={c.is_active ? "active" : "paused"} />
                   </td>
 
-                  <td className="p-4 whitespace-nowrap text-slate-400 font-mono text-[11px]">
+                  <td className="p-4 whitespace-nowrap text-[#929BAD] font-mono text-[11px]">
                     {new Date(c.created_at).toLocaleDateString()}
                   </td>
 
                   <td className="p-4 text-right whitespace-nowrap">
                     <Link
                       href={`/admin/promotions/${c.promotion_id}`}
-                      className="text-xs text-amber-400 hover:underline font-medium"
+                      className="text-xs text-[#A78BFA] hover:text-[#B9A3FF] hover:underline font-medium inline-flex items-center gap-1"
                     >
                       View Campaign →
                     </Link>
@@ -274,16 +274,16 @@ export default function DiscountCodesPage() {
       {/* Batch Code Generation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#0e1017] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl">
+          <div className="bg-[#11141D] border border-[#272B35] rounded-lg w-full max-w-md p-6 space-y-5 shadow-2xl">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400" />
+                <Sparkles className="w-4 h-4 text-[#A78BFA]" />
                 Batch Code Generator
               </h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
+                className="p-1 rounded-md text-[#929BAD] hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -291,12 +291,12 @@ export default function DiscountCodesPage() {
 
             <form onSubmit={handleBatchGenerate} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300">Target Promotion</label>
+                <label className="text-xs font-semibold text-[#E5E7EB]">Target Promotion</label>
                 <select
                   required
                   value={targetPromotionId}
                   onChange={(e) => setTargetPromotionId(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none"
+                  className="w-full px-3.5 py-2 rounded-md bg-[#171B26] border border-[#272B35] text-xs text-white focus:border-[#A78BFA]/60 outline-none"
                 >
                   {promotions.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -307,19 +307,19 @@ export default function DiscountCodesPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300">Code Prefix</label>
+                <label className="text-xs font-semibold text-[#E5E7EB]">Code Prefix</label>
                 <input
                   type="text"
                   required
                   value={batchPrefix}
                   onChange={(e) => setBatchPrefix(e.target.value.toUpperCase())}
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white font-mono uppercase focus:border-amber-400 outline-none"
+                  className="w-full px-3.5 py-2 rounded-md bg-[#171B26] border border-[#272B35] text-xs text-white font-mono uppercase focus:border-[#A78BFA]/60 outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Quantity of Codes</label>
+                  <label className="text-xs font-semibold text-[#E5E7EB]">Quantity of Codes</label>
                   <input
                     type="number"
                     min={1}
@@ -327,19 +327,19 @@ export default function DiscountCodesPage() {
                     required
                     value={batchCount}
                     onChange={(e) => setBatchCount(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 rounded-md bg-[#171B26] border border-[#272B35] text-xs text-white font-mono focus:border-[#A78BFA]/60 outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Usage Limit / Code</label>
+                  <label className="text-xs font-semibold text-[#E5E7EB]">Usage Limit / Code</label>
                   <input
                     type="number"
                     min={1}
                     placeholder="1 for single-use"
                     value={batchLimit || ""}
                     onChange={(e) => setBatchLimit(e.target.value ? Number(e.target.value) : null)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 rounded-md bg-[#171B26] border border-[#272B35] text-xs text-white font-mono focus:border-[#A78BFA]/60 outline-none"
                   />
                 </div>
               </div>
@@ -348,14 +348,14 @@ export default function DiscountCodesPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-md text-xs font-semibold text-[#929BAD] hover:text-[#E5E7EB]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={generating}
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all disabled:opacity-50"
+                  className="px-5 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-[#A78BFA]/10 transition-all disabled:opacity-50"
                 >
                   {generating ? "Generating..." : "Generate Codes"}
                 </button>

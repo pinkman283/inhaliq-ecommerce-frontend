@@ -81,7 +81,7 @@ export default function AdminSystemSettingsPage() {
           <button
             onClick={() => handleClearCache("all")}
             disabled={clearing !== null}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition-all cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition-all cursor-pointer disabled:opacity-50"
           >
             {clearing === "all" ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -97,7 +97,7 @@ export default function AdminSystemSettingsPage() {
 
       {/* Server Environment Health Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4">
           <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-1">
             PHP Version
           </span>
@@ -106,7 +106,7 @@ export default function AdminSystemSettingsPage() {
           </span>
         </div>
 
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4">
           <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-1">
             Laravel Core
           </span>
@@ -115,7 +115,7 @@ export default function AdminSystemSettingsPage() {
           </span>
         </div>
 
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4">
           <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-1">
             Environment
           </span>
@@ -124,7 +124,7 @@ export default function AdminSystemSettingsPage() {
           </span>
         </div>
 
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4">
           <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-1">
             Cache Store
           </span>
@@ -133,7 +133,7 @@ export default function AdminSystemSettingsPage() {
           </span>
         </div>
 
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4">
           <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-1">
             Database
           </span>
@@ -142,7 +142,7 @@ export default function AdminSystemSettingsPage() {
           </span>
         </div>
 
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4">
           <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-1">
             Daemon Health
           </span>
@@ -154,10 +154,10 @@ export default function AdminSystemSettingsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Cache Flusher */}
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-5">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-5">
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-amber-400" />
+              <Cpu className="w-4 h-4 text-[#A78BFA]" />
               Operational Cache Revalidation & Flusher
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -166,7 +166,7 @@ export default function AdminSystemSettingsPage() {
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-xl border border-white/5">
+            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-md border border-white/5">
               <div>
                 <span className="text-xs font-semibold text-white block">Application Cache</span>
                 <span className="text-[11px] text-slate-400">Cached queries and transient session data</span>
@@ -174,13 +174,13 @@ export default function AdminSystemSettingsPage() {
               <button
                 onClick={() => handleClearCache("cache")}
                 disabled={clearing === "cache"}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
+                className="px-3 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
               >
                 {clearing === "cache" ? "Clearing..." : "Clear Cache"}
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-xl border border-white/5">
+            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-md border border-white/5">
               <div>
                 <span className="text-xs font-semibold text-white block">Configuration Cache</span>
                 <span className="text-[11px] text-slate-400">Environment variables and config arrays</span>
@@ -188,13 +188,13 @@ export default function AdminSystemSettingsPage() {
               <button
                 onClick={() => handleClearCache("config")}
                 disabled={clearing === "config"}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
+                className="px-3 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
               >
                 {clearing === "config" ? "Clearing..." : "Clear Config"}
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-xl border border-white/5">
+            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-md border border-white/5">
               <div>
                 <span className="text-xs font-semibold text-white block">Route Cache</span>
                 <span className="text-[11px] text-slate-400">Compiled route registration map</span>
@@ -202,13 +202,13 @@ export default function AdminSystemSettingsPage() {
               <button
                 onClick={() => handleClearCache("route")}
                 disabled={clearing === "route"}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
+                className="px-3 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
               >
                 {clearing === "route" ? "Clearing..." : "Clear Routes"}
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-xl border border-white/5">
+            <div className="flex items-center justify-between p-3.5 bg-[#161a26] rounded-md border border-white/5">
               <div>
                 <span className="text-xs font-semibold text-white block">Compiled Blade Views</span>
                 <span className="text-[11px] text-slate-400">Pre-rendered view templates</span>
@@ -216,7 +216,7 @@ export default function AdminSystemSettingsPage() {
               <button
                 onClick={() => handleClearCache("view")}
                 disabled={clearing === "view"}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
+                className="px-3 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 cursor-pointer"
               >
                 {clearing === "view" ? "Clearing..." : "Clear Views"}
               </button>
@@ -225,7 +225,7 @@ export default function AdminSystemSettingsPage() {
         </div>
 
         {/* Dynamic Sitemap Generator */}
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-5">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-5">
           <div className="flex items-start justify-between">
             <div>
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -238,7 +238,7 @@ export default function AdminSystemSettingsPage() {
             </div>
           </div>
 
-          <div className="p-4 bg-[#161a26] rounded-xl border border-white/5 space-y-3">
+          <div className="p-4 bg-[#161a26] rounded-md border border-white/5 space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-xs font-semibold text-white block">Public Sitemap Endpoint</span>
@@ -248,7 +248,7 @@ export default function AdminSystemSettingsPage() {
                 href={`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"}/sitemap.xml`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10"
               >
                 <span>View XML</span>
                 <ExternalLink className="w-3 h-3" />
@@ -258,7 +258,7 @@ export default function AdminSystemSettingsPage() {
             <button
               onClick={handleGenerateSitemap}
               disabled={generatingSitemap}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all cursor-pointer disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-xs font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all cursor-pointer disabled:opacity-50"
             >
               {generatingSitemap ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -281,7 +281,7 @@ export default function AdminSystemSettingsPage() {
                 </span>
               </div>
 
-              <div className="max-h-44 overflow-y-auto bg-black/40 rounded-xl p-3 border border-white/5 space-y-1 font-mono text-[11px] text-slate-400 no-scrollbar">
+              <div className="max-h-44 overflow-y-auto bg-black/40 rounded-md p-3 border border-white/5 space-y-1 font-mono text-[11px] text-slate-400 no-scrollbar">
                 {sitemapData.entries_sample?.map((e: any, idx: number) => (
                   <div key={idx} className="truncate hover:text-white transition-colors">
                     <span className="text-amber-400 mr-2">[{e.priority}]</span>

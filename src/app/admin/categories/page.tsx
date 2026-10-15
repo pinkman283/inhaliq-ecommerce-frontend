@@ -367,7 +367,7 @@ export default function AdminCategoriesPage() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#A78BFA]">
             Taxonomy & Navigation
           </span>
           <h1 className="text-2xl font-black text-white">Categories ({categories.length})</h1>
@@ -385,7 +385,7 @@ export default function AdminCategoriesPage() {
                 handleOpenCreate(null);
               }
             }}
-            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
+            className="px-4 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-black flex items-center gap-1.5 transition-all shadow-lg shadow-purple-500/20 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>

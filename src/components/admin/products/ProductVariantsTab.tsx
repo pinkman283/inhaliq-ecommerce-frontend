@@ -161,7 +161,7 @@ export function ProductVariantsTab({
             <h4 className="text-xs font-semibold text-white tracking-wide">
               Product Options & Variants
             </h4>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-emerald-400 font-bold">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10 text-emerald-400 font-bold">
               {variants.length} Configured
             </span>
           </div>
@@ -171,7 +171,7 @@ export function ProductVariantsTab({
         </div>
 
         {/* Workflow Switcher Tabs */}
-        <div className="flex items-center p-0.5 rounded-lg bg-white/[0.04] border border-white/10 self-start sm:self-auto">
+        <div className="flex items-center p-0.5 rounded-md bg-white/[0.04] border border-white/10 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveMode("matrix")}
@@ -226,7 +226,7 @@ export function ProductVariantsTab({
       {/* Mode B: Manual / Generic Variant Addition */}
       {activeMode === "manual" && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-4">
+          <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
               <h5 className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                 <Edit3 className="w-3.5 h-3.5 text-cyan-400" />
@@ -245,7 +245,7 @@ export function ProductVariantsTab({
                   value={manualName}
                   onChange={(e) => setManualName(e.target.value)}
                   placeholder="e.g. Red Linear Switch or CyberDeck 65%"
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition"
                 />
               </div>
 
@@ -256,7 +256,7 @@ export function ProductVariantsTab({
                   value={manualSize}
                   onChange={(e) => setManualSize(e.target.value)}
                   placeholder="e.g. 49mm, TKL, 2TB"
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition"
                 />
               </div>
 
@@ -267,7 +267,7 @@ export function ProductVariantsTab({
                   value={manualColorName}
                   onChange={(e) => setManualColorName(e.target.value)}
                   placeholder="e.g. Obsidian Black"
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition"
                 />
               </div>
 
@@ -278,14 +278,14 @@ export function ProductVariantsTab({
                     type="color"
                     value={manualColorHex || "#000000"}
                     onChange={(e) => setManualColorHex(e.target.value)}
-                    className="w-8 h-8 rounded-lg border border-white/10 bg-transparent cursor-pointer p-0.5"
+                    className="w-8 h-8 rounded-md border border-white/10 bg-transparent cursor-pointer p-0.5"
                   />
                   <input
                     type="text"
                     value={manualColorHex}
                     onChange={(e) => setManualColorHex(e.target.value)}
                     placeholder="#111111"
-                    className="flex-1 bg-white/[0.03] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none font-mono"
+                    className="flex-1 bg-white/[0.03] border border-white/10 rounded-md px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none font-mono"
                   />
                 </div>
               </div>
@@ -297,7 +297,7 @@ export function ProductVariantsTab({
                   min="0"
                   value={manualStock}
                   onChange={(e) => setManualStock(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-xl px-3 py-2 text-xs text-white outline-none transition"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-md px-3 py-2 text-xs text-white outline-none transition"
                 />
               </div>
 
@@ -308,7 +308,7 @@ export function ProductVariantsTab({
                   step="0.01"
                   value={manualPriceMod}
                   onChange={(e) => setManualPriceMod(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-xl px-3 py-2 text-xs text-white outline-none transition"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-md px-3 py-2 text-xs text-white outline-none transition"
                 />
               </div>
 
@@ -319,7 +319,7 @@ export function ProductVariantsTab({
                   value={manualBarcode}
                   onChange={(e) => setManualBarcode(e.target.value)}
                   placeholder="UPC / EAN"
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition font-mono"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-400/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition font-mono"
                 />
               </div>
             </div>
@@ -328,7 +328,7 @@ export function ProductVariantsTab({
               <button
                 type="button"
                 onClick={handleAddManualVariant}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold transition cursor-pointer shadow-sm active:scale-95"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold transition cursor-pointer shadow-sm active:scale-95"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Standalone Option

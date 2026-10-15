@@ -100,7 +100,7 @@ export default function ChartOfAccountsPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -124,7 +124,7 @@ export default function ChartOfAccountsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-semibold transition-all shadow-sm cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-semibold transition-all shadow-sm cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Sub-Account</span>
@@ -132,16 +132,16 @@ export default function ChartOfAccountsPage() {
             <button
               onClick={fetchAccounts}
               disabled={loading}
-              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-slate-400 hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
+              className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-slate-400 hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-amber-400" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#A78BFA]" : ""}`} />
             </button>
           </div>
         }
       />
 
       {/* Class Filter Tabs & Search */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08]">
         <div className="flex flex-wrap items-center gap-1.5">
           {[
             { id: "all", label: "All Classes" },
@@ -155,9 +155,9 @@ export default function ChartOfAccountsPage() {
             <button
               key={type.id}
               onClick={() => setFilterType(type.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                 filterType === type.id
-                  ? "bg-amber-400 text-slate-950 font-bold shadow-sm"
+                  ? "bg-[#A78BFA] text-[#090B10] font-bold shadow-sm"
                   : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
               }`}
             >
@@ -173,13 +173,13 @@ export default function ChartOfAccountsPage() {
             placeholder="Search code or account name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 transition"
+            className="w-full bg-[#161a26] border border-white/[0.08] rounded-md pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition"
           />
         </div>
       </div>
 
       {/* Accounts Table */}
-      <div className="p-4 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-3 shadow-sm">
+      <div className="p-4 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-3 shadow-sm">
         {filteredAccounts.length === 0 ? (
           <AdminEmptyState
             icon={ListTree}
@@ -211,7 +211,7 @@ export default function ChartOfAccountsPage() {
 
                   return (
                     <tr key={account.id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-3 font-mono font-bold text-amber-400">
+                      <td className="py-3 font-mono font-bold text-[#A78BFA]">
                         {account.account_code}
                       </td>
                       <td className="py-3 font-bold text-white">
@@ -263,10 +263,10 @@ export default function ChartOfAccountsPage() {
       {/* Create Account Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-[#0b0f19] border border-white/10 rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <ListTree className="w-4 h-4" />
                 </div>
                 <div>
@@ -276,7 +276,7 @@ export default function ChartOfAccountsPage() {
               </div>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -291,7 +291,7 @@ export default function ChartOfAccountsPage() {
                     placeholder="e.g. 6080"
                     value={accountCode}
                     onChange={(e) => setAccountCode(e.target.value)}
-                    className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-400"
+                    className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-400"
                     required
                   />
                 </div>
@@ -301,7 +301,7 @@ export default function ChartOfAccountsPage() {
                   <select
                     value={accountType}
                     onChange={(e) => setAccountType(e.target.value as AccountType)}
-                    className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
+                    className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
                   >
                     <option value="asset">Asset (1000)</option>
                     <option value="liability">Liability (2000)</option>
@@ -320,7 +320,7 @@ export default function ChartOfAccountsPage() {
                   placeholder="e.g. Server Infrastructure & CDN"
                   value={accountName}
                   onChange={(e) => setAccountName(e.target.value)}
-                  className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
+                  className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
                   required
                 />
               </div>
@@ -332,7 +332,7 @@ export default function ChartOfAccountsPage() {
                   placeholder="What transactions are posted to this account..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none"
+                  className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none"
                 />
               </div>
 
@@ -340,14 +340,14 @@ export default function ChartOfAccountsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
+                  className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-black text-xs font-bold transition-all disabled:opacity-50 shadow-md shadow-emerald-600/20"
+                  className="px-4 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-black text-xs font-bold transition-all disabled:opacity-50 shadow-md shadow-emerald-600/20"
                 >
                   {submitting ? "Creating..." : "Create Account"}
                 </button>

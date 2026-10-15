@@ -168,7 +168,7 @@ export default function AdminOrderStatusesPage() {
               setNewEmailTrigger(true);
               setIsModalOpen(true);
             }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Custom Stage</span>
@@ -179,10 +179,10 @@ export default function AdminOrderStatusesPage() {
       <SettingsNavTabs />
 
       {/* Main Container */}
-      <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-6">
+      <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-6">
         <div>
           <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <GitCommit className="w-4 h-4 text-amber-400" />
+            <GitCommit className="w-4 h-4 text-[#A78BFA]" />
             Order Fulfillment Pipeline Stages
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -193,7 +193,7 @@ export default function AdminOrderStatusesPage() {
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-14 bg-[#161a26] rounded-xl animate-pulse" />
+              <div key={i} className="h-14 bg-[#161a26] rounded-md animate-pulse" />
             ))}
           </div>
         ) : statuses.length === 0 ? (
@@ -203,7 +203,7 @@ export default function AdminOrderStatusesPage() {
             icon={GitCommit}
           />
         ) : (
-          <div className="divide-y divide-white/[0.06] border border-white/[0.06] rounded-xl overflow-hidden">
+          <div className="divide-y divide-white/[0.06] border border-white/[0.06] rounded-md overflow-hidden">
             {statuses.map((item, idx) => {
               const preset = COLOR_PRESETS.find((c) => c.id === item.color) || COLOR_PRESETS[0];
 
@@ -219,7 +219,7 @@ export default function AdminOrderStatusesPage() {
                     </span>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${preset.bg} ${preset.border} ${preset.text} border`}>
+                        <span className={`px-2.5 py-0.5 rounded text-xs font-bold ${preset.bg} ${preset.border} ${preset.text} border`}>
                           {item.label}
                         </span>
                         {item.is_system && (
@@ -229,7 +229,7 @@ export default function AdminOrderStatusesPage() {
                         )}
                       </div>
                       <span className="text-[10px] font-mono text-slate-400 block mt-0.5">
-                        slug: <span className="text-amber-300">{item.id}</span>
+                        slug: <span className="text-[#A78BFA]">{item.id}</span>
                       </span>
                     </div>
                   </div>
@@ -240,7 +240,7 @@ export default function AdminOrderStatusesPage() {
                     <button
                       type="button"
                       onClick={() => handleToggleSms(idx)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border transition-all cursor-pointer ${
                         item.sms_trigger
                           ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
                           : "bg-white/5 text-slate-400 border-transparent hover:bg-white/10"
@@ -254,7 +254,7 @@ export default function AdminOrderStatusesPage() {
                     <button
                       type="button"
                       onClick={() => handleToggleEmail(idx)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border transition-all cursor-pointer ${
                         item.email_trigger
                           ? "bg-sky-500/10 text-sky-300 border-sky-500/30"
                           : "bg-white/5 text-slate-400 border-transparent hover:bg-white/10"
@@ -268,7 +268,7 @@ export default function AdminOrderStatusesPage() {
                     {!item.is_system && (
                       <button
                         onClick={() => handleDeleteStatus(idx)}
-                        className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-white/5 rounded-md transition-colors cursor-pointer"
                         title="Remove Stage"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -323,7 +323,7 @@ export default function AdminOrderStatusesPage() {
                       setNewId(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "_"));
                     }
                   }}
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                   required
                 />
               </div>
@@ -335,7 +335,7 @@ export default function AdminOrderStatusesPage() {
                   placeholder="e.g. qc_passed"
                   value={newId}
                   onChange={(e) => setNewId(e.target.value)}
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
                   required
                 />
               </div>
@@ -345,7 +345,7 @@ export default function AdminOrderStatusesPage() {
                 <select
                   value={newColor}
                   onChange={(e) => setNewColor(e.target.value)}
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-white/20 focus:outline-none transition cursor-pointer"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-white/20 focus:outline-none transition cursor-pointer"
                 >
                   {COLOR_PRESETS.map((c) => (
                     <option key={c.id} value={c.id} className="bg-[#131722] text-white">
@@ -355,7 +355,7 @@ export default function AdminOrderStatusesPage() {
                 </select>
               </div>
 
-              <div className="p-3.5 rounded-lg bg-white/[0.02] border border-white/5 space-y-2.5 pt-3">
+              <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-2.5 pt-3">
                 <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                   Automated Triggers
                 </span>
@@ -390,7 +390,7 @@ export default function AdminOrderStatusesPage() {
               </button>
               <button
                 type="submit"
-                className="h-8 px-4 rounded-lg bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer shadow-sm"
+                className="h-8 px-4 rounded-md bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer shadow-sm"
               >
                 Add Stage
               </button>

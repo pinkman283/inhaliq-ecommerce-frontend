@@ -17,7 +17,7 @@ export function ScrollableTableCard({
 }: ScrollableTableCardProps) {
   return (
     <div
-      className={`rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-xs overflow-hidden ${className}`}
+      className={`rounded-md bg-[#11141D] border border-[#272B35] shadow-xs overflow-hidden ${className}`}
     >
       <div
         className={`w-full overflow-auto custom-scrollbar relative ${scrollClassName}`}

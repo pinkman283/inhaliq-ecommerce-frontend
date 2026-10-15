@@ -187,7 +187,7 @@ export default function AdminGoodsReceiptsPage() {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           toast.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -198,9 +198,9 @@ export default function AdminGoodsReceiptsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <PackageCheck className="w-6 h-6" />
           </div>
           <div>
@@ -213,7 +213,7 @@ export default function AdminGoodsReceiptsPage() {
 
         <button
           onClick={openCreateModal}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-bold text-xs flex items-center gap-2 shadow-lg shadow-purple-500/20 transition self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           Receive Physical Shipment
@@ -221,7 +221,7 @@ export default function AdminGoodsReceiptsPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 flex items-center justify-between">
+      <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex items-center justify-between">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -229,13 +229,13 @@ export default function AdminGoodsReceiptsPage() {
             value={search}
             onChange={e => { setSearch(e.target.value); setPage(1); }}
             placeholder="Search GRN, PO, or supplier..."
-            className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
         </div>
       </div>
 
       {/* GRN Table */}
-      <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+      <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
@@ -253,7 +253,7 @@ export default function AdminGoodsReceiptsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading goods receipts...
                   </td>
                 </tr>
@@ -269,7 +269,7 @@ export default function AdminGoodsReceiptsPage() {
                     <td className="py-3.5 px-4">
                       <span className="font-bold text-white font-mono block">{gr.receipt_number}</span>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-amber-400 font-bold">
+                    <td className="py-3.5 px-4 font-mono text-[#A78BFA] font-bold">
                       {gr.purchase_order?.po_number}
                     </td>
                     <td className="py-3.5 px-4 text-slate-200">
@@ -288,7 +288,7 @@ export default function AdminGoodsReceiptsPage() {
                       <button
                         onClick={() => openViewModal(gr)}
                         title="View Shipment Details"
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                        className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 transition"
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </button>
@@ -304,9 +304,9 @@ export default function AdminGoodsReceiptsPage() {
       {/* MODAL: Receive Physical Shipment (Create GRN) */}
       {createModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-3xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-3xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <PackageCheck className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Receive Physical Shipment (Create GRN)</h3>
               </div>
@@ -323,7 +323,7 @@ export default function AdminGoodsReceiptsPage() {
                     required
                     value={selectedPoId}
                     onChange={e => handleSelectPo(e.target.value)}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="">-- Choose Approved PO --</option>
                     {openPOs.map(po => (
@@ -340,7 +340,7 @@ export default function AdminGoodsReceiptsPage() {
                     required
                     value={receivedDate}
                     onChange={e => setReceivedDate(e.target.value)}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -354,7 +354,7 @@ export default function AdminGoodsReceiptsPage() {
 
                   <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
                     {receivingLines.map((line, idx) => (
-                      <div key={idx} className="bg-[#151824] p-3.5 rounded-xl border border-white/5 space-y-2">
+                      <div key={idx} className="bg-[#151824] p-3.5 rounded-md border border-white/5 space-y-2">
                         <div className="flex justify-between items-center">
                           <div>
                             <span className="font-bold text-white block">{line.product_name}</span>
@@ -372,7 +372,7 @@ export default function AdminGoodsReceiptsPage() {
                               min="0"
                               value={line.quantity_received}
                               onChange={e => updateLineQty(idx, "quantity_received", parseInt(e.target.value) || 0)}
-                              className="w-full bg-[#0b0d14] border border-emerald-500/30 rounded-lg px-2.5 py-1.5 text-emerald-300 font-mono text-center font-bold"
+                              className="w-full bg-[#0b0d14] border border-emerald-500/30 rounded-md px-2.5 py-1.5 text-emerald-300 font-mono text-center font-bold"
                             />
                           </div>
                           <div>
@@ -382,7 +382,7 @@ export default function AdminGoodsReceiptsPage() {
                               min="0"
                               value={line.quantity_damaged}
                               onChange={e => updateLineQty(idx, "quantity_damaged", parseInt(e.target.value) || 0)}
-                              className="w-full bg-[#0b0d14] border border-amber-500/30 rounded-lg px-2.5 py-1.5 text-amber-300 font-mono text-center"
+                              className="w-full bg-[#0b0d14] border border-amber-500/30 rounded-md px-2.5 py-1.5 text-amber-300 font-mono text-center"
                             />
                           </div>
                           <div>
@@ -392,7 +392,7 @@ export default function AdminGoodsReceiptsPage() {
                               min="0"
                               value={line.quantity_rejected}
                               onChange={e => updateLineQty(idx, "quantity_rejected", parseInt(e.target.value) || 0)}
-                              className="w-full bg-[#0b0d14] border border-rose-500/30 rounded-lg px-2.5 py-1.5 text-rose-300 font-mono text-center"
+                              className="w-full bg-[#0b0d14] border border-rose-500/30 rounded-md px-2.5 py-1.5 text-rose-300 font-mono text-center"
                             />
                           </div>
                         </div>
@@ -409,7 +409,7 @@ export default function AdminGoodsReceiptsPage() {
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
                   placeholder="Carrier tracking, batch lot numbers, inspector notes..."
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md p-3 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -417,14 +417,14 @@ export default function AdminGoodsReceiptsPage() {
                 <button
                   type="button"
                   onClick={() => setCreateModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || receivingLines.length === 0}
-                  className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/20 disabled:opacity-50"
                 >
                   {isSubmitting ? "Generating FIFO Layers..." : "Confirm & Accept into Stock"}
                 </button>
@@ -437,7 +437,7 @@ export default function AdminGoodsReceiptsPage() {
       {/* MODAL: View GRN Details */}
       {viewModal && selectedReceipt && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-2xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-2xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2 text-emerald-400">
                 <PackageCheck className="w-5 h-5" />
@@ -451,7 +451,7 @@ export default function AdminGoodsReceiptsPage() {
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 bg-[#151824] p-3.5 rounded-xl border border-white/10">
+            <div className="grid grid-cols-3 gap-3 bg-[#151824] p-3.5 rounded-md border border-white/10">
               <div>
                 <span className="text-slate-400 block text-[10px] uppercase font-bold">Supplier</span>
                 <span className="text-white font-bold">{selectedReceipt.vendor?.company_name}</span>
@@ -468,7 +468,7 @@ export default function AdminGoodsReceiptsPage() {
 
             <div className="space-y-2">
               <h4 className="font-bold text-white uppercase text-[11px]">Accepted Shipment Items</h4>
-              <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5">
+              <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5">
                 {selectedReceipt.items?.map(it => (
                   <div key={it.id} className="p-3 flex items-center justify-between gap-3">
                     <div>

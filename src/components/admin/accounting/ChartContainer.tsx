@@ -26,7 +26,7 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
 }) => {
   return (
     <div
-      className={`rounded-2xl border border-white/[0.06] bg-[#0d1017] p-5 shadow-sm transition-all duration-200 hover:border-white/10 ${className}`}
+      className={`rounded-md border border-white/[0.06] bg-[#0d1017] p-5 shadow-sm transition-all duration-200 hover:border-white/10 ${className}`}
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-4">
         <div className="space-y-1">
@@ -51,7 +51,7 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
 
       <div style={{ minHeight: typeof height === "number" ? `${height}px` : height }} className="relative w-full">
         {isLoading ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-slate-950/40 backdrop-blur-sm z-10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-md bg-slate-950/40 backdrop-blur-sm z-10">
             <Loader2 className="h-7 w-7 animate-spin text-cyan-400 mb-2" />
             <span className="text-xs text-slate-400 font-medium">Loading analytics...</span>
           </div>

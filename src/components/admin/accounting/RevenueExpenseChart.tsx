@@ -84,7 +84,7 @@ export const RevenueExpenseChart: React.FC<RevenueExpenseChartProps> = ({
               {burnRatio}%
             </span>
           </div>
-          <div className="flex items-center rounded-lg bg-slate-800/80 p-0.5 border border-white/5 text-xs">
+          <div className="flex items-center rounded-md bg-slate-800/80 p-0.5 border border-white/5 text-xs">
             <button
               type="button"
               onClick={() => setViewMode("combined")}

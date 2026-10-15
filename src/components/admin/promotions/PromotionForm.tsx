@@ -412,7 +412,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
             <button
               type="button"
               onClick={() => router.back()}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back
@@ -421,7 +421,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all disabled:opacity-50 cursor-pointer"
             >
               <Save className="w-4 h-4" />
               {saving ? "Saving..." : isEdit ? "Update Promotion" : "Publish Promotion"}
@@ -452,9 +452,9 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   key={t.key}
                   type="button"
                   onClick={() => setActiveTab(t.key as any)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-md font-medium whitespace-nowrap transition-all cursor-pointer ${
                     isActive
-                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shadow-sm"
+                      ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 font-bold shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
                   }`}
                 >
@@ -468,18 +468,18 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* STEP 1: Basic Info */}
             {activeTab === "basic" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-5">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-amber-400" />
+                      <Sparkles className="w-4 h-4 text-[#A78BFA]" />
                       Step 1: Basic Promotion Details
                     </h3>
                     <p className="text-xs text-slate-400 mt-1">
                       Set the core identity, public name, URL slug, and evaluation priority for this promotion.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 whitespace-nowrap">
                     Step 1 of 7
                   </span>
                 </div>
@@ -495,7 +495,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       placeholder="e.g. Eid Mega Sale, Cyber Monday 20% OFF"
                       value={formData.name || ""}
                       onChange={(e) => handleNameChange(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
                     />
                   </div>
 
@@ -508,7 +508,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       <button
                         type="button"
                         onClick={handleRegenerateSlug}
-                        className="text-[10px] text-amber-400 hover:text-amber-300 flex items-center gap-1 font-mono transition-colors cursor-pointer"
+                        className="text-[10px] text-[#A78BFA] hover:text-[#B9A3FF] flex items-center gap-1 font-mono transition-colors cursor-pointer"
                         title="Re-generate slug from title"
                       >
                         <Wand2 className="w-3 h-3" />
@@ -520,7 +520,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       placeholder="e.g. eid-mega-sale"
                       value={formData.slug || ""}
                       onChange={(e) => handleSlugChange(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none font-mono"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none font-mono"
                     />
                     <p className="text-[10px] text-slate-500 font-mono">
                       URL safe identifier for campaign landing page.
@@ -533,7 +533,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                     <select
                       value={formData.promotion_type || "discount_code"}
                       onChange={(e) => handleChange("promotion_type", e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-semibold"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-semibold"
                     >
                       <option value="discount_code">Discount Code (Customer enters coupon code)</option>
                       <option value="claimable_coupon">Claimable Coupon (Customer claims voucher to wallet)</option>
@@ -550,7 +550,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       placeholder="e.g. Get 20% discount on all mechanical keyboards on orders above ৳1,500."
                       value={formData.description || ""}
                       onChange={(e) => handleChange("description", e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none resize-none"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none resize-none"
                     />
                   </div>
 
@@ -562,7 +562,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       value={formData.priority ?? ""}
                       onFocus={(e) => e.target.select()}
                       onChange={(e) => handleNumericFieldChange("priority", e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                     />
                     <p className="text-[10px] text-slate-500">
                       When multiple promotions are eligible, higher priority promotions evaluate first.
@@ -584,7 +584,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("discount")}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition-all cursor-pointer"
                   >
                     Next: Discount Rules
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -595,18 +595,18 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
             {/* STEP 2: Discount Rules */}
             {activeTab === "discount" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-5">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <Percent className="w-4 h-4 text-amber-400" />
+                      <Percent className="w-4 h-4 text-[#A78BFA]" />
                       Step 2: Discount Calculation Rules
                     </h3>
                     <p className="text-xs text-slate-400 mt-1">
                       Define the exact formula, discount amount, maximum cap, and any special Buy X Get Y logic.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 whitespace-nowrap">
                     Step 2 of 7
                   </span>
                 </div>
@@ -618,7 +618,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                     <select
                       value={formData.discount_type || "percentage"}
                       onChange={(e) => handleChange("discount_type", e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-semibold"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-semibold"
                     >
                       <option value="percentage">Percentage Discount (% OFF)</option>
                       <option value="fixed_amount">Fixed Amount Discount (৳ OFF Order)</option>
@@ -642,7 +642,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         value={formData.discount_value ?? ""}
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => handleNumericFieldChange("discount_value", e.target.value, { isFloat: true })}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono font-bold"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono font-bold"
                       />
                     </div>
                   )}
@@ -672,14 +672,14 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         value={formData.max_discount_amount ?? ""}
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => handleNumericFieldChange("max_discount_amount", e.target.value, { isFloat: true, defaultNull: true })}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                       />
                     </div>
                   )}
 
                   {/* BXGY Specific Options */}
                   {formData.discount_type === "buy_x_get_y" && (
-                    <div className="md:col-span-2 p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 space-y-3">
+                    <div className="md:col-span-2 p-4 rounded-md bg-purple-500/5 border border-purple-500/20 space-y-3">
                       <h4 className="text-xs font-bold text-purple-300 uppercase tracking-wider">
                         Buy X Get Y (BXGY) Parameters
                       </h4>
@@ -693,7 +693,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             value={formData.bxgy_buy_quantity ?? ""}
                             onFocus={(e) => e.target.select()}
                             onChange={(e) => handleNumericFieldChange("bxgy_buy_quantity", e.target.value)}
-                            className="w-full px-3 py-1.5 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white"
+                            className="w-full px-3 py-1.5 rounded-md bg-[#12151f] border border-white/10 text-xs text-white"
                           />
                         </div>
                         <div>
@@ -705,7 +705,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             value={formData.bxgy_get_quantity ?? ""}
                             onFocus={(e) => e.target.select()}
                             onChange={(e) => handleNumericFieldChange("bxgy_get_quantity", e.target.value)}
-                            className="w-full px-3 py-1.5 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white"
+                            className="w-full px-3 py-1.5 rounded-md bg-[#12151f] border border-white/10 text-xs text-white"
                           />
                         </div>
                         <div>
@@ -718,7 +718,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             value={formData.bxgy_reward_discount_percent ?? ""}
                             onFocus={(e) => e.target.select()}
                             onChange={(e) => handleNumericFieldChange("bxgy_reward_discount_percent", e.target.value)}
-                            className="w-full px-3 py-1.5 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white"
+                            className="w-full px-3 py-1.5 rounded-md bg-[#12151f] border border-white/10 text-xs text-white"
                           />
                         </div>
                       </div>
@@ -730,7 +730,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("basic")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Back
@@ -738,7 +738,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("scoping")}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition-all cursor-pointer"
                   >
                     Next: Scope & Audience
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -749,7 +749,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
             {/* STEP 4: Schedule & Limits */}
             {activeTab === "schedule" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-6">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -760,7 +760,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       Configure authoritative campaign start/expiry dates, claim deadlines, wallet validity, usage limits, and stacking rules.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 whitespace-nowrap">
                     Step 4 of 7
                   </span>
                 </div>
@@ -774,7 +774,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       type="datetime-local"
                       value={formData.starts_at || ""}
                       onChange={(e) => handleChange("starts_at", e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                     />
                     <p className="text-[10px] text-slate-500">
                       Leave empty to activate immediately upon publishing.
@@ -802,7 +802,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         handleChange("expires_at", e.target.value);
                         setActiveExpiresAtPreset(null);
                       }}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                     />
                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
                       {[
@@ -852,7 +852,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         handleChange("claim_deadline", e.target.value);
                         setActiveClaimDeadlinePreset(null);
                       }}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                     />
                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
                       {[
@@ -869,7 +869,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             onClick={() => applyClaimDeadlineOffset(p.hours, p.label)}
                             className={`px-2 py-0.5 rounded text-[10px] border transition-colors cursor-pointer ${
                               isSelected
-                                ? "bg-amber-500/25 text-amber-300 border-amber-400/50 font-bold ring-1 ring-amber-400/30"
+                                ? "bg-[#211B32] text-[#A78BFA] border-[#A78BFA]/50 font-bold ring-1 ring-[#A78BFA]/30"
                                 : "bg-[#12151f] hover:bg-white/10 text-slate-300 border-white/10"
                             }`}
                             title={isSelected ? "Click to unselect and clear" : `Set ${p.label}`}
@@ -906,7 +906,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           e.target.value ? Number(e.target.value) : null
                         )
                       }
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                     />
                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
                       {[3, 7, 14, 30].map((days) => {
@@ -946,7 +946,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         value={formData.min_order_amount ?? ""}
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => handleNumericFieldChange("min_order_amount", e.target.value, { isFloat: true })}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                       />
                     </div>
 
@@ -970,7 +970,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         value={formData.max_order_amount ?? ""}
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => handleNumericFieldChange("max_order_amount", e.target.value, { isFloat: true, defaultNull: true })}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                       />
                     </div>
 
@@ -994,7 +994,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         value={formData.total_usage_limit ?? ""}
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => handleNumericFieldChange("total_usage_limit", e.target.value, { defaultNull: true })}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                       />
                       <p className="text-[10px] text-slate-500">
                         Total redemptions across all customers before promotion locks.
@@ -1010,7 +1010,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         value={formData.per_customer_usage_limit ?? ""}
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => handleNumericFieldChange("per_customer_usage_limit", e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                       />
                       <p className="text-[10px] text-slate-500">
                         Times an individual customer (or guest email/phone) can use this.
@@ -1046,7 +1046,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("scoping")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Back
@@ -1054,7 +1054,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("codes")}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition-all cursor-pointer"
                   >
                     Next: Promo Codes
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1065,18 +1065,18 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
             {/* STEP 3: Scope & Audience */}
             {activeTab === "scoping" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-6">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <Layers className="w-4 h-4 text-amber-400" />
+                      <Layers className="w-4 h-4 text-[#A78BFA]" />
                       Step 3: Target Scoping & Customer Audience
                     </h3>
                     <p className="text-xs text-slate-400 mt-1">
                       Choose which products, categories, or brands qualify, and specify which customers are eligible.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 whitespace-nowrap">
                     Step 3 of 7
                   </span>
                 </div>
@@ -1091,7 +1091,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                     <select
                       value={formData.applies_to || "entire_order"}
                       onChange={(e) => handleChange("applies_to", e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none"
+                      className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                     >
                       <option value="entire_order">Entire Order (All eligible catalog)</option>
                       <option value="specific_categories">Specific Categories</option>
@@ -1101,16 +1101,16 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   </div>
 
                   {formData.applies_to === "specific_categories" && (
-                    <div className="p-4 rounded-xl bg-[#12151f] border border-white/10 space-y-3">
+                    <div className="p-4 rounded-md bg-[#12151f] border border-white/10 space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-semibold text-amber-400">
+                        <label className="text-xs font-semibold text-[#A78BFA]">
                           Target Categories ({formData.target_category_ids?.length || 0} selected)
                         </label>
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
                             onClick={() => handleChange("target_category_ids", categories.map((c) => c.id))}
-                            className="text-[10px] text-amber-400 hover:text-amber-300 font-semibold cursor-pointer"
+                            className="text-[10px] text-[#A78BFA] hover:text-[#B9A3FF] font-semibold cursor-pointer"
                           >
                             Select All
                           </button>
@@ -1139,14 +1139,14 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                   isSelected ? current.filter((id) => id !== cat.id) : [...current, cat.id]
                                 );
                               }}
-                              className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${
+                              className={`flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium border transition-all cursor-pointer text-left ${
                                 isSelected
-                                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm"
+                                  ? "bg-[#211B32] text-[#A78BFA] border-[#A78BFA]/40 shadow-sm"
                                   : "bg-white/5 hover:bg-white/10 text-slate-300 border-white/10"
                               }`}
                             >
                               <span className="truncate">{cat.name}</span>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0 ml-1" />}
+                              {isSelected && <Check className="w-3.5 h-3.5 text-[#A78BFA] shrink-0 ml-1" />}
                             </button>
                           );
                         })}
@@ -1155,16 +1155,16 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   )}
 
                   {formData.applies_to === "specific_products" && (
-                    <div className="p-4 rounded-xl bg-[#12151f] border border-white/10 space-y-3">
+                    <div className="p-4 rounded-md bg-[#12151f] border border-white/10 space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-semibold text-amber-400">
+                        <label className="text-xs font-semibold text-[#A78BFA]">
                           Target Products ({formData.target_product_ids?.length || 0} selected)
                         </label>
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
                             onClick={() => handleChange("target_product_ids", products.map((p) => p.id))}
-                            className="text-[10px] text-amber-400 hover:text-amber-300 font-semibold cursor-pointer"
+                            className="text-[10px] text-[#A78BFA] hover:text-[#B9A3FF] font-semibold cursor-pointer"
                           >
                             Select All
                           </button>
@@ -1193,14 +1193,14 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                   isSelected ? current.filter((id) => id !== prod.id) : [...current, prod.id]
                                 );
                               }}
-                              className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${
+                              className={`flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium border transition-all cursor-pointer text-left ${
                                 isSelected
-                                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm"
+                                  ? "bg-[#211B32] text-[#A78BFA] border-[#A78BFA]/40 shadow-sm"
                                   : "bg-white/5 hover:bg-white/10 text-slate-300 border-white/10"
                               }`}
                             >
                               <span className="truncate">{prod.name} (৳{prod.price})</span>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0 ml-1" />}
+                              {isSelected && <Check className="w-3.5 h-3.5 text-[#A78BFA] shrink-0 ml-1" />}
                             </button>
                           );
                         })}
@@ -1209,16 +1209,16 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   )}
 
                   {formData.applies_to === "specific_brands" && (
-                    <div className="p-4 rounded-xl bg-[#12151f] border border-white/10 space-y-3">
+                    <div className="p-4 rounded-md bg-[#12151f] border border-white/10 space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-semibold text-amber-400">
+                        <label className="text-xs font-semibold text-[#A78BFA]">
                           Target Brands ({formData.target_brand_ids?.length || 0} selected)
                         </label>
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
                             onClick={() => handleChange("target_brand_ids", brands.map((b) => b.id))}
-                            className="text-[10px] text-amber-400 hover:text-amber-300 font-semibold cursor-pointer"
+                            className="text-[10px] text-[#A78BFA] hover:text-[#B9A3FF] font-semibold cursor-pointer"
                           >
                             Select All
                           </button>
@@ -1247,14 +1247,14 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                   isSelected ? current.filter((id) => id !== brand.id) : [...current, brand.id]
                                 );
                               }}
-                              className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${
+                              className={`flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium border transition-all cursor-pointer text-left ${
                                 isSelected
-                                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm"
+                                  ? "bg-[#211B32] text-[#A78BFA] border-[#A78BFA]/40 shadow-sm"
                                   : "bg-white/5 hover:bg-white/10 text-slate-300 border-white/10"
                               }`}
                             >
                               <span className="truncate">{brand.name}</span>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0 ml-1" />}
+                              {isSelected && <Check className="w-3.5 h-3.5 text-[#A78BFA] shrink-0 ml-1" />}
                             </button>
                           );
                         })}
@@ -1288,7 +1288,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           key={opt.key}
                           type="button"
                           onClick={() => handleChange("customer_eligibility", opt.key)}
-                          className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                          className={`p-3 rounded-md border text-left transition-all cursor-pointer ${
                             isSelected
                               ? "bg-blue-500/20 border-blue-500/50 text-white ring-1 ring-blue-400/30"
                               : "bg-[#12151f] hover:bg-white/5 border-white/10 text-slate-400"
@@ -1308,7 +1308,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
                   {/* Customer Multi-Selector when specific_customers is chosen */}
                   {formData.customer_eligibility === "specific_customers" && (
-                    <div className="p-3.5 rounded-xl bg-[#12151f] border border-blue-500/30 space-y-3">
+                    <div className="p-3.5 rounded-md bg-[#12151f] border border-blue-500/30 space-y-3">
                       <div className="flex items-center justify-between">
                         <label className="text-xs font-semibold text-blue-300">
                           Designated Customers ({formData.customer_ids?.length || 0} selected)
@@ -1340,13 +1340,13 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             }
                           }}
                           placeholder="Search by name, email, or phone number..."
-                          className="flex-1 px-3 py-1.5 rounded-lg bg-[#0c0e14] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-blue-400 outline-none"
+                          className="flex-1 px-3 py-1.5 rounded-md bg-[#0c0e14] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-blue-400 outline-none"
                         />
                         <button
                           type="button"
                           onClick={handleSearchCustomers}
                           disabled={customerSearchLoading || !customerSearch.trim()}
-                          className="px-3 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                          className="px-3 py-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
                         >
                           {customerSearchLoading ? "Searching..." : "Search"}
                         </button>
@@ -1354,7 +1354,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
                       {/* Search Results */}
                       {customerSearchResults.length > 0 && (
-                        <div className="max-h-40 overflow-y-auto border border-white/10 rounded-lg divide-y divide-white/5 bg-[#0c0e14]">
+                        <div className="max-h-40 overflow-y-auto border border-white/10 rounded-md divide-y divide-white/5 bg-[#0c0e14]">
                           {customerSearchResults.map((cust) => {
                             const isSelected = formData.customer_ids?.includes(cust.id);
                             return (
@@ -1397,7 +1397,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           {selectedCustomersList.map((cust) => (
                             <span
                               key={cust.id}
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[11px] text-blue-200"
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-[11px] text-blue-200"
                             >
                               <span>{cust.name} ({cust.email})</span>
                               <button
@@ -1422,7 +1422,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("discount")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Back
@@ -1430,7 +1430,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("schedule")}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition-all cursor-pointer"
                   >
                     Next: Schedule & Limits
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1441,18 +1441,18 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
             {/* STEP 5: Promo Codes */}
             {activeTab === "codes" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-5">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <Tag className="w-4 h-4 text-amber-400" />
+                      <Tag className="w-4 h-4 text-[#A78BFA]" />
                       Step 5: Promo Code Management
                     </h3>
                     <p className="text-xs text-slate-400 mt-1">
                       Add specific coupon codes customers type at checkout, or batch-generate unique single-use codes.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 whitespace-nowrap">
                     Step 5 of 7
                   </span>
                 </div>
@@ -1464,7 +1464,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={handleAddCode}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 text-[#A78BFA] text-xs font-bold border border-[#A78BFA]/30 transition-colors cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Add Code
@@ -1480,7 +1480,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         placeholder="e.g. SUMMER20"
                         value={codeItem.code}
                         onChange={(e) => handleCodeChange(index, "code", e.target.value.toUpperCase())}
-                        className="flex-1 px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white font-mono uppercase font-bold focus:border-amber-400 outline-none"
+                        className="flex-1 px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white font-mono uppercase font-bold focus:border-[#A78BFA]/50 outline-none"
                       />
                       <input
                         type="number"
@@ -1488,13 +1488,13 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         placeholder="Limit (Optional)"
                         value={codeItem.usage_limit || ""}
                         onChange={(e) => handleCodeChange(index, "usage_limit", e.target.value ? Number(e.target.value) : null)}
-                        className="w-32 px-3 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white font-mono focus:border-amber-400 outline-none"
+                        className="w-32 px-3 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white font-mono focus:border-[#A78BFA]/50 outline-none"
                       />
                       {(formData.codes || []).length > 1 && (
                         <button
                           type="button"
                           onClick={() => handleRemoveCode(index)}
-                          className="p-2 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                          className="p-2 rounded-md bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -1516,7 +1516,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         type="text"
                         value={batchPrefix}
                         onChange={(e) => setBatchPrefix(e.target.value.toUpperCase())}
-                        className="w-full px-3 py-1.5 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white font-mono uppercase"
+                        className="w-full px-3 py-1.5 rounded-md bg-[#12151f] border border-white/10 text-xs text-white font-mono uppercase"
                       />
                     </div>
                     <div>
@@ -1527,7 +1527,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         max={100}
                         value={batchCount}
                         onChange={(e) => setBatchCount(Number(e.target.value))}
-                        className="w-full px-3 py-1.5 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white font-mono"
+                        className="w-full px-3 py-1.5 rounded-md bg-[#12151f] border border-white/10 text-xs text-white font-mono"
                       />
                     </div>
                     <div>
@@ -1537,13 +1537,13 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         min={1}
                         value={batchUsageLimit ?? 1}
                         onChange={(e) => setBatchUsageLimit(e.target.value ? Number(e.target.value) : null)}
-                        className="w-full px-3 py-1.5 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white font-mono"
+                        className="w-full px-3 py-1.5 rounded-md bg-[#12151f] border border-white/10 text-xs text-white font-mono"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={handleGenerateBatchCodes}
-                      className="px-4 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-bold border border-cyan-500/30 transition-colors cursor-pointer"
+                      className="px-4 py-2 rounded-md bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-bold border border-cyan-500/30 transition-colors cursor-pointer"
                     >
                       Generate Codes
                     </button>
@@ -1554,7 +1554,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("schedule")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Back
@@ -1562,7 +1562,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("storefront")}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition-all cursor-pointer"
                   >
                     Next: Storefront Presentation
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1573,28 +1573,28 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
             {/* STEP 6: Storefront Presentation */}
             {activeTab === "storefront" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-6">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <Layout className="w-4 h-4 text-amber-400" />
+                      <Layout className="w-4 h-4 text-[#A78BFA]" />
                       Step 6: Storefront Presentation & Banners
                     </h3>
                     <p className="text-xs text-slate-400 mt-1">
                       Control homepage visibility, promotional banner artwork, headlines, CTA buttons, and campaign terms.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 whitespace-nowrap">
                     Step 6 of 7
                   </span>
                 </div>
 
                 {/* Master Storefront Toggle */}
-                <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-3">
+                <div className="p-4 rounded-md border border-[#A78BFA]/30 bg-[#A78BFA]/5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-xs font-bold text-white flex items-center gap-2">
-                        <Layout className="w-4 h-4 text-amber-400" />
+                        <Layout className="w-4 h-4 text-[#A78BFA]" />
                         Display on Customer Storefront
                       </h4>
                       <p className="text-[11px] text-slate-400 mt-0.5">
@@ -1608,7 +1608,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         onChange={(e) => handleChange("show_on_storefront", e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                      <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded after:h-5 after:w-5 after:transition-all peer-checked:bg-[#A78BFA]"></div>
                     </label>
                   </div>
                 </div>
@@ -1634,17 +1634,17 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                               key={p.key}
                               type="button"
                               onClick={() => handleChange("storefront_placement", p.key)}
-                              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                              className={`p-3 rounded-md border text-left transition-all cursor-pointer ${
                                 isSelected
-                                  ? "bg-amber-500/20 border-amber-500/50 text-white ring-1 ring-amber-400/30"
+                                  ? "bg-[#211B32] border-[#A78BFA]/50 text-white ring-1 ring-[#A78BFA]/30"
                                   : "bg-[#12151f] hover:bg-white/5 border-white/10 text-slate-400"
                               }`}
                             >
                               <div className="flex items-center justify-between mb-1">
-                                <span className={`text-xs font-bold ${isSelected ? "text-amber-300" : "text-white"}`}>
+                                <span className={`text-xs font-bold ${isSelected ? "text-[#A78BFA]" : "text-white"}`}>
                                   {p.label}
                                 </span>
-                                {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                                {isSelected && <Check className="w-3.5 h-3.5 text-[#A78BFA]" />}
                               </div>
                               <span className="text-[10px] text-slate-400 block leading-tight">{p.desc}</span>
                             </button>
@@ -1656,10 +1656,10 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                     {/* Image Upload Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Desktop Banner Image */}
-                      <div className="space-y-2 p-4 rounded-xl bg-[#12151f] border border-white/10">
+                      <div className="space-y-2 p-4 rounded-md bg-[#12151f] border border-white/10">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                            <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+                            <ImageIcon className="w-3.5 h-3.5 text-[#A78BFA]" />
                             Desktop Banner Artwork
                           </label>
                           {formData.banner_image && (
@@ -1674,7 +1674,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         </div>
 
                         {formData.banner_image ? (
-                          <div className="relative rounded-lg overflow-hidden border border-white/10 aspect-video bg-black/40">
+                          <div className="relative rounded-md overflow-hidden border border-white/10 aspect-video bg-black/40">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={formData.banner_image}
@@ -1685,8 +1685,8 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         ) : null}
 
                         <div className="flex items-center gap-2">
-                          <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-dashed border-white/20 text-xs text-slate-300 cursor-pointer transition-colors">
-                            <Upload className="w-3.5 h-3.5 text-amber-400" />
+                          <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-dashed border-white/20 text-xs text-slate-300 cursor-pointer transition-colors">
+                            <Upload className="w-3.5 h-3.5 text-[#A78BFA]" />
                             <span>{uploadingDesktop ? "Uploading..." : "Upload Desktop Image"}</span>
                             <input
                               type="file"
@@ -1702,12 +1702,12 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="Or paste image URL (e.g. /banners/hero.jpg)"
                           value={formData.banner_image || ""}
                           onChange={(e) => handleChange("banner_image", e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#0c0e14] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none font-mono"
+                          className="w-full px-3 py-1.5 rounded-md bg-[#0c0e14] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none font-mono"
                         />
                       </div>
 
                       {/* Mobile Banner Image */}
-                      <div className="space-y-2 p-4 rounded-xl bg-[#12151f] border border-white/10">
+                      <div className="space-y-2 p-4 rounded-md bg-[#12151f] border border-white/10">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                             <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
@@ -1725,7 +1725,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         </div>
 
                         {formData.mobile_banner_image ? (
-                          <div className="relative rounded-lg overflow-hidden border border-white/10 aspect-video bg-black/40">
+                          <div className="relative rounded-md overflow-hidden border border-white/10 aspect-video bg-black/40">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={formData.mobile_banner_image}
@@ -1736,7 +1736,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         ) : null}
 
                         <div className="flex items-center gap-2">
-                          <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-dashed border-white/20 text-xs text-slate-300 cursor-pointer transition-colors">
+                          <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-dashed border-white/20 text-xs text-slate-300 cursor-pointer transition-colors">
                             <Upload className="w-3.5 h-3.5 text-cyan-400" />
                             <span>{uploadingMobile ? "Uploading..." : "Upload Mobile Image"}</span>
                             <input
@@ -1753,7 +1753,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="Or paste mobile image URL"
                           value={formData.mobile_banner_image || ""}
                           onChange={(e) => handleChange("mobile_banner_image", e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#0c0e14] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none font-mono"
+                          className="w-full px-3 py-1.5 rounded-md bg-[#0c0e14] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none font-mono"
                         />
                       </div>
                     </div>
@@ -1768,7 +1768,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         placeholder="e.g. Eid Mega Sale with 20% discount on mechanical keyboards"
                         value={formData.image_alt_text || ""}
                         onChange={(e) => handleChange("image_alt_text", e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+                        className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
                       />
                     </div>
 
@@ -1783,7 +1783,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="Defaults to promotion name if blank"
                           value={formData.headline || ""}
                           onChange={(e) => handleChange("headline", e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none font-semibold"
+                          className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none font-semibold"
                         />
                       </div>
 
@@ -1796,7 +1796,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="e.g. Up to 20% OFF top gaming & mechanical keyboards"
                           value={formData.subheadline || ""}
                           onChange={(e) => handleChange("subheadline", e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+                          className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
                         />
                       </div>
 
@@ -1809,7 +1809,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="e.g. HOT DEAL, 20% OFF, LIMITED TIME"
                           value={formData.badge_text || ""}
                           onChange={(e) => handleChange("badge_text", e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+                          className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
                         />
                       </div>
 
@@ -1822,7 +1822,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="Shop Deals"
                           value={formData.cta_text || ""}
                           onChange={(e) => handleChange("cta_text", e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none"
+                          className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                         />
                       </div>
 
@@ -1835,7 +1835,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="/products or /promotions/eid-mega-sale"
                           value={formData.cta_destination || ""}
                           onChange={(e) => handleChange("cta_destination", e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-mono"
+                          className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-mono"
                         />
                       </div>
 
@@ -1848,13 +1848,13 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                           placeholder="e.g. Valid only on mechanical keyboards. Cannot be combined with other coupons. Limit one per customer."
                           value={formData.terms_conditions || ""}
                           onChange={(e) => handleChange("terms_conditions", e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none resize-none"
+                          className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none resize-none"
                         />
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-xl border border-white/10 bg-[#12151f] text-slate-400 text-xs space-y-1">
+                  <div className="p-4 rounded-md border border-white/10 bg-[#12151f] text-slate-400 text-xs space-y-1">
                     <p className="font-semibold text-slate-300">Storefront display is disabled for this promotion.</p>
                     <p>
                       This promotion functions strictly as a coupon code or targeted reward. It will not occupy any homepage banner slots or carousel slides.
@@ -1866,7 +1866,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("codes")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Back
@@ -1874,7 +1874,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("review")}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition-all cursor-pointer"
                   >
                     Next: Review & Publish
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1885,7 +1885,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
             {/* STEP 7: Review & Publish */}
             {activeTab === "review" && (
-              <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-6">
+              <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -1896,25 +1896,25 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       Verify all promotion settings before publishing live to customers and storefront.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+                  <span className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                     Step 7 of 7
                   </span>
                 </div>
 
                 {/* Summary Card */}
-                <div className="p-4 rounded-xl border border-white/10 bg-[#12151f] space-y-4">
+                <div className="p-4 rounded-md border border-white/10 bg-[#12151f] space-y-4">
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="text-base font-bold text-white">{formData.name || "Untitled Promotion"}</h4>
                       <p className="text-xs text-slate-400 font-mono mt-0.5">Slug: {formData.slug || "auto-generated"}</p>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                    <span className="px-2.5 py-1 rounded text-xs font-bold uppercase bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
                       {formData.promotion_type?.replace(/_/g, " ")}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                    <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-1">
                       <span className="text-[10px] text-slate-400 block uppercase font-bold">Discount Rule</span>
                       <span className="font-bold text-white">
                         {formData.discount_type === "percentage"
@@ -1930,7 +1930,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       )}
                     </div>
 
-                    <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-1">
                       <span className="text-[10px] text-slate-400 block uppercase font-bold">Catalog Scope</span>
                       <span className="font-bold text-white capitalize">
                         {formData.applies_to?.replace(/_/g, " ")}
@@ -1940,7 +1940,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       </span>
                     </div>
 
-                    <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-1">
                       <span className="text-[10px] text-slate-400 block uppercase font-bold">Schedule</span>
                       <span className="font-bold text-emerald-300">
                         {formData.expires_at ? `Until ${new Date(formData.expires_at).toLocaleDateString()}` : "No expiry"}
@@ -1950,9 +1950,9 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                       </span>
                     </div>
 
-                    <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-1">
                       <span className="text-[10px] text-slate-400 block uppercase font-bold">Storefront Status</span>
-                      <span className={`font-bold ${formData.show_on_storefront ? "text-amber-300" : "text-slate-400"}`}>
+                      <span className={`font-bold ${formData.show_on_storefront ? "text-[#A78BFA]" : "text-slate-400"}`}>
                         {formData.show_on_storefront ? `Visible: ${formData.storefront_placement?.replace(/_/g, " ")}` : "Hidden (Back-office)"}
                       </span>
                       <span className="text-[10px] text-slate-400 block">
@@ -1970,7 +1970,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                         .map((c, idx) => (
                           <span
                             key={idx}
-                            className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-amber-300 font-bold"
+                            className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[#A78BFA] font-bold"
                           >
                             {c.code} {c.usage_limit ? `(${c.usage_limit} uses)` : ""}
                           </span>
@@ -1987,7 +1987,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <select
                     value={formData.status || "active"}
                     onChange={(e) => handleChange("status", e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none font-semibold"
+                    className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none font-semibold"
                   >
                     <option value="active">Active (Live Immediately)</option>
                     <option value="scheduled">Scheduled (Activates on Starts At date)</option>
@@ -2000,7 +2000,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveTab("storefront")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Back to Storefront Presentation
@@ -2008,7 +2008,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                   <button
                     type="submit"
                     disabled={saving}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all disabled:opacity-50 cursor-pointer"
                   >
                     <Save className="w-4 h-4" />
                     {saving ? "Saving..." : isEdit ? "Update Promotion" : "Publish Promotion Live"}

@@ -56,7 +56,7 @@ export function CategoryDeleteModal({
           {/* Header */}
           <div className="h-14 px-6 border-b border-white/[0.06] bg-[#0b0e17] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+              <div className="w-8 h-8 rounded-md bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
                 <AlertTriangle className="w-4 h-4" />
               </div>
               <div>
@@ -78,7 +78,7 @@ export function CategoryDeleteModal({
 
           {/* Content */}
           <div className="p-6 space-y-4 flex-1 overflow-y-auto text-xs">
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5">
+            <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5">
               <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                 Category to Delete
               </span>
@@ -88,7 +88,7 @@ export function CategoryDeleteModal({
 
             {hasBlockingDependencies ? (
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-2">
+                <div className="p-3.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-2">
                   <div className="flex items-center gap-2 font-bold text-xs text-amber-400">
                     <ShieldAlert className="w-4 h-4 shrink-0" />
                     <span>Deletion Blocked by System</span>
@@ -104,7 +104,7 @@ export function CategoryDeleteModal({
                   </span>
 
                   {directProductsCount > 0 && (
-                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                    <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Package className="w-4 h-4 text-amber-400 shrink-0" />
                         <span className="text-slate-300">Directly Assigned Products</span>
@@ -116,7 +116,7 @@ export function CategoryDeleteModal({
                   )}
 
                   {subcategoryProductsCount > 0 && (
-                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                    <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Package className="w-4 h-4 text-cyan-400 shrink-0" />
                         <span className="text-slate-300">Subcategory References</span>
@@ -128,7 +128,7 @@ export function CategoryDeleteModal({
                   )}
 
                   {childCategoriesCount > 0 && (
-                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                    <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Layers className="w-4 h-4 text-rose-400 shrink-0" />
                         <span className="text-slate-300">Child Subcategories</span>
@@ -145,7 +145,7 @@ export function CategoryDeleteModal({
                 <p className="text-slate-300 leading-relaxed">
                   Are you sure you want to permanently delete <strong className="text-white font-bold">{category.name}</strong>?
                 </p>
-                <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-400 leading-relaxed">
+                <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 text-[11px] text-slate-400 leading-relaxed">
                   <p className="text-slate-300 font-medium mb-1">✓ No blocking dependencies detected:</p>
                   <ul className="list-disc list-inside space-y-0.5 text-slate-400">
                     <li>0 products assigned directly</li>
@@ -173,7 +173,7 @@ export function CategoryDeleteModal({
               type="button"
               disabled={deleting || hasBlockingDependencies}
               onClick={onConfirmDelete}
-              className={`h-8 px-4 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm ${
+              className={`h-8 px-4 rounded-md text-xs font-bold transition flex items-center gap-1.5 shadow-sm ${
                 hasBlockingDependencies
                   ? "bg-slate-800 text-slate-500 border border-white/5 cursor-not-allowed"
                   : "bg-rose-500 hover:bg-rose-600 text-white cursor-pointer disabled:opacity-50"

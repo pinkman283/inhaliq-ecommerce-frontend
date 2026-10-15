@@ -52,17 +52,17 @@ export function AdminCheckbox({
         aria-label={ariaLabel || title}
       />
       <div
-        className={`w-4 h-4 rounded-[5px] flex items-center justify-center transition-all duration-150 border ${
+        className={`w-4 h-4 rounded flex items-center justify-center transition-all duration-150 border ${
           checked || indeterminate
-            ? "bg-amber-500 border-amber-400 text-slate-950 shadow-sm shadow-amber-500/20"
-            : "bg-white/[0.04] border-white/20 hover:border-amber-400/50 hover:bg-white/[0.07] peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500/40"
+            ? "bg-[#A78BFA] border-[#B9A3FF] text-[#090B10] shadow-sm shadow-[#A78BFA]/20"
+            : "bg-[#11141D] border-[#272B35] hover:border-[#A78BFA]/50 hover:bg-[#171B26] peer-focus-visible:ring-2 peer-focus-visible:ring-[#A78BFA]/40"
         }`}
       >
         {checked && !indeterminate && (
-          <Check className="w-3 h-3 stroke-[3] text-slate-950" />
+          <Check className="w-3 h-3 stroke-[3] text-[#090B10]" />
         )}
         {indeterminate && (
-          <Minus className="w-3 h-3 stroke-[3] text-slate-950" />
+          <Minus className="w-3 h-3 stroke-[3] text-[#090B10]" />
         )}
       </div>
     </label>

@@ -59,7 +59,7 @@ export function SettingsNavTabs() {
   const activeTabs = isAppearanceContext ? appearanceTabs : systemTabs;
 
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-white/10 no-scrollbar">
+    <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-[#272B35] no-scrollbar">
       {activeTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = 
@@ -86,13 +86,13 @@ export function SettingsNavTabs() {
           <Link
             key={tab.href}
             href={tab.href}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-bold transition-all shrink-0 cursor-pointer ${
               isActive
-                ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-sm"
-                : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
+                ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-sm"
+                : "text-[#929BAD] hover:text-[#E5E7EB] hover:bg-[#171B26] border border-transparent"
             }`}
           >
-            <Icon className={`w-3.5 h-3.5 ${isActive ? "text-amber-400" : "text-slate-500"}`} />
+            <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#A78BFA]" : "text-[#626B7B]"}`} />
             <span>{tab.label}</span>
           </Link>
         );

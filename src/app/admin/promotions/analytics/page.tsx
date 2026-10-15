@@ -109,15 +109,15 @@ export default function PromotionAnalyticsPage() {
         ]}
         action={
           <div className="flex items-center gap-3">
-            <div className="flex items-center rounded-xl bg-white/5 border border-white/10 p-1 text-xs">
+            <div className="flex items-center rounded-md bg-white/5 border border-white/10 p-1 text-xs">
               {(["7d", "30d", "90d"] as const).map((r) => (
                 <button
                   key={r}
                   type="button"
                   onClick={() => setTimeRange(r)}
-                  className={`px-3 py-1 rounded-lg font-bold transition-colors ${
+                  className={`px-3 py-1 rounded-md font-bold transition-colors ${
                     timeRange === r
-                      ? "bg-amber-500 text-black shadow-xs"
+                      ? "bg-[#A78BFA] text-[#090B10] shadow-xs"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -129,7 +129,7 @@ export default function PromotionAnalyticsPage() {
             <button
               onClick={() => fetchAnalytics()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+              className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
@@ -144,10 +144,10 @@ export default function PromotionAnalyticsPage() {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Trend Area Chart (Col 2) */}
-        <div className="lg:col-span-2 p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] space-y-4">
+        <div className="lg:col-span-2 p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-amber-400" />
+              <TrendingUp className="w-4 h-4 text-[#A78BFA]" />
               Promotion Activity & Discount Volume
             </h3>
             <span className="text-xs text-slate-400 font-mono">Daily aggregated</span>
@@ -167,8 +167,8 @@ export default function PromotionAnalyticsPage() {
                 <AreaChart data={data.recent_trend}>
                   <defs>
                     <linearGradient id="discountGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#A78BFA" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#A78BFA" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
@@ -198,7 +198,7 @@ export default function PromotionAnalyticsPage() {
                     type="monotone"
                     dataKey="discount_sum"
                     name="Discounts Granted (৳)"
-                    stroke="#f59e0b"
+                    stroke="#A78BFA"
                     fill="url(#discountGrad)"
                   />
                 </AreaChart>
@@ -208,7 +208,7 @@ export default function PromotionAnalyticsPage() {
         </div>
 
         {/* Store Credit & Wallet Liability Card (Col 1) */}
-        <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0c0e14] flex flex-col justify-between gap-6">
+        <div className="p-6 rounded-md border border-white/[0.08] bg-[#0c0e14] flex flex-col justify-between gap-6">
           <div>
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 mb-4">
               <CreditCard className="w-4 h-4 text-cyan-400" />
@@ -216,7 +216,7 @@ export default function PromotionAnalyticsPage() {
             </h3>
 
             <div className="space-y-3">
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-1">
                 <span className="text-[11px] text-slate-400 uppercase font-medium">
                   Active Customer Wallet Balance (Liability)
                 </span>
@@ -229,16 +229,16 @@ export default function PromotionAnalyticsPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-0.5">
                   <span className="text-[10px] text-slate-400 uppercase">Total Issued</span>
                   <div className="text-sm font-bold font-mono text-emerald-400">
                     ৳{kpis ? Number(kpis.store_credit_issued).toLocaleString() : "0"}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-3 rounded-md bg-black/40 border border-white/5 space-y-0.5">
                   <span className="text-[10px] text-slate-400 uppercase">Total Debited</span>
-                  <div className="text-sm font-bold font-mono text-amber-400">
+                  <div className="text-sm font-bold font-mono text-[#A78BFA]">
                     ৳{kpis ? Number(kpis.store_credit_redeemed).toLocaleString() : "0"}
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export default function PromotionAnalyticsPage() {
 
           <Link
             href="/admin/promotions/store-credit"
-            className="w-full text-center py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 hover:text-white transition-colors"
+            className="w-full text-center py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 hover:text-white transition-colors"
           >
             Manage Store Credit Ledger →
           </Link>
@@ -277,7 +277,7 @@ export default function PromotionAnalyticsPage() {
       {/* Top Campaigns Table */}
       <div className="space-y-3">
         <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-amber-400" />
+          <Sparkles className="w-4 h-4 text-[#A78BFA]" />
           Top Performing Promotional Campaigns
         </h3>
 
@@ -311,7 +311,7 @@ export default function PromotionAnalyticsPage() {
                     </td>
 
                     <td className="p-4 whitespace-nowrap">
-                      <span className="font-mono font-bold text-amber-300 text-xs bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded">
+                      <span className="font-mono font-semibold text-[#A78BFA] text-xs bg-[#211B32] border border-[#A78BFA]/30 px-2.5 py-1 rounded">
                         {tp.discount_type === "percentage" ? `${tp.discount_value}% OFF` : `৳${tp.discount_value} OFF`}
                       </span>
                     </td>
@@ -323,7 +323,7 @@ export default function PromotionAnalyticsPage() {
                     <td className="p-4 text-right whitespace-nowrap">
                       <Link
                         href={`/admin/promotions/${tp.id}`}
-                        className="text-xs text-amber-400 hover:underline font-medium"
+                        className="text-xs text-[#A78BFA] hover:text-[#B9A3FF] hover:underline font-medium"
                       >
                         Inspect Campaign →
                       </Link>

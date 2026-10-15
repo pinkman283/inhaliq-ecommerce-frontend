@@ -162,7 +162,7 @@ function BrandFormDrawerContent({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Sennheiser, Focal, AETHER Studio"
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition"
           />
         </div>
 
@@ -173,7 +173,7 @@ function BrandFormDrawerContent({
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
             placeholder="https://manufacturer.com"
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition"
           />
         </div>
 
@@ -199,14 +199,14 @@ function BrandFormDrawerContent({
 
           {/* Minimal Logo Preview if logo exists */}
           {logo && (
-            <div className="relative rounded-xl overflow-hidden border border-white/10 bg-slate-950 h-28 flex items-center justify-center p-2 group">
+            <div className="relative rounded-md overflow-hidden border border-white/10 bg-slate-950 h-28 flex items-center justify-center p-2 group">
               <img
                 src={logo}
                 alt={name || "Brand Logo Preview"}
                 className="w-full h-full object-contain"
               />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2">
-                <label className="px-2.5 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition">
+                <label className="px-2.5 py-1.5 rounded-md bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition">
                   <Upload className="w-3.5 h-3.5" />
                   <span>Change</span>
                   <input
@@ -220,7 +220,7 @@ function BrandFormDrawerContent({
                 <button
                   type="button"
                   onClick={() => setLogo("")}
-                  className="px-2.5 py-1.5 rounded-lg bg-rose-500/80 hover:bg-rose-600 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition"
+                  className="px-2.5 py-1.5 rounded-md bg-rose-500/80 hover:bg-rose-600 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Remove</span>
@@ -231,7 +231,7 @@ function BrandFormDrawerContent({
 
           {/* Direct Upload Button & Fallback URL input */}
           <div className="flex items-center gap-2">
-            <label className="h-9 px-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0">
+            <label className="h-9 px-3 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0">
               {uploadingLogo ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-400" />
               ) : (
@@ -252,14 +252,14 @@ function BrandFormDrawerContent({
               value={logo}
               onChange={(e) => setLogo(e.target.value)}
               placeholder="Or paste external logo URL..."
-              className="flex-1 h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition min-w-0"
+              className="flex-1 h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition min-w-0"
             />
 
             {logo && (
               <button
                 type="button"
                 onClick={() => setLogo("")}
-                className="h-9 px-2.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition flex items-center justify-center shrink-0 cursor-pointer"
+                className="h-9 px-2.5 rounded-md border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition flex items-center justify-center shrink-0 cursor-pointer"
                 title="Remove current logo"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -275,7 +275,7 @@ function BrandFormDrawerContent({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Brand acoustic philosophy, background, and origin..."
-            className="w-full rounded-lg border border-white/10 bg-[#131722] p-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition resize-none"
+            className="w-full rounded-md border border-white/10 bg-[#131722] p-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition resize-none"
           />
         </div>
 
@@ -286,7 +286,7 @@ function BrandFormDrawerContent({
               type="number"
               value={displayOrder}
               onChange={(e) => setDisplayOrder(e.target.value)}
-              className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition"
+              className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none transition"
             />
           </div>
 
@@ -314,7 +314,7 @@ function BrandFormDrawerContent({
         <button
           type="submit"
           disabled={saving || (editingBrand ? !isEditDirty : false)}
-          className={`h-8 px-4 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
+          className={`h-8 px-4 rounded-md text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
             editingBrand && !isEditDirty
               ? "bg-white/10 text-slate-500 cursor-not-allowed border border-white/5"
               : "bg-cyan-400 hover:bg-cyan-300 text-slate-950"

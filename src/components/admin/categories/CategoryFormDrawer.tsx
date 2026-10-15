@@ -240,7 +240,7 @@ function CategoryFormDrawerContent({
           <div className="flex items-center justify-between">
             <label className="text-xs font-medium text-slate-300">Parent Category (Optional)</label>
             {editingCategory && invalidParentIds.size > 1 && (
-              <span className="text-[10px] text-amber-400 flex items-center gap-1 font-medium">
+              <span className="text-[10px] text-[#A78BFA] flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 Descendants protected ({invalidParentIds.size - 1} excluded)
               </span>
@@ -249,7 +249,7 @@ function CategoryFormDrawerContent({
           <select
             value={parentId === null ? "" : parentId}
             onChange={(e) => setParentId(e.target.value === "" ? null : Number(e.target.value))}
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition cursor-pointer"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition cursor-pointer"
           >
             <option value="" className="bg-[#131722] text-slate-300">
               None (Top-Level Root Category)
@@ -277,7 +277,7 @@ function CategoryFormDrawerContent({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Mechanical Keyboards & Desks"
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition"
           />
         </div>
 
@@ -289,14 +289,14 @@ function CategoryFormDrawerContent({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Category overview, specifications, and scope..."
-            className="w-full rounded-lg border border-white/10 bg-[#131722] p-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition resize-none"
+            className="w-full rounded-md border border-white/10 bg-[#131722] p-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition resize-none"
           />
         </div>
 
         {/* SEO Configuration */}
         <div className="pt-4 mt-4 border-t border-white/[0.06] space-y-4">
           <h4 className="text-[13px] font-medium text-white flex items-center gap-2">
-            <Search className="w-3.5 h-3.5 text-amber-400" />
+            <Search className="w-3.5 h-3.5 text-[#A78BFA]" />
             Search Engine Optimization
           </h4>
           <p className="text-xs text-slate-400">
@@ -310,7 +310,7 @@ function CategoryFormDrawerContent({
               value={metaTitle}
               onChange={(e) => setMetaTitle(e.target.value)}
               placeholder="Custom SEO title..."
-              className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition"
+              className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition"
             />
           </div>
 
@@ -321,7 +321,7 @@ function CategoryFormDrawerContent({
               value={metaDescription}
               onChange={(e) => setMetaDescription(e.target.value)}
               placeholder="Custom SEO description..."
-              className="w-full rounded-lg border border-white/10 bg-[#131722] p-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition resize-none"
+              className="w-full rounded-md border border-white/10 bg-[#131722] p-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition resize-none"
             />
           </div>
         </div>
@@ -348,14 +348,14 @@ function CategoryFormDrawerContent({
 
           {/* Minimal Image Thumbnail Preview if an image exists */}
           {image && (
-            <div className="relative rounded-xl overflow-hidden border border-white/10 bg-slate-950 h-28 flex items-center justify-center group">
+            <div className="relative rounded-md overflow-hidden border border-white/10 bg-slate-950 h-28 flex items-center justify-center group">
               <img
                 src={image}
                 alt={imageAlt || "Category Preview"}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2">
-                <label className="px-2.5 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition">
+                <label className="px-2.5 py-1.5 rounded-md bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition">
                   <Upload className="w-3.5 h-3.5" />
                   <span>Change</span>
                   <input
@@ -369,7 +369,7 @@ function CategoryFormDrawerContent({
                 <button
                   type="button"
                   onClick={() => setImage("")}
-                  className="px-2.5 py-1.5 rounded-lg bg-rose-500/80 hover:bg-rose-600 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition"
+                  className="px-2.5 py-1.5 rounded-md bg-rose-500/80 hover:bg-rose-600 text-white text-[11px] font-bold backdrop-blur-sm cursor-pointer flex items-center gap-1.5 transition"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Remove</span>
@@ -380,11 +380,11 @@ function CategoryFormDrawerContent({
 
           {/* Direct Upload Button & Fallback URL input */}
           <div className="flex items-center gap-2">
-            <label className="h-9 px-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0">
+            <label className="h-9 px-3 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0">
               {uploadingImage ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#A78BFA]" />
               ) : (
-                <Upload className="w-3.5 h-3.5 text-amber-400" />
+                <Upload className="w-3.5 h-3.5 text-[#A78BFA]" />
               )}
               <span>{uploadingImage ? "Uploading..." : "Upload Device Image"}</span>
               <input
@@ -401,14 +401,14 @@ function CategoryFormDrawerContent({
               value={image}
               onChange={(e) => setImage(e.target.value)}
               placeholder="Or paste external image URL..."
-              className="flex-1 h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition min-w-0"
+              className="flex-1 h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition min-w-0"
             />
 
             {image && (
               <button
                 type="button"
                 onClick={() => setImage("")}
-                className="h-9 px-2.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition flex items-center justify-center shrink-0 cursor-pointer"
+                className="h-9 px-2.5 rounded-md border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition flex items-center justify-center shrink-0 cursor-pointer"
                 title="Remove current image"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -424,7 +424,7 @@ function CategoryFormDrawerContent({
               value={imageAlt}
               onChange={(e) => setImageAlt(e.target.value)}
               placeholder="Leave blank to use category name..."
-              className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition"
+              className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition"
             />
           </div>
         </div>
@@ -438,7 +438,7 @@ function CategoryFormDrawerContent({
               value={badge}
               onChange={(e) => setBadge(e.target.value)}
               placeholder="e.g. Flagship"
-              className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition"
+              className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition"
             />
           </div>
           <div className="space-y-1.5">
@@ -447,7 +447,7 @@ function CategoryFormDrawerContent({
               type="number"
               value={displayOrder}
               onChange={(e) => setDisplayOrder(e.target.value)}
-              className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-none transition"
+              className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-none transition"
             />
           </div>
         </div>
@@ -475,7 +475,7 @@ function CategoryFormDrawerContent({
         <button
           type="submit"
           disabled={saving || uploadingImage || (Boolean(editingCategory) && !isEditDirty)}
-          className="h-8 px-4 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 shadow-sm"
+          className="h-8 px-4 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 shadow-sm"
         >
           {saving && <Loader2 className="w-3 h-3 animate-spin" />}
           <span>{editingCategory ? "Save Changes" : "Create Category"}</span>

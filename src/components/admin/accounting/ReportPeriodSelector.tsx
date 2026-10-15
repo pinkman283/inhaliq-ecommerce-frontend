@@ -129,13 +129,13 @@ export const ReportPeriodSelector: React.FC<ReportPeriodSelectorProps> = ({
 
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-x-auto">
+      <div className="flex items-center gap-1 p-1 rounded-md bg-white/[0.03] border border-white/[0.06] overflow-x-auto">
         {presets.map((p) => (
           <button
             key={p.id}
             type="button"
             onClick={() => handleSelectPreset(p.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
               activePreset === p.id
                 ? "bg-white/10 text-white font-semibold border border-white/10 shadow-sm"
                 : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
@@ -147,7 +147,7 @@ export const ReportPeriodSelector: React.FC<ReportPeriodSelectorProps> = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 text-xs text-slate-300">
+        <div className="flex items-center gap-2 rounded-md bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 text-xs text-slate-300">
           <Calendar className="h-3.5 w-3.5 text-slate-400" />
           <span className="font-mono text-slate-300">{startDate}</span>
           <span className="text-slate-500">→</span>
@@ -159,7 +159,7 @@ export const ReportPeriodSelector: React.FC<ReportPeriodSelectorProps> = ({
             type="button"
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-slate-400 hover:bg-white/10 hover:text-white transition-all disabled:opacity-50 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-md border border-white/[0.06] bg-white/[0.03] text-slate-400 hover:bg-white/10 hover:text-white transition-all disabled:opacity-50 cursor-pointer"
             title="Refresh Data"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin text-slate-200" : ""}`} />
@@ -214,7 +214,7 @@ export const ReportPeriodSelector: React.FC<ReportPeriodSelectorProps> = ({
                 type="date"
                 value={customStart}
                 onChange={(e) => setCustomStart(e.target.value)}
-                className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition [color-scheme:dark]"
+                className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition [color-scheme:dark]"
               />
             </div>
 
@@ -224,7 +224,7 @@ export const ReportPeriodSelector: React.FC<ReportPeriodSelectorProps> = ({
                 type="date"
                 value={customEnd}
                 onChange={(e) => setCustomEnd(e.target.value)}
-                className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition [color-scheme:dark]"
+                className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition [color-scheme:dark]"
               />
             </div>
           </div>

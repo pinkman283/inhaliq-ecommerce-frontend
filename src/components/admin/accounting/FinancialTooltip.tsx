@@ -36,7 +36,7 @@ export const FinancialTooltip: React.FC<FinancialTooltipProps> = ({
   const displayLabel = labelFormatter ? labelFormatter(label || "") : label;
 
   return (
-    <div className="z-50 min-w-[170px] rounded-xl border border-white/10 bg-slate-900/95 p-3 shadow-2xl backdrop-blur-md text-xs">
+    <div className="z-50 min-w-[170px] rounded-md border border-white/10 bg-slate-900/95 p-3 shadow-2xl backdrop-blur-md text-xs">
       {displayLabel && (
         <div className="mb-2 border-b border-white/10 pb-1.5 font-medium text-slate-300">
           {displayLabel}

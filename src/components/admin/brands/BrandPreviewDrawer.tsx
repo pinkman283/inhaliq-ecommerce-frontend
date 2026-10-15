@@ -74,7 +74,7 @@ export function BrandPreviewDrawer({
           <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4 text-xs">
             {/* Identity Card */}
             <div className="flex items-center gap-3.5 pb-4 border-b border-white/5">
-              <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-white/10 flex items-center justify-center text-cyan-400 font-black text-base shrink-0 overflow-hidden shadow-inner">
+              <div className="w-14 h-14 rounded-md bg-slate-900 border border-white/10 flex items-center justify-center text-cyan-400 font-black text-base shrink-0 overflow-hidden shadow-inner">
                 {brand.logo ? (
                   <img
                     src={brand.logo}
@@ -100,7 +100,7 @@ export function BrandPreviewDrawer({
 
             {/* Quick Metrics */}
             <div className="grid grid-cols-3 gap-2.5">
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-slate-400">
                   <Package className="w-3.5 h-3.5 text-cyan-400" />
                   <span className="text-[10px] font-semibold uppercase tracking-wider">Catalog</span>
@@ -111,7 +111,7 @@ export function BrandPreviewDrawer({
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-slate-400">
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
                   <span className="text-[10px] font-semibold uppercase tracking-wider">Categories</span>
@@ -122,19 +122,19 @@ export function BrandPreviewDrawer({
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-slate-400">
-                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <Award className="w-3.5 h-3.5 text-[#A78BFA]" />
                   <span className="text-[10px] font-semibold uppercase tracking-wider">Tier</span>
                 </div>
-                <p className="text-sm font-bold text-amber-400">
+                <p className="text-sm font-bold text-[#A78BFA]">
                   {brand.is_featured ? "Featured" : "Standard"}
                 </p>
               </div>
             </div>
 
             {/* View Storefront Link */}
-            <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 via-white/[0.02] to-transparent border border-cyan-500/20 flex items-center justify-between">
+            <div className="p-3 rounded-md bg-gradient-to-r from-cyan-500/10 via-white/[0.02] to-transparent border border-cyan-500/20 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 block">
                   Public Storefront
@@ -145,7 +145,7 @@ export function BrandPreviewDrawer({
                 href={storefrontUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-7 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-300 font-bold text-[11px] transition flex items-center gap-1.5 cursor-pointer"
+                className="h-7 px-3 rounded-md bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-300 font-bold text-[11px] transition flex items-center gap-1.5 cursor-pointer"
               >
                 <span>View Storefront</span>
                 <ArrowUpRight className="w-3 h-3" />
@@ -162,7 +162,7 @@ export function BrandPreviewDrawer({
                   href={websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-cyan-400 hover:text-cyan-300 font-mono text-xs flex items-center gap-1.5 p-2 rounded-lg bg-white/[0.02] border border-white/5"
+                  className="text-cyan-400 hover:text-cyan-300 font-mono text-xs flex items-center gap-1.5 p-2 rounded-md bg-white/[0.02] border border-white/5"
                 >
                   <Globe className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate flex-1">{brand.website}</span>
@@ -177,7 +177,7 @@ export function BrandPreviewDrawer({
                 <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                   Brand Overview
                 </span>
-                <p className="text-slate-300 leading-relaxed text-xs p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                <p className="text-slate-300 leading-relaxed text-xs p-3 rounded-md bg-white/[0.02] border border-white/5">
                   {brand.description}
                 </p>
               </div>
@@ -198,7 +198,7 @@ export function BrandPreviewDrawer({
                   {brand.products.map((p) => (
                     <div
                       key={p.id}
-                      className="flex items-center justify-between p-2 rounded-lg bg-white/[0.02] border border-white/5 text-slate-200"
+                      className="flex items-center justify-between p-2 rounded-md bg-white/[0.02] border border-white/5 text-slate-200"
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         {p.primary_image?.image_url && (
@@ -228,7 +228,7 @@ export function BrandPreviewDrawer({
                 onClose();
                 onEdit(brand);
               }}
-              className="h-8 px-4 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="h-8 px-4 rounded-md bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 shadow-sm"
             >
               <Edit className="w-3.5 h-3.5" />
               <span>Edit Brand</span>

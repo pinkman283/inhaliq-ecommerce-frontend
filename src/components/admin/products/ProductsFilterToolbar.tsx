@@ -45,7 +45,7 @@ export function ProductsFilterToolbar({
   onResetFilters,
 }: ProductsFilterToolbarProps) {
   return (
-    <div className="p-2.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-col lg:flex-row items-center justify-between gap-2">
+    <div className="p-2.5 rounded-md bg-[#0f121b] border border-white/[0.08] flex flex-col lg:flex-row items-center justify-between gap-2">
       {/* Search Input */}
       <form onSubmit={onSearchSubmit} className="relative w-full lg:w-72">
         <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -54,7 +54,7 @@ export function ProductsFilterToolbar({
           value={search || ""}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search SKU, name, brand..."
-          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-8.5 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
+          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-md pl-8.5 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
         />
       </form>
 
@@ -133,7 +133,7 @@ export function ProductsFilterToolbar({
         <button
           type="button"
           onClick={onResetFilters}
-          className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-semibold flex items-center gap-1 transition-all shrink-0 cursor-pointer"
+          className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-semibold flex items-center gap-1 transition-all shrink-0 cursor-pointer"
           title="Reset filters"
         >
           <RotateCcw className="w-3.5 h-3.5" />

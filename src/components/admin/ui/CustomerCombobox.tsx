@@ -34,7 +34,7 @@ function HighlightText({ text, query }: { text: string; query: string }) {
         regex.test(part) ? (
           <span
             key={i}
-            className="text-amber-300 font-semibold bg-amber-400/20 px-0.5 rounded"
+            className="text-[#A78BFA] font-semibold bg-[#A78BFA]/20 px-0.5 rounded"
           >
             {part}
           </span>
@@ -240,17 +240,17 @@ export function CustomerCombobox({
       {/* Selected State vs Search Input */}
       {selected ? (
         <div
-          className={`w-full px-3.5 py-2 bg-[#12151f] border rounded-lg text-xs flex items-center justify-between gap-2 transition ${
+          className={`w-full px-3.5 py-2 bg-[#12151f] border rounded-md text-xs flex items-center justify-between gap-2 transition ${
             error ? "border-red-500/50" : "border-white/10 hover:border-white/20"
           }`}
         >
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <div className="w-5 h-5 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-[10px] font-bold text-amber-400 shrink-0">
+            <div className="w-5 h-5 rounded-full bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[10px] font-bold text-[#A78BFA] shrink-0">
               {selected.name?.charAt(0) || "U"}
             </div>
             <span className="font-semibold text-white truncate">{selected.name}</span>
             {selected.customer_id && (
-              <span className="font-mono text-[10px] text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/20 font-bold shrink-0">
+              <span className="font-mono text-[10px] text-[#A78BFA] bg-[#211B32] px-1.5 py-0.5 rounded border border-[#A78BFA]/30 font-bold shrink-0">
                 {selected.customer_id}
               </span>
             )}
@@ -286,15 +286,15 @@ export function CustomerCombobox({
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onKeyDown={handleKeyDown}
-            className={`w-full pl-9 pr-9 py-2 bg-[#12151f] border rounded-lg text-xs text-white placeholder-slate-500 outline-none transition ${
+            className={`w-full pl-9 pr-9 py-2 bg-[#12151f] border rounded-md text-xs text-white placeholder-slate-500 outline-none transition ${
               error
                 ? "border-red-500/50 focus:border-red-400"
-                : "border-white/10 focus:border-amber-400"
+                : "border-white/10 focus:border-[#A78BFA]/50"
             }`}
           />
           {loading ? (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <RefreshCw className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+              <RefreshCw className="w-3.5 h-3.5 text-[#A78BFA] animate-spin" />
             </div>
           ) : query ? (
             <button
@@ -319,11 +319,11 @@ export function CustomerCombobox({
         <div
           ref={listRef}
           role="listbox"
-          className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-[#0e111a] border border-white/10 rounded-lg shadow-2xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-white/5"
+          className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-[#0e111a] border border-white/10 rounded-md shadow-2xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-white/5"
         >
           {loading && results.length === 0 ? (
             <div className="py-6 px-4 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-400" />
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#A78BFA]" />
               <span>Searching customers...</span>
             </div>
           ) : searchError ? (
@@ -335,7 +335,7 @@ export function CustomerCombobox({
               <button
                 type="button"
                 onClick={() => fetchCustomers(query)}
-                className="text-[11px] text-amber-400 hover:underline cursor-pointer"
+                className="text-[11px] text-[#A78BFA] hover:text-[#B9A3FF] hover:underline cursor-pointer"
               >
                 Try again
               </button>
@@ -362,7 +362,7 @@ export function CustomerCombobox({
                   onMouseEnter={() => setHighlightedIndex(index)}
                   className={`px-3 py-2 text-xs flex items-center justify-between gap-2 cursor-pointer transition ${
                     isHighlighted
-                      ? "bg-amber-400/10 text-white"
+                      ? "bg-[#211B32] text-white"
                       : "hover:bg-white/5 text-slate-300"
                   }`}
                 >
@@ -372,7 +372,7 @@ export function CustomerCombobox({
                         <HighlightText text={cust.name} query={query} />
                       </span>
                       {cust.customer_id && (
-                        <span className="font-mono text-[10px] text-amber-400 bg-amber-400/10 px-1.5 py-0.2 rounded border border-amber-400/20 font-bold shrink-0">
+                        <span className="font-mono text-[10px] text-[#A78BFA] bg-[#211B32] px-1.5 py-0.2 rounded border border-[#A78BFA]/30 font-bold shrink-0">
                           <HighlightText text={cust.customer_id} query={query} />
                         </span>
                       )}

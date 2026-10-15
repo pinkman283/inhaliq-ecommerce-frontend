@@ -336,7 +336,7 @@ export default function AdminPosPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -345,7 +345,7 @@ export default function AdminPosPage() {
     <div className="space-y-6">
       {/* Toast Notification */}
       {statusMessage && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           statusMessage.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -356,21 +356,21 @@ export default function AdminPosPage() {
       )}
 
       {/* POS Top Control Bar */}
-      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <Calculator className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-bold text-white tracking-tight">Point of Sale Terminal</h1>
               {session ? (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   {session.register?.name || "Terminal Open"}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">
                   <Lock className="w-3.5 h-3.5" />
                   Drawer Closed
                 </span>
@@ -386,10 +386,10 @@ export default function AdminPosPage() {
         <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
           {session ? (
             <>
-              <div className="bg-[#151824] px-4 py-2 rounded-xl border border-white/10 flex items-center gap-4 text-xs">
+              <div className="bg-[#151824] px-4 py-2 rounded-md border border-white/10 flex items-center gap-4 text-xs">
                 <div>
                   <span className="text-slate-400 block text-[10px] uppercase font-bold">Cash Drawer</span>
-                  <span className="text-amber-400 font-bold font-mono text-sm">
+                  <span className="text-[#A78BFA] font-bold font-mono text-sm">
                     ${session.expected_cash_balance?.toFixed(2) || "0.00"}
                   </span>
                 </div>
@@ -404,9 +404,9 @@ export default function AdminPosPage() {
 
               <button
                 onClick={() => setCashMovementModal(true)}
-                className="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
+                className="px-3.5 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
               >
-                <Coins className="w-4 h-4 text-amber-400" />
+                <Coins className="w-4 h-4 text-[#A78BFA]" />
                 Cash In / Drop
               </button>
 
@@ -415,7 +415,7 @@ export default function AdminPosPage() {
                   setActualClosingCash(session.expected_cash_balance || 0);
                   setCloseSessionModal(true);
                 }}
-                className="px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold flex items-center gap-1.5 transition"
+                className="px-4 py-2.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold flex items-center gap-1.5 transition"
               >
                 <Lock className="w-4 h-4" />
                 Close Shift
@@ -424,7 +424,7 @@ export default function AdminPosPage() {
           ) : (
             <button
               onClick={() => setOpenSessionModal(true)}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition"
+              className="px-5 py-2.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-bold text-xs flex items-center gap-2 shadow-lg shadow-[#A78BFA]/20 transition"
             >
               <Unlock className="w-4 h-4" />
               Open Register Shift
@@ -438,7 +438,7 @@ export default function AdminPosPage() {
         
         {/* Left: Product Search & Quick Catalog (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 space-y-3">
+          <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 space-y-3">
             {/* Search Input */}
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -448,7 +448,7 @@ export default function AdminPosPage() {
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Scan barcode, SKU, or search hardware name..."
-                className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400/60 transition"
+                className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition"
               />
               {searchQuery && (
                 <button 
@@ -464,9 +464,9 @@ export default function AdminPosPage() {
             <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
               <button
                 onClick={() => setSelectedCategory("all")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
+                className={`px-3 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition ${
                   selectedCategory === "all"
-                    ? "bg-amber-400 text-black shadow-md"
+                    ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20"
                     : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200 border border-white/5"
                 }`}
               >
@@ -476,9 +476,9 @@ export default function AdminPosPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id.toString())}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition ${
                     selectedCategory === cat.id.toString()
-                      ? "bg-amber-400 text-black shadow-md"
+                      ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20"
                       : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200 border border-white/5"
                   }`}
                 >
@@ -491,11 +491,11 @@ export default function AdminPosPage() {
           {/* Product Grid */}
           {productsLoading ? (
             <div className="p-12 text-center text-slate-400">
-              <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <span className="text-xs">Searching inventory matrix...</span>
             </div>
           ) : products.length === 0 ? (
-            <div className="bg-[#0d0f18] p-12 rounded-2xl border border-white/10 text-center text-slate-400">
+            <div className="bg-[#0d0f18] p-12 rounded-md border border-white/10 text-center text-slate-400">
               <ShoppingBag className="w-10 h-10 text-slate-600 mx-auto mb-3" />
               <p className="text-sm font-semibold text-slate-300">No hardware found</p>
               <p className="text-xs text-slate-500 mt-1">Try another search keyword or select all departments.</p>
@@ -506,7 +506,7 @@ export default function AdminPosPage() {
                 <div
                   key={product.id}
                   onClick={() => addToCart(product)}
-                  className="bg-[#0d0f18] hover:bg-[#151824] p-3.5 rounded-xl border border-white/10 hover:border-amber-400/40 cursor-pointer transition flex flex-col justify-between group relative overflow-hidden shadow-sm hover:shadow-lg"
+                  className="bg-[#0d0f18] hover:bg-[#151824] p-3.5 rounded-md border border-white/10 hover:border-[#A78BFA]/40 cursor-pointer transition flex flex-col justify-between group relative overflow-hidden shadow-sm hover:shadow-lg"
                 >
                   {/* Stock Indicator Badge */}
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -525,16 +525,16 @@ export default function AdminPosPage() {
                   </div>
 
                   {/* Product Title */}
-                  <h4 className="text-xs font-bold text-white group-hover:text-amber-300 transition line-clamp-2 mb-3">
+                  <h4 className="text-xs font-bold text-white group-hover:text-[#B9A3FF] transition line-clamp-2 mb-3">
                     {product.name}
                   </h4>
 
                   {/* Price & Add */}
                   <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                    <span className="text-sm font-black text-amber-400 font-mono">
+                    <span className="text-sm font-black text-[#A78BFA] font-mono">
                       ${product.price.toFixed(2)}
                     </span>
-                    <div className="w-6 h-6 rounded-lg bg-white/5 group-hover:bg-amber-400 group-hover:text-black text-slate-400 flex items-center justify-center transition">
+                    <div className="w-6 h-6 rounded-md bg-white/5 group-hover:bg-[#A78BFA] group-hover:text-[#090B10] text-slate-400 flex items-center justify-center transition">
                       <Plus className="w-3.5 h-3.5" />
                     </div>
                   </div>
@@ -545,13 +545,13 @@ export default function AdminPosPage() {
         </div>
 
         {/* Right: Active POS Cart & Billing Panel (5 cols) */}
-        <div className="lg:col-span-5 bg-[#0d0f18] rounded-2xl border border-white/10 shadow-2xl flex flex-col justify-between min-h-[640px] sticky top-6">
+        <div className="lg:col-span-5 bg-[#0d0f18] rounded-md border border-white/10 shadow-2xl flex flex-col justify-between min-h-[640px] sticky top-6">
           {/* Cart Header */}
           <div className="p-4 border-b border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Receipt className="w-5 h-5 text-amber-400" />
+              <Receipt className="w-5 h-5 text-[#A78BFA]" />
               <h3 className="text-sm font-bold text-white">Current Register Bill</h3>
-              <span className="text-xs text-slate-400 bg-white/5 px-2 py-0.5 rounded-full font-bold">
+              <span className="text-xs text-slate-400 bg-white/5 px-2 py-0.5 rounded font-bold">
                 {cart.reduce((a, b) => a + b.quantity, 0)} items
               </span>
             </div>
@@ -575,7 +575,7 @@ export default function AdminPosPage() {
                 value={customerName}
                 onChange={e => setCustomerName(e.target.value)}
                 placeholder="Walk-in Customer"
-                className="w-full bg-[#181b28] border border-white/10 rounded-lg px-2.5 py-1.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 text-xs"
+                className="w-full bg-[#181b28] border border-white/10 rounded-md px-2.5 py-1.5 text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 text-xs"
               />
             </div>
             <div>
@@ -585,7 +585,7 @@ export default function AdminPosPage() {
                 value={customerPhone}
                 onChange={e => setCustomerPhone(e.target.value)}
                 placeholder="Optional Phone"
-                className="w-full bg-[#181b28] border border-white/10 rounded-lg px-2.5 py-1.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 text-xs"
+                className="w-full bg-[#181b28] border border-white/10 rounded-md px-2.5 py-1.5 text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 text-xs"
               />
             </div>
           </div>
@@ -602,7 +602,7 @@ export default function AdminPosPage() {
               cart.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="bg-[#151824] p-3 rounded-xl border border-white/5 flex items-center justify-between gap-3 text-xs"
+                  className="bg-[#151824] p-3 rounded-md border border-white/5 flex items-center justify-between gap-3 text-xs"
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-white truncate">{item.product.name}</p>
@@ -612,14 +612,14 @@ export default function AdminPosPage() {
                   </div>
 
                   {/* Quantity Controls */}
-                  <div className="flex items-center gap-1.5 bg-[#0b0d14] p-1 rounded-lg border border-white/10">
+                  <div className="flex items-center gap-1.5 bg-[#0b0d14] p-1 rounded-md border border-white/10">
                     <button
                       onClick={() => updateCartQty(idx, -1)}
                       className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
-                    <span className="w-6 text-center font-bold font-mono text-amber-300">
+                    <span className="w-6 text-center font-bold font-mono text-[#A78BFA]">
                       {item.quantity}
                     </span>
                     <button
@@ -661,7 +661,7 @@ export default function AdminPosPage() {
                 <div className="flex justify-between text-slate-400 items-center">
                   <div className="flex items-center gap-1.5">
                     <span className="font-medium text-slate-300">Bill Discount</span>
-                    <div className="inline-flex rounded-lg bg-[#0b0d14] p-0.5 border border-white/10">
+                    <div className="inline-flex rounded-md bg-[#0b0d14] p-0.5 border border-white/10">
                       <button
                         type="button"
                         onClick={() => {
@@ -672,7 +672,7 @@ export default function AdminPosPage() {
                         }}
                         className={`px-1.5 py-0.5 rounded text-[10px] font-black transition cursor-pointer ${
                           discountType === "fixed"
-                            ? "bg-amber-400 text-slate-950 shadow-sm"
+                            ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                             : "text-slate-400 hover:text-white"
                         }`}
                         title="Fixed Amount Discount ($)"
@@ -689,7 +689,7 @@ export default function AdminPosPage() {
                         }}
                         className={`px-1.5 py-0.5 rounded text-[10px] font-black transition cursor-pointer ${
                           discountType === "percentage"
-                            ? "bg-amber-400 text-slate-950 shadow-sm"
+                            ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                             : "text-slate-400 hover:text-white"
                         }`}
                         title="Percentage Discount (%)"
@@ -708,7 +708,7 @@ export default function AdminPosPage() {
                       value={discountValue || ""}
                       onChange={e => setDiscountValue(Math.max(0, parseFloat(e.target.value) || 0))}
                       placeholder="0"
-                      className="w-16 bg-[#181b28] border border-white/10 rounded px-2 py-1 text-right text-amber-400 font-mono text-xs font-bold focus:outline-none focus:border-amber-400"
+                      className="w-16 bg-[#181b28] border border-white/10 rounded px-2 py-1 text-right text-amber-400 font-mono text-xs font-bold focus:outline-none focus:border-[#A78BFA]/50"
                     />
                     <span className="text-[11px] font-mono font-bold text-slate-400">
                       {discountType === "percentage" ? "%" : "$"}
@@ -727,7 +727,7 @@ export default function AdminPosPage() {
                           onClick={() => setDiscountValue(pct)}
                           className={`px-1.5 py-0.5 rounded border text-[9px] font-mono font-bold transition cursor-pointer ${
                             discountValue === pct
-                              ? "bg-amber-400/20 border-amber-400/50 text-amber-300"
+                              ? "bg-[#211B32] border-[#A78BFA]/30 text-[#A78BFA]"
                               : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
                           }`}
                         >
@@ -742,7 +742,7 @@ export default function AdminPosPage() {
                           onClick={() => setDiscountValue(amt)}
                           className={`px-1.5 py-0.5 rounded border text-[9px] font-mono font-bold transition cursor-pointer ${
                             discountValue === amt
-                              ? "bg-amber-400/20 border-amber-400/50 text-amber-300"
+                              ? "bg-[#211B32] border-[#A78BFA]/30 text-[#A78BFA]"
                               : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
                           }`}
                         >
@@ -765,7 +765,7 @@ export default function AdminPosPage() {
               </div>
               <div className="flex justify-between text-sm font-bold text-white pt-2 border-t border-white/10">
                 <span>Total Payable</span>
-                <span className="text-amber-400 font-mono text-base">${totalAmount.toFixed(2)}</span>
+                <span className="text-[#A78BFA] font-mono text-base">${totalAmount.toFixed(2)}</span>
               </div>
             </div>
 
@@ -773,7 +773,7 @@ export default function AdminPosPage() {
             <button
               disabled={cart.length === 0 || !session}
               onClick={handleOpenPayment}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="w-full py-3.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-[#A78BFA]/20 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               <CreditCard className="w-4 h-4" />
               {session ? `PAY $${totalAmount.toFixed(2)} NOW` : "OPEN REGISTER TO CHECKOUT"}
@@ -785,9 +785,9 @@ export default function AdminPosPage() {
       {/* MODAL: Open Register Session */}
       {openSessionModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Unlock className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Open Cash Register Shift</h3>
               </div>
@@ -802,7 +802,7 @@ export default function AdminPosPage() {
                 <select
                   value={selectedRegisterId || ""}
                   onChange={e => setSelectedRegisterId(parseInt(e.target.value))}
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#A78BFA]/50"
                 >
                   {registers.map(reg => (
                     <option key={reg.id} value={reg.id}>
@@ -821,7 +821,7 @@ export default function AdminPosPage() {
                   required
                   value={openingFloat}
                   onChange={e => setOpeningFloat(parseFloat(e.target.value) || 0)}
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                 />
                 <span className="text-[11px] text-slate-500 mt-1 block">
                   Count physical bills/coins placed into cash drawer.
@@ -832,13 +832,13 @@ export default function AdminPosPage() {
                 <button
                   type="button"
                   onClick={() => setOpenSessionModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs shadow-lg shadow-amber-400/20"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-[#A78BFA]/20"
                 >
                   Confirm & Open Shift
                 </button>
@@ -851,7 +851,7 @@ export default function AdminPosPage() {
       {/* MODAL: Close Register Session */}
       {closeSessionModal && session && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2 text-rose-400">
                 <Lock className="w-5 h-5" />
@@ -863,7 +863,7 @@ export default function AdminPosPage() {
             </div>
 
             <form onSubmit={handleCloseSession} className="space-y-4">
-              <div className="bg-[#151824] p-3.5 rounded-xl border border-white/10 space-y-2 text-xs">
+              <div className="bg-[#151824] p-3.5 rounded-md border border-white/10 space-y-2 text-xs">
                 <div className="flex justify-between text-slate-400">
                   <span>Opening Float:</span>
                   <span className="font-mono text-slate-200">${session.opening_balance?.toFixed(2)}</span>
@@ -882,7 +882,7 @@ export default function AdminPosPage() {
                 </div>
                 <div className="flex justify-between font-bold text-white pt-2 border-t border-white/10">
                   <span>Expected Drawer Cash:</span>
-                  <span className="text-amber-400 font-mono text-sm">${session.expected_cash_balance?.toFixed(2)}</span>
+                  <span className="text-[#A78BFA] font-mono text-sm">${session.expected_cash_balance?.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -895,7 +895,7 @@ export default function AdminPosPage() {
                   required
                   value={actualClosingCash}
                   onChange={e => setActualClosingCash(parseFloat(e.target.value) || 0)}
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                 />
                 <div className="mt-1 flex justify-between text-[11px]">
                   <span className="text-slate-500">Difference:</span>
@@ -916,7 +916,7 @@ export default function AdminPosPage() {
                   value={closingNotes}
                   onChange={e => setClosingNotes(e.target.value)}
                   placeholder="Explain any difference or end-of-shift handover details..."
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -924,13 +924,13 @@ export default function AdminPosPage() {
                 <button
                   type="button"
                   onClick={() => setCloseSessionModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-lg shadow-rose-500/20"
+                  className="flex-1 py-2.5 rounded-md bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-lg shadow-rose-500/20"
                 >
                   Reconcile & Close Shift
                 </button>
@@ -943,9 +943,9 @@ export default function AdminPosPage() {
       {/* MODAL: Cash In / Out / Safe Drop */}
       {cashMovementModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Coins className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Cash Drawer Movement</h3>
               </div>
@@ -967,9 +967,9 @@ export default function AdminPosPage() {
                       key={item.id}
                       type="button"
                       onClick={() => setCashMovementType(item.id as any)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1.5 transition ${
+                      className={`p-2.5 rounded-md border text-xs font-bold flex flex-col items-center gap-1.5 transition ${
                         cashMovementType === item.id 
-                          ? "bg-amber-400/10 border-amber-400 text-amber-300" 
+                          ? "bg-[#211B32] border-[#A78BFA] text-[#A78BFA]" 
                           : "bg-white/5 border-white/10 text-slate-400 hover:text-slate-200"
                       }`}
                     >
@@ -990,7 +990,7 @@ export default function AdminPosPage() {
                   value={cashMovementAmount || ""}
                   onChange={e => setCashMovementAmount(parseFloat(e.target.value) || 0)}
                   placeholder="0.00"
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -1002,7 +1002,7 @@ export default function AdminPosPage() {
                   value={cashMovementReason}
                   onChange={e => setCashMovementReason(e.target.value)}
                   placeholder="e.g. Mid-day change replenishment, Cash deposit drop"
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -1010,13 +1010,13 @@ export default function AdminPosPage() {
                 <button
                   type="button"
                   onClick={() => setCashMovementModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs shadow-lg shadow-amber-400/20"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-[#A78BFA]/20"
                 >
                   Record Movement
                 </button>
@@ -1029,9 +1029,9 @@ export default function AdminPosPage() {
       {/* MODAL: Payment Checkout & Receipt Execution */}
       {paymentModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-lg p-6 space-y-6 shadow-2xl animate-in zoom-in-95">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-lg p-6 space-y-6 shadow-2xl animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <CreditCard className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Select Tender & Settle Bill</h3>
               </div>
@@ -1041,9 +1041,9 @@ export default function AdminPosPage() {
             </div>
 
             {/* Total Payable Display */}
-            <div className="bg-[#151824] p-4 rounded-xl border border-white/10 text-center space-y-1">
+            <div className="bg-[#151824] p-4 rounded-md border border-white/10 text-center space-y-1">
               <span className="text-xs text-slate-400 uppercase font-bold tracking-wider">Total Amount Due</span>
-              <div className="text-3xl font-black text-amber-400 font-mono">
+              <div className="text-3xl font-black text-[#A78BFA] font-mono">
                 ${totalAmount.toFixed(2)}
               </div>
             </div>
@@ -1062,9 +1062,9 @@ export default function AdminPosPage() {
                     key={m.id}
                     type="button"
                     onClick={() => setPaymentMethod(m.id as any)}
-                    className={`p-3 rounded-xl border text-xs font-bold flex flex-col items-center gap-1.5 transition ${
+                    className={`p-3 rounded-md border text-xs font-bold flex flex-col items-center gap-1.5 transition ${
                       paymentMethod === m.id
-                        ? "bg-amber-400 text-black border-amber-400 shadow-lg shadow-amber-400/20"
+                        ? "bg-[#A78BFA] text-[#090B10] border-[#A78BFA] shadow-lg shadow-[#A78BFA]/20"
                         : "bg-white/5 border-white/10 text-slate-300 hover:bg-white/10"
                     }`}
                   >
@@ -1077,7 +1077,7 @@ export default function AdminPosPage() {
 
             {/* Cash Tender Calculation */}
             {paymentMethod === "cash" && (
-              <div className="space-y-3 bg-[#12141e] p-4 rounded-xl border border-white/10">
+              <div className="space-y-3 bg-[#12141e] p-4 rounded-md border border-white/10">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-slate-300">Cash Received from Customer ($)</label>
                   {/* Quick bill chips */}
@@ -1087,7 +1087,7 @@ export default function AdminPosPage() {
                         key={val}
                         type="button"
                         onClick={() => setCashReceived(val)}
-                        className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-[10px] font-mono font-bold text-amber-300 border border-white/10"
+                        className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-[10px] font-mono font-bold text-[#A78BFA] border border-white/10"
                       >
                         ${val}
                       </button>
@@ -1101,7 +1101,7 @@ export default function AdminPosPage() {
                   min={totalAmount}
                   value={cashReceived || ""}
                   onChange={e => setCashReceived(parseFloat(e.target.value) || 0)}
-                  className="w-full bg-[#181b28] border border-white/10 rounded-xl px-3.5 py-2.5 text-lg font-mono font-bold text-white focus:outline-none focus:border-amber-400 text-right"
+                  className="w-full bg-[#181b28] border border-white/10 rounded-md px-3.5 py-2.5 text-lg font-mono font-bold text-white focus:outline-none focus:border-[#A78BFA]/50 text-right"
                 />
 
                 <div className="flex justify-between items-center pt-2 border-t border-white/10 text-sm font-bold">
@@ -1116,7 +1116,7 @@ export default function AdminPosPage() {
               <button
                 type="button"
                 onClick={() => setPaymentModal(false)}
-                className="w-full sm:w-auto px-4 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition cursor-pointer"
+                className="w-full sm:w-auto px-4 py-3 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition cursor-pointer"
               >
                 Back to Cart
               </button>
@@ -1125,7 +1125,7 @@ export default function AdminPosPage() {
                 type="button"
                 disabled={isProcessingSale || (paymentMethod === "cash" && cashReceived < totalAmount)}
                 onClick={() => handleExecuteSale(false)}
-                className="flex-1 w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 transition cursor-pointer"
+                className="flex-1 w-full py-3 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 transition cursor-pointer"
                 title="Confirm sale immediately, update inventory and log to sales without printing modal"
               >
                 {isProcessingSale ? (
@@ -1145,7 +1145,7 @@ export default function AdminPosPage() {
                 type="button"
                 disabled={isProcessingSale || (paymentMethod === "cash" && cashReceived < totalAmount)}
                 onClick={() => handleExecuteSale(true)}
-                className="flex-1 w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 transition cursor-pointer"
+                className="flex-1 w-full py-3 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-black text-xs shadow-lg shadow-[#A78BFA]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 transition cursor-pointer"
                 title="Confirm sale and open the commercial invoice with printing & download options"
               >
                 <Printer className="w-4 h-4" />
@@ -1159,7 +1159,7 @@ export default function AdminPosPage() {
       {/* MODAL: Commercial Invoice & Thermal Slip Print View */}
       {receiptModal && completedReceipt && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95 max-h-[92vh] overflow-y-auto">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95 max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2 text-emerald-400">
                 <CheckCircle2 className="w-5 h-5" />
@@ -1176,7 +1176,7 @@ export default function AdminPosPage() {
             </div>
 
             {/* Thermal Slip Simulation */}
-            <div className="bg-white text-black p-5 rounded-2xl shadow-inner font-mono text-[11px] space-y-3 receipt-paper">
+            <div className="bg-white text-black p-5 rounded-md shadow-inner font-mono text-[11px] space-y-3 receipt-paper">
               <div className="text-center space-y-0.5 border-b border-dashed border-gray-400 pb-3">
                 <h2 className="text-sm font-bold tracking-tight">AETHER INDUSTRIAL AUDIO</h2>
                 <p className="text-[10px] text-gray-600">Enterprise High-Performance Studio Hardware</p>
@@ -1269,14 +1269,14 @@ export default function AdminPosPage() {
                 <button
                   type="button"
                   onClick={triggerPrintReceipt}
-                  className="flex-1 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 cursor-pointer"
+                  className="flex-1 py-2.5 rounded-md bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 cursor-pointer"
                 >
                   <Printer className="w-4 h-4" />
                   Print Invoice
                 </button>
                 <Link
                   href="/admin/sales"
-                  className="px-3.5 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-xs font-bold flex items-center gap-1 transition"
+                  className="px-3.5 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-xs font-bold flex items-center gap-1 transition"
                 >
                   Sales Ledger ↗
                 </Link>
@@ -1285,7 +1285,7 @@ export default function AdminPosPage() {
               <button
                 type="button"
                 onClick={() => setReceiptModal(false)}
-                className="w-full py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer transition"
+                className="w-full py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold cursor-pointer transition"
               >
                 ✨ Ready for Next Customer
               </button>

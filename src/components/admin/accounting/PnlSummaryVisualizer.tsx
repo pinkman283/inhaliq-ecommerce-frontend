@@ -27,7 +27,7 @@ export const PnlSummaryVisualizer: React.FC<PnlSummaryVisualizerProps> = ({
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-24 rounded-xl bg-white/[0.02] border border-white/[0.06] animate-pulse" />
+          <div key={i} className="h-24 rounded-md bg-white/[0.02] border border-white/[0.06] animate-pulse" />
         ))}
       </div>
     );
@@ -39,7 +39,7 @@ export const PnlSummaryVisualizer: React.FC<PnlSummaryVisualizerProps> = ({
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
       {/* 1. Net Revenue */}
-      <div className="p-4 rounded-xl bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
+      <div className="p-4 rounded-md bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
         <div className="flex items-center justify-between text-xs text-slate-400">
           <span className="font-medium">Net Revenue</span>
           <span className="text-[11px] font-mono text-slate-500">100%</span>
@@ -53,7 +53,7 @@ export const PnlSummaryVisualizer: React.FC<PnlSummaryVisualizerProps> = ({
       </div>
 
       {/* 2. Cost of Goods */}
-      <div className="p-4 rounded-xl bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
+      <div className="p-4 rounded-md bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
         <div className="flex items-center justify-between text-xs text-slate-400">
           <span className="font-medium">Cost of Goods (FIFO)</span>
           <span className="text-[11px] font-mono text-slate-500">{cogsPercent}%</span>
@@ -67,7 +67,7 @@ export const PnlSummaryVisualizer: React.FC<PnlSummaryVisualizerProps> = ({
       </div>
 
       {/* 3. Gross Profit */}
-      <div className="p-4 rounded-xl bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
+      <div className="p-4 rounded-md bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
         <div className="flex items-center justify-between text-xs text-slate-400">
           <span className="font-medium">Gross Profit</span>
           <span className="text-[11px] font-mono font-medium text-emerald-400/90">{grossMargin}% margin</span>
@@ -81,7 +81,7 @@ export const PnlSummaryVisualizer: React.FC<PnlSummaryVisualizerProps> = ({
       </div>
 
       {/* 4. Net Operating Income */}
-      <div className="p-4 rounded-xl bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
+      <div className="p-4 rounded-md bg-[#0d1017] border border-white/[0.06] flex flex-col justify-between transition-all hover:border-white/10">
         <div className="flex items-center justify-between text-xs text-slate-400">
           <span className="font-medium">Net Profit</span>
           <span

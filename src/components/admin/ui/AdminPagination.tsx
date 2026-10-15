@@ -32,7 +32,7 @@ export const AdminPagination: React.FC<AdminPaginationProps> = ({
       : undefined;
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-t border-white/[0.06] text-xs text-slate-400 bg-white/[0.01]">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-t border-[#272B35] text-xs text-[#929BAD] bg-[#090B10]/40">
       <div>
         {totalItems !== undefined ? (
           <span>
@@ -53,13 +53,13 @@ export const AdminPagination: React.FC<AdminPaginationProps> = ({
           type="button"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage <= 1 || isLoading}
-          className="p-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+          className="p-1.5 rounded-md border border-[#272B35] bg-[#11141D] hover:bg-[#171B26] text-[#929BAD] hover:text-[#E5E7EB] disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
           title="Previous Page"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
 
-        <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-mono text-[11px] font-semibold text-white">
+        <span className="px-2.5 py-1 rounded-md bg-[#171B26] border border-[#272B35] font-mono text-[11px] font-semibold text-[#E5E7EB]">
           {currentPage} / {totalPages || 1}
         </span>
 
@@ -67,7 +67,7 @@ export const AdminPagination: React.FC<AdminPaginationProps> = ({
           type="button"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage >= totalPages || isLoading}
-          className="p-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+          className="p-1.5 rounded-md border border-[#272B35] bg-[#11141D] hover:bg-[#171B26] text-[#929BAD] hover:text-[#E5E7EB] disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
           title="Next Page"
         >
           <ChevronRight className="w-4 h-4" />

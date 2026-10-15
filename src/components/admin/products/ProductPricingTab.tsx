@@ -26,7 +26,7 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
     <div className="space-y-6">
       {/* Informative banner if variants exist */}
       {hasVariants && (
-        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5 text-xs text-amber-300">
+        <div className="p-3.5 rounded-md bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5 text-xs text-amber-300">
           <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
             <p className="font-semibold text-white">Stock Synchronized from Variants</p>
@@ -41,7 +41,7 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h4 className="text-xs font-semibold text-white tracking-wide flex items-center gap-1.5">
-            <DollarSign className="w-4 h-4 text-amber-400" />
+            <DollarSign className="w-4 h-4 text-[#A78BFA]" />
             Pricing Strategy
           </h4>
           <span className="text-[11px] text-slate-500 font-mono">Currency: USD / BDT</span>
@@ -63,7 +63,7 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
                 value={formData.price}
                 onChange={(e) => onChange("price", e.target.value)}
                 placeholder="0.00"
-                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl pl-8 pr-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none"
+                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md pl-8 pr-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none"
               />
             </div>
             <p className="text-[10.5px] text-slate-500">Retail price charged to customers</p>
@@ -84,7 +84,7 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
                 value={formData.compare_at_price}
                 onChange={(e) => onChange("compare_at_price", e.target.value)}
                 placeholder="0.00"
-                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl pl-8 pr-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none"
+                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md pl-8 pr-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none"
               />
             </div>
             <p className="text-[10.5px] text-slate-500">
@@ -113,7 +113,7 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
                 value={formData.cost_price}
                 onChange={(e) => onChange("cost_price", e.target.value)}
                 placeholder="0.00"
-                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl pl-8 pr-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none"
+                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md pl-8 pr-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none"
               />
             </div>
             <p className="text-[10.5px] text-slate-500">
@@ -151,10 +151,10 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
               value={hasVariants ? variantStockSum.toString() : formData.stock_quantity}
               onChange={(e) => onChange("stock_quantity", e.target.value)}
               placeholder="0"
-              className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none ${
+              className={`w-full border rounded-md px-3.5 py-2.5 text-xs text-white font-mono transition-all outline-none ${
                 hasVariants
                   ? "bg-white/[0.01] border-white/5 opacity-70 cursor-not-allowed text-slate-400"
-                  : "bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50"
+                  : "bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50"
               }`}
             />
             <p className="text-[10.5px] text-slate-500">
@@ -164,7 +164,7 @@ export function ProductPricingTab({ formData, onChange }: ProductPricingTabProps
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex flex-col justify-between">
+          <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 flex flex-col justify-between">
             <div>
               <p className="text-xs font-medium text-white flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5 text-slate-400" />

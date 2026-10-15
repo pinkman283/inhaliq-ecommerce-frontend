@@ -17,8 +17,8 @@ export function VariantMatrixTable({
 }: VariantMatrixTableProps) {
   if (variants.length === 0) {
     return (
-      <div className="py-12 px-4 rounded-xl border border-dashed border-white/10 text-center flex flex-col items-center justify-center space-y-2.5 bg-white/[0.01]">
-        <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-500">
+      <div className="py-12 px-4 rounded-md border border-dashed border-white/10 text-center flex flex-col items-center justify-center space-y-2.5 bg-white/[0.01]">
+        <div className="w-10 h-10 rounded-md bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-500">
           <Layers className="w-5 h-5 text-slate-400" />
         </div>
         <h4 className="text-xs font-semibold text-white">No Variants Configured</h4>
@@ -30,7 +30,7 @@ export function VariantMatrixTable({
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+    <div className="rounded-md border border-white/[0.08] bg-white/[0.02] overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
@@ -72,7 +72,7 @@ export function VariantMatrixTable({
                   {/* 2. Size / Spec */}
                   <td className="py-2.5 px-3 whitespace-nowrap">
                     {v.size ? (
-                      <span className="px-2 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/20 text-amber-300 font-mono text-[11px]">
+                      <span className="px-2 py-0.5 rounded-md bg-[#211B32] border border-[#A78BFA]/30 text-[#A78BFA] font-mono text-[11px]">
                         {v.size}
                       </span>
                     ) : (
@@ -177,7 +177,7 @@ export function VariantMatrixTable({
                       type="button"
                       onClick={() => onRemoveVariant(idx)}
                       title="Remove combination"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+                      className="p-1.5 rounded-md text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

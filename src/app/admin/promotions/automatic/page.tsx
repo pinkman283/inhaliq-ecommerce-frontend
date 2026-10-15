@@ -304,7 +304,7 @@ export default function AutomaticDiscountsPage() {
             <button
               onClick={() => fetchRules()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer"
+              className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
@@ -312,7 +312,7 @@ export default function AutomaticDiscountsPage() {
             <button
               type="button"
               onClick={handleOpenCreate}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               New Automatic Rule
@@ -322,7 +322,7 @@ export default function AutomaticDiscountsPage() {
       />
 
       {/* Filter strip */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
@@ -330,7 +330,7 @@ export default function AutomaticDiscountsPage() {
             placeholder="Search automatic promotion rule..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+            className="w-full pl-9 pr-4 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
           />
         </div>
         <span className="text-xs text-slate-400 font-mono">
@@ -357,7 +357,7 @@ export default function AutomaticDiscountsPage() {
             {loading ? (
               <tr>
                 <td colSpan={8} className="p-12 text-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                  <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   Loading automatic rules...
                 </td>
               </tr>
@@ -376,7 +376,7 @@ export default function AutomaticDiscountsPage() {
                       <button
                         type="button"
                         onClick={() => handleOpenEdit(rule)}
-                        className="font-bold text-white hover:text-amber-400 transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                        className="font-bold text-white hover:text-[#A78BFA] transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                       >
                         <Zap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                         {rule.name}
@@ -390,7 +390,7 @@ export default function AutomaticDiscountsPage() {
                   </td>
 
                   <td className="p-4 whitespace-nowrap">
-                    <span className="font-mono font-bold text-amber-300 text-xs px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                    <span className="font-mono font-semibold text-[#A78BFA] text-xs px-2.5 py-1 rounded bg-[#211B32] border border-[#A78BFA]/30">
                       {rule.discount_type === "free_shipping"
                         ? "FREE SHIPPING"
                         : rule.discount_type === "buy_x_get_y"
@@ -449,7 +449,7 @@ export default function AutomaticDiscountsPage() {
                       <button
                         type="button"
                         onClick={() => handleOpenEdit(rule)}
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
                         title="Edit automatic rule in sidebar"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
@@ -457,7 +457,7 @@ export default function AutomaticDiscountsPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(rule.id)}
-                        className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors cursor-pointer"
                         title="Delete automatic rule"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -493,7 +493,7 @@ export default function AutomaticDiscountsPage() {
             {/* Header */}
             <div className="h-14 px-6 border-b border-white/[0.06] bg-[#0c0f18] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                <div className="w-7 h-7 rounded-md bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
                   <Zap className="w-4 h-4" />
                 </div>
                 <div>
@@ -508,7 +508,7 @@ export default function AutomaticDiscountsPage() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition cursor-pointer"
+                className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition cursor-pointer"
                 title="Close sidebar"
               >
                 <X className="w-4 h-4" />
@@ -518,8 +518,8 @@ export default function AutomaticDiscountsPage() {
             {/* Scrollable Form Body */}
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 text-xs">
               {/* Dynamic Formula Summary Banner */}
-              <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-500/10 via-amber-500/10 to-transparent border border-emerald-500/20 flex items-start gap-3">
-                <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="p-3.5 rounded-md bg-gradient-to-r from-purple-500/10 via-[#A78BFA]/5 to-transparent border border-purple-500/20 flex items-start gap-3">
+                <Sparkles className="w-4 h-4 text-[#A78BFA] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <span className="text-[11px] font-bold text-white uppercase tracking-wider">
                     Live Formula Behavior:
@@ -558,7 +558,7 @@ export default function AutomaticDiscountsPage() {
               {/* Section 1: Rule Identity */}
               <div className="space-y-3">
                 <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5 text-amber-400" />
+                  <Tag className="w-3.5 h-3.5 text-[#A78BFA]" />
                   1. Rule Identity & Status
                 </h4>
 
@@ -572,7 +572,7 @@ export default function AutomaticDiscountsPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Free Delivery Over ৳1500"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition"
                   />
                 </div>
 
@@ -583,7 +583,7 @@ export default function AutomaticDiscountsPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Describe the qualification requirements and offer details..."
-                    className="w-full rounded-lg border border-white/10 bg-[#131722] p-2.5 text-xs text-white focus:border-amber-400/50 focus:outline-none transition resize-none"
+                    className="w-full rounded-md border border-white/10 bg-[#131722] p-2.5 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition resize-none"
                   />
                 </div>
 
@@ -595,7 +595,7 @@ export default function AutomaticDiscountsPage() {
                       value={badgeText}
                       onChange={(e) => setBadgeText(e.target.value)}
                       placeholder="e.g. FREE SHIPPING"
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-amber-300 focus:border-amber-400/50 focus:outline-none font-mono uppercase transition"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-[#A78BFA] focus:border-[#A78BFA]/50 focus:outline-none font-mono uppercase transition"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -604,7 +604,7 @@ export default function AutomaticDiscountsPage() {
                       type="number"
                       value={priority}
                       onChange={(e) => setPriority(Number(e.target.value))}
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none font-mono transition"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none font-mono transition"
                       title="Higher priority runs earlier during evaluation"
                     />
                   </div>
@@ -613,7 +613,7 @@ export default function AutomaticDiscountsPage() {
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as any)}
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-2 text-xs text-white focus:border-amber-400/50 focus:outline-none transition"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-2 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition"
                     >
                       <option value="active">Active</option>
                       <option value="paused">Paused</option>
@@ -652,9 +652,9 @@ export default function AutomaticDiscountsPage() {
                             setAppliesTo("entire_order");
                           }
                         }}
-                        className={`p-3 rounded-xl border text-center flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
+                        className={`p-3 rounded-md border text-center flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
                           isSelected
-                            ? "bg-amber-500/15 border-amber-400/50 text-amber-300 shadow-sm"
+                            ? "bg-[#211B32] border-[#A78BFA]/50 text-[#A78BFA] shadow-sm"
                             : "bg-[#131722] border-white/10 text-slate-400 hover:text-white hover:border-white/20"
                         }`}
                       >
@@ -667,7 +667,7 @@ export default function AutomaticDiscountsPage() {
 
                 {/* Conditional Fields based on discount type */}
                 {discountType === "percentage" && (
-                  <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+                  <div className="grid grid-cols-2 gap-3 p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-medium text-slate-300">Discount Percent (%)</label>
                       <input
@@ -676,7 +676,7 @@ export default function AutomaticDiscountsPage() {
                         max="100"
                         value={discountValue}
                         onChange={(e) => setDiscountValue(Number(e.target.value))}
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -687,14 +687,14 @@ export default function AutomaticDiscountsPage() {
                         value={maxDiscountAmount}
                         onChange={(e) => setMaxDiscountAmount(e.target.value)}
                         placeholder="Optional cap e.g. 1000"
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                       />
                     </div>
                   </div>
                 )}
 
                 {discountType === "fixed_amount" && (
-                  <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+                  <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-medium text-slate-300">Discount Amount (৳)</label>
                       <input
@@ -702,14 +702,14 @@ export default function AutomaticDiscountsPage() {
                         min="1"
                         value={discountValue}
                         onChange={(e) => setDiscountValue(Number(e.target.value))}
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                       />
                     </div>
                   </div>
                 )}
 
                 {discountType === "buy_x_get_y" && (
-                  <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+                  <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06] space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-medium text-slate-300">Buy Quantity (X)</label>
@@ -718,7 +718,7 @@ export default function AutomaticDiscountsPage() {
                           min="1"
                           value={bxgyBuyQty}
                           onChange={(e) => setBxgyBuyQty(Number(e.target.value))}
-                          className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                          className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -728,7 +728,7 @@ export default function AutomaticDiscountsPage() {
                           min="1"
                           value={bxgyGetQty}
                           onChange={(e) => setBxgyGetQty(Number(e.target.value))}
-                          className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                          className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -742,7 +742,7 @@ export default function AutomaticDiscountsPage() {
                           value={bxgyRewardPercent}
                           onChange={(e) => setBxgyRewardPercent(Number(e.target.value))}
                           placeholder="100 for Free"
-                          className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                          className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -753,7 +753,7 @@ export default function AutomaticDiscountsPage() {
                           value={bxgyMaxApps}
                           onChange={(e) => setBxgyMaxApps(e.target.value)}
                           placeholder="Optional limit e.g. 2"
-                          className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                          className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -779,7 +779,7 @@ export default function AutomaticDiscountsPage() {
                       value={minOrderAmount}
                       onChange={(e) => setMinOrderAmount(Number(e.target.value))}
                       placeholder="0 for none"
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -792,7 +792,7 @@ export default function AutomaticDiscountsPage() {
                       value={minQuantity}
                       onChange={(e) => setMinQuantity(e.target.value)}
                       placeholder="e.g. 2 items"
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-amber-400/50 focus:outline-none"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white font-mono focus:border-[#A78BFA]/50 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -811,7 +811,7 @@ export default function AutomaticDiscountsPage() {
                     <select
                       value={appliesTo}
                       onChange={(e) => setAppliesTo(e.target.value as any)}
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none"
                     >
                       <option value="entire_order">Entire Order (All eligible items)</option>
                       <option value="specific_categories">Specific Categories</option>
@@ -820,7 +820,7 @@ export default function AutomaticDiscountsPage() {
                   </div>
 
                   {appliesTo === "specific_categories" && (
-                    <div className="space-y-2 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+                    <div className="space-y-2 p-3 rounded-md bg-white/[0.02] border border-white/[0.06]">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-medium text-slate-300 block">
                           Select Qualifying Categories ({targetCategoryIds.length} selected):
@@ -829,7 +829,7 @@ export default function AutomaticDiscountsPage() {
                           <button
                             type="button"
                             onClick={() => setTargetCategoryIds(categories.map((c) => c.id))}
-                            className="text-[10px] text-amber-400 hover:text-amber-300 font-semibold cursor-pointer"
+                            className="text-[10px] text-[#A78BFA] hover:text-[#B9A3FF] font-semibold cursor-pointer"
                           >
                             Select All
                           </button>
@@ -850,7 +850,7 @@ export default function AutomaticDiscountsPage() {
                           return (
                             <label
                               key={c.id}
-                              className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/5 cursor-pointer text-slate-300"
+                              className="flex items-center gap-2 p-1.5 rounded-md hover:bg-white/5 cursor-pointer text-slate-300"
                             >
                               <AdminCheckbox
                                 checked={checked}
@@ -871,7 +871,7 @@ export default function AutomaticDiscountsPage() {
                   )}
 
                   {appliesTo === "specific_brands" && (
-                    <div className="space-y-2 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+                    <div className="space-y-2 p-3 rounded-md bg-white/[0.02] border border-white/[0.06]">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-medium text-slate-300 block">
                           Select Qualifying Brands ({targetBrandIds.length} selected):
@@ -880,7 +880,7 @@ export default function AutomaticDiscountsPage() {
                           <button
                             type="button"
                             onClick={() => setTargetBrandIds(brands.map((b) => b.id))}
-                            className="text-[10px] text-amber-400 hover:text-amber-300 font-semibold cursor-pointer"
+                            className="text-[10px] text-[#A78BFA] hover:text-[#B9A3FF] font-semibold cursor-pointer"
                           >
                             Select All
                           </button>
@@ -901,7 +901,7 @@ export default function AutomaticDiscountsPage() {
                           return (
                             <label
                               key={b.id}
-                              className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/5 cursor-pointer text-slate-300"
+                              className="flex items-center gap-2 p-1.5 rounded-md hover:bg-white/5 cursor-pointer text-slate-300"
                             >
                               <AdminCheckbox
                                 checked={checked}
@@ -931,7 +931,7 @@ export default function AutomaticDiscountsPage() {
                 </h4>
 
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2.5 p-2 rounded-lg bg-white/[0.02] border border-white/[0.06] cursor-pointer">
+                  <label className="flex items-center gap-2.5 p-2 rounded-md bg-white/[0.02] border border-white/[0.06] cursor-pointer">
                     <AdminCheckbox
                       checked={isStackable}
                       onChange={(e) => setIsStackable(e.target.checked)}
@@ -946,7 +946,7 @@ export default function AutomaticDiscountsPage() {
                     </div>
                   </label>
 
-                  <label className="flex items-center gap-2.5 p-2 rounded-lg bg-white/[0.02] border border-white/[0.06] cursor-pointer">
+                  <label className="flex items-center gap-2.5 p-2 rounded-md bg-white/[0.02] border border-white/[0.06] cursor-pointer">
                     <AdminCheckbox
                       checked={canCombineWithFreeShipping}
                       onChange={(e) => setCanCombineWithFreeShipping(e.target.checked)}
@@ -980,7 +980,7 @@ export default function AutomaticDiscountsPage() {
                       type="datetime-local"
                       value={startsAt}
                       onChange={(e) => setStartsAt(e.target.value)}
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -1000,7 +1000,7 @@ export default function AutomaticDiscountsPage() {
                       type="datetime-local"
                       value={expiresAt}
                       onChange={(e) => setExpiresAt(e.target.value)}
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1015,7 +1015,7 @@ export default function AutomaticDiscountsPage() {
                     type="button"
                     onClick={() => handleDelete(editingRule.id)}
                     disabled={deleting}
-                    className="px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/20 transition-all cursor-pointer flex items-center gap-1.5"
+                    className="px-3 py-2 rounded-md text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/20 transition-all cursor-pointer flex items-center gap-1.5"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     Delete Rule
@@ -1027,14 +1027,14 @@ export default function AutomaticDiscountsPage() {
                 <button
                   type="button"
                   onClick={() => setIsDrawerOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 border border-white/10 transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 border border-white/10 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all cursor-pointer flex items-center gap-2"
+                  className="px-5 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all cursor-pointer flex items-center gap-2"
                 >
                   {saving ? (
                     <>

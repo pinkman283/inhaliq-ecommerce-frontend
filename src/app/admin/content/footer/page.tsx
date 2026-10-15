@@ -639,21 +639,21 @@ function AdminContentFooterPageContent() {
             <button
               onClick={() => fetchData()}
               disabled={loading}
-              className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-md transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
               Refresh
             </button>
             <button
               onClick={handleOpenCreateSocial}
-              className="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-md transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Share2 className="w-3.5 h-3.5 text-purple-400" />
               Add Social Link
             </button>
             <button
               onClick={handleOpenCreateColumn}
-              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-all shadow-sm shadow-cyan-600/20 flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-all shadow-sm shadow-cyan-600/20 flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Add Column
@@ -670,7 +670,7 @@ function AdminContentFooterPageContent() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveTab("columns")}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "columns"
                 ? "bg-white/10 text-white shadow-sm"
                 : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
@@ -681,7 +681,7 @@ function AdminContentFooterPageContent() {
           </button>
           <button
             onClick={() => setActiveTab("social")}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "social"
                 ? "bg-white/10 text-white shadow-sm"
                 : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
@@ -692,7 +692,7 @@ function AdminContentFooterPageContent() {
           </button>
           <button
             onClick={() => setActiveTab("preview")}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "preview"
                 ? "bg-white/10 text-white shadow-sm"
                 : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
@@ -704,7 +704,7 @@ function AdminContentFooterPageContent() {
         </div>
 
         {activeTab === "preview" && (
-          <div className="flex items-center gap-1 bg-black/40 border border-white/10 p-0.5 rounded-lg text-xs">
+          <div className="flex items-center gap-1 bg-black/40 border border-white/10 p-0.5 rounded-md text-xs">
             <button
               onClick={() => setPreviewDevice("desktop")}
               className={`px-2.5 py-1 rounded flex items-center gap-1.5 transition-colors cursor-pointer ${
@@ -744,7 +744,7 @@ function AdminContentFooterPageContent() {
                 <button
                   type="button"
                   onClick={handleOpenCreateColumn}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-colors cursor-pointer"
                 >
                   Create First Column
                 </button>
@@ -755,7 +755,7 @@ function AdminContentFooterPageContent() {
               {columns.map((col, colIdx) => (
                 <div
                   key={col.id}
-                  className={`rounded-2xl border transition-all duration-200 overflow-hidden flex flex-col bg-[#0F141E]/90 ${
+                  className={`rounded-md border transition-all duration-200 overflow-hidden flex flex-col bg-[#0F141E]/90 ${
                     col.is_active
                       ? "border-white/[0.09] shadow-sm hover:border-white/20"
                       : "border-white/[0.04] opacity-70"
@@ -837,7 +837,7 @@ function AdminContentFooterPageContent() {
                       col.links.map((link, linkIdx) => (
                         <div
                           key={link.id}
-                          className={`p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between gap-2.5 ${
+                          className={`p-2.5 rounded-md border transition-all duration-150 flex items-center justify-between gap-2.5 ${
                             link.is_active
                               ? "bg-black/30 border-white/[0.06] hover:border-white/15"
                               : "bg-black/10 border-white/[0.03] opacity-60"
@@ -910,7 +910,7 @@ function AdminContentFooterPageContent() {
                     <button
                       type="button"
                       onClick={() => handleOpenCreateLink(col.id)}
-                      className="w-full py-1.5 px-3 text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full py-1.5 px-3 text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5 text-cyan-400" />
                       Add Link
@@ -935,7 +935,7 @@ function AdminContentFooterPageContent() {
             </div>
             <button
               onClick={handleOpenCreateSocial}
-              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg transition-all shadow-sm shadow-purple-600/20 flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-md transition-all shadow-sm shadow-purple-600/20 flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Add Social Profile
@@ -956,7 +956,7 @@ function AdminContentFooterPageContent() {
                 <button
                   type="button"
                   onClick={handleOpenCreateSocial}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-md transition-colors cursor-pointer"
                 >
                   Add First Social Profile
                 </button>
@@ -967,14 +967,14 @@ function AdminContentFooterPageContent() {
               {socialLinks.map((link) => (
                 <div
                   key={link.id}
-                  className={`p-4 rounded-2xl border transition-all duration-200 flex items-center justify-between gap-3 bg-[#0F141E]/90 ${
+                  className={`p-4 rounded-md border transition-all duration-200 flex items-center justify-between gap-3 bg-[#0F141E]/90 ${
                     link.is_active
                       ? "border-white/[0.09] shadow-sm hover:border-white/20"
                       : "border-white/[0.04] opacity-60"
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                    <div className="w-10 h-10 rounded-md bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
                       <SocialPlatformIcon platform={link.platform} icon={link.icon} className="w-5 h-5" />
                     </div>
                     <div className="space-y-0.5 min-w-0 flex-1">
@@ -1029,7 +1029,7 @@ function AdminContentFooterPageContent() {
       {/* TAB 3: Live Storefront Preview */}
       {activeTab === "preview" && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0B0F17] border border-white/10 space-y-4">
+          <div className="p-4 rounded-md bg-[#0B0F17] border border-white/10 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -1043,12 +1043,12 @@ function AdminContentFooterPageContent() {
             </div>
 
             {/* Simulated Storefront Footer */}
-            <div className="border border-white/10 rounded-xl overflow-hidden bg-[#0a0d14] shadow-2xl">
+            <div className="border border-white/10 rounded-md overflow-hidden bg-[#0a0d14] shadow-2xl">
               {/* Optional Theme Feature Ribbon banner */}
               {theme?.footer_features_enabled !== false && (
                 <div className="bg-white/[0.02] border-b border-white/[0.06] p-4 text-xs text-slate-400 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <Sparkles className="w-4 h-4 text-[#A78BFA]" />
                     <span className="font-semibold text-slate-300">Theme Guarantees Ribbon Active</span>
                   </div>
                   <Link
@@ -1069,7 +1069,7 @@ function AdminContentFooterPageContent() {
                     {/* Brand Column (2 wide) */}
                     <div className="lg:col-span-2 space-y-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-[#005826] flex items-center justify-center font-bold text-white text-sm">
+                        <div className="w-8 h-8 rounded-md bg-[#005826] flex items-center justify-center font-bold text-white text-sm">
                           {theme?.store_brand_name?.charAt(0) || "S"}
                         </div>
                         <span className="font-bold text-white tracking-wide text-base">
@@ -1091,7 +1091,7 @@ function AdminContentFooterPageContent() {
                             .map((s) => (
                               <div
                                 key={s.id}
-                                className="w-8 h-8 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors"
+                                className="w-8 h-8 rounded-md border border-white/10 bg-white/[0.03] flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors"
                               >
                                 <SocialPlatformIcon platform={s.platform} icon={s.icon} className="w-4 h-4" />
                               </div>
@@ -1134,7 +1134,7 @@ function AdminContentFooterPageContent() {
                           .map((s) => (
                             <div
                               key={s.id}
-                              className="w-8 h-8 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-slate-300"
+                              className="w-8 h-8 rounded-md border border-white/10 bg-white/[0.03] flex items-center justify-center text-slate-300"
                             >
                               <SocialPlatformIcon platform={s.platform} icon={s.icon} className="w-4 h-4" />
                             </div>
@@ -1206,7 +1206,7 @@ function AdminContentFooterPageContent() {
                 placeholder="e.g. Quick Links, Customer Service, Legal"
                 required
                 maxLength={100}
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
               />
             </div>
 
@@ -1216,7 +1216,7 @@ function AdminContentFooterPageContent() {
                 type="number"
                 value={columnSortOrder}
                 onChange={(e) => setColumnSortOrder(e.target.value)}
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500"
               />
             </div>
 
@@ -1236,14 +1236,14 @@ function AdminContentFooterPageContent() {
               <button
                 type="button"
                 onClick={() => setIsColumnModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={savingColumn}
-                className="px-5 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-all shadow-sm shadow-cyan-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                className="px-5 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-all shadow-sm shadow-cyan-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
               >
                 {savingColumn && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {editingColumn ? "Save Changes" : "Create Column"}
@@ -1275,7 +1275,7 @@ function AdminContentFooterPageContent() {
                 value={selectedColumnId ?? ""}
                 onChange={(e) => setSelectedColumnId(Number(e.target.value))}
                 required
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
               >
                 {columns.map((col) => (
                   <option key={col.id} value={col.id}>
@@ -1296,7 +1296,7 @@ function AdminContentFooterPageContent() {
                 placeholder="e.g. Return Policy, Contact Support"
                 required
                 maxLength={100}
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
               />
             </div>
 
@@ -1311,7 +1311,7 @@ function AdminContentFooterPageContent() {
                 placeholder="e.g. /about, /shipping-policy, https://..."
                 required
                 maxLength={255}
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white font-mono placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white font-mono placeholder-slate-500 focus:outline-none focus:border-cyan-500"
               />
 
               <div className="space-y-1 pt-1">
@@ -1360,14 +1360,14 @@ function AdminContentFooterPageContent() {
               <button
                 type="button"
                 onClick={() => setIsLinkModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={savingLink}
-                className="px-5 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-all shadow-sm shadow-cyan-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                className="px-5 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-all shadow-sm shadow-cyan-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
               >
                 {savingLink && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {editingLink ? "Save Changes" : "Create Link"}
@@ -1402,7 +1402,7 @@ function AdminContentFooterPageContent() {
                       key={p.name}
                       type="button"
                       onClick={() => handlePresetSelect(p)}
-                      className={`p-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`p-2 rounded-md border text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
                         isSelected
                           ? "bg-purple-500/15 border-purple-500/40 text-purple-300 shadow-xs"
                           : "bg-white/[0.02] border-white/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.05]"
@@ -1418,7 +1418,7 @@ function AdminContentFooterPageContent() {
 
             {/* Custom or WhatsApp inputs */}
             {isSocialWhatsApp ? (
-              <div className="space-y-3 p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+              <div className="space-y-3 p-3.5 rounded-md bg-emerald-500/5 border border-emerald-500/20">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-emerald-300">
                     WhatsApp Business Number <span className="text-rose-400">*</span>
@@ -1429,7 +1429,7 @@ function AdminContentFooterPageContent() {
                     onChange={(e) => setSocialWhatsappNumber(e.target.value)}
                     placeholder="e.g. 8801700000000"
                     required
-                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white font-mono focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white font-mono focus:outline-none focus:border-emerald-500"
                   />
                   <p className="text-[10px] text-slate-500">Include country code without + or spaces.</p>
                 </div>
@@ -1441,7 +1441,7 @@ function AdminContentFooterPageContent() {
                     value={socialWhatsappMessage}
                     onChange={(e) => setSocialWhatsappMessage(e.target.value)}
                     placeholder="e.g. Hi, I have a question about my order."
-                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -1454,7 +1454,7 @@ function AdminContentFooterPageContent() {
                     value={socialPlatform}
                     onChange={(e) => setSocialPlatform(e.target.value)}
                     required
-                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500"
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-purple-500"
                   />
                 </div>
 
@@ -1466,7 +1466,7 @@ function AdminContentFooterPageContent() {
                     onChange={(e) => setSocialUrl(e.target.value)}
                     placeholder="https://..."
                     required
-                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white font-mono focus:outline-none focus:border-purple-500"
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white font-mono focus:outline-none focus:border-purple-500"
                   />
                 </div>
               </div>
@@ -1488,14 +1488,14 @@ function AdminContentFooterPageContent() {
               <button
                 type="button"
                 onClick={() => setIsSocialModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={savingSocial}
-                className="px-5 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg transition-all shadow-sm shadow-purple-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                className="px-5 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-md transition-all shadow-sm shadow-purple-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
               >
                 {savingSocial && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {editingSocialLink ? "Save Changes" : "Add Profile"}
@@ -1508,9 +1508,9 @@ function AdminContentFooterPageContent() {
       {/* DIALOG: Delete Column Confirmation */}
       {deletingColumn && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="bg-[#0F141E] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#0F141E] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl">
             <div className="flex items-center gap-3 text-rose-400">
-              <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
+              <div className="w-10 h-10 rounded bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
@@ -1532,7 +1532,7 @@ function AdminContentFooterPageContent() {
               <button
                 type="button"
                 onClick={() => setDeletingColumn(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
@@ -1540,7 +1540,7 @@ function AdminContentFooterPageContent() {
                 type="button"
                 onClick={handleDeleteColumn}
                 disabled={deleting}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Delete Column
@@ -1553,9 +1553,9 @@ function AdminContentFooterPageContent() {
       {/* DIALOG: Delete Link Confirmation */}
       {deletingLink && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="bg-[#0F141E] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#0F141E] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl">
             <div className="flex items-center gap-3 text-rose-400">
-              <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
+              <div className="w-10 h-10 rounded bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
@@ -1572,7 +1572,7 @@ function AdminContentFooterPageContent() {
               <button
                 type="button"
                 onClick={() => setDeletingLink(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
@@ -1580,7 +1580,7 @@ function AdminContentFooterPageContent() {
                 type="button"
                 onClick={handleDeleteLink}
                 disabled={deleting}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Delete Link
@@ -1593,9 +1593,9 @@ function AdminContentFooterPageContent() {
       {/* DIALOG: Delete Social Link Confirmation */}
       {deletingSocialLink && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="bg-[#0F141E] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#0F141E] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl">
             <div className="flex items-center gap-3 text-rose-400">
-              <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
+              <div className="w-10 h-10 rounded bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
@@ -1612,7 +1612,7 @@ function AdminContentFooterPageContent() {
               <button
                 type="button"
                 onClick={() => setDeletingSocialLink(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
@@ -1620,7 +1620,7 @@ function AdminContentFooterPageContent() {
                 type="button"
                 onClick={handleDeleteSocial}
                 disabled={deleting}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Delete Profile

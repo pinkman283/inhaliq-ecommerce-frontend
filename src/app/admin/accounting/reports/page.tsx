@@ -89,7 +89,7 @@ export default function FinancialReportsPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 print:hidden ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 print:hidden ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -113,7 +113,7 @@ export default function FinancialReportsPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-medium text-slate-300 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-medium text-slate-300 transition-colors cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5 text-slate-400" />
                 <span>Print</span>
@@ -122,7 +122,7 @@ export default function FinancialReportsPage() {
                 href={adminApi.getAccountingExportUrl("trial_balance")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-medium transition-all shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-medium transition-all shadow-sm"
               >
                 <Download className="w-3.5 h-3.5 text-slate-400" />
                 <span>Export CSV</span>
@@ -145,7 +145,7 @@ export default function FinancialReportsPage() {
 
       {/* Statement Navigation Tabs - Minimal Pill Bar */}
       <div className="flex items-center print:hidden">
-        <div className="inline-flex p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] gap-1 overflow-x-auto">
+        <div className="inline-flex p-1 rounded-md bg-white/[0.03] border border-white/[0.08] gap-1 overflow-x-auto">
           {[
             { id: "pnl", label: "Income Statement", icon: TrendingUp },
             { id: "balance_sheet", label: "Balance Sheet", icon: Scale },
@@ -158,7 +158,7 @@ export default function FinancialReportsPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                   isActive
                     ? "bg-white/10 text-white font-semibold border border-white/10 shadow-sm"
                     : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
@@ -190,7 +190,7 @@ export default function FinancialReportsPage() {
             />
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
+          <div className="p-6 rounded-md bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
             {/* Statement Header */}
             <div className="border-b border-white/[0.06] pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
@@ -204,7 +204,7 @@ export default function FinancialReportsPage() {
               <div className="flex items-center gap-3">
                 <span className="text-xs text-slate-400">Net Operating Income:</span>
                 <span
-                  className={`text-lg font-bold font-mono px-2.5 py-1 rounded-lg ${
+                  className={`text-lg font-bold font-mono px-2.5 py-1 rounded-md ${
                     (pnl?.net_income ?? 0) >= 0
                       ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
                       : "text-rose-400 bg-rose-500/10 border border-rose-500/20"
@@ -229,7 +229,7 @@ export default function FinancialReportsPage() {
                 {(pnl?.revenue_lines || []).map((row) => {
                   const pct = (pnl?.total_revenue ?? 0) > 0 ? ((row.amount / (pnl?.total_revenue ?? 1)) * 100).toFixed(1) : "0.0";
                   return (
-                    <div key={row.code} className="flex items-center justify-between py-2 text-slate-300 hover:bg-white/[0.02] px-2 rounded-lg transition-colors">
+                    <div key={row.code} className="flex items-center justify-between py-2 text-slate-300 hover:bg-white/[0.02] px-2 rounded-md transition-colors">
                       <span className="font-mono flex items-center gap-2">
                         <span className="text-slate-500 text-[11px]">[{row.code}]</span>
                         <span className="text-slate-200">{row.name}</span>
@@ -243,7 +243,7 @@ export default function FinancialReportsPage() {
                     </div>
                   );
                 })}
-                <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] font-semibold text-white bg-white/[0.02] px-3 rounded-lg">
+                <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] font-semibold text-white bg-white/[0.02] px-3 rounded-md">
                   <span>Total Operating Revenue</span>
                   <div className="flex items-center gap-8 font-mono">
                     <span className="w-16 text-right text-slate-400">100%</span>
@@ -266,7 +266,7 @@ export default function FinancialReportsPage() {
                 {(pnl?.cogs_lines || []).map((row) => {
                   const pct = (pnl?.total_revenue ?? 0) > 0 ? ((row.amount / (pnl?.total_revenue ?? 1)) * 100).toFixed(1) : "0.0";
                   return (
-                    <div key={row.code} className="flex items-center justify-between py-2 text-slate-300 hover:bg-white/[0.02] px-2 rounded-lg transition-colors">
+                    <div key={row.code} className="flex items-center justify-between py-2 text-slate-300 hover:bg-white/[0.02] px-2 rounded-md transition-colors">
                       <span className="font-mono flex items-center gap-2">
                         <span className="text-slate-500 text-[11px]">[{row.code}]</span>
                         <span className="text-slate-200">{row.name}</span>
@@ -280,7 +280,7 @@ export default function FinancialReportsPage() {
                     </div>
                   );
                 })}
-                <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] font-semibold text-white bg-white/[0.02] px-3 rounded-lg">
+                <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] font-semibold text-white bg-white/[0.02] px-3 rounded-md">
                   <span>Total Cost of Goods Sold (FIFO)</span>
                   <div className="flex items-center gap-8 font-mono">
                     <span className="w-16 text-right text-slate-400">
@@ -294,7 +294,7 @@ export default function FinancialReportsPage() {
               </div>
 
               {/* Gross Profit Milestone */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/[0.08] flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Gross Operating Profit</span>
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-medium border border-emerald-500/20">
@@ -319,7 +319,7 @@ export default function FinancialReportsPage() {
                   pnl.expense_lines.map((row) => {
                     const pct = (pnl?.total_revenue ?? 0) > 0 ? ((row.amount / (pnl?.total_revenue ?? 1)) * 100).toFixed(1) : "0.0";
                     return (
-                      <div key={row.code} className="flex items-center justify-between py-2 text-slate-300 hover:bg-white/[0.02] px-2 rounded-lg transition-colors">
+                      <div key={row.code} className="flex items-center justify-between py-2 text-slate-300 hover:bg-white/[0.02] px-2 rounded-md transition-colors">
                         <span className="font-mono flex items-center gap-2">
                           <span className="text-slate-500 text-[11px]">[{row.code}]</span>
                           <span className="text-slate-200">{row.name}</span>
@@ -338,7 +338,7 @@ export default function FinancialReportsPage() {
                     No operating expenses recorded for this period.
                   </div>
                 )}
-                <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] font-semibold text-white bg-white/[0.02] px-3 rounded-lg">
+                <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] font-semibold text-white bg-white/[0.02] px-3 rounded-md">
                   <span>Total Operating Expenses</span>
                   <div className="flex items-center gap-8 font-mono">
                     <span className="w-16 text-right text-slate-400">0.0%</span>
@@ -350,7 +350,7 @@ export default function FinancialReportsPage() {
               </div>
 
               {/* Net Operating Income Summary Block */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/[0.08] flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-wider text-white">
                     Net Operating Income
@@ -396,7 +396,7 @@ export default function FinancialReportsPage() {
             />
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
+          <div className="p-6 rounded-md bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
             <div className="border-b border-white/[0.06] pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-white tracking-tight print:text-black">
@@ -408,12 +408,12 @@ export default function FinancialReportsPage() {
               </div>
               <div>
                 {bs?.is_balanced ? (
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-medium">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-medium">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Assets = Liabilities + Equity (Balanced)</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 font-mono text-xs font-medium">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 font-mono text-xs font-medium">
                     <AlertCircle className="w-4 h-4" />
                     <span>Imbalance Detected</span>
                   </div>
@@ -423,7 +423,7 @@ export default function FinancialReportsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* ASSETS COLUMN */}
-              <div className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+              <div className="p-5 rounded-md bg-white/[0.02] border border-white/[0.06] space-y-3">
                 <div className="text-xs font-semibold uppercase tracking-wider text-slate-300 pb-2 border-b border-white/[0.06] flex items-center justify-between">
                   <span>Assets (Class 1000)</span>
                   <span className="font-mono text-white text-sm font-bold">
@@ -432,7 +432,7 @@ export default function FinancialReportsPage() {
                 </div>
                 <div className="space-y-1">
                   {(bs?.assets || []).map((row) => (
-                    <div key={row.code} className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-lg transition-colors">
+                    <div key={row.code} className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-md transition-colors">
                       <span className="font-mono text-slate-300 flex items-center gap-2">
                         <span className="text-slate-500 text-[11px]">[{row.code}]</span>
                         <span className="text-slate-200">{row.name}</span>
@@ -448,7 +448,7 @@ export default function FinancialReportsPage() {
               {/* LIABILITIES & EQUITY COLUMN */}
               <div className="space-y-4">
                 {/* Liabilities */}
-                <div className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+                <div className="p-5 rounded-md bg-white/[0.02] border border-white/[0.06] space-y-3">
                   <div className="text-xs font-semibold uppercase tracking-wider text-slate-300 pb-2 border-b border-white/[0.06] flex items-center justify-between">
                     <span>Liabilities (Class 2000)</span>
                     <span className="font-mono text-slate-200 text-sm font-bold">
@@ -457,7 +457,7 @@ export default function FinancialReportsPage() {
                   </div>
                   <div className="space-y-1">
                     {(bs?.liabilities || []).map((row) => (
-                      <div key={row.code} className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-lg transition-colors">
+                      <div key={row.code} className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-md transition-colors">
                         <span className="font-mono text-slate-300 flex items-center gap-2">
                           <span className="text-slate-500 text-[11px]">[{row.code}]</span>
                           <span className="text-slate-200">{row.name}</span>
@@ -471,7 +471,7 @@ export default function FinancialReportsPage() {
                 </div>
 
                 {/* Equity */}
-                <div className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+                <div className="p-5 rounded-md bg-white/[0.02] border border-white/[0.06] space-y-3">
                   <div className="text-xs font-semibold uppercase tracking-wider text-slate-300 pb-2 border-b border-white/[0.06] flex items-center justify-between">
                     <span>Equity (Class 3000)</span>
                     <span className="font-mono text-slate-200 text-sm font-bold">
@@ -480,7 +480,7 @@ export default function FinancialReportsPage() {
                   </div>
                   <div className="space-y-1">
                     {(bs?.equity || []).map((row) => (
-                      <div key={row.code} className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-lg transition-colors">
+                      <div key={row.code} className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-md transition-colors">
                         <span className="font-mono text-slate-300 flex items-center gap-2">
                           <span className="text-slate-500 text-[11px]">[{row.code}]</span>
                           <span className="text-slate-200">{row.name}</span>
@@ -494,7 +494,7 @@ export default function FinancialReportsPage() {
                 </div>
 
                 {/* Total Liabilities & Equity Check */}
-                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between text-xs font-semibold text-white">
+                <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/[0.08] flex items-center justify-between text-xs font-semibold text-white">
                   <span>Total Liabilities & Equity</span>
                   <span className="font-mono text-sm font-bold text-white">
                     ${(bs?.total_liabilities_and_equity ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -524,7 +524,7 @@ export default function FinancialReportsPage() {
             />
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
+          <div className="p-6 rounded-md bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
             <div className="border-b border-white/[0.06] pb-4">
               <h2 className="text-lg font-bold text-white tracking-tight print:text-black">
                 Statement of Cash Flows
@@ -546,19 +546,19 @@ export default function FinancialReportsPage() {
                 Operating Activities
               </div>
               <div className="space-y-1.5 pl-2">
-                <div className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-lg transition-colors">
+                <div className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-md transition-colors">
                   <span className="text-slate-300">Customer Receipts (Sales & Collections)</span>
                   <span className="font-mono font-semibold text-emerald-400">
                     +${(cf?.cash_from_customers ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-lg transition-colors">
+                <div className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-md transition-colors">
                   <span className="text-slate-300">Supplier Disbursements (Procurement & Payables)</span>
                   <span className="font-mono font-semibold text-rose-400">
                     -${(cf?.cash_paid_suppliers ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-lg transition-colors">
+                <div className="flex items-center justify-between text-xs py-1.5 px-2 hover:bg-white/[0.02] rounded-md transition-colors">
                   <span className="text-slate-300">Operating Expenses Paid (OPEX & Services)</span>
                   <span className="font-mono font-semibold text-rose-400">
                     -${(cf?.cash_paid_expenses ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -566,7 +566,7 @@ export default function FinancialReportsPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] text-xs font-semibold text-white bg-white/[0.02] px-3 rounded-lg">
+              <div className="flex items-center justify-between py-2.5 border-t border-white/[0.08] text-xs font-semibold text-white bg-white/[0.02] px-3 rounded-md">
                 <span>Net Operating Cash Flow</span>
                 <span
                   className={`font-mono text-sm font-bold ${
@@ -577,7 +577,7 @@ export default function FinancialReportsPage() {
                 </span>
               </div>
 
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between mt-4">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/[0.08] flex items-center justify-between mt-4">
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-slate-200">
                     Closing Cash & Bank Balance
@@ -599,7 +599,7 @@ export default function FinancialReportsPage() {
       {/* 4. CERTIFIED TRIAL BALANCE                                */}
       {/* ========================================================= */}
       {activeTab === "trial_balance" && (
-        <div className="p-6 rounded-2xl bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
+        <div className="p-6 rounded-md bg-[#0d1017] border border-white/[0.06] space-y-6 shadow-sm print:border-none print:p-0 print:bg-white">
           <div className="border-b border-white/[0.06] pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-white tracking-tight print:text-black">
@@ -611,12 +611,12 @@ export default function FinancialReportsPage() {
             </div>
             <div>
               {tb?.is_balanced ? (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-medium">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-medium">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Debits = Credits (Balanced)</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 font-mono text-xs font-medium">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 font-mono text-xs font-medium">
                   <AlertCircle className="w-4 h-4" />
                   <span>Variance Detected</span>
                 </div>

@@ -250,7 +250,7 @@ export default function AdminBrandsPage() {
         <button
           type="button"
           onClick={handleOpenCreate}
-          className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-lg shadow-cyan-500/20 active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"
+          className="px-4 py-2.5 rounded-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-lg shadow-cyan-500/20 active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Create Brand</span>

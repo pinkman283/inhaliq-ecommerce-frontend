@@ -69,7 +69,7 @@ export default function RedemptionsHistoryPage() {
           <button
             onClick={() => fetchRedemptions()}
             disabled={loading}
-            className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+            className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
             title="Refresh"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
@@ -78,7 +78,7 @@ export default function RedemptionsHistoryPage() {
       />
 
       {/* Filter strip */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
@@ -86,7 +86,7 @@ export default function RedemptionsHistoryPage() {
             placeholder="Search by order #, customer email, or promo code..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+            className="w-full pl-9 pr-4 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
           />
         </div>
         <span className="text-xs text-slate-400 font-mono">
@@ -112,7 +112,7 @@ export default function RedemptionsHistoryPage() {
             {loading ? (
               <tr>
                 <td colSpan={7} className="p-12 text-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                  <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   Loading redemption records...
                 </td>
               </tr>
@@ -156,7 +156,7 @@ export default function RedemptionsHistoryPage() {
 
                   <td className="p-4 whitespace-nowrap">
                     {r.code_used ? (
-                      <span className="font-mono font-bold text-amber-300 text-xs bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
+                      <span className="font-mono font-semibold text-[#A78BFA] text-xs bg-[#211B32] border border-[#A78BFA]/30 px-2.5 py-1 rounded">
                         {r.code_used}
                       </span>
                     ) : (

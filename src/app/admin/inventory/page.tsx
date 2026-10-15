@@ -297,7 +297,7 @@ export default function AdminInventoryPage() {
       />
 
       {/* Controls Bar */}
-      <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-col lg:flex-row items-center justify-between gap-3">
+      <div className="p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08] flex flex-col lg:flex-row items-center justify-between gap-3">
         <form onSubmit={handleSearch} className="relative w-full lg:w-72">
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -305,7 +305,7 @@ export default function AdminInventoryPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search SKU or product title..."
-            className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 transition"
+            className="w-full bg-[#161a26] border border-white/[0.08] rounded-md pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition"
           />
         </form>
 
@@ -346,7 +346,7 @@ export default function AdminInventoryPage() {
           <button
             type="button"
             onClick={handleResetFilters}
-            className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/[0.08] text-xs font-medium flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/[0.08] text-xs font-medium flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
             title="Reset all filters and search"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -415,7 +415,7 @@ export default function AdminInventoryPage() {
                     key={p.id}
                     className={`transition-colors ${
                       isSelected
-                        ? "bg-amber-500/10 border-l-2 border-amber-500"
+                        ? "bg-[#211B32] border-l-2 border-[#A78BFA]"
                         : "hover:bg-white/[0.02]"
                     }`}
                   >
@@ -432,10 +432,10 @@ export default function AdminInventoryPage() {
                           <img
                             src={img}
                             alt={p.name}
-                            className="w-8 h-8 rounded-lg object-cover bg-slate-900 border border-white/10 shrink-0"
+                            className="w-8 h-8 rounded-md object-cover bg-slate-900 border border-white/10 shrink-0"
                           />
                         ) : (
-                          <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-md bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                             <Package className="w-4 h-4 text-slate-500" />
                           </div>
                         )}
@@ -469,7 +469,7 @@ export default function AdminInventoryPage() {
                       </div>
                     </td>
                     <td className="p-3 text-left whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider ${
                         p.stock_quantity > 10
                           ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                           : p.stock_quantity > 0
@@ -485,21 +485,21 @@ export default function AdminInventoryPage() {
                       <div className="flex items-center justify-center gap-1.5 mx-auto">
                         <button
                           onClick={() => setViewingProduct(p)}
-                          className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition cursor-pointer"
+                          className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition cursor-pointer"
                           title="View Stock Details"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleOpenAdjust(p)}
-                          className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition cursor-pointer"
+                          className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition cursor-pointer"
                           title="Adjust Units"
                         >
                           <ArrowUpDown className="w-3.5 h-3.5" />
                         </button>
                         <Link
                           href={`/admin/audit-logs?search=${p.sku}`}
-                          className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition cursor-pointer"
+                          className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition cursor-pointer"
                           title="View SKU Audit Logs"
                         >
                           <ScrollText className="w-3.5 h-3.5" />
@@ -515,12 +515,12 @@ export default function AdminInventoryPage() {
       </ScrollableTableCard>
 
       {/* Pagination Bar */}
-      <div className="bg-[#0e121e] p-4 sm:p-5 rounded-2xl border border-white/10 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="text-xs text-slate-400 flex items-center gap-2">
           <span>
             Showing <strong className="text-white font-mono">{fromRecord || 0}</strong> to{" "}
             <strong className="text-white font-mono">{toRecord || 0}</strong> of{" "}
-            <strong className="text-amber-400 font-mono">{totalRecords.toLocaleString()}</strong> catalog items
+            <strong className="text-[#A78BFA] font-mono">{totalRecords.toLocaleString()}</strong> catalog items
           </span>
         </div>
 
@@ -534,7 +534,7 @@ export default function AdminInventoryPage() {
                 setPerPage(Number(e.target.value));
                 setPage(1);
               }}
-              className="bg-[#151824] border border-white/10 text-white rounded-xl px-2.5 py-1 text-xs focus:outline-none focus:border-amber-400 cursor-pointer"
+              className="bg-[#151824] border border-white/10 text-white rounded-md px-2.5 py-1 text-xs focus:outline-none focus:border-[#A78BFA]/50 cursor-pointer"
             >
               <option value={10}>10</option>
               <option value={20}>20</option>
@@ -548,7 +548,7 @@ export default function AdminInventoryPage() {
             <button
               onClick={() => setPage(1)}
               disabled={page <= 1 || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="First Page"
             >
               <ChevronsLeft className="w-4 h-4" />
@@ -556,20 +556,20 @@ export default function AdminInventoryPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1 || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="Previous Page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="px-3 py-1 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-300 font-mono font-bold text-xs">
+            <span className="px-3 py-1 rounded-md bg-[#211B32] border border-[#A78BFA]/30 text-[#A78BFA] font-mono font-bold text-xs">
               Page {page} of {totalPages || 1}
             </span>
 
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="Next Page"
             >
               <ChevronRight className="w-4 h-4" />
@@ -577,7 +577,7 @@ export default function AdminInventoryPage() {
             <button
               onClick={() => setPage(totalPages)}
               disabled={page >= totalPages || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="Last Page"
             >
               <ChevronsRight className="w-4 h-4" />
@@ -622,7 +622,7 @@ export default function AdminInventoryPage() {
               {/* Body */}
               <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4 text-xs">
                 {/* Stock Telemetry Summary */}
-                <div className="p-3.5 rounded-lg bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Current In-Stock
@@ -649,7 +649,7 @@ export default function AdminInventoryPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       SKU Identifier
                     </span>
@@ -657,7 +657,7 @@ export default function AdminInventoryPage() {
                       {viewingProduct.sku || "—"}
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Listing Price
                     </span>
@@ -668,7 +668,7 @@ export default function AdminInventoryPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Category
                     </span>
@@ -676,7 +676,7 @@ export default function AdminInventoryPage() {
                       {viewingProduct.category?.name || "Uncategorized"}
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Catalog Status
                     </span>
@@ -687,7 +687,7 @@ export default function AdminInventoryPage() {
                 </div>
 
                 {viewingProduct.description && (
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Product Summary
                     </span>
@@ -714,7 +714,7 @@ export default function AdminInventoryPage() {
                     setViewingProduct(null);
                     handleOpenAdjust(prod);
                   }}
-                  className="h-8 px-4 rounded-lg bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs flex items-center gap-1.5 transition cursor-pointer shadow-sm"
+                  className="h-8 px-4 rounded-md bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs flex items-center gap-1.5 transition cursor-pointer shadow-sm"
                 >
                   <ArrowUpDown className="w-3.5 h-3.5" />
                   <span>Adjust Stock</span>
@@ -761,7 +761,7 @@ export default function AdminInventoryPage() {
               {/* Body: Clean un-boxed canvas */}
               <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5 text-xs">
                 {/* Stock Level Telemetry Banner */}
-                <div className="p-3.5 rounded-lg bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider block">
                       Current In Stock
@@ -797,7 +797,7 @@ export default function AdminInventoryPage() {
                 </div>
 
                 {/* Minimal Segmented Mode Switcher */}
-                <div className="grid grid-cols-2 gap-1 bg-white/[0.03] p-1 rounded-lg border border-white/[0.06]">
+                <div className="grid grid-cols-2 gap-1 bg-white/[0.03] p-1 rounded-md border border-white/[0.06]">
                   <button
                     type="button"
                     onClick={() => setAdjustMode("add")}
@@ -834,7 +834,7 @@ export default function AdminInventoryPage() {
                     <select
                       value={selectedVariantId ?? ""}
                       onChange={(e) => setSelectedVariantId(e.target.value ? Number(e.target.value) : null)}
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-white/20 focus:outline-none transition cursor-pointer"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-white/20 focus:outline-none transition cursor-pointer"
                     >
                       {adjustingProduct.variants.map((v) => (
                         <option key={v.id} value={v.id}>
@@ -860,7 +860,7 @@ export default function AdminInventoryPage() {
                         value={unitCostInput}
                         onChange={(e) => setUnitCostInput(e.target.value)}
                         placeholder="e.g. 45.00 (leave blank to use default cost price)"
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
                       />
                     </div>
 
@@ -882,7 +882,7 @@ export default function AdminInventoryPage() {
                         value={addQty}
                         onChange={(e) => setAddQty(e.target.value)}
                         placeholder="e.g. 10"
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
                       />
                     </div>
 
@@ -920,7 +920,7 @@ export default function AdminInventoryPage() {
                         value={addReason}
                         onChange={(e) => setAddReason(e.target.value)}
                         placeholder="e.g. Supplier Restock Batch"
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                       />
                       <div className="flex flex-wrap gap-1 pt-1">
                         {["Supplier Restock", "Warehouse Recount", "Customer Return"].map((r) => (
@@ -957,12 +957,12 @@ export default function AdminInventoryPage() {
                         value={reduceQty}
                         onChange={(e) => setReduceQty(e.target.value)}
                         placeholder={`e.g. 5 (max ${currentStock})`}
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
                       />
                     </div>
 
                     {isOverReducing && (
-                      <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center gap-2 text-rose-300 text-xs">
+                      <div className="p-2.5 rounded-md bg-rose-500/10 border border-rose-500/20 flex items-center gap-2 text-rose-300 text-xs">
                         <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                         <span>Cannot reduce more than current stock ({currentStock} units).</span>
                       </div>
@@ -1011,7 +1011,7 @@ export default function AdminInventoryPage() {
                         value={reduceReason}
                         onChange={(e) => setReduceReason(e.target.value)}
                         placeholder="e.g. Damaged in Warehouse / Write-off"
-                        className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                        className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                       />
                       <div className="flex flex-wrap gap-1 pt-1">
                         {["Damaged / Defective", "Inventory Discrepancy", "QA Testing", "Write-off"].map((r) => (
@@ -1042,7 +1042,7 @@ export default function AdminInventoryPage() {
                 <button
                   type="submit"
                   disabled={saving || isOverReducing || (adjustMode === "add" ? parsedAdd <= 0 : parsedReduce <= 0)}
-                  className={`h-8 px-4 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
+                  className={`h-8 px-4 rounded-md text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
                     adjustMode === "add"
                       ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950"
                       : "bg-rose-500 hover:bg-rose-400 text-white"

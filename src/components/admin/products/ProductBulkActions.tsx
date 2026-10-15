@@ -122,13 +122,13 @@ export function ProductBulkActions({
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
             className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-4xl w-[calc(100%-2rem)] sm:w-auto"
           >
-            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-2.5 px-4 py-3 rounded-2xl bg-[#0d101a]/95 backdrop-blur-xl border border-amber-500/30 shadow-[0_12px_45px_rgba(0,0,0,0.85),0_0_25px_rgba(245,158,11,0.15)] text-xs text-white">
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-2.5 px-4 py-3 rounded-md bg-[#0d101a]/95 backdrop-blur-xl border border-[#A78BFA]/30 shadow-[0_12px_45px_rgba(0,0,0,0.85),0_0_25px_rgba(167,139,250,0.15)] text-xs text-white">
               {/* Badge & Count */}
               <div className="flex items-center gap-2 pr-2 border-r border-white/10 shrink-0">
-                <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/20 text-amber-300 font-black border border-amber-500/30 text-xs">
+                <span className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#211B32] text-[#A78BFA] font-black border border-[#A78BFA]/30 text-xs">
                   <CheckSquare className="w-3.5 h-3.5" />
                   <span>{selectedCount}</span>
-                  <span className="font-medium text-amber-200/80">
+                  <span className="font-medium text-slate-300">
                     {selectedCount === 1 ? "product" : "products"}
                   </span>
                 </span>
@@ -151,7 +151,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={() => setActiveModal("activate")}
                   disabled={isBusy}
-                  className="px-2.5 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-2.5 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   title="Activate selected products"
                 >
                   <CheckCircle className="w-3.5 h-3.5" />
@@ -163,7 +163,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={() => setActiveModal("deactivate")}
                   disabled={isBusy}
-                  className="px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-2.5 py-1.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   title="Deactivate selected products"
                 >
                   <EyeOff className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ export function ProductBulkActions({
                     setActiveModal("category");
                   }}
                   disabled={isBusy || categories.length === 0}
-                  className="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   title="Assign Category"
                 >
                   <FolderTree className="w-3.5 h-3.5 text-blue-400" />
@@ -193,7 +193,7 @@ export function ProductBulkActions({
                     setActiveModal("brand");
                   }}
                   disabled={isBusy || brands.length === 0}
-                  className="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   title="Assign Brand"
                 >
                   <Award className="w-3.5 h-3.5 text-purple-400" />
@@ -210,7 +210,7 @@ export function ProductBulkActions({
                     setActiveModal("price");
                   }}
                   disabled={isBusy}
-                  className="px-2.5 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-2.5 py-1.5 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   title="Adjust Prices"
                 >
                   <DollarSign className="w-3.5 h-3.5" />
@@ -222,7 +222,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={() => setActiveModal("delete")}
                   disabled={isBusy}
-                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg shadow-rose-600/30 active:scale-95 disabled:opacity-50 cursor-pointer ml-1"
+                  className="px-3 py-1.5 rounded-md bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg shadow-rose-600/30 active:scale-95 disabled:opacity-50 cursor-pointer ml-1"
                 >
                   {isDeleting ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -236,7 +236,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={onClearSelection}
-                  className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer ml-1"
+                  className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer ml-1"
                   title="Clear Selection"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -251,7 +251,7 @@ export function ProductBulkActions({
       <AnimatePresence>
         {activeModal === "activate" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-md bg-[#0c101d] border border-emerald-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+            <div className="w-full max-w-md bg-[#0c101d] border border-emerald-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
               <div className="flex items-center gap-2.5 text-emerald-400">
                 <CheckCircle className="w-5 h-5 shrink-0" />
                 <h3 className="text-sm font-semibold text-white">Activate {selectedCount} Product(s)?</h3>
@@ -263,7 +263,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={() => setActiveModal("none")}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -271,7 +271,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={() => handleExecuteStatus("activate")}
                   disabled={isBusy}
-                  className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Confirm Activation</span>
@@ -286,7 +286,7 @@ export function ProductBulkActions({
       <AnimatePresence>
         {activeModal === "deactivate" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-md bg-[#0c101d] border border-amber-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+            <div className="w-full max-w-md bg-[#0c101d] border border-amber-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
               <div className="flex items-center gap-2.5 text-amber-400">
                 <EyeOff className="w-5 h-5 shrink-0" />
                 <h3 className="text-sm font-semibold text-white">Deactivate {selectedCount} Product(s)?</h3>
@@ -298,7 +298,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={() => setActiveModal("none")}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -306,7 +306,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={() => handleExecuteStatus("deactivate")}
                   disabled={isBusy}
-                  className="px-4 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-md bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-950" />}
                   <span>Confirm Deactivation</span>
@@ -321,7 +321,7 @@ export function ProductBulkActions({
       <AnimatePresence>
         {activeModal === "category" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-md bg-[#0c101d] border border-blue-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+            <div className="w-full max-w-md bg-[#0c101d] border border-blue-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
               <div className="flex items-center gap-2.5 text-blue-400">
                 <FolderTree className="w-5 h-5 shrink-0" />
                 <h3 className="text-sm font-semibold text-white">Assign Category ({selectedCount} items)</h3>
@@ -336,7 +336,7 @@ export function ProductBulkActions({
                 <select
                   value={selectedCategoryId}
                   onChange={(e) => setSelectedCategoryId(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -349,7 +349,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={() => setActiveModal("none")}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -357,7 +357,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={handleExecuteCategory}
                   disabled={isBusy || !selectedCategoryId}
-                  className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Assign Category</span>
@@ -372,7 +372,7 @@ export function ProductBulkActions({
       <AnimatePresence>
         {activeModal === "brand" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-md bg-[#0c101d] border border-purple-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+            <div className="w-full max-w-md bg-[#0c101d] border border-purple-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
               <div className="flex items-center gap-2.5 text-purple-400">
                 <Award className="w-5 h-5 shrink-0" />
                 <h3 className="text-sm font-semibold text-white">Assign Brand ({selectedCount} items)</h3>
@@ -387,7 +387,7 @@ export function ProductBulkActions({
                 <select
                   value={selectedBrandId}
                   onChange={(e) => setSelectedBrandId(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
                 >
                   {brands.map((b) => (
                     <option key={b.id} value={b.id}>
@@ -400,7 +400,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={() => setActiveModal("none")}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -408,7 +408,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={handleExecuteBrand}
                   disabled={isBusy || !selectedBrandId}
-                  className="px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Assign Brand</span>
@@ -423,13 +423,13 @@ export function ProductBulkActions({
       <AnimatePresence>
         {activeModal === "price" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-lg bg-[#0c101d] border border-cyan-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+            <div className="w-full max-w-lg bg-[#0c101d] border border-cyan-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
               <div className="flex items-center gap-2.5 text-cyan-400">
                 <DollarSign className="w-5 h-5 shrink-0" />
                 <h3 className="text-sm font-semibold text-white">Bulk Price Adjustment ({selectedCount} items)</h3>
               </div>
               
-              <div className="p-3 bg-cyan-950/30 border border-cyan-500/20 rounded-xl text-xs text-cyan-200/90 leading-relaxed">
+              <div className="p-3 bg-cyan-950/30 border border-cyan-500/20 rounded-md text-xs text-cyan-200/90 leading-relaxed">
                 Adjust retail pricing for all <span className="font-bold text-white">{selectedCount}</span> selected products. Negative prices are blocked automatically. Cost prices and variant price modifiers are preserved.
               </div>
 
@@ -438,11 +438,11 @@ export function ProductBulkActions({
                   <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
                     Adjustment Type
                   </label>
-                  <div className="grid grid-cols-2 gap-1.5 p-1 bg-white/5 rounded-xl border border-white/10">
+                  <div className="grid grid-cols-2 gap-1.5 p-1 bg-white/5 rounded-md border border-white/10">
                     <button
                       type="button"
                       onClick={() => setPriceAdjustmentType("percentage")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
                         priceAdjustmentType === "percentage"
                           ? "bg-cyan-500 text-slate-950 shadow-sm"
                           : "text-slate-400 hover:text-white"
@@ -454,7 +454,7 @@ export function ProductBulkActions({
                     <button
                       type="button"
                       onClick={() => setPriceAdjustmentType("fixed")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
                         priceAdjustmentType === "fixed"
                           ? "bg-cyan-500 text-slate-950 shadow-sm"
                           : "text-slate-400 hover:text-white"
@@ -476,7 +476,7 @@ export function ProductBulkActions({
                     value={priceValueInput}
                     onChange={(e) => setPriceValueInput(e.target.value)}
                     placeholder={priceAdjustmentType === "percentage" ? "e.g. 10 or -5" : "e.g. 5.00 or -2.50"}
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
               </div>
@@ -488,7 +488,7 @@ export function ProductBulkActions({
                 <select
                   value={priceRounding}
                   onChange={(e) => setPriceRounding(e.target.value as "none" | "round" | "ceil" | "floor" | "round_99")}
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
                 >
                   <option value="none">Standard 2 Decimals (e.g. $19.45)</option>
                   <option value="round">Nearest Whole Number (e.g. $19.00)</option>
@@ -498,7 +498,7 @@ export function ProductBulkActions({
                 </select>
               </div>
 
-              <div className="p-3 bg-white/[0.02] border border-white/[0.08] rounded-xl text-xs space-y-1">
+              <div className="p-3 bg-white/[0.02] border border-white/[0.08] rounded-md text-xs space-y-1">
                 <div className="text-slate-400 text-[11px] font-semibold uppercase tracking-wider">Effect Summary</div>
                 <div className="text-white font-medium">
                   {parseFloat(priceValueInput) >= 0 ? "+" : ""}
@@ -511,7 +511,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={() => setActiveModal("none")}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -519,7 +519,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={handleExecutePrice}
                   disabled={isBusy || isNaN(parseFloat(priceValueInput))}
-                  className="px-4 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-lg shadow-cyan-500/20"
+                  className="px-4 py-1.5 rounded-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-lg shadow-cyan-500/20"
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-950" />}
                   <span>Apply Price Adjustment</span>
@@ -534,7 +534,7 @@ export function ProductBulkActions({
       <AnimatePresence>
         {activeModal === "delete" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-md bg-[#0c101d] border border-rose-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+            <div className="w-full max-w-md bg-[#0c101d] border border-rose-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
               <div className="flex items-center gap-2.5 text-rose-400">
                 <AlertTriangle className="w-5 h-5 shrink-0" />
                 <h3 className="text-sm font-semibold text-white">Delete {selectedCount} Product(s)?</h3>
@@ -546,7 +546,7 @@ export function ProductBulkActions({
                 <button
                   type="button"
                   onClick={() => setActiveModal("none")}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -554,7 +554,7 @@ export function ProductBulkActions({
                   type="button"
                   onClick={handleDelete}
                   disabled={isBusy}
-                  className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                  className="px-4 py-1.5 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Confirm Delete</span>

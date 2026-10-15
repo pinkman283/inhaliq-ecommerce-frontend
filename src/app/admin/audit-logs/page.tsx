@@ -197,7 +197,7 @@ export default function AdminAuditLogsPage() {
     }
     if (typeof val === "boolean") {
       return (
-        <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+        <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
           val 
             ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" 
             : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
@@ -256,14 +256,14 @@ export default function AdminAuditLogsPage() {
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-3xl border border-white/10 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <ScrollText className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#A78BFA]">
                 Immutable Cryptographic Ledger
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -279,10 +279,10 @@ export default function AdminAuditLogsPage() {
           <button
             type="button"
             onClick={loadAuditLogs}
-            className="px-3.5 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-2 transition cursor-pointer shadow-md"
+            className="px-3.5 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-2 transition cursor-pointer shadow-md"
             title="Refresh Audit Trail"
           >
-            <RotateCcw className={`w-3.5 h-3.5 text-amber-400 ${loading ? "animate-spin" : ""}`} />
+            <RotateCcw className={`w-3.5 h-3.5 text-[#A78BFA] ${loading ? "animate-spin" : ""}`} />
             <span>Refresh</span>
           </button>
         </div>
@@ -291,12 +291,12 @@ export default function AdminAuditLogsPage() {
       {/* KPI Ribbon */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Logs */}
-        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-3xl border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
+        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
             <span>Total Events</span>
-            <Activity className="w-4 h-4 text-amber-400" />
+            <Activity className="w-4 h-4 text-[#A78BFA]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">
+          <div className="text-2xl sm:text-3xl font-black text-[#A78BFA] font-mono">
             {stats.total_logs.toLocaleString()}
           </div>
           <div className="text-[11px] text-slate-500">
@@ -305,7 +305,7 @@ export default function AdminAuditLogsPage() {
         </div>
 
         {/* Logs Today */}
-        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-3xl border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
+        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
             <span>Activity Today</span>
             <Clock className="w-4 h-4 text-emerald-400" />
@@ -319,7 +319,7 @@ export default function AdminAuditLogsPage() {
         </div>
 
         {/* Security & Auth */}
-        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-3xl border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
+        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
             <span>Security & Auth</span>
             <ShieldCheck className="w-4 h-4 text-indigo-400" />
@@ -333,7 +333,7 @@ export default function AdminAuditLogsPage() {
         </div>
 
         {/* Financial & Commercial Ops */}
-        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-3xl border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
+        <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl space-y-1 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
             <span>Commercial Ops</span>
             <BadgeDollarSign className="w-4 h-4 text-cyan-400" />
@@ -348,7 +348,7 @@ export default function AdminAuditLogsPage() {
       </div>
 
       {/* Comprehensive Filter Toolbar */}
-      <div className="bg-[#0e121e] p-4 sm:p-5 rounded-3xl border border-white/10 shadow-xl space-y-4">
+      <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           
           {/* Search Input */}
@@ -359,7 +359,7 @@ export default function AdminAuditLogsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search action, user, entity, description..."
-              className="w-full bg-[#151824] border border-white/10 focus:border-amber-400 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition shadow-inner"
+              className="w-full bg-[#151824] border border-white/10 focus:border-[#A78BFA]/50 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition shadow-inner"
             />
           </form>
 
@@ -375,23 +375,23 @@ export default function AdminAuditLogsPage() {
                   setOpenEntityDropdown(false);
                   setOpenRoleDropdown(false);
                 }}
-                className="bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl px-3.5 py-2 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
+                className="bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-md px-3.5 py-2 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
               >
                 <div className="flex items-center gap-1.5 truncate max-w-[160px]">
-                  <Layers className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <Layers className="w-3.5 h-3.5 text-[#A78BFA] shrink-0" />
                   <span className="truncate">
                     {moduleFilter === "all"
                       ? "All System Modules"
                       : facets.modules.find(m => m.id === moduleFilter)?.label || moduleFilter}
                   </span>
                 </div>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openModuleDropdown ? "rotate-180 text-amber-400" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openModuleDropdown ? "rotate-180 text-[#A78BFA]" : ""}`} />
               </button>
 
               {openModuleDropdown && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setOpenModuleDropdown(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-64 rounded-2xl bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95 max-h-64 overflow-y-auto">
+                  <div className="absolute right-0 top-full mt-2 w-64 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95 max-h-64 overflow-y-auto">
                     {facets.modules.map(mod => (
                       <button
                         key={mod.id}
@@ -401,14 +401,14 @@ export default function AdminAuditLogsPage() {
                           setPage(1);
                           setOpenModuleDropdown(false);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                        className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                           moduleFilter === mod.id
-                            ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                            ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                             : "text-slate-300 hover:bg-white/10 hover:text-white"
                         }`}
                       >
                         <span className="truncate">{mod.label}</span>
-                        {moduleFilter === mod.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />}
+                        {moduleFilter === mod.id && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA] shrink-0" />}
                       </button>
                     ))}
                   </div>
@@ -425,7 +425,7 @@ export default function AdminAuditLogsPage() {
                   setOpenModuleDropdown(false);
                   setOpenRoleDropdown(false);
                 }}
-                className="bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl px-3.5 py-2 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
+                className="bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-md px-3.5 py-2 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
               >
                 <div className="flex items-center gap-1.5 truncate max-w-[150px]">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
@@ -433,13 +433,13 @@ export default function AdminAuditLogsPage() {
                     {entityFilter === "all" ? "All Entity Types" : entityFilter}
                   </span>
                 </div>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openEntityDropdown ? "rotate-180 text-amber-400" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openEntityDropdown ? "rotate-180 text-[#A78BFA]" : ""}`} />
               </button>
 
               {openEntityDropdown && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setOpenEntityDropdown(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95 max-h-60 overflow-y-auto">
+                  <div className="absolute right-0 top-full mt-2 w-56 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95 max-h-60 overflow-y-auto">
                     <button
                       type="button"
                       onClick={() => {
@@ -447,14 +447,14 @@ export default function AdminAuditLogsPage() {
                         setPage(1);
                         setOpenEntityDropdown(false);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                      className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                         entityFilter === "all"
-                          ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                          ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                           : "text-slate-300 hover:bg-white/10 hover:text-white"
                       }`}
                     >
                       <span>All Entity Types</span>
-                      {entityFilter === "all" && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                      {entityFilter === "all" && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                     </button>
                     {facets.entity_types.map(ent => (
                       <button
@@ -465,14 +465,14 @@ export default function AdminAuditLogsPage() {
                           setPage(1);
                           setOpenEntityDropdown(false);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                        className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                           entityFilter === ent
-                            ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                            ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                             : "text-slate-300 hover:bg-white/10 hover:text-white"
                         }`}
                       >
                         <span>{ent}</span>
-                        {entityFilter === ent && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                        {entityFilter === ent && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                       </button>
                     ))}
                   </div>
@@ -489,7 +489,7 @@ export default function AdminAuditLogsPage() {
                   setOpenModuleDropdown(false);
                   setOpenEntityDropdown(false);
                 }}
-                className="bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl px-3.5 py-2 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
+                className="bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-md px-3.5 py-2 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
               >
                 <div className="flex items-center gap-1.5 truncate max-w-[140px]">
                   <UserCheck className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
@@ -501,13 +501,13 @@ export default function AdminAuditLogsPage() {
                     {roleFilter === "system" && "System Bot"}
                   </span>
                 </div>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openRoleDropdown ? "rotate-180 text-amber-400" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openRoleDropdown ? "rotate-180 text-[#A78BFA]" : ""}`} />
               </button>
 
               {openRoleDropdown && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setOpenRoleDropdown(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95">
+                  <div className="absolute right-0 top-full mt-2 w-48 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95">
                     {[
                       { id: "all", label: "All Roles" },
                       { id: "super_admin", label: "Super Admin" },
@@ -523,14 +523,14 @@ export default function AdminAuditLogsPage() {
                           setPage(1);
                           setOpenRoleDropdown(false);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                        className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                           roleFilter === r.id
-                            ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                            ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                             : "text-slate-300 hover:bg-white/10 hover:text-white"
                         }`}
                       >
                         <span>{r.label}</span>
-                        {roleFilter === r.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                        {roleFilter === r.id && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                       </button>
                     ))}
                   </div>
@@ -539,7 +539,7 @@ export default function AdminAuditLogsPage() {
             </div>
 
             {/* Date Range Pickers */}
-            <div className="flex items-center gap-1.5 bg-[#151824] px-3 py-1.5 rounded-2xl border border-white/10 text-xs">
+            <div className="flex items-center gap-1.5 bg-[#151824] px-3 py-1.5 rounded-md border border-white/10 text-xs">
               <span className="text-[10px] text-slate-500 font-bold uppercase">From</span>
               <input
                 type="date"
@@ -561,7 +561,7 @@ export default function AdminAuditLogsPage() {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0"
+              className="px-3 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0"
               title="Reset All Filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -597,7 +597,7 @@ export default function AdminAuditLogsPage() {
               <tr>
                 <td colSpan={7} className="p-10 text-center text-slate-500">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <RotateCcw className="w-5 h-5 text-amber-400 animate-spin" />
+                    <RotateCcw className="w-5 h-5 text-[#A78BFA] animate-spin" />
                     <span>Querying cryptographic audit records...</span>
                   </div>
                 </td>
@@ -616,7 +616,7 @@ export default function AdminAuditLogsPage() {
                     key={log.id}
                     className={`transition-colors font-mono text-[11px] ${
                       isSelected
-                        ? "bg-amber-500/10 border-l-2 border-amber-500"
+                        ? "bg-[#211B32] border-l-2 border-[#A78BFA]"
                         : "hover:bg-white/[0.02]"
                     }`}
                   >
@@ -633,7 +633,7 @@ export default function AdminAuditLogsPage() {
                           <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           {formatDate(log.created_at)}
                         </span>
-                        <span className="text-[10px] text-amber-400 font-mono flex items-center gap-1 mt-0.5 font-semibold">
+                        <span className="text-[10px] text-[#A78BFA] font-mono flex items-center gap-1 mt-0.5 font-semibold">
                           <Clock className="w-3 h-3 text-amber-400 shrink-0" />
                           {formatTime(log.created_at)}
                         </span>
@@ -641,7 +641,7 @@ export default function AdminAuditLogsPage() {
                     </td>
                     <td className="p-3.5 font-sans font-bold text-white whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-[10px] font-black text-amber-400 shrink-0">
+                        <div className="w-7 h-7 rounded-md bg-slate-900 border border-white/10 flex items-center justify-center text-[10px] font-black text-[#A78BFA] shrink-0">
                           {log.user_name ? log.user_name.slice(0, 2).toUpperCase() : "SY"}
                         </div>
                         <div className="flex flex-col">
@@ -653,7 +653,7 @@ export default function AdminAuditLogsPage() {
                       </div>
                     </td>
                     <td className="p-3.5 whitespace-nowrap">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${getActionColor(log.action)}`}>
+                      <span className={`px-2.5 py-1 rounded text-[10px] font-bold border ${getActionColor(log.action)}`}>
                         {log.action}
                       </span>
                     </td>
@@ -674,7 +674,7 @@ export default function AdminAuditLogsPage() {
                             setSelectedLog(log);
                             setShowRawJson(false);
                           }}
-                          className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm mx-auto cursor-pointer"
+                          className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm mx-auto cursor-pointer"
                           title="View Change Diff Details"
                         >
                           <Eye className="w-3.5 h-3.5" />
@@ -692,10 +692,10 @@ export default function AdminAuditLogsPage() {
       </ScrollableTableCard>
 
       {/* Pagination Bar */}
-      <div className="bg-[#0e121e] p-4 sm:p-5 rounded-3xl border border-white/10 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#0e121e] p-4 sm:p-5 rounded-md border border-white/10 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="text-xs text-slate-400 flex items-center gap-2">
           <span>
-            Showing <strong className="text-white font-mono">{fromRecord || 0}</strong> to <strong className="text-white font-mono">{toRecord || 0}</strong> of <strong className="text-amber-400 font-mono">{totalRecords.toLocaleString()}</strong> audit records
+            Showing <strong className="text-white font-mono">{fromRecord || 0}</strong> to <strong className="text-white font-mono">{toRecord || 0}</strong> of <strong className="text-[#A78BFA] font-mono">{totalRecords.toLocaleString()}</strong> audit records
           </span>
         </div>
 
@@ -709,7 +709,7 @@ export default function AdminAuditLogsPage() {
                 setPerPage(Number(e.target.value));
                 setPage(1);
               }}
-              className="bg-[#151824] border border-white/10 text-white rounded-xl px-2.5 py-1 text-xs focus:outline-none focus:border-amber-400 cursor-pointer"
+              className="bg-[#151824] border border-white/10 text-white rounded-md px-2.5 py-1 text-xs focus:outline-none focus:border-[#A78BFA]/50 cursor-pointer"
             >
               <option value={10}>10</option>
               <option value={20}>20</option>
@@ -723,7 +723,7 @@ export default function AdminAuditLogsPage() {
             <button
               onClick={() => setPage(1)}
               disabled={page <= 1 || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="First Page"
             >
               <ChevronsLeft className="w-4 h-4" />
@@ -731,20 +731,20 @@ export default function AdminAuditLogsPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1 || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="Previous Page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="px-3 py-1 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-300 font-mono font-bold text-xs">
+            <span className="px-3 py-1 rounded-md bg-[#211B32] border border-[#A78BFA]/30 text-[#A78BFA] font-mono font-bold text-xs">
               Page {page} of {totalPages || 1}
             </span>
 
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="Next Page"
             >
               <ChevronRight className="w-4 h-4" />
@@ -752,7 +752,7 @@ export default function AdminAuditLogsPage() {
             <button
               onClick={() => setPage(totalPages)}
               disabled={page >= totalPages || loading}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
+              className="w-8 h-8 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 flex items-center justify-center transition cursor-pointer border border-white/5"
               title="Last Page"
             >
               <ChevronsRight className="w-4 h-4" />
@@ -766,11 +766,11 @@ export default function AdminAuditLogsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div onClick={() => setSelectedLog(null)} className="fixed inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in" />
 
-          <div className="relative w-full max-w-2xl rounded-3xl bg-[#0c0e15] border border-white/15 shadow-2xl p-6 sm:p-8 z-10 space-y-5 text-xs max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95">
+          <div className="relative w-full max-w-2xl rounded-lg bg-[#0c0e15] border border-white/15 shadow-2xl p-6 sm:p-8 z-10 space-y-5 text-xs max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95">
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#A78BFA] block">
                   Action Inspection & Audit Diff
                 </span>
                 <h3 className="text-base font-black text-white font-mono">{selectedLog.action}</h3>
@@ -782,15 +782,15 @@ export default function AdminAuditLogsPage() {
 
             {/* Telemetry Metadata Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                 <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-amber-400" /> Timestamp
+                  <Clock className="w-3 h-3 text-[#A78BFA]" /> Timestamp
                 </span>
-                <span className="text-xs font-mono font-bold text-amber-300 block">
+                <span className="text-xs font-mono font-bold text-[#A78BFA] block">
                   {formatDateTime(selectedLog.created_at)}
                 </span>
               </div>
-              <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                 <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-cyan-400" /> Executor
                 </span>
@@ -798,7 +798,7 @@ export default function AdminAuditLogsPage() {
                   {selectedLog.user_name || "System"} <span className="text-[10px] text-slate-400 font-mono">({selectedLog.user_role || "system"})</span>
                 </span>
               </div>
-              <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                 <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
                   <Globe className="w-3 h-3 text-purple-400" /> Entity & Source
                 </span>
@@ -809,7 +809,7 @@ export default function AdminAuditLogsPage() {
             </div>
 
             {/* Description Card */}
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-1">
+            <div className="p-4 rounded-md bg-white/[0.02] border border-white/10 space-y-1">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Operation Summary
               </span>
@@ -825,7 +825,7 @@ export default function AdminAuditLogsPage() {
                 <button
                   type="button"
                   onClick={() => setShowRawJson(!showRawJson)}
-                  className="text-[10px] text-slate-400 hover:text-amber-400 flex items-center gap-1 transition-colors cursor-pointer"
+                  className="text-[10px] text-slate-400 hover:text-[#A78BFA] flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Code2 className="w-3.5 h-3.5" />
                   {showRawJson ? "Show Formatted Cards" : "View Raw JSON Payload"}
@@ -835,7 +835,7 @@ export default function AdminAuditLogsPage() {
               {!showRawJson ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* ORIGINAL STATE (OLD) */}
-                  <div className="p-4 rounded-2xl bg-[#0e121e] border border-rose-500/20 space-y-3">
+                  <div className="p-4 rounded-md bg-[#0e121e] border border-rose-500/20 space-y-3">
                     <div className="flex items-center gap-2 pb-2 border-b border-white/5">
                       <MinusCircle className="w-4 h-4 text-rose-400" />
                       <span className="text-[11px] font-black uppercase tracking-wider text-rose-400">
@@ -844,7 +844,7 @@ export default function AdminAuditLogsPage() {
                     </div>
 
                     {!selectedLog.old_values || Object.keys(selectedLog.old_values).length === 0 ? (
-                      <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 text-center text-slate-500 italic text-[11px]">
+                      <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 text-center text-slate-500 italic text-[11px]">
                         No prior state (New Entity Created)
                       </div>
                     ) : (
@@ -852,7 +852,7 @@ export default function AdminAuditLogsPage() {
                         {Object.entries(selectedLog.old_values).map(([k, v]) => (
                           <div
                             key={k}
-                            className="p-2.5 rounded-xl bg-rose-500/5 border border-rose-500/20 flex flex-col gap-1"
+                            className="p-2.5 rounded-md bg-rose-500/5 border border-rose-500/20 flex flex-col gap-1"
                           >
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                               {formatKeyName(k)}
@@ -865,7 +865,7 @@ export default function AdminAuditLogsPage() {
                   </div>
 
                   {/* MUTATED STATE (NEW) */}
-                  <div className="p-4 rounded-2xl bg-[#0e121e] border border-emerald-500/20 space-y-3">
+                  <div className="p-4 rounded-md bg-[#0e121e] border border-emerald-500/20 space-y-3">
                     <div className="flex items-center gap-2 pb-2 border-b border-white/5">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                       <span className="text-[11px] font-black uppercase tracking-wider text-emerald-400">
@@ -874,7 +874,7 @@ export default function AdminAuditLogsPage() {
                     </div>
 
                     {!selectedLog.new_values || Object.keys(selectedLog.new_values).length === 0 ? (
-                      <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 text-center text-slate-500 italic text-[11px]">
+                      <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 text-center text-slate-500 italic text-[11px]">
                         Entity Deleted / Depleted
                       </div>
                     ) : (
@@ -882,7 +882,7 @@ export default function AdminAuditLogsPage() {
                         {Object.entries(selectedLog.new_values).map(([k, v]) => (
                           <div
                             key={k}
-                            className="p-2.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex flex-col gap-1"
+                            className="p-2.5 rounded-md bg-emerald-500/5 border border-emerald-500/20 flex flex-col gap-1"
                           >
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                               {formatKeyName(k)}
@@ -897,20 +897,20 @@ export default function AdminAuditLogsPage() {
               ) : (
                 /* Raw JSON toggle for technical inspection */
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                  <div className="p-4 rounded-md bg-black/40 border border-white/10 space-y-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400 block">
                       Original State JSON
                     </span>
-                    <pre className="font-mono text-[10px] text-slate-300 overflow-x-auto p-3 bg-black/60 rounded-xl max-h-56">
+                    <pre className="font-mono text-[10px] text-slate-300 overflow-x-auto p-3 bg-black/60 rounded-md max-h-56">
                       {selectedLog.old_values ? JSON.stringify(selectedLog.old_values, null, 2) : "null"}
                     </pre>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                  <div className="p-4 rounded-md bg-black/40 border border-white/10 space-y-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block">
                       Mutated State JSON
                     </span>
-                    <pre className="font-mono text-[10px] text-slate-300 overflow-x-auto p-3 bg-black/60 rounded-xl max-h-56">
+                    <pre className="font-mono text-[10px] text-slate-300 overflow-x-auto p-3 bg-black/60 rounded-md max-h-56">
                       {selectedLog.new_values ? JSON.stringify(selectedLog.new_values, null, 2) : "null"}
                     </pre>
                   </div>
@@ -923,7 +923,7 @@ export default function AdminAuditLogsPage() {
               <button
                 type="button"
                 onClick={() => setSelectedLog(null)}
-                className="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black uppercase tracking-wide text-xs transition-all shadow-md cursor-pointer"
+                className="px-5 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-black uppercase tracking-wide text-xs transition-all shadow-md cursor-pointer"
               >
                 Close Inspector
               </button>

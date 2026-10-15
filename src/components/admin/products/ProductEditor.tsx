@@ -398,7 +398,7 @@ function ProductEditorInner({
         {/* Header */}
         <div className="h-14 px-6 border-b border-white/[0.08] bg-[#0c101d] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5 min-w-0 pr-3">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+            <div className="w-8 h-8 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shrink-0">
               <Package className="w-4 h-4" />
             </div>
             <div className="min-w-0">
@@ -423,7 +423,7 @@ function ProductEditorInner({
           <button
             type="button"
             onClick={handleClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer shrink-0"
+            className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer shrink-0"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -442,21 +442,21 @@ function ProductEditorInner({
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-3.5 py-3 text-xs font-medium border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                   isActive
-                    ? "border-amber-400 text-white font-semibold"
+                    ? "border-[#A78BFA] text-white font-semibold"
                     : "border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20"
                 }`}
               >
                 <Icon
                   className={`w-3.5 h-3.5 ${
-                    isActive ? "text-amber-400" : "text-slate-400"
+                    isActive ? "text-[#A78BFA]" : "text-slate-400"
                   }`}
                 />
                 <span>{tab.label}</span>
                 {tab.badge !== undefined && (
                   <span
-                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
                       isActive
-                        ? "bg-amber-400/20 text-amber-300 border border-amber-400/30"
+                        ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                         : "bg-white/5 text-slate-400"
                     }`}
                   >
@@ -526,7 +526,7 @@ function ProductEditorInner({
           <button
             type="button"
             onClick={handleClose}
-            className="text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer px-3 py-1.5 rounded-lg hover:bg-white/5"
+            className="text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer px-3 py-1.5 rounded-md hover:bg-white/5"
           >
             Cancel
           </button>
@@ -535,7 +535,7 @@ function ProductEditorInner({
             <button
               type="submit"
               disabled={saving}
-              className="h-9 px-5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition cursor-pointer disabled:opacity-50 flex items-center gap-2 shadow-sm"
+              className="h-9 px-5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition cursor-pointer disabled:opacity-50 flex items-center gap-2 shadow-sm"
             >
               {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>{saving ? "Saving..." : editingProduct ? "Save Changes" : "Create Product"}</span>
@@ -547,13 +547,13 @@ function ProductEditorInner({
       {/* QUICK CATEGORY MODAL */}
       {isQuickCategoryOpen && (
         <div className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0c101d] border border-white/10 rounded-2xl p-5 space-y-4 shadow-2xl">
+          <div className="w-full max-w-md bg-[#0c101d] border border-white/10 rounded-lg p-5 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <h3 className="text-sm font-semibold text-white">Create Category</h3>
               <button
                 type="button"
                 onClick={() => setIsQuickCategoryOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -569,7 +569,7 @@ function ProductEditorInner({
                   value={quickCategoryName}
                   onChange={(e) => setQuickCategoryName(e.target.value)}
                   placeholder="e.g. Ergonomics & Comfort"
-                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
                 />
               </div>
 
@@ -580,7 +580,7 @@ function ProductEditorInner({
                   value={quickCategoryDescription}
                   onChange={(e) => setQuickCategoryDescription(e.target.value)}
                   placeholder="Optional category description..."
-                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-none"
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-none"
                 />
               </div>
 
@@ -588,14 +588,14 @@ function ProductEditorInner({
                 <button
                   type="button"
                   onClick={() => setIsQuickCategoryOpen(false)}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={quickCategorySaving}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs transition cursor-pointer disabled:opacity-50"
                 >
                   {quickCategorySaving ? "Creating..." : "Create Category"}
                 </button>
@@ -608,13 +608,13 @@ function ProductEditorInner({
       {/* QUICK BRAND MODAL */}
       {isQuickBrandOpen && (
         <div className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0c101d] border border-white/10 rounded-2xl p-5 space-y-4 shadow-2xl">
+          <div className="w-full max-w-md bg-[#0c101d] border border-white/10 rounded-lg p-5 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <h3 className="text-sm font-semibold text-white">Create Brand</h3>
               <button
                 type="button"
                 onClick={() => setIsQuickBrandOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -630,7 +630,7 @@ function ProductEditorInner({
                   value={quickBrandName}
                   onChange={(e) => setQuickBrandName(e.target.value)}
                   placeholder="e.g. Apex Hardware"
-                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
                 />
               </div>
 
@@ -641,7 +641,7 @@ function ProductEditorInner({
                   value={quickBrandWebsite}
                   onChange={(e) => setQuickBrandWebsite(e.target.value)}
                   placeholder="https://..."
-                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
                 />
               </div>
 
@@ -652,7 +652,7 @@ function ProductEditorInner({
                   value={quickBrandDescription}
                   onChange={(e) => setQuickBrandDescription(e.target.value)}
                   placeholder="Optional brand description..."
-                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-none"
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-none"
                 />
               </div>
 
@@ -660,14 +660,14 @@ function ProductEditorInner({
                 <button
                   type="button"
                   onClick={() => setIsQuickBrandOpen(false)}
-                  className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={quickBrandSaving}
-                  className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs transition cursor-pointer disabled:opacity-50"
                 >
                   {quickBrandSaving ? "Creating..." : "Create Brand"}
                 </button>

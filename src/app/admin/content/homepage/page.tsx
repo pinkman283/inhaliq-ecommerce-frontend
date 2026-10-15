@@ -276,14 +276,14 @@ export default function AdminContentHomepagePage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A78BFA] bg-[#211B32] px-2.5 py-0.5 rounded border border-[#A78BFA]/30">
               Content / CMS
             </span>
             <span className="text-xs text-slate-500">·</span>
             <span className="text-xs text-slate-400 font-medium">Showcase & Product Sections</span>
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2.5">
-            <Layers className="w-6 h-6 text-amber-400" />
+            <Layers className="w-6 h-6 text-[#A78BFA]" />
             Homepage
           </h1>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
@@ -295,17 +295,17 @@ export default function AdminContentHomepagePage() {
           <Link
             href="/"
             target="_blank"
-            className="px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/10 hover:border-white/20 text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-1.5 shadow-sm"
+            className="px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/10 hover:border-white/20 text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-1.5 shadow-sm"
           >
             <span>View Storefront</span>
-            <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#A78BFA]" />
           </Link>
 
           {canManage && (
             <button
               type="button"
               onClick={handleCreate}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-lg shadow-amber-400/20 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-[#A78BFA]/20 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Add Showcase Section</span>
@@ -316,19 +316,19 @@ export default function AdminContentHomepagePage() {
 
       {/* 2. KPI Summary Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+        <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.06]">
           <span className="text-xs font-semibold text-slate-400">Total Sections</span>
           <p className="text-2xl font-black text-white mt-1">{sections.length}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20">
+        <div className="p-4 rounded-md bg-emerald-500/[0.04] border border-emerald-500/20">
           <span className="text-xs font-semibold text-emerald-400">Active on Storefront</span>
           <p className="text-2xl font-black text-emerald-300 mt-1">{activeCount}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-blue-500/[0.04] border border-blue-500/20">
+        <div className="p-4 rounded-md bg-blue-500/[0.04] border border-blue-500/20">
           <span className="text-xs font-semibold text-blue-400">Multi-Tab Showcases</span>
           <p className="text-2xl font-black text-blue-300 mt-1">{tabbedCount}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-purple-500/[0.04] border border-purple-500/20">
+        <div className="p-4 rounded-md bg-purple-500/[0.04] border border-purple-500/20">
           <span className="text-xs font-semibold text-purple-400">Categories Linked</span>
           <p className="text-2xl font-black text-purple-300 mt-1">
             {new Set(sections.map((s) => s.category_id).filter(Boolean)).size}
@@ -344,7 +344,7 @@ export default function AdminContentHomepagePage() {
               Homepage Layout Flow (Top to Bottom)
             </span>
             {savingOrder && (
-              <span className="text-[11px] text-amber-400 flex items-center gap-1 font-semibold">
+              <span className="text-[11px] text-[#A78BFA] flex items-center gap-1 font-semibold">
                 <Loader2 className="w-3 h-3 animate-spin" /> Saving sequence...
               </span>
             )}
@@ -359,13 +359,13 @@ export default function AdminContentHomepagePage() {
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="h-24 rounded-2xl bg-white/[0.02] border border-white/[0.06] animate-pulse"
+                className="h-24 rounded-md bg-white/[0.02] border border-white/[0.06] animate-pulse"
               />
             ))}
           </div>
         ) : sections.length === 0 ? (
-          <div className="p-14 text-center rounded-2xl bg-white/[0.01] border border-dashed border-white/10 space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-400/10 text-amber-400 border border-amber-400/20 flex items-center justify-center mx-auto">
+          <div className="p-14 text-center rounded-md bg-white/[0.01] border border-dashed border-white/10 space-y-4">
+            <div className="w-12 h-12 rounded-md bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 flex items-center justify-center mx-auto">
               <Layers className="w-6 h-6" />
             </div>
             <div>
@@ -378,7 +378,7 @@ export default function AdminContentHomepagePage() {
               <button
                 type="button"
                 onClick={handleCreate}
-                className="px-4 py-2 rounded-xl bg-amber-400 text-slate-950 text-xs font-bold hover:bg-amber-300 transition-colors inline-flex items-center gap-2 shadow-lg shadow-amber-400/20 cursor-pointer"
+                className="px-4 py-2 rounded-md bg-[#A78BFA] text-[#090B10] text-xs font-bold hover:bg-[#B9A3FF] transition-colors inline-flex items-center gap-2 shadow-lg shadow-[#A78BFA]/20 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create First Showcase</span>
@@ -398,7 +398,7 @@ export default function AdminContentHomepagePage() {
                   onDragStart={() => handleDragStart(section.id)}
                   onDragOver={handleDragOver}
                   onDrop={() => handleDrop(section.id)}
-                  className={`rounded-2xl bg-slate-950/70 border border-white/[0.08] hover:border-amber-400/35 transition-all p-4 select-none relative group shadow-md ${
+                  className={`rounded-md bg-slate-950/70 border border-white/[0.08] hover:border-[#A78BFA]/35 transition-all p-4 select-none relative group shadow-md ${
                     isDragging ? "opacity-30 bg-amber-400/5 border-amber-400" : ""
                   }`}
                 >
@@ -411,7 +411,7 @@ export default function AdminContentHomepagePage() {
                       <div className="flex items-center gap-1 shrink-0">
                         {canManage && (
                           <div
-                            className="cursor-grab active:cursor-grabbing p-1.5 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-colors"
+                            className="cursor-grab active:cursor-grabbing p-1.5 rounded-md text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-colors"
                             title="Drag to reorder section"
                           >
                             <GripVertical className="w-4 h-4" />
@@ -431,7 +431,7 @@ export default function AdminContentHomepagePage() {
                             </button>
                           )}
 
-                          <div className="w-7 h-7 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-xs font-mono font-bold text-amber-400">
+                          <div className="w-7 h-7 rounded-md bg-slate-900 border border-white/10 flex items-center justify-center text-xs font-mono font-bold text-[#A78BFA]">
                             #{index + 1}
                           </div>
 
@@ -452,23 +452,23 @@ export default function AdminContentHomepagePage() {
                       {/* Section Info & Attributes */}
                       <div className="space-y-1 min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors truncate">
+                          <h3 className="text-sm font-bold text-white group-hover:text-[#B9A3FF] transition-colors truncate">
                             {section.title}
                           </h3>
 
                           {section.badge_text && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-amber-400/10 text-amber-300 border border-amber-400/20">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
                               <Icon className="w-2.5 h-2.5 text-amber-400" />
                               <span>{section.badge_text}</span>
                             </span>
                           )}
 
                           {section.has_tabs ? (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-300 border border-blue-500/20">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-300 border border-blue-500/20">
                               Multi-Tab Showcase ({section.tabs?.length || 0} Tabs)
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-300 border border-purple-500/20 capitalize">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-300 border border-purple-500/20 capitalize">
                               Single Source ({section.source_type || "category"})
                             </span>
                           )}
@@ -518,7 +518,7 @@ export default function AdminContentHomepagePage() {
                         type="button"
                         onClick={() => handleToggle(section)}
                         disabled={actionLoadingId === section.id || !canManage}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer disabled:opacity-50 ${
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer disabled:opacity-50 ${
                           section.is_active
                             ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25"
                             : "bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20"
@@ -537,7 +537,7 @@ export default function AdminContentHomepagePage() {
                           <button
                             type="button"
                             onClick={() => handleEdit(section)}
-                            className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-amber-400/10 hover:text-amber-300 text-slate-300 text-xs font-bold transition-colors flex items-center gap-1.5 border border-white/[0.08] cursor-pointer"
+                            className="px-3 py-1.5 rounded-md bg-white/[0.04] hover:bg-[#211B32] hover:text-[#A78BFA] text-slate-300 text-xs font-bold transition-colors flex items-center gap-1.5 border border-white/[0.08] cursor-pointer"
                             title="Edit section configuration"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -548,7 +548,7 @@ export default function AdminContentHomepagePage() {
                             type="button"
                             onClick={() => handleDuplicate(section)}
                             disabled={actionLoadingId === section.id}
-                            className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors border border-white/[0.08] cursor-pointer disabled:opacity-50"
+                            className="p-2 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors border border-white/[0.08] cursor-pointer disabled:opacity-50"
                             title="Duplicate section"
                           >
                             <Copy className="w-3.5 h-3.5" />
@@ -558,7 +558,7 @@ export default function AdminContentHomepagePage() {
                             type="button"
                             onClick={() => handleDelete(section)}
                             disabled={actionLoadingId === section.id}
-                            className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 transition-colors border border-rose-500/20 cursor-pointer disabled:opacity-50"
+                            className="p-2 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 transition-colors border border-rose-500/20 cursor-pointer disabled:opacity-50"
                             title="Delete section"
                           >
                             <Trash2 className="w-3.5 h-3.5" />

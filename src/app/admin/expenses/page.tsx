@@ -224,7 +224,7 @@ export default function AdminExpensesPage() {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           toast.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -235,9 +235,9 @@ export default function AdminExpensesPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <Receipt className="w-6 h-6" />
           </div>
           <div>
@@ -252,25 +252,25 @@ export default function AdminExpensesPage() {
           <button
             type="button"
             onClick={() => setShowSpendAnalytics(!showSpendAnalytics)}
-            className={`px-3.5 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+            className={`px-3.5 py-2.5 rounded-md border text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
               showSpendAnalytics
-                ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm"
+                ? "bg-[#211B32] text-[#A78BFA] border-[#A78BFA]/30 shadow-sm"
                 : "bg-white/5 hover:bg-white/10 text-slate-200 border-white/10"
             }`}
           >
-            <PieChart className="w-4 h-4 text-amber-400" />
+            <PieChart className="w-4 h-4 text-[#A78BFA]" />
             <span>{showSpendAnalytics ? "Hide Spend Analysis" : "Spend Analysis"}</span>
           </button>
           <button
             onClick={() => setCategoryModal(true)}
-            className="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
+            className="px-3.5 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
           >
-            <Tag className="w-4 h-4 text-amber-400" />
+            <Tag className="w-4 h-4 text-[#A78BFA]" />
             Categories
           </button>
           <button
             onClick={openCreateModal}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition"
+            className="px-4 py-2.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-bold text-xs flex items-center gap-2 shadow-lg shadow-[#A78BFA]/20 transition"
           >
             <Plus className="w-4 h-4" />
             Record Operating Expense
@@ -280,15 +280,15 @@ export default function AdminExpensesPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Total Operating Spend</span>
           <span className="text-2xl font-black text-rose-400 font-mono">${stats.total_expenses?.toFixed(2) || "0.00"}</span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">This Month's Overhead</span>
-          <span className="text-2xl font-black text-amber-400 font-mono">${stats.this_month_expenses?.toFixed(2) || "0.00"}</span>
+          <span className="text-2xl font-black text-[#A78BFA] font-mono">${stats.this_month_expenses?.toFixed(2) || "0.00"}</span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Recorded Vouchers</span>
           <span className="text-2xl font-black text-white font-mono">{stats.total_recorded_count || 0}</span>
         </div>
@@ -316,7 +316,7 @@ export default function AdminExpensesPage() {
       )}
 
       {/* Search & Filter Bar */}
-      <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -324,7 +324,7 @@ export default function AdminExpensesPage() {
             value={search}
             onChange={e => { setSearch(e.target.value); setPage(1); }}
             placeholder="Search expense, title, payee, or voucher..."
-            className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
         </div>
 
@@ -333,14 +333,14 @@ export default function AdminExpensesPage() {
           <button
             type="button"
             onClick={() => setOpenCategoryFilter(!openCategoryFilter)}
-            className="w-full sm:w-64 bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
+            className="w-full sm:w-64 bg-[#151824] hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-md px-4 py-2.5 text-xs font-bold text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer shadow-md"
           >
             <span className="truncate">
               {categoryFilter === "all"
                 ? "All Expense Categories"
                 : categories.find(c => String(c.id) === String(categoryFilter))?.name || "Selected Category"}
             </span>
-            <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openCategoryFilter ? "rotate-180 text-amber-400" : ""}`} />
+            <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openCategoryFilter ? "rotate-180 text-[#A78BFA]" : ""}`} />
           </button>
 
           {openCategoryFilter && (
@@ -349,7 +349,7 @@ export default function AdminExpensesPage() {
                 className="fixed inset-0 z-30" 
                 onClick={() => setOpenCategoryFilter(false)} 
               />
-              <div className="absolute right-0 top-full mt-2 w-full sm:w-64 rounded-2xl bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95 max-h-60 overflow-y-auto">
+              <div className="absolute right-0 top-full mt-2 w-full sm:w-64 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95 max-h-60 overflow-y-auto">
                 <button
                   type="button"
                   onClick={() => {
@@ -357,14 +357,14 @@ export default function AdminExpensesPage() {
                     setPage(1);
                     setOpenCategoryFilter(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                  className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                     categoryFilter === "all"
-                      ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                      ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                       : "text-slate-300 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   <span>All Expense Categories</span>
-                  {categoryFilter === "all" && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                  {categoryFilter === "all" && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                 </button>
                 {categories.map(cat => (
                   <button
@@ -375,14 +375,14 @@ export default function AdminExpensesPage() {
                       setPage(1);
                       setOpenCategoryFilter(false);
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                    className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                       String(categoryFilter) === String(cat.id)
-                        ? "bg-amber-400/15 text-amber-300 border border-amber-400/30"
+                        ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                         : "text-slate-300 hover:bg-white/10 hover:text-white"
                     }`}
                   >
                     <span>{cat.name}</span>
-                    {String(categoryFilter) === String(cat.id) && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                    {String(categoryFilter) === String(cat.id) && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                   </button>
                 ))}
               </div>
@@ -392,7 +392,7 @@ export default function AdminExpensesPage() {
       </div>
 
       {/* Expense Table */}
-      <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+      <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
@@ -411,7 +411,7 @@ export default function AdminExpensesPage() {
               {loading ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-400">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading operating expense ledger...
                   </td>
                 </tr>
@@ -432,7 +432,7 @@ export default function AdminExpensesPage() {
                       <span className="text-[10px] text-slate-400">{exp.notes || "No notes"}</span>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 text-amber-300">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 text-[#A78BFA]">
                         {exp.category?.name || "General"}
                       </span>
                     </td>
@@ -453,14 +453,14 @@ export default function AdminExpensesPage() {
                         <button
                           onClick={() => openEditModal(exp)}
                           title="Edit Expense"
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 transition"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDelete(exp)}
                           title="Delete Expense"
-                          className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition"
+                          className="p-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -481,14 +481,14 @@ export default function AdminExpensesPage() {
               <button
                 disabled={page <= 1}
                 onClick={() => setPage(p => Math.max(1, p - 1))}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Next
               </button>
@@ -500,9 +500,9 @@ export default function AdminExpensesPage() {
       {/* MODAL: Record / Edit Expense */}
       {(createModal || editModal) && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl animate-in zoom-in-95 text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-lg p-6 space-y-5 shadow-2xl animate-in zoom-in-95 text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Receipt className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">
                   {createModal ? "Record Operating Expense" : "Edit Operating Expense"}
@@ -522,7 +522,7 @@ export default function AdminExpensesPage() {
                   value={formData.title}
                   onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g. Meta Ads Campaign, August Studio Rent, High-Speed Fiber Internet"
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -533,7 +533,7 @@ export default function AdminExpensesPage() {
                     required
                     value={formData.expense_category_id}
                     onChange={e => setFormData({ ...formData, expense_category_id: e.target.value })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="">-- Choose Category --</option>
                     {categories.map(c => (
@@ -551,7 +551,7 @@ export default function AdminExpensesPage() {
                     value={formData.amount}
                     onChange={e => setFormData({ ...formData, amount: e.target.value })}
                     placeholder="0.00"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -564,7 +564,7 @@ export default function AdminExpensesPage() {
                     required
                     value={formData.expense_date}
                     onChange={e => setFormData({ ...formData, expense_date: e.target.value })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -572,7 +572,7 @@ export default function AdminExpensesPage() {
                   <select
                     value={formData.payment_method}
                     onChange={e => setFormData({ ...formData, payment_method: e.target.value })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="cash">Cash Tender</option>
                     <option value="bank_transfer">Bank Wire / Transfer</option>
@@ -590,7 +590,7 @@ export default function AdminExpensesPage() {
                     value={formData.payee_name}
                     onChange={e => setFormData({ ...formData, payee_name: e.target.value })}
                     placeholder="e.g. Google LLC, City Power Corp"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -600,7 +600,7 @@ export default function AdminExpensesPage() {
                     value={formData.reference_number}
                     onChange={e => setFormData({ ...formData, reference_number: e.target.value })}
                     placeholder="e.g. INV-99011"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -612,7 +612,7 @@ export default function AdminExpensesPage() {
                   value={formData.notes}
                   onChange={e => setFormData({ ...formData, notes: e.target.value })}
                   placeholder="Additional audit notes..."
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md p-3 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -620,14 +620,14 @@ export default function AdminExpensesPage() {
                 <button
                   type="button"
                   onClick={() => { setCreateModal(false); setEditModal(false); }}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold shadow-lg shadow-amber-400/20"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold shadow-lg shadow-[#A78BFA]/20"
                 >
                   {isSubmitting ? "Saving..." : createModal ? "Record Expense" : "Update Expense"}
                 </button>
@@ -640,9 +640,9 @@ export default function AdminExpensesPage() {
       {/* MODAL: Manage Expense Categories */}
       {categoryModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl animate-in zoom-in-95 text-xs max-h-[85vh] overflow-y-auto">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-lg p-6 space-y-5 shadow-2xl animate-in zoom-in-95 text-xs max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Tag className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Expense Cost Categories</h3>
               </div>
@@ -654,7 +654,7 @@ export default function AdminExpensesPage() {
             {/* Existing Categories */}
             <div className="space-y-2">
               <label className="uppercase font-bold text-slate-400 block">Existing Categories</label>
-              <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5 max-h-48 overflow-y-auto">
+              <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5 max-h-48 overflow-y-auto">
                 {categories.map(c => (
                   <div key={c.id} className="p-2.5 flex items-center justify-between">
                     <div>
@@ -679,7 +679,7 @@ export default function AdminExpensesPage() {
                   placeholder="Category Name"
                   value={newCatForm.name}
                   onChange={e => setNewCatForm({ ...newCatForm, name: e.target.value })}
-                  className="bg-[#151824] border border-white/10 rounded-lg px-3 py-2 text-white"
+                  className="bg-[#151824] border border-white/10 rounded-md px-3 py-2 text-white"
                 />
                 <input
                   type="text"
@@ -687,12 +687,12 @@ export default function AdminExpensesPage() {
                   placeholder="Code (e.g. TAX, LOG)"
                   value={newCatForm.code}
                   onChange={e => setNewCatForm({ ...newCatForm, code: e.target.value.toUpperCase() })}
-                  className="bg-[#151824] border border-white/10 rounded-lg px-3 py-2 text-white font-mono"
+                  className="bg-[#151824] border border-white/10 rounded-md px-3 py-2 text-white font-mono"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold"
+                className="w-full py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold shadow-lg shadow-[#A78BFA]/20"
               >
                 Save Category
               </button>

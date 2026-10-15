@@ -197,7 +197,7 @@ export default function AdminColorsPage() {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-black bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[#090B10] bg-[#A78BFA] hover:bg-[#B9A3FF] rounded-md shadow-sm transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Color</span>

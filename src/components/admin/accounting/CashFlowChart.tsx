@@ -127,8 +127,8 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
           </div>
 
           <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-xs">
-            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+            <div className="flex items-center gap-2.5 p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-400">
                 <ArrowDownLeft className="h-4 w-4" />
               </div>
               <div>
@@ -139,8 +139,8 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400">
+            <div className="flex items-center gap-2.5 p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-rose-500/10 text-rose-400">
                 <ArrowUpRight className="h-4 w-4" />
               </div>
               <div>
@@ -151,8 +151,8 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/5 text-slate-300">
+            <div className="flex items-center gap-2.5 p-2.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-white/5 text-slate-300">
                 <Scale className="h-4 w-4" />
               </div>
               <div>

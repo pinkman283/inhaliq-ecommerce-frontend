@@ -87,16 +87,16 @@ export function LiveStorefrontPreview({
     <div className="space-y-3 sticky top-6">
       
       {/* Top Preview Controls Bar */}
-      <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#0b0e17] border border-white/10 text-xs">
+      <div className="flex items-center justify-between p-2.5 rounded-md bg-[#0b0e17] border border-white/10 text-xs">
         
         {/* Device Switcher */}
-        <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/5 border border-white/10">
+        <div className="flex items-center gap-1 p-0.5 rounded-md bg-white/5 border border-white/10">
           <button
             type="button"
             onClick={() => setPreviewDevice("desktop")}
             className={`p-1.5 rounded-md transition-all cursor-pointer ${
               previewDevice === "desktop"
-                ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                ? "bg-[#A78BFA] text-[#090B10] font-bold shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
             title="Desktop View"
@@ -108,7 +108,7 @@ export function LiveStorefrontPreview({
             onClick={() => setPreviewDevice("mobile")}
             className={`p-1.5 rounded-md transition-all cursor-pointer ${
               previewDevice === "mobile"
-                ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                ? "bg-[#A78BFA] text-[#090B10] font-bold shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
             title="Mobile Phone View"
@@ -118,7 +118,7 @@ export function LiveStorefrontPreview({
         </div>
 
         {/* Page Switcher */}
-        <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/5 border border-white/10 text-[10px]">
+        <div className="flex items-center gap-1 p-0.5 rounded-md bg-white/5 border border-white/10 text-[10px]">
           <button
             type="button"
             onClick={() => setPreviewPage("home")}
@@ -152,7 +152,7 @@ export function LiveStorefrontPreview({
         <button
           type="button"
           onClick={() => setIsCompareMode(!isCompareMode)}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-1 px-2.5 py-1 rounded border text-[10px] font-bold transition-all cursor-pointer ${
             isCompareMode
               ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/40"
               : "bg-white/5 text-slate-400 border-white/10 hover:text-white"
@@ -167,7 +167,7 @@ export function LiveStorefrontPreview({
 
       {/* Compare Slider bar */}
       {isCompareMode && (
-        <div className="p-2 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-[10px] flex items-center justify-between text-indigo-200">
+        <div className="p-2 rounded-md bg-indigo-950/40 border border-indigo-500/30 text-[10px] flex items-center justify-between text-indigo-200">
           <span>Live Storefront</span>
           <input
             type="range"
@@ -194,7 +194,7 @@ export function LiveStorefrontPreview({
         )}
 
         <div
-          className={`rounded-xl border overflow-hidden shadow-2xl p-4 space-y-3.5 transition-all duration-300 relative ${
+          className={`rounded-md border overflow-hidden shadow-2xl p-4 space-y-3.5 transition-all duration-300 relative ${
             isLightCanvas ? "border-slate-300 text-slate-900 shadow-slate-300/40" : "border-white/15 text-slate-100"
           }`}
           style={{ backgroundColor: bgColor }}
@@ -210,7 +210,7 @@ export function LiveStorefrontPreview({
           {announcementEnabled && (
             <div
               onClick={() => onElementClick?.("announcement")}
-              className={`py-1.5 px-3 rounded-lg text-[9.5px] font-medium flex items-center justify-between border cursor-pointer hover:ring-2 hover:ring-amber-400/50 transition-all ${
+              className={`py-1.5 px-3 rounded-md text-[9.5px] font-medium flex items-center justify-between border cursor-pointer hover:ring-2 hover:ring-[#A78BFA]/50 transition-all ${
                 isLightCanvas ? "text-slate-800 border-slate-300" : "text-slate-200 border-white/10"
               }`}
               style={{
@@ -229,7 +229,7 @@ export function LiveStorefrontPreview({
           {/* 2. Mini Navbar */}
           <div
             onClick={() => onElementClick?.("branding")}
-            className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 cursor-pointer hover:ring-2 hover:ring-amber-400/50 transition-all ${
+            className={`p-2.5 rounded-md border flex items-center justify-between gap-2 cursor-pointer hover:ring-2 hover:ring-[#A78BFA]/50 transition-all ${
               isLightCanvas ? "bg-white/90 border-slate-200 shadow-sm" : "bg-[#090b14]/90 border-white/10"
             }`}
           >
@@ -246,14 +246,14 @@ export function LiveStorefrontPreview({
             </div>
 
             <div className="flex items-center gap-2">
-              <div className={`px-2 py-0.5 rounded-lg text-[9px] flex items-center gap-1 border ${
+              <div className={`px-2 py-0.5 rounded text-[9px] flex items-center gap-1 border ${
                 isLightCanvas ? "bg-slate-100 border-slate-200 text-slate-500" : "bg-white/5 border-white/10 text-slate-400"
               }`}>
                 <Search className="w-2.5 h-2.5" />
                 <span className="truncate">Search...</span>
               </div>
               <div
-                className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-[9px] font-bold text-white shadow-sm"
+                className="flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold text-white shadow-sm"
                 style={{ backgroundColor: primaryColor }}
               >
                 <ShoppingBag className="w-2.5 h-2.5" />
@@ -268,13 +268,13 @@ export function LiveStorefrontPreview({
               {/* Hero Banner Mockup */}
               <div
                 onClick={() => onElementClick?.("hero")}
-                className={`p-4 rounded-xl border space-y-2.5 transition-all cursor-pointer hover:ring-2 hover:ring-amber-400/50 ${
+                className={`p-4 rounded-md border space-y-2.5 transition-all cursor-pointer hover:ring-2 hover:ring-[#A78BFA]/50 ${
                   isLightCanvas ? "shadow-sm border-slate-200" : "border-white/10"
                 }`}
                 style={{ backgroundColor: cardBgColor }}
               >
                 <div
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold border"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold border"
                   style={{
                     backgroundColor: `${primaryColor}15`,
                     borderColor: `${primaryColor}40`,
@@ -306,7 +306,7 @@ export function LiveStorefrontPreview({
                 <div className="flex items-center gap-2 pt-1">
                   <button
                     type="button"
-                    className="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-white flex items-center gap-1 shadow-md"
+                    className="px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider text-white flex items-center gap-1 shadow-md"
                     style={{
                       backgroundColor: effectivePrimaryBtnBg,
                       color: btnPrimaryText,
@@ -326,13 +326,13 @@ export function LiveStorefrontPreview({
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl border space-y-1.5"
+                    className="p-3 rounded-md border space-y-1.5"
                     style={{
                       backgroundColor: cardBgColor,
                       borderColor: cardBorderColor,
                     }}
                   >
-                    <div className="h-16 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-[10px] text-slate-500 font-mono">
+                    <div className="h-16 rounded-md bg-white/5 border border-white/5 flex items-center justify-center text-[10px] text-slate-500 font-mono">
                       [ Hardware Image ]
                     </div>
                     <div>
@@ -352,10 +352,10 @@ export function LiveStorefrontPreview({
           {/* PAGE VIEW: PRODUCT DETAIL */}
           {previewPage === "product" && (
             <div
-              className="p-4 rounded-xl border space-y-3"
+              className="p-4 rounded-md border space-y-3"
               style={{ backgroundColor: cardBgColor, borderColor: cardBorderColor }}
             >
-              <div className="h-28 rounded-lg bg-white/5 flex items-center justify-center text-xs text-slate-500 font-mono">
+              <div className="h-28 rounded-md bg-white/5 flex items-center justify-center text-xs text-slate-500 font-mono">
                 [ Studio Product Gallery ]
               </div>
               <div>
@@ -368,7 +368,7 @@ export function LiveStorefrontPreview({
               </div>
               <button
                 type="button"
-                className="w-full py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-md flex items-center justify-center gap-1.5"
+                className="w-full py-2 rounded-md text-xs font-bold uppercase tracking-wider text-white shadow-md flex items-center justify-center gap-1.5"
                 style={{
                   backgroundColor: effectivePrimaryBtnBg,
                   color: btnPrimaryText,
@@ -383,13 +383,13 @@ export function LiveStorefrontPreview({
           {/* PAGE VIEW: CHECKOUT */}
           {previewPage === "cart" && (
             <div
-              className="p-4 rounded-xl border space-y-3"
+              className="p-4 rounded-md border space-y-3"
               style={{ backgroundColor: cardBgColor, borderColor: cardBorderColor }}
             >
               <h5 className="text-xs font-bold" style={{ color: textHeadingColor }}>
                 Order Summary
               </h5>
-              <div className="p-2.5 rounded-lg bg-white/5 space-y-1.5 text-[11px]">
+              <div className="p-2.5 rounded-md bg-white/5 space-y-1.5 text-[11px]">
                 <div className="flex justify-between">
                   <span style={{ color: textBodyColor }}>AeroPack X-Pac 24L (x1)</span>
                   <span className="font-mono font-bold" style={{ color: textHeadingColor }}>$235.00</span>
@@ -401,7 +401,7 @@ export function LiveStorefrontPreview({
               </div>
               <button
                 type="button"
-                className="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-white shadow-md flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 rounded-md text-xs font-black uppercase tracking-wider text-white shadow-md flex items-center justify-center gap-1.5"
                 style={{
                   backgroundColor: effectivePrimaryBtnBg,
                   color: btnPrimaryText,
@@ -414,7 +414,7 @@ export function LiveStorefrontPreview({
 
           {/* MINI LIVE FOOTER PREVIEW */}
           <div
-            className="mt-6 pt-3 pb-3 px-3 rounded-lg border-t transition-colors text-[10px]"
+            className="mt-6 pt-3 pb-3 px-3 rounded-md border-t transition-colors text-[10px]"
             style={{
               backgroundColor: footerBgColor || "#1f242e",
               borderColor: isLightFooter ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",

@@ -271,7 +271,7 @@ function AdminContentPagesContent() {
           <div className="flex items-center gap-2">
             <button
               onClick={handleOpenCreate}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-black bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#090B10] bg-[#A78BFA] hover:bg-[#B9A3FF] rounded-md transition-colors cursor-pointer shadow-sm font-bold"
             >
               <Plus className="w-4 h-4" />
               <span>Create Page</span>
@@ -309,7 +309,7 @@ function AdminContentPagesContent() {
       />
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08]">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -317,13 +317,13 @@ function AdminContentPagesContent() {
             placeholder="Search page titles or URLs..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+            className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-lg text-xs text-slate-300">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400" />
+          <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-md text-xs text-slate-300">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#A78BFA]" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -344,19 +344,19 @@ function AdminContentPagesContent() {
           <button
             onClick={fetchPages}
             disabled={loading}
-            className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg transition-colors cursor-pointer"
+            className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-md transition-colors cursor-pointer"
             title="Refresh"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-amber-400" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#A78BFA]" : ""}`} />
           </button>
         </div>
       </div>
 
       {/* Pages Table Card */}
-      <div className="rounded-xl bg-[#0f121b] border border-white/[0.08] overflow-hidden">
+      <div className="rounded-md bg-[#0f121b] border border-white/[0.08] overflow-hidden">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3 text-slate-400">
-            <Loader2 className="w-7 h-7 text-amber-400 animate-spin" />
+            <Loader2 className="w-7 h-7 text-[#A78BFA] animate-spin" />
             <span className="text-xs uppercase tracking-wider font-semibold">
               Loading CMS pages...
             </span>
@@ -373,7 +373,7 @@ function AdminContentPagesContent() {
               action={
                 <button
                   onClick={handleOpenCreate}
-                  className="px-4 py-2 text-xs font-semibold text-black bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold text-[#090B10] bg-[#A78BFA] hover:bg-[#B9A3FF] rounded-md transition-colors cursor-pointer font-bold"
                 >
                   + Create Page
                 </button>
@@ -404,12 +404,12 @@ function AdminContentPagesContent() {
                       {/* Title */}
                       <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
                             <FileText className="w-3.5 h-3.5" />
                           </div>
                           <button
                             onClick={() => handleOpenEdit(page)}
-                            className="font-bold text-white hover:text-amber-400 transition-colors text-left cursor-pointer"
+                            className="font-bold text-white hover:text-[#A78BFA] transition-colors text-left cursor-pointer"
                           >
                             {page.title}
                           </button>
@@ -444,7 +444,7 @@ function AdminContentPagesContent() {
                           href={`/pages/${page.slug}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="hover:text-amber-400 inline-flex items-center gap-1 transition-colors"
+                          className="hover:text-[#A78BFA] inline-flex items-center gap-1 transition-colors"
                           title="Open storefront page in new tab"
                         >
                           <span>/pages/{page.slug}</span>
@@ -492,21 +492,21 @@ function AdminContentPagesContent() {
                             href={`/pages/${page.slug}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="p-1.5 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-md transition-colors cursor-pointer"
                             title="View Public Page"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </a>
                           <button
                             onClick={() => handleOpenEdit(page)}
-                            className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
                             title="Edit Page"
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => setDeletingPage(page)}
-                            className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors cursor-pointer"
                             title="Delete Page"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -533,7 +533,7 @@ function AdminContentPagesContent() {
             {/* Header: h-14 */}
             <div className="h-14 px-6 border-b border-white/[0.06] bg-[#0f121b] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                <div className="w-7 h-7 rounded-lg bg-amber-400/10 border border-amber-400/20 text-amber-400 flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-md bg-[#211B32] border border-[#A78BFA]/30 text-[#A78BFA] flex items-center justify-center shrink-0">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
@@ -568,7 +568,7 @@ function AdminContentPagesContent() {
                     placeholder="e.g. 2-Year Hardware Warranty & Care"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#161a26] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-hidden transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#161a26] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-hidden transition"
                     required
                   />
                 </div>
@@ -583,13 +583,13 @@ function AdminContentPagesContent() {
                     placeholder="hardware-warranty-care"
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#161a26] px-3 text-xs font-mono text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-hidden transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#161a26] px-3 text-xs font-mono text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-hidden transition"
                   />
                 </div>
               </div>
 
               {/* Status Toggle Checkbox */}
-              <div className="flex items-center gap-2 py-1 px-3 bg-[#161a26] border border-white/[0.08] rounded-lg">
+              <div className="flex items-center gap-2 py-1 px-3 bg-[#161a26] border border-white/[0.08] rounded-md">
                 <AdminCheckbox
                   id="page_active"
                   checked={isActive}
@@ -618,7 +618,7 @@ function AdminContentPagesContent() {
                       onClick={() => setPreviewContentMode(false)}
                       className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
                         !previewContentMode
-                          ? "bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30"
+                          ? "bg-[#211B32] text-[#A78BFA] font-bold border border-[#A78BFA]/30"
                           : "text-slate-400 hover:text-white"
                       }`}
                     >
@@ -629,7 +629,7 @@ function AdminContentPagesContent() {
                       onClick={() => setPreviewContentMode(true)}
                       className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
                         previewContentMode
-                          ? "bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30"
+                          ? "bg-[#211B32] text-[#A78BFA] font-bold border border-[#A78BFA]/30"
                           : "text-slate-400 hover:text-white"
                       }`}
                     >
@@ -641,7 +641,7 @@ function AdminContentPagesContent() {
                 {!previewContentMode ? (
                   <div className="space-y-1">
                     {/* Formatting Toolbar */}
-                    <div className="flex flex-wrap items-center gap-1 bg-[#161a26] border border-white/[0.08] px-2 py-1 rounded-t-lg text-slate-300">
+                    <div className="flex flex-wrap items-center gap-1 bg-[#161a26] border border-white/[0.08] px-2 py-1 rounded-t-md text-slate-300">
                       <button
                         type="button"
                         onClick={() => insertMarkdownFormatting("**", "**")}
@@ -716,12 +716,12 @@ function AdminContentPagesContent() {
                       placeholder="## Policy Section&#10;&#10;Detailed customer terms, shipping guarantees, or guide information..."
                       value={content}
                       onChange={(e) => setContent(e.target.value)}
-                      className="w-full font-mono rounded-b-lg border border-white/10 bg-[#161a26] p-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-hidden transition resize-y leading-relaxed"
+                      className="w-full font-mono rounded-b-md border border-white/10 bg-[#161a26] p-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-hidden transition resize-y leading-relaxed"
                       required
                     />
                   </div>
                 ) : (
-                  <div className="w-full min-h-[260px] max-h-[340px] overflow-y-auto p-4 bg-[#161a26] border border-white/[0.08] rounded-lg text-slate-200 text-xs leading-relaxed space-y-3 prose prose-invert">
+                  <div className="w-full min-h-[260px] max-h-[340px] overflow-y-auto p-4 bg-[#161a26] border border-white/[0.08] rounded-md text-slate-200 text-xs leading-relaxed space-y-3 prose prose-invert">
                     {content ? (
                       <div className="whitespace-pre-wrap">{content}</div>
                     ) : (
@@ -732,14 +732,14 @@ function AdminContentPagesContent() {
               </div>
 
               {/* Collapsible SEO Section */}
-              <div className="border border-white/[0.08] rounded-xl overflow-hidden">
+              <div className="border border-white/[0.08] rounded-md overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setShowSeoSection(!showSeoSection)}
                   className="w-full flex items-center justify-between p-3 bg-[#161a26] text-xs font-bold text-white hover:bg-white/[0.04] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <Search className="w-3.5 h-3.5 text-amber-400" />
+                    <Search className="w-3.5 h-3.5 text-[#A78BFA]" />
                     <span>Search Engine Optimization (SEO & Meta)</span>
                   </div>
                   {showSeoSection ? (
@@ -764,7 +764,7 @@ function AdminContentPagesContent() {
                         value={metaTitle}
                         onChange={(e) => setMetaTitle(e.target.value)}
                         placeholder="Custom search engine title tag..."
-                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                       />
                     </div>
 
@@ -777,7 +777,7 @@ function AdminContentPagesContent() {
                         value={metaDescription}
                         onChange={(e) => setMetaDescription(e.target.value)}
                         placeholder="Custom search engine snippet summary..."
-                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                       />
                     </div>
                   </div>
@@ -797,7 +797,7 @@ function AdminContentPagesContent() {
               <button
                 type="submit"
                 disabled={saving}
-                className="h-9 px-5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                className="h-9 px-5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
               >
                 {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>{editingPage ? "Update Page" : "Publish Page"}</span>
@@ -810,8 +810,8 @@ function AdminContentPagesContent() {
       {/* Delete Confirmation Modal */}
       {deletingPage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-lg p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-10 h-10 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div className="text-center space-y-1">
@@ -826,14 +826,14 @@ function AdminContentPagesContent() {
             <div className="flex items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setDeletingPage(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Confirm Delete</span>
@@ -851,7 +851,7 @@ export default function AdminContentPagesPage() {
     <React.Suspense
       fallback={
         <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-6 h-6 animate-spin text-amber-400" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#A78BFA]" />
           <p className="text-xs">Loading CMS pages console...</p>
         </div>
       }

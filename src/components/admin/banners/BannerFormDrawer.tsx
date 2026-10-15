@@ -275,7 +275,7 @@ export function BannerFormDrawer({
           {/* Drawer Top Header */}
           <div className="px-6 py-4 border-b border-white/[0.08] bg-[#080b12] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-9 h-9 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -292,7 +292,7 @@ export function BannerFormDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
+              className="p-2 rounded-md text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
               title="Close drawer"
             >
               <X className="w-5 h-5" />
@@ -306,14 +306,14 @@ export function BannerFormDrawer({
             className="flex-1 overflow-y-auto px-6 py-5 space-y-6"
           >
             {/* Placement & Dimension Notice Box */}
-            <div className="p-3.5 rounded-xl bg-amber-400/[0.06] border border-amber-400/20 flex items-start gap-3">
-              <Layers className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+            <div className="p-3.5 rounded-md bg-[#211B32]/40 border border-[#A78BFA]/30 flex items-start gap-3">
+              <Layers className="w-4 h-4 text-[#A78BFA] mt-0.5 shrink-0" />
               <div className="text-xs">
-                <span className="font-bold text-amber-300">
+                <span className="font-bold text-[#A78BFA]">
                   {currentPlacementInfo.label} ({currentPlacementInfo.location})
                 </span>
                 <p className="text-slate-300 mt-0.5 text-[11px] leading-relaxed">
-                  Recommended size: <span className="font-mono font-bold text-white">{currentPlacementInfo.dimensions}</span> · Ratio: <span className="font-bold text-amber-300">{currentPlacementInfo.ratio}</span>. {currentPlacementInfo.description}
+                  Recommended size: <span className="font-mono font-bold text-white">{currentPlacementInfo.dimensions}</span> · Ratio: <span className="font-bold text-[#A78BFA]">{currentPlacementInfo.ratio}</span>. {currentPlacementInfo.description}
                 </p>
               </div>
             </div>
@@ -333,7 +333,7 @@ export function BannerFormDrawer({
                   <select
                     value={placement}
                     onChange={(e) => setPlacement(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400 font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-medium"
                   >
                     {BANNER_PLACEMENTS.map((p) => (
                       <option key={p.id} value={p.id}>
@@ -354,7 +354,7 @@ export function BannerFormDrawer({
                     placeholder="e.g. Summer Flash Sale"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -370,7 +370,7 @@ export function BannerFormDrawer({
                   placeholder="e.g. Up to 50% discount on all premium electronics this weekend"
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
             </div>
@@ -383,13 +383,13 @@ export function BannerFormDrawer({
                 </h3>
 
                 {/* Desktop / Mobile Preview Switcher */}
-                <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-lg border border-white/[0.08]">
+                <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-md border border-white/[0.08]">
                   <button
                     type="button"
                     onClick={() => setPreviewTab("desktop")}
                     className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       previewTab === "desktop"
-                        ? "bg-amber-400 text-slate-950 shadow-sm"
+                        ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -401,7 +401,7 @@ export function BannerFormDrawer({
                     onClick={() => setPreviewTab("mobile")}
                     className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       previewTab === "mobile"
-                        ? "bg-amber-400 text-slate-950 shadow-sm"
+                        ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -424,7 +424,7 @@ export function BannerFormDrawer({
                   </div>
 
                   {/* Desktop Preview Card */}
-                  <div className="relative rounded-2xl overflow-hidden bg-slate-900 border border-white/[0.1] aspect-[3/1] max-h-48 flex items-center justify-center group">
+                  <div className="relative rounded-md overflow-hidden bg-slate-900 border border-white/[0.1] aspect-[3/1] max-h-48 flex items-center justify-center group">
                     {imageUrl ? (
                       <>
                         <img
@@ -436,14 +436,14 @@ export function BannerFormDrawer({
                           <button
                             type="button"
                             onClick={() => desktopFileInputRef.current?.click()}
-                            className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-xs font-semibold backdrop-blur-sm transition cursor-pointer"
+                            className="px-3 py-1.5 rounded-md bg-white/20 hover:bg-white/30 text-white text-xs font-semibold backdrop-blur-sm transition cursor-pointer"
                           >
                             Replace Image
                           </button>
                           <button
                             type="button"
                             onClick={() => setImageUrl("")}
-                            className="p-1.5 rounded-lg bg-rose-500/30 hover:bg-rose-500/50 text-rose-300 transition cursor-pointer"
+                            className="p-1.5 rounded-md bg-rose-500/30 hover:bg-rose-500/50 text-rose-300 transition cursor-pointer"
                             title="Remove image"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -463,7 +463,7 @@ export function BannerFormDrawer({
                     )}
 
                     {uploadingDesktop && (
-                      <div className="absolute inset-0 bg-black/80 flex items-center justify-center gap-2 text-amber-300 text-xs font-bold">
+                      <div className="absolute inset-0 bg-black/80 flex items-center justify-center gap-2 text-[#A78BFA] text-xs font-bold">
                         <Loader2 className="w-5 h-5 animate-spin" />
                         Uploading desktop banner...
                       </div>
@@ -483,7 +483,7 @@ export function BannerFormDrawer({
                       type="button"
                       onClick={() => desktopFileInputRef.current?.click()}
                       disabled={uploadingDesktop}
-                      className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-bold text-white transition cursor-pointer disabled:opacity-50"
+                      className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-bold text-white transition cursor-pointer disabled:opacity-50"
                     >
                       <Upload className="w-4 h-4 text-amber-400" />
                       <span>{imageUrl ? "Upload Replacement" : "Upload Image File"}</span>
@@ -494,7 +494,7 @@ export function BannerFormDrawer({
                       placeholder="Or paste direct image URL..."
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                      className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                     />
                   </div>
                 </div>
@@ -525,7 +525,7 @@ export function BannerFormDrawer({
 
                   {enableMobileImage ? (
                     <div className="space-y-3">
-                      <div className="relative rounded-2xl overflow-hidden bg-slate-900 border border-white/[0.1] w-48 mx-auto aspect-[9/16] max-h-56 flex items-center justify-center group">
+                      <div className="relative rounded-md overflow-hidden bg-slate-900 border border-white/[0.1] w-48 mx-auto aspect-[9/16] max-h-56 flex items-center justify-center group">
                         {mobileImageUrl ? (
                           <>
                             <img
@@ -561,7 +561,7 @@ export function BannerFormDrawer({
                         )}
 
                         {uploadingMobile && (
-                          <div className="absolute inset-0 bg-black/80 flex items-center justify-center gap-1.5 text-amber-300 text-[11px] font-bold">
+                          <div className="absolute inset-0 bg-black/80 flex items-center justify-center gap-1.5 text-[#A78BFA] text-[11px] font-bold">
                             <Loader2 className="w-4 h-4 animate-spin" />
                             Uploading...
                           </div>
@@ -580,7 +580,7 @@ export function BannerFormDrawer({
                           type="button"
                           onClick={() => mobileFileInputRef.current?.click()}
                           disabled={uploadingMobile}
-                          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-bold text-white transition cursor-pointer disabled:opacity-50"
+                          className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-bold text-white transition cursor-pointer disabled:opacity-50"
                         >
                           <Upload className="w-4 h-4 text-sky-400" />
                           <span>{mobileImageUrl ? "Replace Mobile Image" : "Upload Mobile File"}</span>
@@ -591,12 +591,12 @@ export function BannerFormDrawer({
                           placeholder="Or paste mobile image URL..."
                           value={mobileImageUrl}
                           onChange={(e) => setMobileImageUrl(e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                          className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                         />
                       </div>
                     </div>
                   ) : (
-                    <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center text-xs text-slate-400">
+                    <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.06] text-center text-xs text-slate-400">
                       Using desktop image automatically resized for mobile devices. Check the box above if you have a separate mobile banner ratio.
                     </div>
                   )}
@@ -621,7 +621,7 @@ export function BannerFormDrawer({
                     placeholder="e.g. Shop Now"
                     value={ctaText}
                     onChange={(e) => setCtaText(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
 
@@ -637,7 +637,7 @@ export function BannerFormDrawer({
                       placeholder="/products or https://..."
                       value={ctaLink}
                       onChange={(e) => setCtaLink(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-mono"
+                      className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                     />
                   </div>
                 </div>
@@ -656,7 +656,7 @@ export function BannerFormDrawer({
                     key={s.url}
                     type="button"
                     onClick={() => setCtaLink(s.url)}
-                    className="px-2 py-0.5 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-[11px] font-medium text-slate-300 hover:text-amber-300 transition-colors cursor-pointer"
+                    className="px-2 py-0.5 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-[11px] font-medium text-slate-300 hover:text-[#A78BFA] transition-colors cursor-pointer"
                   >
                     {s.label}
                   </button>
@@ -671,7 +671,7 @@ export function BannerFormDrawer({
               </h3>
 
               {/* Status Switch */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+              <div className="flex items-center justify-between p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
                 <div>
                   <span className="text-xs font-bold text-white block">
                     Banner Active Status
@@ -689,7 +689,7 @@ export function BannerFormDrawer({
                     onChange={(e) => setIsActive(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                  <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                 </label>
               </div>
 
@@ -707,7 +707,7 @@ export function BannerFormDrawer({
                     type="datetime-local"
                     value={startsAt}
                     onChange={(e) => setStartsAt(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3.5 py-2 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
 
@@ -723,7 +723,7 @@ export function BannerFormDrawer({
                     type="datetime-local"
                     value={expiresAt}
                     onChange={(e) => setExpiresAt(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3.5 py-2 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -737,7 +737,7 @@ export function BannerFormDrawer({
               <button
                 type="button"
                 onClick={() => setShowAdvanced(!showAdvanced)}
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/[0.04] text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="w-full flex items-center justify-between p-2 rounded-md hover:bg-white/[0.04] text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 <span>5. Advanced Attributes (Display Priority, Badges, SEO)</span>
                 {showAdvanced ? (
@@ -759,7 +759,7 @@ export function BannerFormDrawer({
                         type="number"
                         value={sortOrder}
                         onChange={(e) => setSortOrder(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+                        className="w-full px-3.5 py-2 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                       />
                       <span className="text-[10px] text-slate-500 block">Lower appears first (e.g. 0, 1, 2)</span>
                     </div>
@@ -774,7 +774,7 @@ export function BannerFormDrawer({
                         placeholder="e.g. NEW or HOT"
                         value={badge}
                         onChange={(e) => setBadge(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                        className="w-full px-3.5 py-2 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                       />
                     </div>
 
@@ -788,7 +788,7 @@ export function BannerFormDrawer({
                         placeholder="e.g. 30% OFF"
                         value={discountTag}
                         onChange={(e) => setDiscountTag(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                        className="w-full px-3.5 py-2 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                       />
                     </div>
                   </div>
@@ -804,7 +804,7 @@ export function BannerFormDrawer({
                       placeholder="Descriptive text for search engines and screen readers"
                       value={altText}
                       onChange={(e) => setAltText(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                      className="w-full px-3.5 py-2 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                     />
                   </div>
                 </div>
@@ -818,7 +818,7 @@ export function BannerFormDrawer({
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer disabled:opacity-50"
+              className="px-4 py-2.5 rounded-md text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
@@ -827,7 +827,7 @@ export function BannerFormDrawer({
               type="submit"
               form="banner-form"
               disabled={saving || uploadingDesktop || uploadingMobile}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-lg shadow-amber-400/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-[#A78BFA]/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? (
                 <>

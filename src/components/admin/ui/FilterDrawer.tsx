@@ -38,10 +38,10 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
       case "cyan":
         return "bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-sm";
       case "emerald":
-        return "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-sm";
+        return "bg-[#34D399] hover:bg-[#34D399]/90 text-[#090B10] shadow-sm";
       case "amber":
       default:
-        return "bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-sm";
+        return "bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-sm";
     }
   };
 
@@ -50,17 +50,17 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full sm:w-[380px] sm:!max-w-[380px] max-w-full bg-[#0b0e17] border-l border-white/[0.08] p-0 flex flex-col justify-between shadow-2xl text-slate-100 overflow-hidden"
+        className="w-full sm:w-[380px] sm:!max-w-[380px] max-w-full bg-[#11141D] border-l border-[#272B35] p-0 flex flex-col justify-between shadow-2xl text-[#E5E7EB] overflow-hidden"
       >
         {/* Compact Header: h-12 */}
-        <div className="h-12 px-5 border-b border-white/[0.06] bg-[#0b0e17] flex items-center justify-between shrink-0">
-          <SheetTitle className="text-xs font-semibold text-white tracking-wide">
+        <div className="h-12 px-5 border-b border-[#272B35] bg-[#11141D] flex items-center justify-between shrink-0">
+          <SheetTitle className="text-xs font-semibold text-[#E5E7EB] tracking-wide">
             {title}
           </SheetTitle>
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+            className="p-1 rounded-md text-[#929BAD] hover:text-white hover:bg-[#171B26] transition cursor-pointer"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -73,12 +73,12 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
         </div>
 
         {/* Compact Footer: h-12 */}
-        <div className="h-12 px-5 border-t border-white/[0.06] bg-[#0b0e17] flex items-center justify-between shrink-0">
+        <div className="h-12 px-5 border-t border-[#272B35] bg-[#11141D] flex items-center justify-between shrink-0">
           {onReset ? (
             <button
               type="button"
               onClick={onReset}
-              className="text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer px-1 py-1"
+              className="text-xs font-medium text-[#929BAD] hover:text-[#E5E7EB] transition cursor-pointer px-1 py-1"
             >
               {resetLabel}
             </button>
@@ -86,7 +86,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer px-1 py-1"
+              className="text-xs font-medium text-[#929BAD] hover:text-[#E5E7EB] transition cursor-pointer px-1 py-1"
             >
               Cancel
             </button>
@@ -96,7 +96,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             type="button"
             onClick={onApply}
             disabled={isApplying}
-            className={`h-8 px-4 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center justify-center ${getAccentBtnClasses()}`}
+            className={`h-8 px-4 rounded-md text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center justify-center ${getAccentBtnClasses()}`}
           >
             {isApplying ? "Applying..." : applyLabel}
           </button>

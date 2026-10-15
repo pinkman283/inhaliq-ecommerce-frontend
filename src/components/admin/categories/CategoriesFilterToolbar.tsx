@@ -38,7 +38,7 @@ export function CategoriesFilterToolbar({
   onViewModeChange,
 }: CategoriesFilterToolbarProps) {
   return (
-    <div className="p-4 rounded-2xl bg-[#0e121e] border border-white/10 space-y-3.5">
+    <div className="p-4 rounded-md bg-[#0e121e] border border-white/10 space-y-3.5">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Search Input */}
         <div className="relative">
@@ -48,7 +48,7 @@ export function CategoriesFilterToolbar({
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search category, subcategory, slug..."
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-9.5 pr-8 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition"
+            className="w-full bg-white/5 border border-white/10 rounded-md pl-9.5 pr-8 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition"
           />
           {search && (
             <button
@@ -67,7 +67,7 @@ export function CategoriesFilterToolbar({
           <select
             value={typeFilter}
             onChange={(e) => onTypeFilterChange(e.target.value as "all" | "root_only" | "sub_only" | "level_2" | "level_3")}
-            className="w-full bg-[#131722] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+            className="w-full bg-[#131722] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 cursor-pointer"
           >
             <option value="all">All Levels (Root & Subcategories)</option>
             <option value="root_only">📁 Root Categories Only (Level 1)</option>
@@ -82,7 +82,7 @@ export function CategoriesFilterToolbar({
           <select
             value={selectedRootId === "all" ? "all" : selectedRootId}
             onChange={(e) => onSelectedRootIdChange(e.target.value === "all" ? "all" : Number(e.target.value))}
-            className="w-full bg-[#131722] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+            className="w-full bg-[#131722] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 cursor-pointer"
           >
             <option value="all">All Root Department Branches</option>
             {rootCategories.map((root) => (
@@ -98,7 +98,7 @@ export function CategoriesFilterToolbar({
           <select
             value={selectedParentId === "all" ? "all" : selectedParentId}
             onChange={(e) => onSelectedParentIdChange(e.target.value === "all" ? "all" : Number(e.target.value))}
-            className="w-full bg-[#131722] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer min-w-0"
+            className="w-full bg-[#131722] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 cursor-pointer min-w-0"
           >
             <option value="all">All Parent Categories</option>
             {parentOptions.map((parent) => (
@@ -112,7 +112,7 @@ export function CategoriesFilterToolbar({
             <button
               type="button"
               onClick={onResetFilters}
-              className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-amber-400 hover:text-amber-300 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+              className="px-3 py-2 rounded-md bg-white/5 hover:bg-white/10 text-[#A78BFA] hover:text-[#B9A3FF] border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
               title="Reset all filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -129,13 +129,13 @@ export function CategoriesFilterToolbar({
         </span>
 
         {/* View Mode Toggle */}
-        <div className="flex items-center bg-[#090d18] p-1 rounded-xl border border-white/10">
+        <div className="flex items-center bg-[#090d18] p-1 rounded-md border border-white/10">
           <button
             type="button"
             onClick={() => onViewModeChange("table")}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
               viewMode === "table"
-                ? "bg-amber-500 text-slate-950 shadow-sm"
+                ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -145,9 +145,9 @@ export function CategoriesFilterToolbar({
           <button
             type="button"
             onClick={() => onViewModeChange("tree")}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
               viewMode === "tree"
-                ? "bg-amber-500 text-slate-950 shadow-sm"
+                ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >

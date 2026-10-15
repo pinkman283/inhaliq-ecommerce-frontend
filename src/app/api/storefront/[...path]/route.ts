@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cachedFetch, createDeterministicHash, getRedisClient } from "@/lib/redis";
+import { cachedFetch, createDeterministicHash, getRedisClient, getRedisClientAsync } from "@/lib/redis";
 
 // In-memory cache & in-flight promise registry to deduplicate simultaneous upstream fetches
 const inFlightRequests = new Map<string, Promise<{ data: any; status: number; contentType: string; isText?: boolean }>>();
@@ -34,7 +34,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
   const pathStr = path.join("/");
 
   // 0. Header Navigation & Init Settings
-  if (pathStr === "navigation/header" || pathStr === "nav-menu") {
+  if (pathStr === "navigation/header" || pathStr === "nav-menu" || pathStr === "store-navigation") {
     return {
       key: () => "aether:navigation:header",
       ttl: 86400, // 24 hours
@@ -235,10 +235,45 @@ export async function GET(
 
   // Synthesize store-navigation for Senior provider from init-settings and nav-menu
   if (isSenior && pathStr === "store-navigation") {
+    const cacheKey = "aether:store-navigation";
+    const now = Date.now();
+
+    // 1. Check in-memory cache
+    const memCached = memoryCache.get(cacheKey);
+    if (memCached && now < memCached.expiresAt) {
+      return NextResponse.json(memCached.data, {
+        headers: {
+          "X-Cache": "HIT-MEM",
+          "X-Cache-Key": cacheKey,
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+        },
+      });
+    }
+
+    // 2. Check Redis cache
+    const redis = await getRedisClientAsync();
+    if (redis) {
+      try {
+        const cached = await redis.get(cacheKey);
+        if (cached !== null && cached !== undefined) {
+          memoryCache.set(cacheKey, { data: cached, expiresAt: now + 60000 });
+          return NextResponse.json(cached, {
+            headers: {
+              "X-Cache": "HIT-REDIS",
+              "X-Cache-Key": cacheKey,
+              "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+            },
+          });
+        }
+      } catch (err) {
+        console.warn(`[Proxy] Redis read error for ${cacheKey}:`, err);
+      }
+    }
+
     try {
       const [initRes, navRes] = await Promise.all([
-        fetch(`${baseUrl}/init-settings`, { headers: buildForwardHeaders(request, apiKey) }),
-        fetch(`${baseUrl}/nav-menu`, { headers: buildForwardHeaders(request, apiKey) }),
+        fetch(`${baseUrl}/init-settings`, { headers: buildForwardHeaders(request, apiKey), signal: AbortSignal.timeout(10000) }),
+        fetch(`${baseUrl}/nav-menu`, { headers: buildForwardHeaders(request, apiKey), signal: AbortSignal.timeout(10000) }),
       ]);
       const initData = initRes.ok ? await initRes.json() : null;
       const navData = navRes.ok ? await navRes.json() : null;
@@ -280,9 +315,22 @@ export async function GET(
         },
       ];
 
-      return NextResponse.json({
+      const payload = {
         footer_columns,
         social_links,
+      };
+
+      memoryCache.set(cacheKey, { data: payload, expiresAt: now + 60000 });
+      if (redis) {
+        redis.set(cacheKey, payload, { ex: 86400 }).catch(() => {});
+      }
+
+      return NextResponse.json(payload, {
+        headers: {
+          "X-Cache": "MISS",
+          "X-Cache-Key": cacheKey,
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+        },
       });
     } catch {
       return NextResponse.json({ footer_columns: [], social_links: [] });
@@ -346,7 +394,7 @@ export async function GET(
   }
 
   // 2. Check Redis cache
-  const redis = getRedisClient();
+  const redis = await getRedisClientAsync();
   if (redis) {
     try {
       const cached = await redis.get(cacheKey);

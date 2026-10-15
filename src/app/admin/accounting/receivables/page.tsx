@@ -139,7 +139,7 @@ export default function ReceivablesPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -163,7 +163,7 @@ export default function ReceivablesPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/admin/accounting"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-[#0f121b] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/[0.08] bg-[#0f121b] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Accounting Hub</span>
@@ -171,7 +171,7 @@ export default function ReceivablesPage() {
             <button
               onClick={fetchReceivables}
               disabled={loading}
-              className="p-1.5 rounded-lg border border-white/[0.08] bg-[#0f121b] text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="p-1.5 rounded-md border border-white/[0.08] bg-[#0f121b] text-slate-400 hover:text-white transition-colors disabled:opacity-50"
               title="Refresh"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-cyan-400" : ""}`} />
@@ -180,7 +180,7 @@ export default function ReceivablesPage() {
               href={adminApi.getAccountingExportUrl("receivables")}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 transition-colors text-xs font-semibold shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 transition-colors text-xs font-semibold shadow-sm"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export A/R</span>
@@ -193,7 +193,7 @@ export default function ReceivablesPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Key Operational Numbers */}
         <div className="lg:col-span-5 grid grid-cols-3 gap-3">
-          <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
+          <div className="p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               Open Receivables
             </span>
@@ -206,7 +206,7 @@ export default function ReceivablesPage() {
           </div>
 
           <div
-            className={`p-3.5 rounded-xl border shadow-sm flex flex-col justify-between ${
+            className={`p-3.5 rounded-md border shadow-sm flex flex-col justify-between ${
               overdueAmount > 0
                 ? "bg-rose-950/20 border-rose-500/30"
                 : "bg-[#0f121b] border-white/[0.08]"
@@ -227,7 +227,7 @@ export default function ReceivablesPage() {
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
+          <div className="p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               Recovery Rate
             </span>
@@ -253,10 +253,10 @@ export default function ReceivablesPage() {
 
       {/* Tabs & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+        <div className="flex items-center gap-1 p-1 rounded-md bg-[#0f121b] border border-white/[0.08]">
           <button
             onClick={() => setActiveTab("dues")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all ${
               activeTab === "dues"
                 ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -266,7 +266,7 @@ export default function ReceivablesPage() {
           </button>
           <button
             onClick={() => setActiveTab("receipts")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all ${
               activeTab === "receipts"
                 ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -284,7 +284,7 @@ export default function ReceivablesPage() {
               placeholder="Search by order #, customer..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#0f121b] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-[#0f121b] border border-white/[0.08] rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
             />
           </div>
         )}
@@ -292,7 +292,7 @@ export default function ReceivablesPage() {
 
       {/* Content Area */}
       {activeTab === "dues" ? (
-        <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm">
+        <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm">
           {filteredOrders.length === 0 ? (
             <AdminEmptyState
               icon={CheckCircle2}
@@ -354,7 +354,7 @@ export default function ReceivablesPage() {
                       <td className="py-3 text-center">
                         <button
                           onClick={() => handleOpenPaymentModal(order)}
-                          className="px-3 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-xs font-semibold transition-all"
+                          className="px-3 py-1 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-xs font-semibold transition-all"
                         >
                           Collect Payment
                         </button>
@@ -367,7 +367,7 @@ export default function ReceivablesPage() {
           )}
         </div>
       ) : (
-        <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm">
+        <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm">
           {(!data?.recent_payments || data.recent_payments.length === 0) ? (
             <AdminEmptyState
               icon={CreditCard}
@@ -422,10 +422,10 @@ export default function ReceivablesPage() {
       {/* Record Payment Modal */}
       {modalOpen && selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
                   <DollarSign className="w-4 h-4" />
                 </div>
                 <div>
@@ -435,14 +435,14 @@ export default function ReceivablesPage() {
               </div>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleSubmitPayment} className="space-y-4">
-              <div className="p-3 rounded-lg bg-[#161a26] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-3 rounded-md bg-[#161a26] border border-white/[0.08] flex items-center justify-between">
                 <div>
                   <div className="text-xs text-slate-400">Customer</div>
                   <div className="text-sm font-semibold text-white">{selectedOrder.customer_name}</div>
@@ -463,7 +463,7 @@ export default function ReceivablesPage() {
                   max={selectedOrder.due_amount}
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-cyan-400 font-bold"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-cyan-400 font-bold"
                   required
                 />
               </div>
@@ -474,7 +474,7 @@ export default function ReceivablesPage() {
                   <select
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
                   >
                     <option value="cash">Physical Cash</option>
                     <option value="bank_transfer">Bank Wire</option>
@@ -490,7 +490,7 @@ export default function ReceivablesPage() {
                   <select
                     value={bankAccountId}
                     onChange={(e) => setBankAccountId(Number(e.target.value))}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
                   >
                     {bankAccounts.map((b) => (
                       <option key={b.id} value={b.id}>
@@ -508,7 +508,7 @@ export default function ReceivablesPage() {
                     type="date"
                     value={paymentDate}
                     onChange={(e) => setPaymentDate(e.target.value)}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
                     required
                   />
                 </div>
@@ -519,7 +519,7 @@ export default function ReceivablesPage() {
                     type="text"
                     value={referenceNumber}
                     onChange={(e) => setReferenceNumber(e.target.value)}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </div>
@@ -530,7 +530,7 @@ export default function ReceivablesPage() {
                   rows={2}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400 resize-none"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400 resize-none"
                   placeholder="Optional notes or teller reference..."
                 />
               </div>
@@ -539,14 +539,14 @@ export default function ReceivablesPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
+                  className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
+                  className="px-4 py-2 rounded-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
                 >
                   {submitting ? "Posting..." : "Confirm & Post Payment"}
                 </button>

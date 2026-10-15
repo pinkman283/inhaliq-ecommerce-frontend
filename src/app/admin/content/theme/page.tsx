@@ -79,7 +79,7 @@ function ThemeStudioInner() {
   const [hoverText, setHoverText] = useState(DEFAULT_THEME_SETTINGS.theme_hover_text || "#06b6d4");
   const [navBtnBg, setNavBtnBg] = useState(DEFAULT_THEME_SETTINGS.theme_nav_btn_bg || "#ffffff");
   const [navBtnColor, setNavBtnColor] = useState(DEFAULT_THEME_SETTINGS.theme_nav_btn_color || "#0f172a");
-  const [radius, setRadius] = useState<string>(DEFAULT_THEME_SETTINGS.theme_radius || "rounded-lg");
+  const [radius, setRadius] = useState<string>(DEFAULT_THEME_SETTINGS.theme_radius || "rounded-md");
   const [footerBgColor, setFooterBgColor] = useState(DEFAULT_THEME_SETTINGS.theme_footer_bg_color || "#1f242e");
   const [footerTextColor, setFooterTextColor] = useState(DEFAULT_THEME_SETTINGS.theme_footer_text_color || "#94a3b8");
 
@@ -388,7 +388,7 @@ function ThemeStudioInner() {
       theme_secondary_color: preset.secondary,
       theme_bg_color: preset.bg,
       theme_card_bg_color: preset.card,
-      theme_radius: preset.radius || "rounded-lg",
+      theme_radius: preset.radius || "rounded-md",
     });
 
     toast.success(`Preset "${preset.name}" applied. Click Save to publish changes.`);
@@ -417,7 +417,7 @@ function ThemeStudioInner() {
     setHoverText(s.theme_hover_text ?? "#06b6d4");
     setNavBtnBg(s.theme_nav_btn_bg ?? "#ffffff");
     setNavBtnColor(s.theme_nav_btn_color ?? "#0f172a");
-    setRadius(s.theme_radius ?? "rounded-lg");
+    setRadius(s.theme_radius ?? "rounded-md");
     setFooterBgColor(s.theme_footer_bg_color ?? "#1f242e");
     setFooterTextColor(s.theme_footer_text_color ?? "#94a3b8");
 
@@ -670,7 +670,7 @@ function ThemeStudioInner() {
             <span className="text-cyan-400 font-medium">Theme & Storefront</span>
           </nav>
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+            <div className="p-2 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
               <Palette className="w-5 h-5" />
             </div>
             <div>
@@ -687,7 +687,7 @@ function ThemeStudioInner() {
           <button
             type="button"
             onClick={() => setShowPreviewDrawer(!showPreviewDrawer)}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
               showPreviewDrawer
                 ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-sm shadow-cyan-500/10"
                 : "bg-white/5 text-slate-300 border-white/10 hover:bg-white/10 hover:text-white"
@@ -700,7 +700,7 @@ function ThemeStudioInner() {
           <button
             type="button"
             onClick={() => setShowResetModal(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 border border-white/10 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-semibold bg-white/5 text-slate-300 border border-white/10 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 transition-all cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Defaults</span>
@@ -710,7 +710,7 @@ function ThemeStudioInner() {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold transition-all shadow-md cursor-pointer ${
               isDirty
                 ? "bg-gradient-to-r from-cyan-500 to-indigo-600 text-white hover:from-cyan-400 hover:to-indigo-500 shadow-cyan-500/20"
                 : "bg-white/10 text-slate-300 hover:bg-white/15"
@@ -735,7 +735,7 @@ function ThemeStudioInner() {
         >
           <Palette className="w-4 h-4" />
           <span>Visual Design</span>
-          <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
             Colors & Styles
           </span>
         </button>
@@ -751,7 +751,7 @@ function ThemeStudioInner() {
         >
           <Sparkles className="w-4 h-4" />
           <span>Storefront Messaging</span>
-          <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
             Hero & Banners
           </span>
         </button>
@@ -759,7 +759,7 @@ function ThemeStudioInner() {
 
       {/* Live Preview Split Layout (if toggled) */}
       {showPreviewDrawer && (
-        <div className="p-4 rounded-2xl bg-black/40 border border-cyan-500/30 shadow-2xl space-y-3">
+        <div className="p-4 rounded-md bg-black/40 border border-cyan-500/30 shadow-2xl space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
@@ -773,7 +773,7 @@ function ThemeStudioInner() {
               Close Preview ✕
             </button>
           </div>
-          <div className="overflow-hidden rounded-xl border border-white/10 bg-[#07090e]">
+          <div className="overflow-hidden rounded-md border border-white/10 bg-[#07090e]">
             <LiveStorefrontPreview
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
@@ -806,7 +806,7 @@ function ThemeStudioInner() {
       {activeTab === "visual" && (
         <div className="space-y-6">
           {/* Section: Curated Theme Presets */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -819,13 +819,13 @@ function ThemeStudioInner() {
               </div>
 
               {/* Preset Filter */}
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/30 border border-white/10">
+              <div className="flex items-center gap-1.5 p-1 rounded-md bg-black/30 border border-white/10">
                 {(["all", "dark", "light"] as const).map((cat) => (
                   <button
                     key={cat}
                     type="button"
                     onClick={() => setPresetCategory(cat)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-md text-xs font-semibold capitalize transition-all cursor-pointer ${
                       presetCategory === cat
                         ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
                         : "text-slate-400 hover:text-white"
@@ -848,7 +848,7 @@ function ThemeStudioInner() {
                   <div
                     key={preset.id}
                     onClick={() => handleApplyPreset(preset)}
-                    className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer relative group flex flex-col justify-between ${
+                    className={`p-3.5 rounded-md border text-left transition-all cursor-pointer relative group flex flex-col justify-between ${
                       isSelected
                         ? "bg-cyan-500/10 border-cyan-500/50 shadow-md shadow-cyan-500/10"
                         : "bg-white/[0.03] border-white/10 hover:border-white/20 hover:bg-white/[0.06]"
@@ -860,7 +860,7 @@ function ThemeStudioInner() {
                           {preset.name}
                         </span>
                         {isSelected && (
-                          <span className="p-0.5 rounded-full bg-cyan-500 text-white">
+                          <span className="p-0.5 rounded bg-cyan-500 text-white">
                             <Check className="w-3 h-3" />
                           </span>
                         )}
@@ -873,22 +873,22 @@ function ThemeStudioInner() {
                     {/* Color Swatch Bar */}
                     <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-white/5">
                       <span
-                        className="w-5 h-5 rounded-full border border-white/20 shadow-sm"
+                        className="w-5 h-5 rounded border border-white/20 shadow-sm"
                         style={{ backgroundColor: preset.primary }}
                         title={`Primary: ${preset.primary}`}
                       />
                       <span
-                        className="w-5 h-5 rounded-full border border-white/20 shadow-sm"
+                        className="w-5 h-5 rounded border border-white/20 shadow-sm"
                         style={{ backgroundColor: preset.secondary }}
                         title={`Secondary: ${preset.secondary}`}
                       />
                       <span
-                        className="w-5 h-5 rounded-full border border-white/20 shadow-sm"
+                        className="w-5 h-5 rounded border border-white/20 shadow-sm"
                         style={{ backgroundColor: preset.bg }}
                         title={`Background: ${preset.bg}`}
                       />
                       <span
-                        className="w-5 h-5 rounded-full border border-white/20 shadow-sm"
+                        className="w-5 h-5 rounded border border-white/20 shadow-sm"
                         style={{ backgroundColor: preset.card }}
                         title={`Card: ${preset.card}`}
                       />
@@ -903,7 +903,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section: Colors */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <Palette className="w-4 h-4 text-cyan-400" />
@@ -916,7 +916,7 @@ function ThemeStudioInner() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Primary Color */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Primary Color</label>
                   <span className="text-[10px] text-slate-400 font-mono">{primaryColor}</span>
@@ -927,20 +927,20 @@ function ThemeStudioInner() {
                     type="color"
                     value={primaryColor}
                     onChange={(e) => setPrimaryColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={primaryColor}
                     onChange={(e) => setPrimaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="#06b6d4"
                   />
                 </div>
               </div>
 
               {/* Secondary Color */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Secondary Color</label>
                   <span className="text-[10px] text-slate-400 font-mono">{secondaryColor}</span>
@@ -951,26 +951,26 @@ function ThemeStudioInner() {
                     type="color"
                     value={secondaryColor}
                     onChange={(e) => setSecondaryColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={secondaryColor}
                     onChange={(e) => setSecondaryColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="#6366f1"
                   />
                 </div>
               </div>
 
               {/* Accent Gradient Preset */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <label className="text-xs font-bold text-white">Accent Gradient Preset</label>
                 <p className="text-[11px] text-slate-400">Hero title gradients and glow decorations</p>
                 <select
                   value={accentGradient}
                   onChange={(e) => setAccentGradient(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
                 >
                   <option value="cyan-indigo">Cyan to Indigo</option>
                   <option value="emerald-teal">Emerald to Teal</option>
@@ -983,7 +983,7 @@ function ThemeStudioInner() {
               </div>
 
               {/* Background Color */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Storefront Background</label>
                   <span className="text-[10px] text-slate-400 font-mono">{bgColor}</span>
@@ -994,20 +994,20 @@ function ThemeStudioInner() {
                     type="color"
                     value={bgColor}
                     onChange={(e) => setBgColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={bgColor}
                     onChange={(e) => setBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="#090a0f"
                   />
                 </div>
               </div>
 
               {/* Card / Surface Background */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Card / Surface Color</label>
                   <span className="text-[10px] text-slate-400 font-mono">{cardBgColor}</span>
@@ -1018,20 +1018,20 @@ function ThemeStudioInner() {
                     type="color"
                     value={cardBgColor}
                     onChange={(e) => setCardBgColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={cardBgColor}
                     onChange={(e) => setCardBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="#0c101d"
                   />
                 </div>
               </div>
 
               {/* Card Border Color */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Card Border Color</label>
                   <span className="text-[10px] text-slate-400 font-mono">{cardBorderColor}</span>
@@ -1042,14 +1042,14 @@ function ThemeStudioInner() {
                     type="text"
                     value={cardBorderColor}
                     onChange={(e) => setCardBorderColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="rgba(255, 255, 255, 0.1)"
                   />
                 </div>
               </div>
 
               {/* Headings Text Color */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Heading Text Color</label>
                   <span className="text-[10px] text-slate-400 font-mono">{textHeadingColor}</span>
@@ -1060,20 +1060,20 @@ function ThemeStudioInner() {
                     type="color"
                     value={textHeadingColor.startsWith("#") ? textHeadingColor : "#ffffff"}
                     onChange={(e) => setTextHeadingColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={textHeadingColor}
                     onChange={(e) => setTextHeadingColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="#ffffff"
                   />
                 </div>
               </div>
 
               {/* Body Text Color */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Body Text Color</label>
                   <span className="text-[10px] text-slate-400 font-mono">{textBodyColor}</span>
@@ -1084,13 +1084,13 @@ function ThemeStudioInner() {
                     type="color"
                     value={textBodyColor.startsWith("#") ? textBodyColor : "#94a3b8"}
                     onChange={(e) => setTextBodyColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={textBodyColor}
                     onChange={(e) => setTextBodyColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
                     placeholder="#94a3b8"
                   />
                 </div>
@@ -1099,7 +1099,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section: Buttons */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <Sliders className="w-4 h-4 text-cyan-400" />
@@ -1112,11 +1112,11 @@ function ThemeStudioInner() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Primary Button */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">Primary Button</h3>
                   <div
-                    className="px-4 py-1.5 rounded-lg text-xs font-bold shadow-md"
+                    className="px-4 py-1.5 rounded-md text-xs font-bold shadow-md"
                     style={{ backgroundColor: btnPrimaryBg, color: btnPrimaryText }}
                   >
                     Add to Cart
@@ -1130,13 +1130,13 @@ function ThemeStudioInner() {
                         type="color"
                         value={btnPrimaryBg.startsWith("#") ? btnPrimaryBg : "#06b6d4"}
                         onChange={(e) => setBtnPrimaryBg(e.target.value)}
-                        className="w-8 h-8 rounded-lg cursor-pointer border border-white/20 bg-transparent"
+                        className="w-8 h-8 rounded-md cursor-pointer border border-white/20 bg-transparent"
                       />
                       <input
                         type="text"
                         value={btnPrimaryBg}
                         onChange={(e) => setBtnPrimaryBg(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                        className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                       />
                     </div>
                   </div>
@@ -1147,13 +1147,13 @@ function ThemeStudioInner() {
                         type="color"
                         value={btnPrimaryText.startsWith("#") ? btnPrimaryText : "#ffffff"}
                         onChange={(e) => setBtnPrimaryText(e.target.value)}
-                        className="w-8 h-8 rounded-lg cursor-pointer border border-white/20 bg-transparent"
+                        className="w-8 h-8 rounded-md cursor-pointer border border-white/20 bg-transparent"
                       />
                       <input
                         type="text"
                         value={btnPrimaryText}
                         onChange={(e) => setBtnPrimaryText(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                        className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                       />
                     </div>
                   </div>
@@ -1161,11 +1161,11 @@ function ThemeStudioInner() {
               </div>
 
               {/* Secondary Button */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">Secondary Button</h3>
                   <div
-                    className="px-4 py-1.5 rounded-lg text-xs font-bold border border-white/15"
+                    className="px-4 py-1.5 rounded-md text-xs font-bold border border-white/15"
                     style={{ backgroundColor: btnSecondaryBg, color: btnSecondaryText }}
                   >
                     View Details
@@ -1178,7 +1178,7 @@ function ThemeStudioInner() {
                       type="text"
                       value={btnSecondaryBg}
                       onChange={(e) => setBtnSecondaryBg(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                      className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                     />
                   </div>
                   <div>
@@ -1188,13 +1188,13 @@ function ThemeStudioInner() {
                         type="color"
                         value={btnSecondaryText.startsWith("#") ? btnSecondaryText : "#ffffff"}
                         onChange={(e) => setBtnSecondaryText(e.target.value)}
-                        className="w-8 h-8 rounded-lg cursor-pointer border border-white/20 bg-transparent"
+                        className="w-8 h-8 rounded-md cursor-pointer border border-white/20 bg-transparent"
                       />
                       <input
                         type="text"
                         value={btnSecondaryText}
                         onChange={(e) => setBtnSecondaryText(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                        className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                       />
                     </div>
                   </div>
@@ -1202,11 +1202,11 @@ function ThemeStudioInner() {
               </div>
 
               {/* Active Tab Token */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">Active Tab Pill</h3>
                   <div
-                    className="px-3 py-1 rounded-full text-xs font-bold"
+                    className="px-3 py-1 rounded text-xs font-bold"
                     style={{ backgroundColor: tabActiveBg, color: tabActiveText }}
                   >
                     Active Filter
@@ -1220,13 +1220,13 @@ function ThemeStudioInner() {
                         type="color"
                         value={tabActiveBg.startsWith("#") ? tabActiveBg : "#06b6d4"}
                         onChange={(e) => setTabActiveBg(e.target.value)}
-                        className="w-8 h-8 rounded-lg cursor-pointer border border-white/20 bg-transparent"
+                        className="w-8 h-8 rounded-md cursor-pointer border border-white/20 bg-transparent"
                       />
                       <input
                         type="text"
                         value={tabActiveBg}
                         onChange={(e) => setTabActiveBg(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                        className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                       />
                     </div>
                   </div>
@@ -1236,18 +1236,18 @@ function ThemeStudioInner() {
                       type="text"
                       value={tabActiveText}
                       onChange={(e) => setTabActiveText(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                      className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Navigation Button Token */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">Navbar Buttons</h3>
                   <div
-                    className="px-3 py-1 rounded-lg text-xs font-bold shadow-sm"
+                    className="px-3 py-1 rounded-md text-xs font-bold shadow-sm"
                     style={{ backgroundColor: navBtnBg, color: navBtnColor }}
                   >
                     Sign In
@@ -1260,7 +1260,7 @@ function ThemeStudioInner() {
                       type="text"
                       value={navBtnBg}
                       onChange={(e) => setNavBtnBg(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                      className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                     />
                   </div>
                   <div>
@@ -1269,7 +1269,7 @@ function ThemeStudioInner() {
                       type="text"
                       value={navBtnColor}
                       onChange={(e) => setNavBtnColor(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                      className="w-full px-2.5 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                     />
                   </div>
                 </div>
@@ -1278,7 +1278,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section: Corner Radius & Surface Borders */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <Layers className="w-4 h-4 text-cyan-400" />
@@ -1293,9 +1293,9 @@ function ThemeStudioInner() {
               {[
                 { id: "rounded-none", name: "Sharp (0px)", desc: "Brutalist / Modernist", preview: "rounded-none" },
                 { id: "rounded-md", name: "Subtle (6px)", desc: "Classic / Clean", preview: "rounded-md" },
-                { id: "rounded-lg", name: "Standard (8px)", desc: "Balanced Contemporary", preview: "rounded-lg" },
-                { id: "rounded-xl", name: "Modern (12px)", desc: "Smooth Studio Edge", preview: "rounded-xl" },
-                { id: "rounded-2xl", name: "Curved (16px)", desc: "Friendly Mobile-First", preview: "rounded-2xl" },
+                { id: "rounded-md", name: "Standard (8px)", desc: "Balanced Contemporary", preview: "rounded-md" },
+                { id: "rounded-md", name: "Modern (12px)", desc: "Smooth Studio Edge", preview: "rounded-md" },
+                { id: "rounded-md", name: "Curved (16px)", desc: "Friendly Mobile-First", preview: "rounded-md" },
               ].map((item) => {
                 const isSelected = radius === item.id;
                 return (
@@ -1327,7 +1327,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section: Footer Appearance */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <LayoutTemplate className="w-4 h-4 text-cyan-400" />
@@ -1339,38 +1339,38 @@ function ThemeStudioInner() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <label className="text-xs font-bold text-white">Footer Background</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={footerBgColor.startsWith("#") ? footerBgColor : "#1f242e"}
                     onChange={(e) => setFooterBgColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={footerBgColor}
                     onChange={(e) => setFooterBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                   />
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                 <label className="text-xs font-bold text-white">Footer Text & Muted Links</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={footerTextColor.startsWith("#") ? footerTextColor : "#94a3b8"}
                     onChange={(e) => setFooterTextColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={footerTextColor}
                     onChange={(e) => setFooterTextColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                   />
                 </div>
               </div>
@@ -1385,11 +1385,11 @@ function ThemeStudioInner() {
       {activeTab === "messaging" && (
         <div className="space-y-6">
           {/* Section 1: Announcement Bar */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-amber-400" />
+                  <Flame className="w-4 h-4 text-[#A78BFA]" />
                   <span>Storefront Announcement Bar</span>
                 </h2>
                 <p className="text-xs text-slate-400">
@@ -1405,7 +1405,7 @@ function ThemeStudioInner() {
                   onChange={(e) => setAnnouncementEnabled(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                 <span className="ml-2.5 text-xs font-bold text-slate-300">
                   {announcementEnabled ? "Enabled" : "Disabled"}
                 </span>
@@ -1421,7 +1421,7 @@ function ThemeStudioInner() {
                   value={announcementBadge}
                   onChange={(e) => setAnnouncementBadge(e.target.value)}
                   placeholder="e.g. Free Shipping"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -1432,16 +1432,16 @@ function ThemeStudioInner() {
                   value={announcementText}
                   onChange={(e) => setAnnouncementText(e.target.value)}
                   placeholder="e.g. Free Express Courier on orders over ৳2,000 • Code: AETHER10 (-10%)"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
 
             {/* Live Banner Preview */}
             {announcementEnabled && (
-              <div className="mt-3 p-3 rounded-xl bg-gradient-to-r from-emerald-950/60 via-teal-950/50 to-slate-950/80 border border-emerald-500/20 flex items-center justify-center gap-2.5 text-center text-xs">
+              <div className="mt-3 p-3 rounded-md bg-gradient-to-r from-emerald-950/60 via-teal-950/50 to-slate-950/80 border border-emerald-500/20 flex items-center justify-center gap-2.5 text-center text-xs">
                 {announcementBadge && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">
                     {announcementBadge}
                   </span>
                 )}
@@ -1451,7 +1451,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section 2: Hero Section Copy & 3-Line Headline */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-cyan-400" />
@@ -1474,7 +1474,7 @@ function ThemeStudioInner() {
                   value={heroHeadline1}
                   onChange={(e) => setHeroHeadline1(e.target.value)}
                   placeholder="e.g. Next-Gen Engineering"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -1488,7 +1488,7 @@ function ThemeStudioInner() {
                   value={heroHeadline2Gradient}
                   onChange={(e) => setHeroHeadline2Gradient(e.target.value)}
                   placeholder="e.g. Pure Sensory Excellence"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-indigo-500/30 text-xs text-indigo-300 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-indigo-500/30 text-xs text-indigo-300 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
@@ -1502,7 +1502,7 @@ function ThemeStudioInner() {
                   value={heroHeadline3}
                   onChange={(e) => setHeroHeadline3(e.target.value)}
                   placeholder="e.g. For High-End Creators"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
@@ -1516,7 +1516,7 @@ function ThemeStudioInner() {
                   value={heroBadgeText}
                   onChange={(e) => setHeroBadgeText(e.target.value)}
                   placeholder="e.g. 2026 Flagship Release"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -1527,15 +1527,15 @@ function ThemeStudioInner() {
                   value={heroSubheading}
                   onChange={(e) => setHeroSubheading(e.target.value)}
                   placeholder="Supporting elevator pitch and product value proposition..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 resize-none"
                 />
               </div>
             </div>
 
             {/* Live Hero Headline Preview */}
-            <div className="p-6 rounded-xl bg-black/60 border border-white/10 text-center space-y-3">
+            <div className="p-6 rounded-md bg-black/60 border border-white/10 text-center space-y-3">
               {heroBadgeText && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
                   <Sparkles className="w-3 h-3" />
                   <span>{heroBadgeText}</span>
                 </div>
@@ -1554,7 +1554,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section 3: Split-Reveal Splash Intro Animation */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-5">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -1574,7 +1574,7 @@ function ThemeStudioInner() {
                   onChange={(e) => setSplitRevealEnabled(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                 <span className="ml-2.5 text-xs font-bold text-slate-300">
                   {splitRevealEnabled ? "Active" : "Disabled"}
                 </span>
@@ -1591,7 +1591,7 @@ function ThemeStudioInner() {
                       value={splitRevealTitle}
                       onChange={(e) => setSplitRevealTitle(e.target.value)}
                       placeholder="e.g. AETHER"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+                      className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
                     />
                   </div>
 
@@ -1602,14 +1602,14 @@ function ThemeStudioInner() {
                       value={splitRevealSubtitle}
                       onChange={(e) => setSplitRevealSubtitle(e.target.value)}
                       placeholder="e.g. ELEVATE EVERY INHALE"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+                      className="w-full px-3.5 py-2.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {/* Duration Slider */}
-                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-white">Duration</label>
                       <span className="text-xs font-mono text-cyan-400 font-bold">{splitRevealDuration}s</span>
@@ -1626,12 +1626,12 @@ function ThemeStudioInner() {
                   </div>
 
                   {/* Mode / Frequency */}
-                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                     <label className="text-xs font-bold text-white block">Display Frequency</label>
                     <select
                       value={splitRevealMode}
                       onChange={(e) => setSplitRevealMode(e.target.value)}
-                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+                      className="w-full px-3 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
                     >
                       <option value="every_time">Every Page Visit</option>
                       <option value="once_per_session">Once Per Session</option>
@@ -1639,12 +1639,12 @@ function ThemeStudioInner() {
                   </div>
 
                   {/* Split Direction */}
-                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                     <label className="text-xs font-bold text-white block">Reveal Direction</label>
                     <select
                       value={splitRevealDirection}
                       onChange={(e) => setSplitRevealDirection(e.target.value)}
-                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
+                      className="w-full px-3 py-1.5 rounded-md bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500"
                     >
                       <option value="vertical">Vertical Split (Curtain)</option>
                       <option value="horizontal">Horizontal Split</option>
@@ -1652,7 +1652,7 @@ function ThemeStudioInner() {
                   </div>
 
                   {/* Dim Intensity */}
-                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-md bg-white/[0.03] border border-white/10 space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-white">Background Dim</label>
                       <span className="text-xs font-mono text-cyan-400 font-bold">{Math.round(splitRevealDim * 100)}%</span>
@@ -1672,7 +1672,7 @@ function ThemeStudioInner() {
                 {/* Wallpaper & Logo Upload */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                   {/* Wallpaper Image */}
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+                  <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-white">Splash Wallpaper Image</label>
                       {splitRevealImage && (
@@ -1692,10 +1692,10 @@ function ThemeStudioInner() {
                         <img
                           src={splitRevealImage}
                           alt="Splash Wallpaper Preview"
-                          className="w-16 h-12 rounded-lg object-cover border border-white/10 bg-black/40"
+                          className="w-16 h-12 rounded-md object-cover border border-white/10 bg-black/40"
                         />
                       ) : (
-                        <div className="w-16 h-12 rounded-lg border border-dashed border-white/20 flex items-center justify-center text-slate-500 text-xs">
+                        <div className="w-16 h-12 rounded-md border border-dashed border-white/20 flex items-center justify-center text-slate-500 text-xs">
                           None
                         </div>
                       )}
@@ -1710,7 +1710,7 @@ function ThemeStudioInner() {
                         <button
                           type="button"
                           onClick={() => splitImageInputRef.current?.click()}
-                          className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition-all flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition-all flex items-center gap-1.5"
                         >
                           <Upload className="w-3 h-3" />
                           <span>Upload Image</span>
@@ -1721,7 +1721,7 @@ function ThemeStudioInner() {
                   </div>
 
                   {/* Logo Overlay */}
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+                  <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-white">Splash Logo Overlay</label>
                       {splitRevealLogo && (
@@ -1741,10 +1741,10 @@ function ThemeStudioInner() {
                         <img
                           src={splitRevealLogo}
                           alt="Splash Logo Preview"
-                          className="w-16 h-12 rounded-lg object-contain p-1 border border-white/10 bg-black/40"
+                          className="w-16 h-12 rounded-md object-contain p-1 border border-white/10 bg-black/40"
                         />
                       ) : (
-                        <div className="w-16 h-12 rounded-lg border border-dashed border-white/20 flex items-center justify-center text-slate-500 text-xs">
+                        <div className="w-16 h-12 rounded-md border border-dashed border-white/20 flex items-center justify-center text-slate-500 text-xs">
                           None
                         </div>
                       )}
@@ -1759,7 +1759,7 @@ function ThemeStudioInner() {
                         <button
                           type="button"
                           onClick={() => splitLogoInputRef.current?.click()}
-                          className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition-all flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition-all flex items-center gap-1.5"
                         >
                           <Upload className="w-3 h-3" />
                           <span>Upload Logo</span>
@@ -1774,7 +1774,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section 4: Customer Authentication Background */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-cyan-400" />
@@ -1787,7 +1787,7 @@ function ThemeStudioInner() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Card Position */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <label className="text-xs font-bold text-white block">Form Card Alignment</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(["left", "center", "right"] as const).map((pos) => (
@@ -1795,7 +1795,7 @@ function ThemeStudioInner() {
                       key={pos}
                       type="button"
                       onClick={() => setCustomerAuthCardPosition(pos)}
-                      className={`py-2 rounded-lg text-xs font-bold capitalize border transition-all ${
+                      className={`py-2 rounded-md text-xs font-bold capitalize border transition-all ${
                         customerAuthCardPosition === pos
                           ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
                           : "bg-black/30 border-white/10 text-slate-400 hover:text-white"
@@ -1809,7 +1809,7 @@ function ThemeStudioInner() {
               </div>
 
               {/* Fallback Color */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Background Color</label>
                   <span className="text-[10px] font-mono text-slate-400">{customerAuthBgColor}</span>
@@ -1819,19 +1819,19 @@ function ThemeStudioInner() {
                     type="color"
                     value={customerAuthBgColor.startsWith("#") ? customerAuthBgColor : "#ffffff"}
                     onChange={(e) => setCustomerAuthBgColor(e.target.value)}
-                    className="w-10 h-10 rounded-lg cursor-pointer border border-white/20 bg-transparent p-0.5"
+                    className="w-10 h-10 rounded-md cursor-pointer border border-white/20 bg-transparent p-0.5"
                   />
                   <input
                     type="text"
                     value={customerAuthBgColor}
                     onChange={(e) => setCustomerAuthBgColor(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-white"
+                    className="flex-1 px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs font-mono text-white"
                   />
                 </div>
               </div>
 
               {/* Background Wallpaper Image */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Background Image</label>
                   {customerAuthBgImage && (
@@ -1851,10 +1851,10 @@ function ThemeStudioInner() {
                     <img
                       src={customerAuthBgImage}
                       alt="Auth Background Preview"
-                      className="w-14 h-10 rounded-lg object-cover border border-white/10 bg-black/40"
+                      className="w-14 h-10 rounded-md object-cover border border-white/10 bg-black/40"
                     />
                   ) : (
-                    <div className="w-14 h-10 rounded-lg border border-dashed border-white/20 flex items-center justify-center text-slate-500 text-xs">
+                    <div className="w-14 h-10 rounded-md border border-dashed border-white/20 flex items-center justify-center text-slate-500 text-xs">
                       None
                     </div>
                   )}
@@ -1869,7 +1869,7 @@ function ThemeStudioInner() {
                     <button
                       type="button"
                       onClick={() => authBgInputRef.current?.click()}
-                      className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition-all flex items-center gap-1.5"
+                      className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition-all flex items-center gap-1.5"
                     >
                       <Upload className="w-3 h-3" />
                       <span>Upload Wallpaper</span>
@@ -1881,7 +1881,7 @@ function ThemeStudioInner() {
           </div>
 
           {/* Section 5: Deals & Promotional Badges */}
-          <div className="p-5 rounded-2xl bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
+          <div className="p-5 rounded-md bg-[#0f121a]/80 border border-white/10 backdrop-blur-md space-y-4">
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 <Tag className="w-4 h-4 text-cyan-400" />
@@ -1894,7 +1894,7 @@ function ThemeStudioInner() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Navbar Deals Shortcut */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Navbar Deals Shortcut Link</label>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -1904,7 +1904,7 @@ function ThemeStudioInner() {
                       onChange={(e) => setNavDealsEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                    <div className="w-9 h-5 bg-slate-800 rounded peer peer-checked:after:translate-x-full peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded after:h-4 after:w-4 after:transition-all"></div>
                   </label>
                 </div>
                 <div className="grid grid-cols-2 gap-3 pt-1">
@@ -1915,7 +1915,7 @@ function ThemeStudioInner() {
                       value={navDealsText}
                       onChange={(e) => setNavDealsText(e.target.value)}
                       placeholder="Deals"
-                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      className="w-full px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs text-white"
                     />
                   </div>
                   <div>
@@ -1925,14 +1925,14 @@ function ThemeStudioInner() {
                       value={navDealsLink}
                       onChange={(e) => setNavDealsLink(e.target.value)}
                       placeholder="/products?discounted=true"
-                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      className="w-full px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs text-white"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Category Deals Card */}
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white/[0.03] border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-white">Mega-Menu Category Deals Card</label>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -1942,7 +1942,7 @@ function ThemeStudioInner() {
                       onChange={(e) => setCategoryDealsCardEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                    <div className="w-9 h-5 bg-slate-800 rounded peer peer-checked:after:translate-x-full peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded after:h-4 after:w-4 after:transition-all"></div>
                   </label>
                 </div>
                 <div className="grid grid-cols-2 gap-3 pt-1">
@@ -1953,7 +1953,7 @@ function ThemeStudioInner() {
                       value={categoryDealsCardTitle}
                       onChange={(e) => setCategoryDealsCardTitle(e.target.value)}
                       placeholder="Top Deals"
-                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      className="w-full px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs text-white"
                     />
                   </div>
                   <div>
@@ -1963,7 +1963,7 @@ function ThemeStudioInner() {
                       value={categoryDealsCardSubtitle}
                       onChange={(e) => setCategoryDealsCardSubtitle(e.target.value)}
                       placeholder="Up to 20% Off"
-                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      className="w-full px-3 py-2 rounded-md bg-black/40 border border-white/10 text-xs text-white"
                     />
                   </div>
                 </div>
@@ -1986,9 +1986,9 @@ function ThemeStudioInner() {
       {/* Reset Confirmation Modal */}
       {showResetModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="max-w-md w-full p-6 rounded-2xl bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
+          <div className="max-w-md w-full p-6 rounded-lg bg-[#0f121a] border border-white/15 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+              <div className="p-2.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400">
                 <RotateCcw className="w-5 h-5" />
               </div>
               <div>
@@ -2006,7 +2006,7 @@ function ThemeStudioInner() {
                 type="button"
                 onClick={() => setShowResetModal(false)}
                 disabled={resetting}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -2014,7 +2014,7 @@ function ThemeStudioInner() {
                 type="button"
                 onClick={handleResetDefaults}
                 disabled={resetting}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
               >
                 {resetting ? <Loader2 className="w-4 h-4 animate-spin" /> : <RotateCcw className="w-4 h-4" />}
                 <span>{resetting ? "Resetting..." : "Yes, Reset Defaults"}</span>

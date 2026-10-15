@@ -127,7 +127,7 @@ function ProductPreviewModalInner({
       {/* 1. PREVIEW HEADER */}
       <div className="px-6 py-4 border-b border-white/[0.08] bg-[#0c101d] flex items-center justify-between gap-4 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+          <div className="w-9 h-9 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shrink-0">
             <Package className="w-4.5 h-4.5" />
           </div>
           <div className="min-w-0">
@@ -139,7 +139,7 @@ function ProductPreviewModalInner({
                 #{product.id}
               </span>
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
                   product.is_active
                     ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                     : "bg-rose-500/10 text-rose-400 border-rose-500/20"
@@ -159,7 +159,7 @@ function ProductPreviewModalInner({
         <button
           type="button"
           onClick={onClose}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition cursor-pointer shrink-0"
+          className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition cursor-pointer shrink-0"
           aria-label="Close preview"
           title="Close"
         >
@@ -176,7 +176,7 @@ function ProductPreviewModalInner({
               href={`/products/${product.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 text-xs font-medium transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 text-xs font-medium transition cursor-pointer"
               title="View product on storefront (opens in new tab)"
             >
               <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
@@ -196,7 +196,7 @@ function ProductPreviewModalInner({
                 onClose();
                 onEdit(product);
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 text-xs font-semibold transition cursor-pointer"
               title="Edit this product in ProductEditor"
             >
               <Edit className="w-3.5 h-3.5" />
@@ -211,7 +211,7 @@ function ProductPreviewModalInner({
                 onClose();
                 onDelete(product);
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold transition cursor-pointer"
               title="Delete this product"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -228,7 +228,7 @@ function ProductPreviewModalInner({
           {/* Gallery Column (md: 6 cols) */}
           <div className="md:col-span-6 space-y-3">
             {/* Main Image Container */}
-            <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-black/40 border border-white/10 flex items-center justify-center group shadow-inner">
+            <div className="relative aspect-square w-full rounded-md overflow-hidden bg-black/40 border border-white/10 flex items-center justify-center group shadow-inner">
               {activeImageUrl ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
@@ -245,7 +245,7 @@ function ProductPreviewModalInner({
 
               {/* Primary Badge on image if active image is primary */}
               {currentImageObj?.is_primary && (
-                <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-amber-500/90 text-black text-[10px] font-bold shadow-md">
+                <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-[#A78BFA] text-[#090B10] text-[10px] font-bold shadow-md">
                   Primary Image
                 </span>
               )}
@@ -261,9 +261,9 @@ function ProductPreviewModalInner({
                       key={img.id || `thumb-${idx}`}
                       type="button"
                       onClick={() => setSelectedImageUrl(img.image_url)}
-                      className={`relative w-14 h-14 rounded-xl overflow-hidden border transition-all shrink-0 cursor-pointer bg-black/40 ${
+                      className={`relative w-14 h-14 rounded-md overflow-hidden border transition-all shrink-0 cursor-pointer bg-black/40 ${
                         isSelected
-                          ? "border-amber-400 ring-2 ring-amber-400/40 scale-105"
+                          ? "border-[#A78BFA] ring-2 ring-[#A78BFA]/40 scale-105"
                           : "border-white/10 hover:border-white/30 opacity-70 hover:opacity-100"
                       }`}
                       title={img.alt_text || `View image ${idx + 1}`}
@@ -285,14 +285,14 @@ function ProductPreviewModalInner({
           {/* Quick Highlights & Status Flags (md: 6 cols) */}
           <div className="md:col-span-6 space-y-4">
             {/* Product Badges / Status Chips */}
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-3">
+            <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.08] space-y-3">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <Sparkles className="w-3.5 h-3.5 text-[#A78BFA]" />
                 <span>Merchandising & Badges</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 <span
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border ${
                     product.is_active
                       ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                       : "bg-rose-500/10 text-rose-400 border-rose-500/20"
@@ -303,17 +303,17 @@ function ProductPreviewModalInner({
                 </span>
 
                 {product.is_featured && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 text-xs font-semibold">
                     ★ Featured Product
                   </span>
                 )}
                 {product.is_new_arrival && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-semibold">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-semibold">
                     ✦ New Arrival
                   </span>
                 )}
                 {product.is_best_seller && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
                     🔥 Best Seller
                   </span>
                 )}
@@ -324,7 +324,7 @@ function ProductPreviewModalInner({
             </div>
 
             {/* Taxonomy / Relationships */}
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-3">
+            <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.08] space-y-3">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Category & Brand</span>
@@ -353,7 +353,7 @@ function ProductPreviewModalInner({
 
             {/* Short Description */}
             {product.short_description && (
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-1.5">
+              <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.08] space-y-1.5">
                 <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                   <Info className="w-3.5 h-3.5 text-slate-400" />
                   <span>Summary</span>
@@ -369,7 +369,7 @@ function ProductPreviewModalInner({
         {/* PRICING & INVENTORY TELEMETRY */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Selling & Compare-at Price */}
-          <div className="p-4 rounded-2xl bg-[#0e1322] border border-white/[0.08] space-y-2">
+          <div className="p-4 rounded-md bg-[#0e1322] border border-white/[0.08] space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-semibold uppercase tracking-wider text-[10px]">Selling Price</span>
               <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
@@ -392,7 +392,7 @@ function ProductPreviewModalInner({
           </div>
 
           {/* Inventory Stock & Status */}
-          <div className="p-4 rounded-2xl bg-[#0e1322] border border-white/[0.08] space-y-2">
+          <div className="p-4 rounded-md bg-[#0e1322] border border-white/[0.08] space-y-2">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-semibold uppercase tracking-wider text-[10px]">Inventory Stock</span>
               <Package className="w-3.5 h-3.5 text-cyan-400" />
@@ -403,20 +403,20 @@ function ProductPreviewModalInner({
               </span>
               <span className="text-xs text-slate-400">units available</span>
             </div>
-            <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${stockStatus.color}`}>
+            <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold border ${stockStatus.color}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${stockStatus.dot}`} />
               <span>{stockStatus.label}</span>
             </div>
           </div>
 
           {/* Admin Cost & Profit Margin (Admin Internal Only) */}
-          <div className="p-4 rounded-2xl bg-[#0e1322] border border-white/[0.08] space-y-2 sm:col-span-2 lg:col-span-1">
+          <div className="p-4 rounded-md bg-[#0e1322] border border-white/[0.08] space-y-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1 text-amber-400">
                 <ShieldCheck className="w-3 h-3" />
                 <span>Cost Price (Internal)</span>
               </span>
-              <TrendingUp className="w-3.5 h-3.5 text-amber-400" />
+              <TrendingUp className="w-3.5 h-3.5 text-[#A78BFA]" />
             </div>
             <div className="flex items-baseline justify-between gap-2">
               <div>
@@ -444,7 +444,7 @@ function ProductPreviewModalInner({
         </div>
 
         {/* READ-ONLY VARIANTS INSPECTION */}
-        <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-3.5">
+        <div className="p-5 rounded-md bg-white/[0.02] border border-white/[0.08] space-y-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-cyan-400" />
@@ -452,17 +452,17 @@ function ProductPreviewModalInner({
                 Product Variants
               </h3>
             </div>
-            <span className="text-[11px] font-mono text-slate-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-mono text-slate-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">
               {variants.length} {variants.length === 1 ? "variant" : "variants"}
             </span>
           </div>
 
           {!hasVariants ? (
-            <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.06] text-center text-xs text-slate-400">
+            <div className="p-4 rounded-md bg-white/[0.01] border border-white/[0.06] text-center text-xs text-slate-400">
               No variants configured. Product is sold as a single standalone item.
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
+            <div className="overflow-x-auto rounded-md border border-white/[0.08]">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#0e1220] border-b border-white/[0.08] text-slate-400 text-[10.5px] uppercase font-semibold">
                   <tr>
@@ -541,12 +541,12 @@ function ProductPreviewModalInner({
         </div>
 
         {/* FULL PRODUCT DESCRIPTION */}
-        <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-2.5">
+        <div className="p-5 rounded-md bg-white/[0.02] border border-white/[0.08] space-y-2.5">
           <h3 className="text-xs font-bold uppercase tracking-wider text-white">
             Product Description
           </h3>
           {product.description ? (
-            <div className="text-xs text-slate-300 leading-relaxed whitespace-pre-line bg-white/[0.01] border border-white/[0.04] rounded-xl p-4 max-h-60 overflow-y-auto font-sans">
+            <div className="text-xs text-slate-300 leading-relaxed whitespace-pre-line bg-white/[0.01] border border-white/[0.04] rounded-md p-4 max-h-60 overflow-y-auto font-sans">
               {product.description}
             </div>
           ) : (
@@ -555,7 +555,7 @@ function ProductPreviewModalInner({
         </div>
 
         {/* SEO & METADATA */}
-        <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-3">
+        <div className="p-5 rounded-md bg-white/[0.02] border border-white/[0.08] space-y-3">
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-cyan-400" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-white">
@@ -563,19 +563,19 @@ function ProductPreviewModalInner({
             </h3>
           </div>
           <div className="space-y-2.5 text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2.5 rounded-xl bg-[#090d18] border border-white/[0.04]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2.5 rounded-md bg-[#090d18] border border-white/[0.04]">
               <span className="text-slate-400 font-semibold text-[11px]">URL Slug:</span>
               <span className="font-mono text-cyan-400 truncate max-w-[400px]">
                 /products/{product.slug}
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2.5 rounded-xl bg-[#090d18] border border-white/[0.04]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2.5 rounded-md bg-[#090d18] border border-white/[0.04]">
               <span className="text-slate-400 font-semibold text-[11px]">Meta Title:</span>
               <span className="text-slate-200 truncate max-w-[400px]">
                 {product.meta_title || product.name || "Default (Inherits Product Name)"}
               </span>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#090d18] border border-white/[0.04] space-y-1">
+            <div className="p-2.5 rounded-md bg-[#090d18] border border-white/[0.04] space-y-1">
               <span className="text-slate-400 font-semibold text-[11px] block">Meta Description:</span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
                 {product.meta_description || "No custom meta description provided."}
@@ -593,7 +593,7 @@ function ProductPreviewModalInner({
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 font-medium transition cursor-pointer"
+          className="px-4 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 font-medium transition cursor-pointer"
         >
           Close Preview
         </button>

@@ -402,7 +402,7 @@ export default function AdminStaffPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#A78BFA]">
             Access Control & RBAC
           </span>
           <h1 className="text-2xl font-black text-white">Staff & Administrator Directory ({filteredStaff.length})</h1>
@@ -417,14 +417,14 @@ export default function AdminStaffPage() {
                 setInviteRole("admin");
                 setIsInviteModalOpen(true);
               }}
-              className="px-4 py-2.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-black flex items-center gap-1.5 transition-all shadow-lg"
+              className="px-4 py-2.5 rounded-md bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-black flex items-center gap-1.5 transition-all shadow-lg"
             >
               <Mail className="w-4 h-4" /> Invite Admin
             </button>
           )}
           <button
             onClick={handleOpenCreate}
-            className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition-all shadow-lg shadow-amber-500/20"
+            className="px-4 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-black flex items-center gap-1.5 transition-all shadow-lg shadow-[#A78BFA]/20"
           >
             <Plus className="w-4 h-4" /> Add Personnel
           </button>
@@ -432,7 +432,7 @@ export default function AdminStaffPage() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="p-4 rounded-2xl bg-[#0e121e] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="p-4 rounded-md bg-[#0e121e] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -440,7 +440,7 @@ export default function AdminStaffPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search personnel name, email, or role..."
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-9.5 pr-8 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full bg-white/5 border border-white/10 rounded-md pl-9.5 pr-8 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
           {search && (
             <button
@@ -478,7 +478,7 @@ export default function AdminStaffPage() {
           <button
             type="button"
             onClick={handleResetFilters}
-            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+            className="px-3 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
             title="Reset personnel filters"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -536,7 +536,7 @@ export default function AdminStaffPage() {
                     key={s.id}
                     className={`transition-colors ${
                       isSelected
-                        ? "bg-amber-500/10 border-l-2 border-amber-500"
+                        ? "bg-[#211B32] border-l-2 border-[#A78BFA]"
                         : "hover:bg-white/[0.02]"
                     }`}
                   >
@@ -552,7 +552,7 @@ export default function AdminStaffPage() {
                     <img
                       src={s.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"}
                       alt={s.name}
-                      className="w-8 h-8 rounded-xl object-cover bg-slate-900 ring-1 ring-amber-400/30 shrink-0"
+                      className="w-8 h-8 rounded-md object-cover bg-slate-900 ring-1 ring-[#A78BFA]/30 shrink-0"
                     />
                     <div>
                       <span className="text-white font-bold block">{s.name}</span>
@@ -560,15 +560,15 @@ export default function AdminStaffPage() {
                     </div>
                   </td>
                   <td className="p-3.5 whitespace-nowrap">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1.5 ${
+                    <span className={`px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1.5 ${
                       s.role === "super_admin"
                         ? "bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm shadow-purple-500/10"
                         : s.role === "admin"
-                        ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                        ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                         : "bg-cyan-500/15 text-cyan-300 border border-cyan-400/30"
                     }`}>
                       {s.role === "super_admin" && <Crown className="w-3 h-3 text-purple-400 shrink-0" />}
-                      {s.role === "admin" && <ShieldCheck className="w-3 h-3 text-amber-400 shrink-0" />}
+                      {s.role === "admin" && <ShieldCheck className="w-3 h-3 text-[#A78BFA] shrink-0" />}
                       {s.role === "staff" && <UserCog className="w-3 h-3 text-cyan-400 shrink-0" />}
                       {s.role === "super_admin" ? "Super Admin" : s.role}
                     </span>
@@ -579,8 +579,8 @@ export default function AdminStaffPage() {
                         <Crown className="w-3 h-3 text-purple-400" /> Untouchable Root Access
                       </span>
                     ) : s.role === "admin" ? (
-                      <span className="text-amber-400 font-bold flex items-center gap-1">
-                        <ShieldCheck className="w-3 h-3 text-amber-400" /> Full Operations Access
+                      <span className="text-[#A78BFA] font-bold flex items-center gap-1">
+                        <ShieldCheck className="w-3 h-3 text-[#A78BFA]" /> Full Operations Access
                       </span>
                     ) : s.permissions && s.permissions.length > 0 ? (
                       <span className="text-slate-400 font-mono text-[10px]">{s.permissions.length} module permissions</span>
@@ -590,13 +590,13 @@ export default function AdminStaffPage() {
                   </td>
                   <td className="p-3.5 whitespace-nowrap">
                     {s.status === "active" ? (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      <span className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                         Active
                       </span>
                     ) : s.suspended_until ? (
                       <div className="flex flex-col">
                         <span
-                          className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30 cursor-help"
+                          className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 cursor-help"
                           title={s.suspension_reason ? `Reason: ${s.suspension_reason}` : undefined}
                         >
                           Suspended (Timed)
@@ -607,7 +607,7 @@ export default function AdminStaffPage() {
                       </div>
                     ) : (
                       <span
-                        className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-300 border border-rose-500/30 cursor-help"
+                        className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-300 border border-rose-500/30 cursor-help"
                         title={s.suspension_reason ? `Reason: ${s.suspension_reason}` : undefined}
                       >
                         Suspended (Indefinite)
@@ -623,13 +623,13 @@ export default function AdminStaffPage() {
                       <div className="flex items-center justify-center gap-1.5">
                         <button
                           onClick={() => setViewingStaff(s)}
-                          className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm"
+                          className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm"
                           title="View Super Admin Profile"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
                         <div 
-                          className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 text-[10px] font-black tracking-wide"
+                          className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-purple-500/15 border border-purple-500/30 text-purple-300 text-[10px] font-black tracking-wide"
                           title="Super Administrator is permanent and protected from all external modifications"
                         >
                           <Crown className="w-3 h-3 text-purple-400 shrink-0" />
@@ -640,7 +640,7 @@ export default function AdminStaffPage() {
                       <div className="flex items-center justify-start gap-1.5 flex-wrap w-[146px] mx-auto">
                         <button
                           onClick={() => setViewingStaff(s)}
-                          className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm"
+                          className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm"
                           title="View Personnel Profile & Clearance"
                         >
                           <Eye className="w-3.5 h-3.5" />
@@ -648,7 +648,7 @@ export default function AdminStaffPage() {
                         
                         <button
                           onClick={() => handleOpenEdit(s)}
-                          className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:scale-105 transition-all shadow-sm"
+                          className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] hover:scale-105 transition-all shadow-sm"
                           title="Edit Personnel & Permissions"
                         >
                           <Edit className="w-3.5 h-3.5" />
@@ -658,7 +658,7 @@ export default function AdminStaffPage() {
                         {isSuperAdmin && s.role === "staff" && (
                           <button
                             onClick={() => handlePromote(s)}
-                            className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:scale-105 transition-all shadow-sm"
+                            className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:scale-105 transition-all shadow-sm"
                             title="Promote to Administrator (Executive Clearance)"
                           >
                             <ArrowUpCircle className="w-3.5 h-3.5" />
@@ -669,7 +669,7 @@ export default function AdminStaffPage() {
                         {isSuperAdmin && s.role === "admin" && (
                           <button
                             onClick={() => handleDemote(s)}
-                            className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:scale-105 transition-all shadow-sm"
+                            className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] hover:scale-105 transition-all shadow-sm"
                             title="Demote from Administrator to Staff"
                           >
                             <ArrowDownCircle className="w-3.5 h-3.5" />
@@ -681,7 +681,7 @@ export default function AdminStaffPage() {
                           s.status === "active" ? (
                             <button
                               onClick={() => setSuspendingStaff(s)}
-                              className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm"
+                              className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm"
                               title="Suspend Account (Indefinite / Timed)"
                             >
                               <ShieldAlert className="w-3.5 h-3.5" />
@@ -689,7 +689,7 @@ export default function AdminStaffPage() {
                           ) : (
                             <button
                               onClick={() => handleReactivateStaff(s)}
-                              className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:scale-105 transition-all shadow-sm"
+                              className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:scale-105 transition-all shadow-sm"
                               title="Reactivate Account"
                             >
                               <ShieldCheck className="w-3.5 h-3.5" />
@@ -701,7 +701,7 @@ export default function AdminStaffPage() {
                         {s.role !== "super_admin" && adminUser?.id !== s.id && (
                           <button
                             onClick={() => setDeletingStaff(s)}
-                            className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm"
+                            className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm"
                             title="Delete Account"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -751,11 +751,11 @@ export default function AdminStaffPage() {
               {/* Body */}
               <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4 text-xs">
                 {/* Profile Card */}
-                <div className="p-4 rounded-lg bg-white/[0.02] border border-white/5 flex items-center gap-3.5">
+                <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 flex items-center gap-3.5">
                   <img
                     src={viewingStaff.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"}
                     alt={viewingStaff.name}
-                    className="w-11 h-11 rounded-lg object-cover ring-1 ring-white/10 shrink-0"
+                    className="w-11 h-11 rounded-md object-cover ring-1 ring-white/10 shrink-0"
                   />
                   <div className="min-w-0 flex-1">
                     <h3 className="text-sm font-semibold text-white truncate">{viewingStaff.name}</h3>
@@ -771,14 +771,14 @@ export default function AdminStaffPage() {
                 </div>
 
                 {viewingStaff.role === "super_admin" && (
-                  <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs flex items-center gap-2">
+                  <div className="p-3 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs flex items-center gap-2">
                     <Crown className="w-4 h-4 text-purple-400 shrink-0" />
                     <span><b>Super Administrator:</b> Master authority account with immutable clearance across all modules.</span>
                   </div>
                 )}
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Role Clearance
                     </span>
@@ -787,7 +787,7 @@ export default function AdminStaffPage() {
                       {viewingStaff.role === "super_admin" ? "Super Admin" : viewingStaff.role}
                     </span>
                   </div>
-                  <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                     <span className="text-[10px] font-medium text-slate-400 block uppercase tracking-wider">
                       Active Permissions
                     </span>
@@ -805,7 +805,7 @@ export default function AdminStaffPage() {
                   
                   <div className="space-y-2.5">
                     {ADMIN_PERMISSION_MODULES.map((module) => (
-                      <div key={module.name} className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-2">
+                      <div key={module.name} className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-2">
                         <span className="text-xs font-semibold text-slate-200 block">
                           {module.name}
                         </span>
@@ -852,7 +852,7 @@ export default function AdminStaffPage() {
                       setViewingStaff(null);
                       handleOpenEdit(s);
                     }}
-                    className="h-8 px-4 rounded-lg bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer shadow-sm"
+                    className="h-8 px-4 rounded-md bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer shadow-sm"
                   >
                     Modify Personnel
                   </button>
@@ -913,7 +913,7 @@ export default function AdminStaffPage() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="e.g. Rachel"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -925,7 +925,7 @@ export default function AdminStaffPage() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="e.g. Sterling"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                   />
                 </div>
               </div>
@@ -939,7 +939,7 @@ export default function AdminStaffPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="rachel@store.test"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -951,7 +951,7 @@ export default function AdminStaffPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    inputClassName="h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-white/20 focus:outline-none transition"
+                    inputClassName="h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-white/20 focus:outline-none transition"
                   />
                 </div>
               </div>
@@ -971,7 +971,7 @@ export default function AdminStaffPage() {
                       setRole(val);
                     }}
                     className="w-full"
-                    buttonClassName="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white"
+                    buttonClassName="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white"
                     options={
                       isSuperAdmin
                         ? [
@@ -999,7 +999,7 @@ export default function AdminStaffPage() {
                     value={status}
                     onChange={(val) => setStatus(val)}
                     className="w-full"
-                    buttonClassName="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white"
+                    buttonClassName="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white"
                     options={[
                       { value: "active", label: "Active" },
                       { value: "suspended", label: "Suspended" },
@@ -1070,7 +1070,7 @@ export default function AdminStaffPage() {
                       return (
                         <div
                           key={module.name}
-                          className="p-3 rounded-lg bg-white/[0.02] border border-white/5 space-y-2"
+                          className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-2"
                         >
                           <div className="flex items-center justify-between">
                             <div>
@@ -1094,7 +1094,7 @@ export default function AdminStaffPage() {
                               return (
                                 <label
                                   key={p.id}
-                                  className={`p-2 rounded-lg border flex items-start gap-2 cursor-pointer transition ${
+                                  className={`p-2 rounded-md border flex items-start gap-2 cursor-pointer transition ${
                                     isChecked
                                       ? "bg-white/10 border-white/20 text-white shadow-xs"
                                       : "bg-white/[0.01] border-white/5 text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"
@@ -1121,8 +1121,8 @@ export default function AdminStaffPage() {
                   </div>
                 </div>
               ) : (
-                <div className="p-3.5 rounded-lg bg-white/[0.02] border border-white/5 text-xs text-slate-300 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 shrink-0 text-amber-400" />
+                <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 text-xs text-slate-300 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 shrink-0 text-[#A78BFA]" />
                   <span>The <b>{role.toUpperCase()}</b> role automatically inherits complete privileges across all modules.</span>
                 </div>
               )}
@@ -1140,7 +1140,7 @@ export default function AdminStaffPage() {
               <button
                 type="submit"
                 disabled={saving || (editingStaff ? !isEditDirty : false)}
-                className="h-8 px-4 rounded-lg bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer disabled:opacity-50 shadow-sm"
+                className="h-8 px-4 rounded-md bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer disabled:opacity-50 shadow-sm"
                 title={editingStaff && !isEditDirty ? "No changes made to personnel profile or permissions" : undefined}
               >
                 {saving ? "Saving..." : editingStaff ? "Save Permissions" : "Create Personnel"}
@@ -1168,7 +1168,7 @@ export default function AdminStaffPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div onClick={() => setDeletingStaff(null)} className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
 
-          <div className="relative w-full max-w-md rounded-3xl bg-[#0e121e] border border-rose-500/30 p-6 z-10 space-y-4 text-xs">
+          <div className="relative w-full max-w-md rounded-md bg-[#0e121e] border border-rose-500/30 p-6 z-10 space-y-4 text-xs">
             <h3 className="text-base font-black text-white">Delete Personnel</h3>
             <p className="text-slate-300">
               Are you sure you want to terminate administrative access for <span className="font-bold text-white">{deletingStaff.name}</span>?
@@ -1178,7 +1178,7 @@ export default function AdminStaffPage() {
               <button
                 type="button"
                 onClick={() => setDeletingStaff(null)}
-                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                className="px-4 py-2 rounded-md text-slate-400 hover:text-white"
               >
                 Cancel
               </button>
@@ -1186,7 +1186,7 @@ export default function AdminStaffPage() {
                 type="button"
                 disabled={deleting}
                 onClick={handleDeleteStaff}
-                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all shadow-md"
+                className="px-5 py-2.5 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all shadow-md"
               >
                 {deleting ? "Deleting..." : "Confirm Termination"}
               </button>
@@ -1200,7 +1200,7 @@ export default function AdminStaffPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div onClick={() => setIsInviteModalOpen(false)} className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
 
-          <div className="relative w-full max-w-md rounded-3xl bg-[#0e121e] border border-purple-500/30 p-6 z-10 space-y-4 text-xs">
+          <div className="relative w-full max-w-md rounded-md bg-[#0e121e] border border-purple-500/30 p-6 z-10 space-y-4 text-xs">
             <h3 className="text-base font-black text-white flex items-center gap-2">
               <Mail className="w-5 h-5 text-purple-400" />
               Invite Administrator
@@ -1217,7 +1217,7 @@ export default function AdminStaffPage() {
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
                   placeholder="e.g. John Doe"
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                 />
               </div>
 
@@ -1229,7 +1229,7 @@ export default function AdminStaffPage() {
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="john@example.com"
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                 />
               </div>
 
@@ -1239,7 +1239,7 @@ export default function AdminStaffPage() {
                   value={inviteRole}
                   onChange={(val) => setInviteRole(val)}
                   className="w-full"
-                  buttonClassName="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white"
+                  buttonClassName="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white"
                   options={[
                     { value: "admin", label: "Admin (Full Operations)" },
                     { value: "staff", label: "Staff Member (Custom RBAC)" },
@@ -1252,14 +1252,14 @@ export default function AdminStaffPage() {
                 <button
                   type="button"
                   onClick={() => setIsInviteModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-md text-slate-400 hover:text-white transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={inviting}
-                  className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold transition-all shadow-md disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold transition-all shadow-md disabled:opacity-50 flex items-center gap-2"
                 >
                   {inviting ? "Sending..." : "Send Invitation"}
                 </button>

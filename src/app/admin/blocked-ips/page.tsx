@@ -145,7 +145,7 @@ export default function AdminBlockedIpsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
+            <div className="p-2.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20">
               <ShieldAlert className="w-6 h-6" />
             </div>
             <div>
@@ -158,7 +158,7 @@ export default function AdminBlockedIpsPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsBlockModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold rounded-xl shadow-lg shadow-red-600/20 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold rounded-md shadow-lg shadow-red-600/20 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Block New IP</span>
@@ -167,7 +167,7 @@ export default function AdminBlockedIpsPage() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#0e131f] p-4 rounded-2xl border border-white/5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#0e131f] p-4 rounded-md border border-white/5">
         <div className="relative md:col-span-2">
           <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -178,7 +178,7 @@ export default function AdminBlockedIpsPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-full bg-[#07080c] border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-red-500/50"
+            className="w-full bg-[#07080c] border border-white/10 rounded-md pl-10 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-red-500/50"
           />
         </div>
 
@@ -199,7 +199,7 @@ export default function AdminBlockedIpsPage() {
 
           <button
             onClick={fetchBlockedIps}
-            className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 text-slate-400 hover:text-white transition-all"
+            className="p-2 rounded-md bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 text-slate-400 hover:text-white transition-all"
             title="Refresh list"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
@@ -208,7 +208,7 @@ export default function AdminBlockedIpsPage() {
       </div>
 
       {/* Main Blocked IP Table */}
-      <div className="p-4 rounded-2xl bg-[#0b0d14] border border-white/5 space-y-3">
+      <div className="p-4 rounded-md bg-[#0b0d14] border border-white/5 space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold text-white">Blocked IP Addresses ({totalCount})</h2>
         </div>
@@ -258,16 +258,16 @@ export default function AdminBlockedIpsPage() {
 
                       <td className="py-3.5 px-4">
                         {isActive ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">
                             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                             ACTIVE
                           </span>
                         ) : item.status === "expired" ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                             EXPIRED
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20">
                             REVOKED
                           </span>
                         )}
@@ -303,7 +303,7 @@ export default function AdminBlockedIpsPage() {
                       <td className="py-3.5 px-4 text-center">
                         <button
                           onClick={() => handleOpenInspect(item)}
-                          className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-cyan-400 hover:text-cyan-300 transition-all font-mono text-[11px]"
+                          className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-cyan-400 hover:text-cyan-300 transition-all font-mono text-[11px]"
                         >
                           <span>{item.related_orders_count ?? 0} Orders</span>
                           <span className="text-slate-600">|</span>
@@ -315,7 +315,7 @@ export default function AdminBlockedIpsPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleOpenInspect(item)}
-                            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-cyan-500/10 text-slate-400 hover:text-cyan-400 border border-white/5 transition-all"
+                            className="p-1.5 rounded-md bg-white/[0.03] hover:bg-cyan-500/10 text-slate-400 hover:text-cyan-400 border border-white/5 transition-all"
                             title="Inspect related orders & customers"
                           >
                             <Info className="w-4 h-4" />
@@ -324,7 +324,7 @@ export default function AdminBlockedIpsPage() {
                           {isActive && (
                             <button
                               onClick={() => handleUnblock(item.id, item.ip_address)}
-                              className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-[11px] font-semibold transition-all"
+                              className="px-2.5 py-1 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-[11px] font-semibold transition-all"
                               title="Revoke block rule"
                             >
                               Unblock
@@ -347,14 +347,14 @@ export default function AdminBlockedIpsPage() {
               <button
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none border border-white/10 text-white transition-all"
+                className="px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none border border-white/10 text-white transition-all"
               >
                 Previous
               </button>
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => p + 1)}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none border border-white/10 text-white transition-all"
+                className="px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none border border-white/10 text-white transition-all"
               >
                 Next
               </button>
@@ -367,10 +367,10 @@ export default function AdminBlockedIpsPage() {
       {/* Block New IP Modal */}
       {isBlockModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b0d14] border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#0b0d14] border border-white/10 rounded-lg w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between p-5 border-b border-white/10 bg-white/[0.02]">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
+                <div className="p-2 rounded-md bg-red-500/10 text-red-400 border border-red-500/20">
                   <ShieldAlert className="w-5 h-5" />
                 </div>
                 <div>
@@ -380,7 +380,7 @@ export default function AdminBlockedIpsPage() {
               </div>
               <button
                 onClick={() => setIsBlockModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -397,7 +397,7 @@ export default function AdminBlockedIpsPage() {
                   placeholder="e.g. 198.51.100.45 or 2001:db8::1"
                   value={ipToBlock}
                   onChange={(e) => setIpToBlock(e.target.value)}
-                  className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:outline-none focus:border-red-500/50"
+                  className="w-full bg-[#07080c] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono text-xs focus:outline-none focus:border-red-500/50"
                 />
               </div>
 
@@ -411,7 +411,7 @@ export default function AdminBlockedIpsPage() {
                   placeholder="e.g. Abusive cancellation flood, Botnet probe, Chargeback fraud"
                   value={blockReason}
                   onChange={(e) => setBlockReason(e.target.value)}
-                  className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-xs focus:outline-none focus:border-red-500/50"
+                  className="w-full bg-[#07080c] border border-white/10 rounded-md px-3.5 py-2.5 text-white text-xs focus:outline-none focus:border-red-500/50"
                 />
               </div>
 
@@ -430,7 +430,7 @@ export default function AdminBlockedIpsPage() {
                       key={opt.value}
                       type="button"
                       onClick={() => setBlockDuration(opt.value as any)}
-                      className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
+                      className={`py-2 px-3 rounded-md border text-xs font-semibold transition-all ${
                         blockDuration === opt.value
                           ? "bg-red-500/10 border-red-500/40 text-red-400"
                           : "bg-white/[0.02] border-white/5 text-slate-400 hover:text-white"
@@ -450,7 +450,7 @@ export default function AdminBlockedIpsPage() {
                     required
                     value={customExpiresAt}
                     onChange={(e) => setCustomExpiresAt(e.target.value)}
-                    className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-xs focus:outline-none focus:border-red-500/50"
+                    className="w-full bg-[#07080c] border border-white/10 rounded-md px-3.5 py-2.5 text-white text-xs focus:outline-none focus:border-red-500/50"
                   />
                 </div>
               )}
@@ -462,11 +462,11 @@ export default function AdminBlockedIpsPage() {
                   placeholder="Add internal security investigation details..."
                   value={blockNotes}
                   onChange={(e) => setBlockNotes(e.target.value)}
-                  className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-red-500/50 resize-none"
+                  className="w-full bg-[#07080c] border border-white/10 rounded-md px-3.5 py-2 text-white text-xs focus:outline-none focus:border-red-500/50 resize-none"
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] flex gap-2">
+              <div className="p-3 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] flex gap-2">
                 <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
                 <p>
                   <strong>Shared Network Caution:</strong> Ensure this IP is not a major corporate proxy or cellular NAT gateway before applying long-term blocks to prevent collateral impact on innocent customers.
@@ -477,14 +477,14 @@ export default function AdminBlockedIpsPage() {
                 <button
                   type="button"
                   onClick={() => setIsBlockModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold transition-all"
+                  className="px-4 py-2 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submittingBlock}
-                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-lg shadow-red-600/20 disabled:opacity-50 transition-all flex items-center gap-2"
+                  className="px-5 py-2 rounded-md bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-lg shadow-red-600/20 disabled:opacity-50 transition-all flex items-center gap-2"
                 >
                   {submittingBlock && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
                   <span>Confirm IP Block</span>
@@ -498,10 +498,10 @@ export default function AdminBlockedIpsPage() {
       {/* Inspect Related Entities Drawer/Modal */}
       {inspectingIp && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b0d14] border border-white/10 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#0b0d14] border border-white/10 rounded-lg w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between p-5 border-b border-white/10 bg-white/[0.02] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <div className="p-2.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                   <Info className="w-5 h-5" />
                 </div>
                 <div>
@@ -515,7 +515,7 @@ export default function AdminBlockedIpsPage() {
               </div>
               <button
                 onClick={() => setInspectingIp(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -543,10 +543,10 @@ export default function AdminBlockedIpsPage() {
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {relatedCustomers.map((c) => (
-                          <div key={c.id} className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                          <div key={c.id} className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                             <div className="flex items-center justify-between">
                               <span className="font-bold text-white">{c.name}</span>
-                              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                              <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
                                 c.status === "blocked" ? "bg-red-500/10 text-red-400" :
                                 c.status === "suspended" ? "bg-amber-500/10 text-amber-400" :
                                 "bg-emerald-500/10 text-emerald-400"
@@ -574,7 +574,7 @@ export default function AdminBlockedIpsPage() {
                     {relatedOrders.length === 0 ? (
                       <p className="text-slate-500 text-[11px] italic">No orders recorded originating from this IP address.</p>
                     ) : (
-                      <div className="border border-white/5 rounded-xl overflow-hidden">
+                      <div className="border border-white/5 rounded-md overflow-hidden">
                         <table className="w-full text-left text-xs border-collapse">
                           <thead>
                             <tr className="border-b border-white/5 bg-white/[0.01] text-slate-400 font-semibold text-[11px]">
@@ -591,7 +591,7 @@ export default function AdminBlockedIpsPage() {
                                 <td className="py-2.5 px-3 font-mono font-bold text-white">{ord.order_number}</td>
                                 <td className="py-2.5 px-3 text-slate-400">{ord.customer_name}</td>
                                 <td className="py-2.5 px-3">
-                                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                     ord.order_status === "cancelled" ? "bg-red-500/10 text-red-400" :
                                     ord.order_status === "delivered" ? "bg-emerald-500/10 text-emerald-400" :
                                     "bg-cyan-500/10 text-cyan-400"
@@ -616,7 +616,7 @@ export default function AdminBlockedIpsPage() {
               <span className="text-[11px] text-slate-500">Security Audit Log ID: #{inspectingIp.id}</span>
               <button
                 onClick={() => setInspectingIp(null)}
-                className="px-4 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold transition-all"
+                className="px-4 py-1.5 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold transition-all"
               >
                 Close
               </button>

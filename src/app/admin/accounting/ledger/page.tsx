@@ -179,7 +179,7 @@ export default function GeneralLedgerPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -203,7 +203,7 @@ export default function GeneralLedgerPage() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-semibold transition-all shadow-sm cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-semibold transition-all shadow-sm cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Journal Entry</span>
@@ -212,7 +212,7 @@ export default function GeneralLedgerPage() {
               href={adminApi.getAccountingExportUrl("ledger")}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
               <span>Export CSV</span>
@@ -220,16 +220,16 @@ export default function GeneralLedgerPage() {
             <button
               onClick={fetchLedger}
               disabled={loading}
-              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-slate-400 hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
+              className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-slate-400 hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-amber-400" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#A78BFA]" : ""}`} />
             </button>
           </div>
         }
       />
 
       {/* Mathematical Audit Balance Summary Bar */}
-      <div className="p-4 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-wrap items-center justify-between gap-4 shadow-sm">
+      <div className="p-4 rounded-md bg-[#0f121b] border border-white/[0.08] flex flex-wrap items-center justify-between gap-4 shadow-sm">
         <div className="flex items-center gap-6">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Ledger Debits</span>
@@ -248,12 +248,12 @@ export default function GeneralLedgerPage() {
 
         <div className="flex items-center gap-2">
           {data?.summary?.is_balanced ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
               <CheckCircle2 className="w-4 h-4" />
               <span>Perfect Double-Entry Balance (Debit == Credit)</span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold">
               <AlertCircle className="w-4 h-4" />
               <span>Ledger Variance Detected</span>
             </div>
@@ -262,7 +262,7 @@ export default function GeneralLedgerPage() {
       </div>
 
       {/* Filter Toolbar */}
-      <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] text-xs shadow-sm">
+      <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08] text-xs shadow-sm">
         <div className="relative sm:col-span-2">
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -270,7 +270,7 @@ export default function GeneralLedgerPage() {
             placeholder="Search by entry #, narration, memo, reference..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg pl-9 pr-3 py-1.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400/50 transition"
+            className="w-full bg-[#161a26] border border-white/[0.08] rounded-md pl-9 pr-3 py-1.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50 transition"
           />
         </div>
 
@@ -278,7 +278,7 @@ export default function GeneralLedgerPage() {
           <select
             value={selectedAccountId}
             onChange={(e) => setSelectedAccountId(e.target.value)}
-            className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-amber-400/50 transition"
+            className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-1.5 text-white focus:outline-none focus:border-[#A78BFA]/50 transition"
           >
             <option value="">All Accounts (All Classes)</option>
             {accounts.map((a) => (
@@ -294,11 +294,11 @@ export default function GeneralLedgerPage() {
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-amber-400/50 transition"
+            className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-2 py-1.5 text-white focus:outline-none focus:border-[#A78BFA]/50 transition"
           />
           <button
             type="submit"
-            className="px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold transition-all cursor-pointer shrink-0 shadow-sm"
+            className="px-3.5 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-semibold transition-all cursor-pointer shrink-0 shadow-sm"
           >
             Filter
           </button>
@@ -306,7 +306,7 @@ export default function GeneralLedgerPage() {
       </form>
 
       {/* General Ledger Table */}
-      <div className="p-4 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-3 shadow-sm">
+      <div className="p-4 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-3 shadow-sm">
         {(!data?.entries?.data || data.entries.data.length === 0) ? (
           <AdminEmptyState
             icon={BookOpen}
@@ -323,7 +323,7 @@ export default function GeneralLedgerPage() {
               return (
                 <div
                   key={entry.id}
-                  className="rounded-xl bg-white/[0.02] border border-white/5 overflow-hidden transition-colors hover:border-white/10"
+                  className="rounded-md bg-white/[0.02] border border-white/5 overflow-hidden transition-colors hover:border-white/10"
                 >
                   {/* Entry Header Bar */}
                   <div
@@ -334,7 +334,7 @@ export default function GeneralLedgerPage() {
                       <button className="text-slate-400 hover:text-white">
                         {isExpanded ? <ChevronDown className="w-4 h-4 text-indigo-400" /> : <ChevronRight className="w-4 h-4" />}
                       </button>
-                      <span className="font-mono font-bold text-amber-400 text-xs sm:text-sm">
+                      <span className="font-mono font-bold text-[#A78BFA] text-xs sm:text-sm">
                         {entry.entry_number}
                       </span>
                       <span className="text-xs font-mono text-slate-400">{entry.entry_date}</span>
@@ -355,7 +355,7 @@ export default function GeneralLedgerPage() {
                           ${totalDebit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </span>
                       </div>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         {entry.status}
                       </span>
                     </div>
@@ -383,7 +383,7 @@ export default function GeneralLedgerPage() {
                         <tbody className="divide-y divide-white/5">
                           {entry.lines.map((line) => (
                             <tr key={line.id} className="hover:bg-white/[0.02]">
-                              <td className="py-2 font-mono text-amber-400 font-bold">
+                              <td className="py-2 font-mono text-[#A78BFA] font-bold">
                                 {line.account?.account_code || "—"}
                               </td>
                               <td className="py-2 text-white font-medium">
@@ -431,14 +431,14 @@ export default function GeneralLedgerPage() {
                   <button
                     disabled={page <= 1}
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white disabled:opacity-30"
+                    className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white disabled:opacity-30"
                   >
                     Previous
                   </button>
                   <button
                     disabled={page >= data.entries.last_page}
                     onClick={() => setPage((p) => p + 1)}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white disabled:opacity-30"
+                    className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white disabled:opacity-30"
                   >
                     Next
                   </button>
@@ -452,10 +452,10 @@ export default function GeneralLedgerPage() {
       {/* Manual Journal Entry Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#0b0f19] border border-white/10 rounded-lg max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <div>
@@ -465,7 +465,7 @@ export default function GeneralLedgerPage() {
               </div>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -479,7 +479,7 @@ export default function GeneralLedgerPage() {
                     type="date"
                     value={entryDate}
                     onChange={(e) => setEntryDate(e.target.value)}
-                    className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-400"
+                    className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-400"
                     required
                   />
                 </div>
@@ -491,7 +491,7 @@ export default function GeneralLedgerPage() {
                     placeholder="e.g. ADJ-001, MEMO-99"
                     value={referenceNumber}
                     onChange={(e) => setReferenceNumber(e.target.value)}
-                    className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-indigo-400"
+                    className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-indigo-400"
                   />
                 </div>
               </div>
@@ -504,7 +504,7 @@ export default function GeneralLedgerPage() {
                   placeholder="Official business reason for this journal entry..."
                   value={narration}
                   onChange={(e) => setNarration(e.target.value)}
-                  className="w-full bg-[#141a29] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-400 resize-none"
+                  className="w-full bg-[#141a29] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-400 resize-none"
                 />
               </div>
 
@@ -524,12 +524,12 @@ export default function GeneralLedgerPage() {
 
                 <div className="space-y-2">
                   {lines.map((line, idx) => (
-                    <div key={idx} className="grid grid-cols-12 gap-2 items-center bg-white/[0.02] p-2.5 rounded-xl border border-white/5">
+                    <div key={idx} className="grid grid-cols-12 gap-2 items-center bg-white/[0.02] p-2.5 rounded-md border border-white/5">
                       <div className="col-span-5">
                         <select
                           value={line.chart_of_account_id}
                           onChange={(e) => updateLine(idx, "chart_of_account_id", Number(e.target.value))}
-                          className="w-full bg-[#141a29] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-400"
+                          className="w-full bg-[#141a29] border border-white/10 rounded-md px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-400"
                           required
                         >
                           <option value={0}>Select Account...</option>
@@ -551,7 +551,7 @@ export default function GeneralLedgerPage() {
                             updateLine(idx, "debit", e.target.value);
                             if (e.target.value) updateLine(idx, "credit", "");
                           }}
-                          className="w-full bg-[#141a29] border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white font-mono text-right focus:outline-none focus:border-indigo-400"
+                          className="w-full bg-[#141a29] border border-white/10 rounded-md px-2 py-1.5 text-xs text-white font-mono text-right focus:outline-none focus:border-indigo-400"
                         />
                       </div>
 
@@ -565,7 +565,7 @@ export default function GeneralLedgerPage() {
                             updateLine(idx, "credit", e.target.value);
                             if (e.target.value) updateLine(idx, "debit", "");
                           }}
-                          className="w-full bg-[#141a29] border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white font-mono text-right focus:outline-none focus:border-indigo-400"
+                          className="w-full bg-[#141a29] border border-white/10 rounded-md px-2 py-1.5 text-xs text-white font-mono text-right focus:outline-none focus:border-indigo-400"
                         />
                       </div>
 
@@ -575,7 +575,7 @@ export default function GeneralLedgerPage() {
                           placeholder="Line memo"
                           value={line.memo}
                           onChange={(e) => updateLine(idx, "memo", e.target.value)}
-                          className="w-full bg-[#141a29] border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-400"
+                          className="w-full bg-[#141a29] border border-white/10 rounded-md px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-400"
                         />
                       </div>
 
@@ -595,7 +595,7 @@ export default function GeneralLedgerPage() {
               </div>
 
               {/* Dynamic Balance Check Footer */}
-              <div className="p-3 rounded-xl bg-[#141a29] border border-white/10 flex items-center justify-between text-xs font-mono">
+              <div className="p-3 rounded-md bg-[#141a29] border border-white/10 flex items-center justify-between text-xs font-mono">
                 <div>
                   <span className="text-slate-400 mr-2">Total Debits:</span>
                   <span className="font-bold text-white">${modalTotalDebit.toFixed(2)}</span>
@@ -621,14 +621,14 @@ export default function GeneralLedgerPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
+                  className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting || !isModalBalanced}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all disabled:opacity-40 shadow-md shadow-indigo-600/20"
+                  className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all disabled:opacity-40 shadow-md shadow-indigo-600/20"
                 >
                   {submitting ? "Validating & Posting..." : "Post Journal Entry"}
                 </button>

@@ -306,7 +306,7 @@ export function ProductMediaTab({
           <div className="flex items-center gap-2">
             <h4 className="text-xs font-semibold text-white tracking-wide">Product Images & Color Association</h4>
             <span
-              className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+              className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
                 images.length === 0
                   ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
                   : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
@@ -321,7 +321,7 @@ export function ProductMediaTab({
         </div>
 
         {/* Mode Switcher */}
-        <div className="p-0.5 rounded-lg bg-white/[0.04] border border-white/10 flex items-center shrink-0">
+        <div className="p-0.5 rounded-md bg-white/[0.04] border border-white/10 flex items-center shrink-0">
           <button
             type="button"
             onClick={() => setInputMode("upload")}
@@ -373,15 +373,15 @@ export function ProductMediaTab({
             e.preventDefault();
             if (e.dataTransfer.files) handleFiles(e.dataTransfer.files);
           }}
-          className={`border border-dashed rounded-xl py-7 px-4 text-center transition-all flex flex-col items-center justify-center gap-2.5 ${
+          className={`border border-dashed rounded-md py-7 px-4 text-center transition-all flex flex-col items-center justify-center gap-2.5 ${
             images.length >= 5
               ? "opacity-40 border-white/10 cursor-not-allowed bg-white/[0.01]"
-              : "border-white/15 hover:border-amber-400/50 bg-white/[0.02] hover:bg-white/[0.04] cursor-pointer group"
+              : "border-white/15 hover:border-[#A78BFA]/50 bg-white/[0.02] hover:bg-white/[0.04] cursor-pointer group"
           }`}
         >
-          <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 group-hover:text-amber-400 group-hover:scale-105 transition">
+          <div className="w-11 h-11 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 group-hover:text-[#A78BFA] group-hover:scale-105 transition">
             {isUploading ? (
-              <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+              <Loader2 className="w-5 h-5 animate-spin text-[#A78BFA]" />
             ) : (
               <UploadCloud className="w-5 h-5" />
             )}
@@ -406,13 +406,13 @@ export function ProductMediaTab({
             value={newImageUrl}
             onChange={(e) => setNewImageUrl(e.target.value)}
             placeholder="https://images.unsplash.com/photo-..."
-            className="flex-1 bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
+            className="flex-1 bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
           />
           <button
             type="button"
             onClick={handleAddImageUrl}
             disabled={images.length >= 5}
-            className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition cursor-pointer disabled:opacity-50"
+            className="px-4 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition cursor-pointer disabled:opacity-50"
           >
             Add URL
           </button>
@@ -431,14 +431,14 @@ export function ProductMediaTab({
             {images.map((img, idx) => (
               <div
                 key={idx}
-                className={`rounded-xl border ${
+                className={`rounded-md border ${
                   img.is_primary
-                    ? "border-amber-400/60 ring-1 ring-amber-400/30 bg-amber-500/[0.02]"
+                    ? "border-[#A78BFA]/60 ring-1 ring-[#A78BFA]/30 bg-[#A78BFA]/[0.05]"
                     : "border-white/10 bg-white/[0.02] hover:border-white/20"
                 } p-2.5 flex flex-col justify-between gap-2.5 transition-all shadow-sm`}
               >
                 {/* Image preview with badges */}
-                <div className="relative aspect-video sm:aspect-square rounded-lg overflow-hidden border border-white/10 bg-black/60 group">
+                <div className="relative aspect-video sm:aspect-square rounded-md overflow-hidden border border-white/10 bg-black/60 group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={img.image_url}
@@ -448,7 +448,7 @@ export function ProductMediaTab({
 
                   {/* Primary Badge */}
                   {img.is_primary && (
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-sm text-amber-300 text-[10px] font-semibold border border-amber-400/40 shadow-xs flex items-center gap-1 z-10">
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-sm text-[#A78BFA] text-[10px] font-semibold border border-[#A78BFA]/40 shadow-xs flex items-center gap-1 z-10">
                       <CheckCircle2 className="w-3 h-3 text-amber-400" />
                       Primary Cover
                     </span>
@@ -472,7 +472,7 @@ export function ProductMediaTab({
                       <button
                         type="button"
                         onClick={() => handleSetPrimaryImage(idx)}
-                        className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-[11px] font-bold transition cursor-pointer shadow"
+                        className="px-2.5 py-1 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-[11px] font-bold transition cursor-pointer shadow"
                       >
                         Make Primary
                       </button>
@@ -480,7 +480,7 @@ export function ProductMediaTab({
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(idx)}
-                      className="p-1.5 rounded-lg bg-rose-500/80 hover:bg-rose-500 text-white transition cursor-pointer shadow"
+                      className="p-1.5 rounded-md bg-rose-500/80 hover:bg-rose-500 text-white transition cursor-pointer shadow"
                       title="Remove image"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -499,7 +499,7 @@ export function ProductMediaTab({
                     <select
                       value={img.color_name || ""}
                       onChange={(e) => handleUpdateColor(idx, e.target.value)}
-                      className="w-full bg-white/[0.04] border border-white/10 focus:border-cyan-400/50 rounded-lg px-2 py-1.5 text-[11px] text-slate-200 outline-none cursor-pointer"
+                      className="w-full bg-white/[0.04] border border-white/10 focus:border-cyan-400/50 rounded-md px-2 py-1.5 text-[11px] text-slate-200 outline-none cursor-pointer"
                     >
                       <option value="" className="bg-[#0b0e17] text-slate-300">
                         All Colors (General Catalog)
@@ -520,7 +520,7 @@ export function ProductMediaTab({
                       value={img.alt_text || ""}
                       onChange={(e) => handleUpdateAltText(idx, e.target.value)}
                       placeholder="e.g. Matte Black finish side view"
-                      className="w-full bg-white/[0.03] border border-white/10 focus:border-amber-400/50 rounded-lg px-2 py-1.5 text-[11px] text-white placeholder:text-slate-600 outline-none"
+                      className="w-full bg-white/[0.03] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-2 py-1.5 text-[11px] text-white placeholder:text-slate-600 outline-none"
                     />
                   </div>
                 </div>
@@ -529,7 +529,7 @@ export function ProductMediaTab({
           </div>
         </div>
       ) : (
-        <div className="p-6 rounded-xl bg-white/[0.02] border border-white/5 text-center text-xs text-slate-500 space-y-1">
+        <div className="p-6 rounded-md bg-white/[0.02] border border-white/5 text-center text-xs text-slate-500 space-y-1">
           <ImageIcon className="w-6 h-6 mx-auto mb-1.5 text-slate-600" />
           <p className="font-semibold text-slate-400">No images uploaded yet</p>
           <p className="text-[11px]">Add at least 1 image to showcase this product in the catalog.</p>

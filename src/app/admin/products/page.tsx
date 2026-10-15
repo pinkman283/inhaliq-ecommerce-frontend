@@ -292,7 +292,7 @@ export default function AdminProductsPage() {
               type="button"
               onClick={handleExportCSV}
               disabled={isExporting}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
               title="Export filtered catalog to CSV"
             >
               <Download className={`w-4 h-4 text-emerald-400 ${isExporting ? "animate-pulse" : ""}`} />
@@ -301,7 +301,7 @@ export default function AdminProductsPage() {
             <button
               type="button"
               onClick={() => setIsImportOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors cursor-pointer"
               title="Import catalog from CSV"
             >
               <Upload className="w-4 h-4 text-sky-400" />
@@ -310,7 +310,7 @@ export default function AdminProductsPage() {
             <button
               type="button"
               onClick={handleOpenCreate}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-purple-500/20 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Product</span>
@@ -452,7 +452,7 @@ export default function AdminProductsPage() {
       {/* DELETE CONFIRM MODAL */}
       {deletingProduct && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0c101d] border border-rose-500/20 rounded-2xl p-5 space-y-4 shadow-2xl">
+          <div className="w-full max-w-md bg-[#0c101d] border border-rose-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
             <div className="flex items-center gap-2.5 text-rose-400">
               <AlertTriangle className="w-5 h-5 shrink-0" />
               <h3 className="text-sm font-semibold text-white">Delete Product?</h3>
@@ -464,7 +464,7 @@ export default function AdminProductsPage() {
               <button
                 type="button"
                 onClick={() => setDeletingProduct(null)}
-                className="px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
               >
                 Cancel
               </button>
@@ -472,7 +472,7 @@ export default function AdminProductsPage() {
                 type="button"
                 onClick={handleDeleteProduct}
                 disabled={deleting}
-                className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 shadow-sm"
+                className="px-4 py-1.5 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition cursor-pointer disabled:opacity-50 shadow-sm"
               >
                 {deleting ? "Deleting..." : "Confirm Delete"}
               </button>

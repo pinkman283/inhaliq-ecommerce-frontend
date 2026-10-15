@@ -275,12 +275,12 @@ export default function AdminLeadsPage() {
   if (!canView) {
     return (
       <div className="max-w-md mx-auto px-4 py-32 text-center space-y-4">
-        <div className="w-16 h-16 rounded-3xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto text-rose-400">
+        <div className="w-16 h-16 rounded-md bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto text-rose-400">
           <ShieldAlert className="w-8 h-8" />
         </div>
         <h2 className="text-xl font-black text-white">Access Denied: Restricted Module</h2>
         <p className="text-xs text-slate-400">
-          You do not have the <span className="text-rose-400 font-mono">leads.view</span> permission required to inspect abandoned checkouts and leads. Please contact the Super Administrator.
+          You do not have the <span className="text-rose-400 font-mono">leads.view</span> permission required to inspect leads. Please contact the Super Administrator.
         </p>
       </div>
     );
@@ -289,15 +289,15 @@ export default function AdminLeadsPage() {
   const getStatusBadge = (status: Lead["status"]) => {
     switch (status) {
       case "new":
-        return <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 animate-pulse">New Lead</span>;
+        return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 animate-pulse">New Lead</span>;
       case "contacted":
-        return <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40">Contacted</span>;
+        return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40">Contacted</span>;
       case "in_progress":
-        return <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">In Progress</span>;
+        return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">In Progress</span>;
       case "converted":
-        return <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Converted</span>;
+        return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Converted</span>;
       case "lost":
-        return <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40">Lost</span>;
+        return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40">Lost</span>;
       default:
         return null;
     }
@@ -310,13 +310,13 @@ export default function AdminLeadsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+            <div className="w-8 h-8 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
               <Magnet className="w-4 h-4" />
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">Abandoned Checkout & Leads</h1>
+            <h1 className="text-2xl font-black text-white tracking-tight">Leads</h1>
           </div>
           <p className="text-xs text-slate-400">
-            Automatically capture prospects who abandon checkout, manage outreach, and convert them to official orders.
+            Automatically capture prospects, manage outreach, and convert them to official orders.
           </p>
         </div>
 
@@ -324,9 +324,9 @@ export default function AdminLeadsPage() {
           <button
             onClick={loadLeads}
             disabled={loading}
-            className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-2 cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-amber-400" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#A78BFA]" : ""}`} />
             Refresh
           </button>
         </div>
@@ -335,7 +335,7 @@ export default function AdminLeadsPage() {
       {/* KPI Metrics Dashboard */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Leads */}
-        <div className="p-5 rounded-2xl bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
+        <div className="p-5 rounded-md bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Leads</span>
             <Magnet className="w-4 h-4 text-indigo-400" />
@@ -345,7 +345,7 @@ export default function AdminLeadsPage() {
         </div>
 
         {/* Pipeline Value */}
-        <div className="p-5 rounded-2xl bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
+        <div className="p-5 rounded-md bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Pipeline Potential</span>
             <DollarSign className="w-4 h-4 text-emerald-400" />
@@ -355,7 +355,7 @@ export default function AdminLeadsPage() {
         </div>
 
         {/* Action Required (New Leads) */}
-        <div className="p-5 rounded-2xl bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
+        <div className="p-5 rounded-md bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Action Required</span>
             <AlertCircle className="w-4 h-4 text-amber-400" />
@@ -365,7 +365,7 @@ export default function AdminLeadsPage() {
         </div>
 
         {/* Conversion Rate */}
-        <div className="p-5 rounded-2xl bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
+        <div className="p-5 rounded-md bg-[#0e121e] border border-white/10 shadow-xl space-y-2 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Conversion Rate</span>
             <TrendingUp className="w-4 h-4 text-cyan-400" />
@@ -376,7 +376,7 @@ export default function AdminLeadsPage() {
       </div>
 
       {/* Filter & Search Toolbar */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#0e121e] border border-white/10 shadow-xl space-y-4">
+      <div className="p-4 sm:p-5 rounded-md bg-[#0e121e] border border-white/10 shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           {/* Status Tabs */}
@@ -392,9 +392,9 @@ export default function AdminLeadsPage() {
               <button
                 key={tab.id}
                 onClick={() => setStatusFilter(statusFilter === tab.id ? "all" : tab.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   statusFilter === tab.id
-                    ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
+                    ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20"
                     : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
                 }`}
               >
@@ -416,14 +416,14 @@ export default function AdminLeadsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search name, phone, email, notes..."
-              className="w-full bg-white/5 border border-white/10 focus:border-amber-400 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-colors"
+              className="w-full bg-white/5 border border-white/10 focus:border-[#A78BFA]/50 rounded-md pl-10 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-colors"
             />
           </form>
         </div>
       </div>
 
       {/* Main Leads Table */}
-      <div className="rounded-2xl bg-[#0e121e] border border-white/10 shadow-2xl overflow-hidden">
+      <div className="rounded-md bg-[#0e121e] border border-white/10 shadow-2xl overflow-hidden">
         <div 
           ref={tableContainerRef}
           onMouseDown={handleMouseDown}
@@ -445,7 +445,7 @@ export default function AdminLeadsPage() {
                 </th>
                 <th className="py-3.5 px-4 min-w-[320px] whitespace-nowrap">Prospect Info</th>
                 <th className="py-3.5 px-4 min-w-[130px] whitespace-nowrap">Location</th>
-                <th className="py-3.5 px-4 min-w-[170px] whitespace-nowrap">Abandoned Cart</th>
+                <th className="py-3.5 px-4 min-w-[170px] whitespace-nowrap">Lead Items / Cart</th>
                 <th className="py-3.5 px-4 min-w-[150px] whitespace-nowrap">Status</th>
                 <th className="py-3.5 px-4 min-w-[140px] whitespace-nowrap">Captured At</th>
                 <th className="py-3.5 px-4 min-w-[140px] whitespace-nowrap text-right">Actions</th>
@@ -456,14 +456,14 @@ export default function AdminLeadsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-16 text-center text-slate-500">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading lead records...
                   </td>
                 </tr>
               ) : leads.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-16 text-center text-slate-500">
-                    <Magnet className="w-10 h-10 mx-auto mb-3 opacity-30 text-amber-400" />
+                    <Magnet className="w-10 h-10 mx-auto mb-3 opacity-30 text-[#A78BFA]" />
                     <p className="font-bold text-slate-400">No leads found</p>
                     <p className="text-[11px] text-slate-600 mt-1">Leads will automatically populate as visitors start checkout.</p>
                   </td>
@@ -477,7 +477,7 @@ export default function AdminLeadsPage() {
                     <tr
                       key={lead.id}
                       className={`hover:bg-white/[0.02] transition-colors ${
-                        isSelected ? "bg-amber-500/5" : ""
+                        isSelected ? "bg-[#211B32]" : ""
                       }`}
                     >
                       {/* Checkbox */}
@@ -509,7 +509,7 @@ export default function AdminLeadsPage() {
                             {/* Phone & Direct Contact */}
                             <a
                               href={`tel:${lead.phone}`}
-                              className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-mono"
+                              className="text-[#A78BFA] hover:text-[#B9A3FF] flex items-center gap-1 font-mono"
                             >
                               <Phone className="w-3 h-3" />
                               {lead.phone}
@@ -543,11 +543,11 @@ export default function AdminLeadsPage() {
                                 setInspectingNoteLead(lead);
                                 setLeadNotes(lead.notes || "");
                               }}
-                              className="text-[10px] text-slate-300 bg-white/[0.04] hover:bg-white/10 hover:border-amber-400/40 px-2.5 py-1 rounded-lg border border-white/10 flex items-center gap-1.5 max-w-[280px] transition-all cursor-pointer group text-left"
+                              className="text-[10px] text-slate-300 bg-white/[0.04] hover:bg-white/10 hover:border-[#A78BFA]/40 px-2.5 py-1 rounded border border-white/10 flex items-center gap-1.5 max-w-[280px] transition-all cursor-pointer group text-left"
                               title="Click to view & edit full note"
                             >
-                              <span className="shrink-0 text-amber-400 text-xs">💬</span>
-                              <span className="truncate whitespace-nowrap overflow-hidden block flex-1 text-slate-300 group-hover:text-amber-200">
+                              <span className="shrink-0 text-[#A78BFA] text-xs">💬</span>
+                              <span className="truncate whitespace-nowrap overflow-hidden block flex-1 text-slate-300 group-hover:text-[#B9A3FF]">
                                 {lead.notes}
                               </span>
                             </button>
@@ -608,7 +608,7 @@ export default function AdminLeadsPage() {
                             <button
                               type="button"
                               onClick={() => setOpenStatusDropdownId(openStatusDropdownId === lead.id ? null : lead.id)}
-                              className="flex items-center justify-between gap-2.5 bg-[#090b12] hover:bg-white/10 border border-white/10 hover:border-white/25 text-slate-200 rounded-2xl pl-3 pr-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer shadow-md"
+                              className="flex items-center justify-between gap-2.5 bg-[#090b12] hover:bg-white/10 border border-white/10 hover:border-white/25 text-slate-200 rounded-md pl-3 pr-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer shadow-md"
                             >
                               <span className="flex items-center gap-1.5">
                                 {lead.status === "new" && "🔴 New Lead"}
@@ -617,7 +617,7 @@ export default function AdminLeadsPage() {
                                 {lead.status === "converted" && "🟢 Converted"}
                                 {lead.status === "lost" && "⚫ Lost"}
                               </span>
-                              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openStatusDropdownId === lead.id ? "rotate-180 text-amber-400" : ""}`} />
+                              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openStatusDropdownId === lead.id ? "rotate-180 text-[#A78BFA]" : ""}`} />
                             </button>
 
                             {/* Luxury Rounded Dropdown Card */}
@@ -627,7 +627,7 @@ export default function AdminLeadsPage() {
                                   className="fixed inset-0 z-30" 
                                   onClick={() => setOpenStatusDropdownId(null)} 
                                 />
-                                <div className="absolute left-0 top-full mt-1.5 w-44 rounded-2xl bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95">
+                                <div className="absolute left-0 top-full mt-1.5 w-44 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95">
                                   {[
                                     { id: "new", label: "New Lead", dot: "🔴" },
                                     { id: "contacted", label: "Contacted", dot: "🟡" },
@@ -642,9 +642,9 @@ export default function AdminLeadsPage() {
                                         handleStatusChange(lead.id, st.id as any);
                                         setOpenStatusDropdownId(null);
                                       }}
-                                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                                      className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                                         lead.status === st.id 
-                                          ? "bg-amber-400/15 text-amber-300 border border-amber-400/30" 
+                                          ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30" 
                                           : "text-slate-300 hover:bg-white/10 hover:text-white"
                                       }`}
                                     >
@@ -653,7 +653,7 @@ export default function AdminLeadsPage() {
                                         <span>{st.label}</span>
                                       </div>
                                       {lead.status === st.id && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />
                                       )}
                                     </button>
                                   ))}
@@ -682,7 +682,7 @@ export default function AdminLeadsPage() {
                                 setConvertingLead(lead);
                                 setConvertNotes(lead.notes || "");
                               }}
-                              className="px-2.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                              className="px-2.5 py-1.5 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                               title="Convert this lead into a confirmed Order"
                             >
                               <Sparkles className="w-3.5 h-3.5" />
@@ -696,7 +696,7 @@ export default function AdminLeadsPage() {
                               setInspectingLead(lead);
                               setLeadNotes(lead.notes || "");
                             }}
-                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer"
+                            className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer"
                             title="View Cart & Notes"
                           >
                             <Eye className="w-3.5 h-3.5" />
@@ -706,7 +706,7 @@ export default function AdminLeadsPage() {
                           {canDelete && (
                             <button
                               onClick={() => handleDeleteLead(lead.id)}
-                              className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition-all cursor-pointer"
+                              className="p-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition-all cursor-pointer"
                               title="Delete Lead"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -737,11 +737,11 @@ export default function AdminLeadsPage() {
       {/* Modal 3: Dedicated Note View & Edit Popup */}
       {inspectingNoteLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl bg-[#0e121e] border border-white/15 p-6 sm:p-7 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto">
+          <div className="w-full max-w-lg rounded-lg bg-[#0e121e] border border-white/15 p-6 sm:p-7 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-9 h-9 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA]">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div>
@@ -753,7 +753,7 @@ export default function AdminLeadsPage() {
               </div>
               <button
                 onClick={() => setInspectingNoteLead(null)}
-                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+                className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -769,7 +769,7 @@ export default function AdminLeadsPage() {
                 value={leadNotes}
                 onChange={(e) => setLeadNotes(e.target.value)}
                 placeholder="Type customer notes, phone call outcomes, agreed custom pricing, or special requests..."
-                className="w-full bg-[#090b12] border border-white/10 focus:border-amber-400 rounded-2xl p-4 text-xs text-white placeholder:text-slate-600 focus:outline-none transition-colors leading-relaxed"
+                className="w-full bg-[#090b12] border border-white/10 focus:border-[#A78BFA]/50 rounded-md p-4 text-xs text-white placeholder:text-slate-600 focus:outline-none transition-colors leading-relaxed"
               />
             </div>
 
@@ -778,7 +778,7 @@ export default function AdminLeadsPage() {
               <div className="flex items-center gap-2">
                 <a
                   href={`tel:${inspectingNoteLead.phone}`}
-                  className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] text-xs font-bold transition-all flex items-center gap-1.5"
                 >
                   <PhoneCall className="w-3.5 h-3.5" /> Call
                 </a>
@@ -786,7 +786,7 @@ export default function AdminLeadsPage() {
                   href={`https://wa.me/${inspectingNoteLead.phone.replace(/[^0-9]/g, "")}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold transition-all flex items-center gap-1.5"
                 >
                   <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
                 </a>
@@ -796,7 +796,7 @@ export default function AdminLeadsPage() {
                 <button
                   type="button"
                   onClick={() => setInspectingNoteLead(null)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 cursor-pointer"
+                  className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 cursor-pointer"
                 >
                   Close
                 </button>
@@ -805,7 +805,7 @@ export default function AdminLeadsPage() {
                     type="button"
                     onClick={() => handleSaveNoteForLead(inspectingNoteLead.id, leadNotes)}
                     disabled={updatingNotes}
-                    className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-xs font-black text-slate-950 shadow-lg shadow-amber-400/20 transition-all disabled:opacity-50 cursor-pointer"
+                    className="px-5 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-xs font-black text-[#090B10] shadow-lg shadow-[#A78BFA]/20 transition-all disabled:opacity-50 cursor-pointer"
                   >
                     {updatingNotes ? "Saving..." : "Save Note"}
                   </button>
@@ -819,7 +819,7 @@ export default function AdminLeadsPage() {
       {/* Modal 1: Lead Details & Cart Inspection */}
       {inspectingLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl rounded-3xl bg-[#0e121e] border border-white/15 p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-lg bg-[#0e121e] border border-white/15 p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
@@ -829,7 +829,7 @@ export default function AdminLeadsPage() {
                   {getStatusBadge(inspectingLead.status)}
                 </div>
                 <p className="text-xs text-slate-400 flex items-center gap-3">
-                  <span className="flex items-center gap-1 text-amber-400 font-mono">
+                  <span className="flex items-center gap-1 text-[#A78BFA] font-mono">
                     <Phone className="w-3 h-3" /> {inspectingLead.phone}
                   </span>
                   {inspectingLead.email && (
@@ -842,7 +842,7 @@ export default function AdminLeadsPage() {
 
               <button
                 onClick={() => setInspectingLead(null)}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+                className="p-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -851,10 +851,10 @@ export default function AdminLeadsPage() {
             {/* Abandoned Cart Items */}
             <div className="space-y-3">
               <span className="text-xs font-black uppercase tracking-wider text-slate-300 block">
-                Abandoned Cart Contents ({inspectingLead.cart_items?.length || 0} items)
+                Lead Items & Cart ({inspectingLead.cart_items?.length || 0} items)
               </span>
 
-              <div className="divide-y divide-white/5 border border-white/10 rounded-2xl bg-white/[0.02] p-4 max-h-60 overflow-y-auto space-y-2">
+              <div className="divide-y divide-white/5 border border-white/10 rounded-md bg-white/[0.02] p-4 max-h-60 overflow-y-auto space-y-2">
                 {(!inspectingLead.cart_items || inspectingLead.cart_items.length === 0) ? (
                   <p className="text-xs text-slate-500 py-4 text-center">No individual items recorded for this checkout session.</p>
                 ) : (
@@ -864,7 +864,7 @@ export default function AdminLeadsPage() {
                         <img
                           src={item.image || "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=80&q=80"}
                           alt={item.title}
-                          className="w-10 h-10 rounded-lg object-cover border border-white/10"
+                          className="w-10 h-10 rounded-md object-cover border border-white/10"
                         />
                         <div>
                           <div className="text-xs font-bold text-white">{item.title}</div>
@@ -885,7 +885,7 @@ export default function AdminLeadsPage() {
                 )}
               </div>
 
-              <div className="flex justify-between items-center px-4 py-2 rounded-xl bg-white/5 text-xs font-bold text-white">
+              <div className="flex justify-between items-center px-4 py-2 rounded-md bg-white/5 text-xs font-bold text-white">
                 <span>Calculated Pipeline Total</span>
                 <span className="text-emerald-400 text-sm">{formatPrice(inspectingLead.total_amount)}</span>
               </div>
@@ -893,7 +893,7 @@ export default function AdminLeadsPage() {
 
             {/* Address Details */}
             {inspectingLead.address && (
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-1">
+              <div className="p-4 rounded-md bg-white/[0.02] border border-white/10 space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Shipping Destination</span>
                 <p className="text-xs text-slate-300">{inspectingLead.address}</p>
                 {(inspectingLead.city || inspectingLead.postal_code) && (
@@ -914,14 +914,14 @@ export default function AdminLeadsPage() {
                 onChange={(e) => setLeadNotes(e.target.value)}
                 placeholder="Log outreach calls, customer feedback, discount offers, or special requirements..."
                 rows={3}
-                className="w-full bg-[#090b12] border border-white/10 focus:border-amber-400 rounded-xl p-3 text-xs text-white placeholder:text-slate-600 focus:outline-none transition-colors"
+                className="w-full bg-[#090b12] border border-white/10 focus:border-[#A78BFA]/50 rounded-md p-3 text-xs text-white placeholder:text-slate-600 focus:outline-none transition-colors"
               />
               <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={handleSaveNotes}
                   disabled={updatingNotes || !canManage}
-                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-white transition-all cursor-pointer"
+                  className="px-4 py-2 rounded-md bg-white/10 hover:bg-white/15 text-xs font-bold text-white transition-all cursor-pointer"
                 >
                   {updatingNotes ? "Saving..." : "Save Notes"}
                 </button>
@@ -933,7 +933,7 @@ export default function AdminLeadsPage() {
               <div className="flex items-center gap-2">
                 <a
                   href={`tel:${inspectingLead.phone}`}
-                  className="px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] text-xs font-bold transition-all flex items-center gap-1.5"
                 >
                   <PhoneCall className="w-3.5 h-3.5" /> Call
                 </a>
@@ -941,7 +941,7 @@ export default function AdminLeadsPage() {
                   href={`https://wa.me/${inspectingLead.phone.replace(/[^0-9]/g, "")}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all flex items-center gap-1.5"
                 >
                   <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
                 </a>
@@ -955,7 +955,7 @@ export default function AdminLeadsPage() {
                     setConvertNotes(inspectingLead.notes || "");
                     setInspectingLead(null);
                   }}
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-90 text-slate-950 font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20"
+                  className="px-5 py-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-90 text-slate-950 font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   Convert to Order
@@ -969,7 +969,7 @@ export default function AdminLeadsPage() {
       {/* Modal 2: 1-Click Convert Lead to Official Order */}
       {convertingLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl bg-[#0e121e] border border-emerald-500/30 p-6 sm:p-8 shadow-2xl space-y-6">
+          <div className="w-full max-w-lg rounded-lg bg-[#0e121e] border border-emerald-500/30 p-6 sm:p-8 shadow-2xl space-y-6">
             
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div className="space-y-0.5">
@@ -984,14 +984,14 @@ export default function AdminLeadsPage() {
 
               <button
                 onClick={() => setConvertingLead(null)}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+                className="p-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+              <div className="p-4 rounded-md bg-white/[0.02] border border-white/10 space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="text-slate-400">Customer Phone:</span>
                   <span className="text-white font-mono">{convertingLead.phone}</span>
@@ -1013,7 +1013,7 @@ export default function AdminLeadsPage() {
                   <select
                     value={convertPaymentMethod}
                     onChange={(e) => setConvertPaymentMethod(e.target.value)}
-                    className="w-full bg-[#090b12] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
+                    className="w-full bg-[#090b12] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
                   >
                     <option value="cash_on_delivery">Cash on Delivery</option>
                     <option value="credit_card">Credit Card (Paid/Auth)</option>
@@ -1027,7 +1027,7 @@ export default function AdminLeadsPage() {
                   <select
                     value={convertPaymentStatus}
                     onChange={(e) => setConvertPaymentStatus(e.target.value)}
-                    className="w-full bg-[#090b12] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
+                    className="w-full bg-[#090b12] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
                   >
                     <option value="pending">Pending</option>
                     <option value="paid">Paid</option>
@@ -1039,7 +1039,7 @@ export default function AdminLeadsPage() {
                   <select
                     value={convertOrderStatus}
                     onChange={(e) => setConvertOrderStatus(e.target.value)}
-                    className="w-full bg-[#090b12] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
+                    className="w-full bg-[#090b12] border border-white/10 rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400"
                   >
                     <option value="processing">Processing (Ready to pack)</option>
                     <option value="pending">Pending Review</option>
@@ -1054,7 +1054,7 @@ export default function AdminLeadsPage() {
                     value={convertNotes}
                     onChange={(e) => setConvertNotes(e.target.value)}
                     placeholder="Converted from phone outreach lead..."
-                    className="w-full bg-[#090b12] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
+                    className="w-full bg-[#090b12] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-400"
                   />
                 </div>
               </div>
@@ -1064,7 +1064,7 @@ export default function AdminLeadsPage() {
               <button
                 type="button"
                 onClick={() => setConvertingLead(null)}
-                className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300"
+                className="px-4 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300"
               >
                 Cancel
               </button>
@@ -1072,7 +1072,7 @@ export default function AdminLeadsPage() {
                 type="button"
                 onClick={handleExecuteConversion}
                 disabled={converting}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-95 text-slate-950 font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
+                className="px-6 py-2.5 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-95 text-slate-950 font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
               >
                 {converting ? (
                   <>

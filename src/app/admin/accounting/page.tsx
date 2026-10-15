@@ -88,7 +88,7 @@ export default function AccountingOverviewPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -112,37 +112,37 @@ export default function AccountingOverviewPage() {
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href="/admin/accounting/reports"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-cyan-400" />
               <span>Statements</span>
             </Link>
             <Link
               href="/admin/accounting/ledger"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
             >
               <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
               <span>General Ledger</span>
             </Link>
             <Link
               href="/admin/accounting/receivables"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
             >
               <Users className="w-3.5 h-3.5 text-emerald-400" />
               <span>Customer Dues</span>
             </Link>
             <Link
               href="/admin/accounting/payables"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 transition-colors"
             >
-              <Truck className="w-3.5 h-3.5 text-amber-400" />
+              <Truck className="w-3.5 h-3.5 text-[#A78BFA]" />
               <span>Supplier Bills</span>
             </Link>
             <a
               href={adminApi.getAccountingExportUrl("trial_balance")}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 transition-colors text-xs font-semibold"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 transition-colors text-xs font-semibold"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Trial Balance CSV</span>
@@ -310,7 +310,7 @@ export default function AccountingOverviewPage() {
       </div>
 
       {/* Bank & Cash Accounts Snapshot */}
-      <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-4 shadow-sm">
+      <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-4 shadow-sm">
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             <Wallet className="w-4 h-4 text-purple-400" />
@@ -328,7 +328,7 @@ export default function AccountingOverviewPage() {
           {(data?.bank_accounts || []).map((account) => (
             <div
               key={account.id}
-              className="p-4 rounded-xl bg-[#161a26] border border-white/[0.06] flex flex-col justify-between gap-3 hover:border-purple-500/30 transition-colors"
+              className="p-4 rounded-md bg-[#161a26] border border-white/[0.06] flex flex-col justify-between gap-3 hover:border-purple-500/30 transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -361,7 +361,7 @@ export default function AccountingOverviewPage() {
       </div>
 
       {/* Recent General Ledger Journal Entries */}
-      <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-4 shadow-sm">
+      <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-4 shadow-sm">
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div>
             <h2 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -416,7 +416,7 @@ export default function AccountingOverviewPage() {
                       ${totalCredit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-2.5 text-center">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         {entry.status}
                       </span>
                     </td>

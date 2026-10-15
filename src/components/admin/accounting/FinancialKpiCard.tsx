@@ -92,13 +92,13 @@ export const FinancialKpiCard: React.FC<FinancialKpiCardProps> = ({
 
   const content = (
     <div
-      className={`relative flex flex-col justify-between rounded-2xl border bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-5 shadow-lg backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-2xl ${styles.border} ${styles.glow} ${className}`}
+      className={`relative flex flex-col justify-between rounded-md border bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-5 shadow-lg backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-2xl ${styles.border} ${styles.glow} ${className}`}
     >
       <div>
         <div className="flex items-start justify-between gap-2">
           <span className="text-xs font-medium uppercase tracking-wider text-slate-400">{title}</span>
           {icon && (
-            <div className={`flex h-8 w-8 items-center justify-center rounded-lg border ${styles.iconBg}`}>
+            <div className={`flex h-8 w-8 items-center justify-center rounded-md border ${styles.iconBg}`}>
               {icon}
             </div>
           )}

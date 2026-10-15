@@ -205,7 +205,7 @@ export default function AdminSettingsPage() {
   if (loading) {
     return (
       <div className="py-24 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#A78BFA]" />
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
           Loading Store Configurations...
         </span>
@@ -231,9 +231,9 @@ export default function AdminSettingsPage() {
       <form onSubmit={handleSaveSettings} className="space-y-5 text-xs">
         
         {/* 1. Store Identity */}
-        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
-            <Store className="w-4 h-4 text-amber-400" />
+            <Store className="w-4 h-4 text-[#A78BFA]" />
             <h3 className="text-sm font-bold text-white">General Store Identity</h3>
           </div>
 
@@ -245,7 +245,7 @@ export default function AdminSettingsPage() {
                 required
                 value={storeName}
                 onChange={(e) => setStoreName(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
             <div className="space-y-1">
@@ -255,7 +255,7 @@ export default function AdminSettingsPage() {
                 required
                 value={supportEmail}
                 onChange={(e) => setSupportEmail(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
             <div className="space-y-1">
@@ -265,7 +265,7 @@ export default function AdminSettingsPage() {
                 value={supportPhone}
                 onChange={(e) => setSupportPhone(e.target.value)}
                 placeholder="+1 (555) 000-0000"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
             <div className="space-y-1">
@@ -275,16 +275,16 @@ export default function AdminSettingsPage() {
                 value={storeAddress}
                 onChange={(e) => setStoreAddress(e.target.value)}
                 placeholder="Street address, city, country"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
           </div>
         </div>
 
         {/* 2. Product & Inventory Rules */}
-        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
-            <Boxes className="w-4 h-4 text-amber-400" />
+            <Boxes className="w-4 h-4 text-[#A78BFA]" />
             <h3 className="text-sm font-bold text-white">Product & Review Settings</h3>
           </div>
 
@@ -296,13 +296,13 @@ export default function AdminSettingsPage() {
                 min="0"
                 value={lowStockThreshold}
                 onChange={(e) => setLowStockThreshold(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
               />
               <p className="text-[10px] text-slate-500">Alert admin when product variant inventory drops below this level</p>
             </div>
 
             <div className="space-y-1 flex flex-col justify-center">
-              <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="flex items-center justify-between gap-3 p-3 rounded-md bg-white/[0.02] border border-white/5">
                 <div>
                   <span className="text-[11px] font-bold text-slate-200 block">Auto-Approve Customer Reviews</span>
                   <span className="text-[10px] text-slate-400">Instantly publish verified customer reviews without manual moderation</span>
@@ -317,7 +317,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* 3. Order & Checkout Rules */}
-        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
             <ShoppingBag className="w-4 h-4 text-cyan-400" />
             <h3 className="text-sm font-bold text-white">Order & Checkout Rules</h3>
@@ -331,13 +331,13 @@ export default function AdminSettingsPage() {
                 value={orderInvoicePrefix}
                 onChange={(e) => setOrderInvoicePrefix(e.target.value)}
                 placeholder="e.g. INV-"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
               />
               <p className="text-[10px] text-slate-500">Appended to generated invoice numbers (e.g. INV-2026-0001)</p>
             </div>
 
             <div className="space-y-1 flex flex-col justify-center">
-              <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="flex items-center justify-between gap-3 p-3 rounded-md bg-white/[0.02] border border-white/5">
                 <div>
                   <span className="text-[11px] font-bold text-slate-200 block">Allow Guest Checkout</span>
                   <span className="text-[10px] text-slate-400">Permit customers to place orders without creating an account</span>
@@ -352,7 +352,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* 2. Financial & Currency */}
-        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
           <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/5">
             <div className="flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-emerald-400" />
@@ -373,7 +373,7 @@ export default function AdminSettingsPage() {
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
               >
                 <option value="USD" className="bg-[#0e121e]">USD ($) - US Dollar</option>
                 <option value="BDT" className="bg-[#0e121e]">BDT (৳) - Bangladeshi Taka</option>
@@ -386,7 +386,7 @@ export default function AdminSettingsPage() {
             <div className="space-y-1">
               <div className="flex items-center justify-between">
                 <label className="text-[11px] font-bold text-slate-300 block">Default VAT Rate (%)</label>
-                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${
                   vatEnabled 
                     ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
                     : "bg-slate-500/10 text-slate-400 border-slate-500/20"
@@ -403,7 +403,7 @@ export default function AdminSettingsPage() {
                 disabled={!vatEnabled}
                 value={vatRate}
                 onChange={(e) => setVatRate(e.target.value)}
-                className={`w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400 transition-all ${
+                className={`w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50 transition-all ${
                   !vatEnabled ? "opacity-40 cursor-not-allowed bg-white/[0.02] border-white/5" : ""
                 }`}
                 placeholder="e.g. 8.0"
@@ -418,7 +418,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* 3. Logistics & Shipping */}
-        <div className="p-5 rounded-xl bg-[#0b0e17] border border-white/10 space-y-4">
+        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
             <Truck className="w-4 h-4 text-cyan-400" />
             <h3 className="text-sm font-bold text-white">Logistics & Default Shipping Rates</h3>
@@ -433,7 +433,7 @@ export default function AdminSettingsPage() {
                 required
                 value={freeShippingThreshold}
                 onChange={(e) => setFreeShippingThreshold(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
             <div className="space-y-1">
@@ -444,7 +444,7 @@ export default function AdminSettingsPage() {
                 required
                 value={standardShippingRate}
                 onChange={(e) => setStandardShippingRate(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
             <div className="space-y-1">
@@ -455,7 +455,7 @@ export default function AdminSettingsPage() {
                 required
                 value={priorityShippingRate}
                 onChange={(e) => setPriorityShippingRate(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-amber-400"
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
           </div>
@@ -476,7 +476,7 @@ export default function AdminSettingsPage() {
               desc: "Color palette, dark/light mode, typography, button styles & radius",
               href: "/admin/content/theme",
               icon: Palette,
-              color: "text-amber-400",
+              color: "text-[#A78BFA]",
             },
             {
               title: "Branding & Store Logo",
@@ -511,7 +511,7 @@ export default function AdminSettingsPage() {
               desc: "Manage published articles, knowledge base, categories, tags & reader comments",
               href: "/admin/content/blog",
               icon: BookOpen,
-              color: "text-amber-400",
+              color: "text-[#A78BFA]",
             },
             {
               title: "Navigation & Footer",
@@ -560,7 +560,7 @@ export default function AdminSettingsPage() {
               desc: "Transactional email & SMS customer notification templates",
               href: "/admin/settings/notifications",
               icon: Bell,
-              color: "text-yellow-400",
+              color: "text-[#A78BFA]",
             },
             {
               title: "Mail Configuration",
@@ -589,17 +589,17 @@ export default function AdminSettingsPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group p-4 rounded-xl bg-[#0f121b] hover:bg-[#131722] border border-white/[0.08] hover:border-amber-400/30 transition-all flex items-start gap-3.5"
+                className="group p-4 rounded-md bg-[#0f121b] hover:bg-[#131722] border border-white/[0.08] hover:border-[#A78BFA]/30 transition-all flex items-start gap-3.5"
               >
-                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div className="w-8 h-8 rounded-md bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Icon className={`w-4 h-4 ${item.color}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-xs font-bold text-white group-hover:text-amber-300 transition-colors">
+                    <span className="text-xs font-bold text-white group-hover:text-[#B9A3FF] transition-colors">
                       {item.title}
                     </span>
-                    <ArrowUpRight className="w-3 h-3 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
+                    <ArrowUpRight className="w-3 h-3 text-slate-500 group-hover:text-[#A78BFA] transition-colors shrink-0" />
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">
                     {item.desc}

@@ -136,7 +136,7 @@ export default function PayablesPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -160,7 +160,7 @@ export default function PayablesPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/admin/accounting"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-[#0f121b] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/[0.08] bg-[#0f121b] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Accounting Hub</span>
@@ -168,16 +168,16 @@ export default function PayablesPage() {
             <button
               onClick={fetchPayables}
               disabled={loading}
-              className="p-1.5 rounded-lg border border-white/[0.08] bg-[#0f121b] text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="p-1.5 rounded-md border border-white/[0.08] bg-[#0f121b] text-slate-400 hover:text-white transition-colors disabled:opacity-50"
               title="Refresh"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-amber-400" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#A78BFA]" : ""}`} />
             </button>
             <a
               href={adminApi.getAccountingExportUrl("payables")}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 transition-colors text-xs font-semibold shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] transition-colors text-xs font-semibold shadow-sm"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export A/P</span>
@@ -190,7 +190,7 @@ export default function PayablesPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Key Operational Numbers */}
         <div className="lg:col-span-5 grid grid-cols-3 gap-3">
-          <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
+          <div className="p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               Open Payables
             </span>
@@ -203,7 +203,7 @@ export default function PayablesPage() {
           </div>
 
           <div
-            className={`p-3.5 rounded-xl border shadow-sm flex flex-col justify-between ${
+            className={`p-3.5 rounded-md border shadow-sm flex flex-col justify-between ${
               overdueAmount > 0
                 ? "bg-rose-950/20 border-rose-500/30"
                 : "bg-[#0f121b] border-white/[0.08]"
@@ -224,7 +224,7 @@ export default function PayablesPage() {
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
+          <div className="p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm flex flex-col justify-between">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               Disbursed
             </span>
@@ -250,12 +250,12 @@ export default function PayablesPage() {
 
       {/* Tabs & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+        <div className="flex items-center gap-1 p-1 rounded-md bg-[#0f121b] border border-white/[0.08]">
           <button
             onClick={() => setActiveTab("dues")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all ${
               activeTab === "dues"
-                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm"
+                ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -263,9 +263,9 @@ export default function PayablesPage() {
           </button>
           <button
             onClick={() => setActiveTab("vouchers")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all ${
               activeTab === "vouchers"
-                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm"
+                ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -281,7 +281,7 @@ export default function PayablesPage() {
               placeholder="Search by GRN #, PO #, vendor..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#0f121b] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+              className="w-full bg-[#0f121b] border border-white/[0.08] rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
             />
           </div>
         )}
@@ -289,7 +289,7 @@ export default function PayablesPage() {
 
       {/* Content Area */}
       {activeTab === "dues" ? (
-        <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm">
+        <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm">
           {filteredPayables.length === 0 ? (
             <AdminEmptyState
               icon={CheckCircle2}
@@ -331,7 +331,7 @@ export default function PayablesPage() {
                             payable.days_open <= 30
                               ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
                               : payable.days_open <= 60
-                              ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                              ? "bg-[#211B32] text-[#A78BFA] border border-amber-500/20"
                               : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                           }`}
                         >
@@ -350,7 +350,7 @@ export default function PayablesPage() {
                       <td className="py-3 text-center">
                         <button
                           onClick={() => handleOpenPaymentModal(payable)}
-                          className="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-semibold transition-all"
+                          className="px-3 py-1 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] text-xs font-semibold transition-all"
                         >
                           Settle Bill
                         </button>
@@ -363,7 +363,7 @@ export default function PayablesPage() {
           )}
         </div>
       ) : (
-        <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm">
+        <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm">
           {(!data?.recent_payments || data.recent_payments.length === 0) ? (
             <AdminEmptyState
               icon={Building2}
@@ -388,7 +388,7 @@ export default function PayablesPage() {
                 <tbody className="divide-y divide-white/5">
                   {data.recent_payments.map((p) => (
                     <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-3 font-mono font-bold text-amber-400">{p.payment_number}</td>
+                      <td className="py-3 font-mono font-bold text-[#A78BFA]">{p.payment_number}</td>
                       <td className="py-3 font-mono text-slate-300">{p.payment_date}</td>
                       <td className="py-3 font-semibold text-white">{p.vendor?.name || "Supplier"}</td>
                       <td className="py-3 font-mono text-slate-400">{p.purchase_order?.po_number || "—"}</td>
@@ -418,10 +418,10 @@ export default function PayablesPage() {
       {/* Settle Payable Modal */}
       {modalOpen && selectedPayable && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center">
                   <Truck className="w-4 h-4" />
                 </div>
                 <div>
@@ -431,14 +431,14 @@ export default function PayablesPage() {
               </div>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleSubmitPayment} className="space-y-4">
-              <div className="p-3 rounded-lg bg-[#161a26] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-3 rounded-md bg-[#161a26] border border-white/[0.08] flex items-center justify-between">
                 <div>
                   <div className="text-xs text-slate-400">Supplier</div>
                   <div className="text-sm font-semibold text-white">{selectedPayable.vendor_name}</div>
@@ -459,7 +459,7 @@ export default function PayablesPage() {
                   max={selectedPayable.due_amount}
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-amber-400 font-bold"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-[#A78BFA]/50 font-bold"
                   required
                 />
               </div>
@@ -470,7 +470,7 @@ export default function PayablesPage() {
                   <select
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="bank_transfer">Bank Wire Transfer</option>
                     <option value="cheque">Company Cheque</option>
@@ -485,7 +485,7 @@ export default function PayablesPage() {
                   <select
                     value={bankAccountId}
                     onChange={(e) => setBankAccountId(Number(e.target.value))}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     {bankAccounts.map((b) => (
                       <option key={b.id} value={b.id}>
@@ -503,7 +503,7 @@ export default function PayablesPage() {
                     type="date"
                     value={paymentDate}
                     onChange={(e) => setPaymentDate(e.target.value)}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                     required
                   />
                 </div>
@@ -514,7 +514,7 @@ export default function PayablesPage() {
                     type="text"
                     value={referenceNumber}
                     onChange={(e) => setReferenceNumber(e.target.value)}
-                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -525,7 +525,7 @@ export default function PayablesPage() {
                   rows={2}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 resize-none"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 resize-none"
                   placeholder="Wire reference, cheque number, or vendor note..."
                 />
               </div>
@@ -534,14 +534,14 @@ export default function PayablesPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
+                  className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
+                  className="px-4 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
                 >
                   {submitting ? "Posting..." : "Confirm & Disburse Payment"}
                 </button>

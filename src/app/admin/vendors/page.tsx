@@ -237,7 +237,7 @@ export default function AdminVendorsPage() {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           toast.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -248,9 +248,9 @@ export default function AdminVendorsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <Truck className="w-6 h-6" />
           </div>
           <div>
@@ -263,7 +263,7 @@ export default function AdminVendorsPage() {
 
         <button
           onClick={openCreateModal}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-bold text-xs flex items-center gap-2 shadow-lg shadow-purple-500/20 transition self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           Add New Vendor
@@ -272,31 +272,31 @@ export default function AdminVendorsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10 flex items-center justify-between">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex items-center justify-between">
           <div>
             <span className="text-xs text-slate-400 font-bold uppercase block">Total Suppliers</span>
             <span className="text-2xl font-black text-white font-mono">{stats.total_vendors}</span>
           </div>
           <Building2 className="w-8 h-8 text-slate-600" />
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10 flex items-center justify-between">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex items-center justify-between">
           <div>
             <span className="text-xs text-slate-400 font-bold uppercase block">Active Suppliers</span>
             <span className="text-2xl font-black text-emerald-400 font-mono">{stats.active_vendors}</span>
           </div>
           <CheckCircle2 className="w-8 h-8 text-emerald-500/30" />
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10 flex items-center justify-between">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex items-center justify-between">
           <div>
             <span className="text-xs text-slate-400 font-bold uppercase block">Payment Standard</span>
-            <span className="text-sm font-bold text-amber-400">NET-30 Terms Active</span>
+            <span className="text-sm font-bold text-[#A78BFA]">NET-30 Terms Active</span>
           </div>
-          <FileText className="w-8 h-8 text-amber-500/30" />
+          <FileText className="w-8 h-8 text-[#A78BFA]/30" />
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -304,7 +304,7 @@ export default function AdminVendorsPage() {
             value={search}
             onChange={e => { setSearch(e.target.value); setPage(1); }}
             placeholder="Search supplier, code, phone, or email..."
-            className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
         </div>
 
@@ -313,9 +313,9 @@ export default function AdminVendorsPage() {
             <button
               key={st}
               onClick={() => { setStatusFilter(st); setPage(1); }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition ${
+              className={`px-3 py-1.5 rounded-md text-xs font-bold capitalize transition ${
                 statusFilter === st 
-                  ? "bg-amber-400 text-black shadow-md" 
+                  ? "bg-[#A78BFA] text-[#090B10] shadow-md" 
                   : "bg-white/5 text-slate-400 hover:bg-white/10 text-slate-300"
               }`}
             >
@@ -326,7 +326,7 @@ export default function AdminVendorsPage() {
       </div>
 
       {/* Vendor Table */}
-      <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+      <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
@@ -344,7 +344,7 @@ export default function AdminVendorsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading supplier matrix...
                   </td>
                 </tr>
@@ -360,7 +360,7 @@ export default function AdminVendorsPage() {
                     <td className="py-3.5 px-4">
                       <div>
                         <span className="font-bold text-white block">{v.company_name}</span>
-                        <span className="text-[10px] font-mono text-amber-400 font-bold">{v.vendor_code}</span>
+                        <span className="text-[10px] font-mono text-[#A78BFA] font-bold">{v.vendor_code}</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4">
@@ -389,7 +389,7 @@ export default function AdminVendorsPage() {
                       {v.vendor_products_count || 0} catalog items
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold ${
                         v.status === "active"
                           ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                           : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
@@ -402,28 +402,28 @@ export default function AdminVendorsPage() {
                         <button
                           onClick={() => openLinkProductModal(v)}
                           title="Link Product Price"
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-amber-300 transition"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-[#A78BFA] transition"
                         >
                           <Tag className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => openViewModal(v)}
                           title="View Details"
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 transition"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => openEditModal(v)}
                           title="Edit Vendor"
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 transition"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDelete(v)}
                           title="Delete Vendor"
-                          className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition"
+                          className="p-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -444,14 +444,14 @@ export default function AdminVendorsPage() {
               <button
                 disabled={page <= 1}
                 onClick={() => setPage(p => Math.max(1, p - 1))}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Next
               </button>
@@ -463,9 +463,9 @@ export default function AdminVendorsPage() {
       {/* MODAL: Create / Edit Vendor */}
       {(createModal || editModal) && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Truck className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">
                   {createModal ? "Create New Supplier Profile" : "Edit Supplier Profile"}
@@ -486,7 +486,7 @@ export default function AdminVendorsPage() {
                     value={formData.company_name}
                     onChange={e => setFormData({ ...formData, company_name: e.target.value, name: e.target.value })}
                     placeholder="e.g. Asus Global Distribution"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -497,7 +497,7 @@ export default function AdminVendorsPage() {
                     value={formData.vendor_code}
                     onChange={e => setFormData({ ...formData, vendor_code: e.target.value })}
                     placeholder="e.g. VND-001"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -510,7 +510,7 @@ export default function AdminVendorsPage() {
                     value={formData.contact_person}
                     onChange={e => setFormData({ ...formData, contact_person: e.target.value })}
                     placeholder="e.g. David Vance"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -521,7 +521,7 @@ export default function AdminVendorsPage() {
                     value={formData.phone}
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="e.g. +1 800 555 0199"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -534,7 +534,7 @@ export default function AdminVendorsPage() {
                     value={formData.email}
                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                     placeholder="orders@supplier.com"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -544,7 +544,7 @@ export default function AdminVendorsPage() {
                     value={formData.tax_number}
                     onChange={e => setFormData({ ...formData, tax_number: e.target.value })}
                     placeholder="e.g. US-TAX-998811"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -555,7 +555,7 @@ export default function AdminVendorsPage() {
                   <select
                     value={formData.payment_terms}
                     onChange={e => setFormData({ ...formData, payment_terms: e.target.value })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="net_15">Net 15 Days</option>
                     <option value="net_30">Net 30 Days</option>
@@ -568,7 +568,7 @@ export default function AdminVendorsPage() {
                   <select
                     value={formData.status}
                     onChange={e => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="active">Active Vendor</option>
                     <option value="inactive">Inactive / Suspended</option>
@@ -583,7 +583,7 @@ export default function AdminVendorsPage() {
                   value={formData.address}
                   onChange={e => setFormData({ ...formData, address: e.target.value })}
                   placeholder="Facility street address, city, state, zip..."
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md p-3 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -591,14 +591,14 @@ export default function AdminVendorsPage() {
                 <button
                   type="button"
                   onClick={() => { setCreateModal(false); setEditModal(false); }}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold shadow-lg shadow-amber-400/20 disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold shadow-lg shadow-purple-500/20 disabled:opacity-50"
                 >
                   {isSubmitting ? "Saving..." : createModal ? "Create Vendor" : "Update Vendor"}
                 </button>
@@ -611,9 +611,9 @@ export default function AdminVendorsPage() {
       {/* MODAL: Link Product & Set Purchase Price */}
       {linkProductModal && selectedVendor && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Tag className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Set Supplier Product Price</h3>
               </div>
@@ -623,7 +623,7 @@ export default function AdminVendorsPage() {
             </div>
 
             <p className="text-xs text-slate-400">
-              Define contractual purchase cost with supplier <span className="text-amber-400 font-bold">{selectedVendor.company_name}</span>.
+              Define contractual purchase cost with supplier <span className="text-[#A78BFA] font-bold">{selectedVendor.company_name}</span>.
             </p>
 
             <form onSubmit={handleLinkProduct} className="space-y-3.5 text-xs">
@@ -633,7 +633,7 @@ export default function AdminVendorsPage() {
                   required
                   value={linkForm.product_id}
                   onChange={e => setLinkForm({ ...linkForm, product_id: e.target.value })}
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 >
                   <option value="">-- Choose Product --</option>
                   {allProducts.map(p => (
@@ -655,7 +655,7 @@ export default function AdminVendorsPage() {
                     value={linkForm.purchase_price}
                     onChange={e => setLinkForm({ ...linkForm, purchase_price: e.target.value })}
                     placeholder="0.00"
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -665,7 +665,7 @@ export default function AdminVendorsPage() {
                     min="0"
                     value={linkForm.lead_time_days}
                     onChange={e => setLinkForm({ ...linkForm, lead_time_days: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -674,14 +674,14 @@ export default function AdminVendorsPage() {
                 <button
                   type="button"
                   onClick={() => setLinkProductModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold shadow-lg shadow-amber-400/20"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold shadow-lg shadow-purple-500/20"
                 >
                   {isSubmitting ? "Linking..." : "Save Supplier Rate"}
                 </button>
@@ -694,13 +694,13 @@ export default function AdminVendorsPage() {
       {/* MODAL: View Vendor Profile, Products & Price History */}
       {viewModal && selectedVendor && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-2xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-2xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Building2 className="w-5 h-5" />
                 <div>
                   <h3 className="text-base font-bold text-white">{selectedVendor.company_name}</h3>
-                  <span className="text-[10px] font-mono text-amber-400">{selectedVendor.vendor_code}</span>
+                  <span className="text-[10px] font-mono text-[#A78BFA]">{selectedVendor.vendor_code}</span>
                 </div>
               </div>
               <button onClick={() => setViewModal(false)} className="text-slate-400 hover:text-white">
@@ -711,19 +711,19 @@ export default function AdminVendorsPage() {
             {/* Analytics Stats */}
             {vendorAnalytics && (
               <div className="grid grid-cols-3 gap-3">
-                <div className="bg-[#151824] p-3 rounded-xl border border-white/10">
+                <div className="bg-[#151824] p-3 rounded-md border border-white/10">
                   <span className="text-slate-400 block text-[10px] uppercase font-bold">Total Procurement Spend</span>
-                  <span className="text-amber-400 font-bold font-mono text-sm">
+                  <span className="text-[#A78BFA] font-bold font-mono text-sm">
                     ${vendorAnalytics.total_purchases_amount?.toFixed(2) || "0.00"}
                   </span>
                 </div>
-                <div className="bg-[#151824] p-3 rounded-xl border border-white/10">
+                <div className="bg-[#151824] p-3 rounded-md border border-white/10">
                   <span className="text-slate-400 block text-[10px] uppercase font-bold">Total POs Fulfilled</span>
                   <span className="text-emerald-400 font-bold font-mono text-sm">
                     {vendorAnalytics.received_pos_count} / {vendorAnalytics.total_pos_count}
                   </span>
                 </div>
-                <div className="bg-[#151824] p-3 rounded-xl border border-white/10">
+                <div className="bg-[#151824] p-3 rounded-md border border-white/10">
                   <span className="text-slate-400 block text-[10px] uppercase font-bold">Supplied Products</span>
                   <span className="text-white font-bold font-mono text-sm">
                     {vendorAnalytics.products_supplied_count} items
@@ -736,18 +736,18 @@ export default function AdminVendorsPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h4 className="font-bold text-white flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-amber-400" />
+                  <Layers className="w-4 h-4 text-[#A78BFA]" />
                   Contracted Products & Unit Costs
                 </h4>
                 <button
                   onClick={() => openLinkProductModal(selectedVendor)}
-                  className="text-[11px] text-amber-400 hover:text-amber-300 font-bold"
+                  className="text-[11px] text-[#A78BFA] hover:text-[#A78BFA] font-bold"
                 >
                   + Add Product Price
                 </button>
               </div>
 
-              <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5">
+              <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5">
                 {(!selectedVendor.vendor_products || selectedVendor.vendor_products.length === 0) ? (
                   <div className="p-6 text-center text-slate-500">
                     No products contracted with this vendor yet.
@@ -760,7 +760,7 @@ export default function AdminVendorsPage() {
                         <span className="text-[10px] text-slate-400">SKU: {vp.product?.sku} | Lead Time: {vp.lead_time_days} days</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-amber-400 font-bold font-mono text-xs block">
+                        <span className="text-[#A78BFA] font-bold font-mono text-xs block">
                           ${vp.purchase_price.toFixed(2)}
                         </span>
                         <span className="text-[10px] text-slate-500">Min Order: {vp.min_order_quantity}</span>
@@ -775,10 +775,10 @@ export default function AdminVendorsPage() {
             {selectedVendor.price_histories && selectedVendor.price_histories.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-bold text-white flex items-center gap-1.5">
-                  <History className="w-4 h-4 text-amber-400" />
+                  <History className="w-4 h-4 text-[#A78BFA]" />
                   Historical Price Changes
                 </h4>
-                <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5 max-h-40 overflow-y-auto">
+                <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5 max-h-40 overflow-y-auto">
                   {selectedVendor.price_histories.map(ph => (
                     <div key={ph.id} className="p-2.5 flex items-center justify-between text-[11px]">
                       <div>
@@ -786,7 +786,7 @@ export default function AdminVendorsPage() {
                         <span className="text-[10px] text-slate-500 block">{ph.notes}</span>
                       </div>
                       <div className="text-right">
-                        <span className="font-mono text-amber-400 font-bold">${ph.price.toFixed(2)}</span>
+                        <span className="font-mono text-[#A78BFA] font-bold">${ph.price.toFixed(2)}</span>
                         <span className="text-[10px] text-slate-500 block">{ph.effective_date}</span>
                       </div>
                     </div>

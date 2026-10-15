@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState, useMemo, Suspense } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { 
   LayoutDashboard, 
@@ -60,6 +60,7 @@ import {
   MessageCircle,
   Smartphone,
   Briefcase,
+  Lock,
 } from "lucide-react";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
 import { useThemeStore, resolveLogo } from "@/store/useThemeStore";
@@ -69,6 +70,53 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { CursorScrollProvider } from "@/components/admin/CursorScrollProvider";
 import { AdminAccountDropdown } from "@/components/admin/AdminAccountDropdown";
 
+
+function AdminDynamicBreadcrumb({ allItems, pathname }: { allItems: any[]; pathname: string }) {
+  const searchParams = useSearchParams();
+
+  const currentNavItem = useMemo(() => {
+    const queryString = searchParams.toString();
+    if (queryString) {
+      const fullUrl = `${pathname}?${queryString}`;
+      const exactMatch = allItems.find((item) => item.href === fullUrl);
+      if (exactMatch) return exactMatch;
+
+      // Partial query match (e.g. category parameter)
+      const queryMatch = allItems.find((item) => {
+        if (!item.href.includes("?")) return false;
+        const [targetPath, targetQuery] = item.href.split("?");
+        if (pathname !== targetPath) return false;
+        const targetParams = new URLSearchParams(targetQuery);
+        return Array.from(targetParams.entries()).every(
+          ([k, v]) => searchParams.get(k) === v
+        );
+      });
+      if (queryMatch) return queryMatch;
+    }
+
+    // Exact pathname match without query params
+    const exactPathMatch = allItems.find(
+      (item) => item.href === pathname && !item.href.includes("?")
+    );
+    if (exactPathMatch) return exactPathMatch;
+
+    // Fallback to startsWith match
+    return (
+      allItems.find((item) => item.href === pathname) ||
+      allItems.find((item) => item.href !== "/admin" && pathname.startsWith(item.href.split("?")[0]))
+    );
+  }, [allItems, pathname, searchParams]);
+
+  if (!currentNavItem) return null;
+
+  return (
+    <div className="hidden sm:flex items-center gap-1.5 text-xs">
+      <span className="text-[#929BAD] font-medium">{currentNavItem.section}</span>
+      <ChevronRight className="w-3 h-3 text-[#626B7B]" />
+      <span className="font-semibold text-[#E5E7EB]">{currentNavItem.label}</span>
+    </div>
+  );
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -157,7 +205,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (loading) {
     return (
       <div className="min-h-screen bg-[#07090e] flex flex-col items-center justify-center gap-3 text-slate-400">
-        <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin" />
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
           Loading Administration Session...
         </span>
@@ -227,7 +275,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             { label: "Order Status", href: "/admin/orders/statuses", icon: SlidersHorizontal, permission: "settings.manage" },
             { label: "Shipping", href: "/admin/orders/shipping", icon: Truck, permission: "settings.manage" },
             { label: "Returns & RTO", href: "/admin/orders/returns", icon: RotateCcw, permission: "orders.view" },
-            { label: "Abandoned Checkouts", href: "/admin/orders/abandoned-checkouts", icon: Magnet, permission: "leads.view" },
+            { label: "Leads", href: "/admin/orders/abandoned-checkouts", icon: Magnet, permission: "leads.view" },
             { label: "Sales Invoices", href: "/admin/orders/sales-invoices", icon: BadgeDollarSign, permission: "orders.view" },
           ],
         },
@@ -272,11 +320,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           label: "Integrations",
           icon: Puzzle,
           items: [
+            { label: "All Integrations", href: "/admin/integrations", icon: Puzzle, permission: "settings.manage" },
+            { label: "Tracking & Pixels", href: "/admin/integrations?category=analytics", icon: BarChart3, permission: "settings.manage" },
+            { label: "Fraud Protection", href: "/admin/integrations?category=fraud", icon: ShieldCheck, permission: "settings.manage" },
+            { label: "Headless API & CORS", href: "/admin/integrations?category=api", icon: Lock, permission: "settings.manage" },
             { label: "Payment Gateways", href: "/admin/integrations?category=payment", icon: CreditCard, permission: "settings.manage" },
-            { label: "SMS Gateway", href: "/admin/integrations?category=sms", icon: MessageSquare, permission: "settings.manage" },
-            { label: "Email / SMTP", href: "/admin/integrations?category=email", icon: Mail, permission: "settings.manage" },
             { label: "Courier Gateways", href: "/admin/integrations?category=courier", icon: Truck, permission: "settings.manage" },
-            { label: "Other Integrations", href: "/admin/integrations?category=other", icon: Puzzle, permission: "settings.manage" },
           ],
         },
         {
@@ -358,7 +407,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     // Legacy Orders aliases
     { label: "Order Status", href: "/admin/settings/statuses", icon: SlidersHorizontal, section: "Orders", permission: "settings.manage" },
     { label: "Shipping", href: "/admin/settings/shipping", icon: Truck, section: "Orders", permission: "settings.manage" },
-    { label: "Abandoned Checkouts", href: "/admin/leads", icon: Magnet, section: "Orders", permission: "leads.view" },
+    { label: "Leads", href: "/admin/leads", icon: Magnet, section: "Orders", permission: "leads.view" },
     { label: "Sales Invoices", href: "/admin/sales", icon: BadgeDollarSign, section: "Orders", permission: "orders.view" },
 
     // Legacy Customers aliases
@@ -401,11 +450,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ...additionalSubPages,
   ];
 
-  // Exact match first, then startsWith for nested routes
-  const currentNavItem =
-    allNavAndSubItems.find((item) => item.href === pathname) ||
-    allNavAndSubItems.find((item) => item.href !== "/admin" && pathname.startsWith(item.href.split("?")[0]));
-
   // Command palette items filter
   const allFlattenedItems = allNavAndSubItems.filter((item) => hasItemAccess(item.permission));
   const filteredCommandItems = allFlattenedItems.filter((item) => 
@@ -414,20 +458,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
-    <div className="h-screen w-full bg-[#07090e] text-slate-100 flex overflow-hidden fixed inset-0">
+    <div className="h-screen w-full bg-[#090B10] text-[#E5E7EB] flex overflow-hidden fixed inset-0">
       {/* Sidebar Desktop */}
       <aside 
-        className={`hidden lg:flex flex-col justify-between bg-[#090b10] border-r border-white/[0.06] shrink-0 h-full transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[width] overflow-hidden z-20 ${
+        className={`hidden lg:flex flex-col justify-between bg-[#11141D] border-r border-[#272B35] shrink-0 h-full transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[width] overflow-hidden z-20 ${
           sidebarCollapsed ? "w-[68px]" : "w-64"
         }`}
       >
         <div className="p-3 flex flex-col h-full overflow-x-hidden overflow-y-auto no-scrollbar">
           
           {/* Admin Brand Header */}
-          <div className="flex items-center gap-2.5 pb-3 border-b border-white/10 mb-3 w-full shrink-0">
+          <div className="flex items-center gap-2.5 pb-3 border-b border-[#272B35] mb-3 w-full shrink-0">
             {sidebarCollapsed ? (
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/40 flex items-center justify-center shadow-xs shrink-0 mx-auto">
-                <span className="font-black text-amber-400 text-sm font-mono">
+              <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#A78BFA]/20 to-[#A78BFA]/10 border border-[#A78BFA]/40 flex items-center justify-center shadow-xs shrink-0 mx-auto">
+                <span className="font-black text-[#A78BFA] text-sm font-mono">
                   {companyBrandName.charAt(0)}
                 </span>
               </div>
@@ -445,14 +489,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   className="h-6 w-auto max-w-[150px] object-contain object-left"
                   suppressHydrationWarning
                 />
-                <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">
+                <span className="text-[9px] uppercase tracking-wider text-[#929BAD] font-bold">
                   Admin Console
                 </span>
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/40 flex items-center justify-center shadow-xs shrink-0">
-                  <span className="font-black text-amber-400 text-xs font-mono">
+                <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#A78BFA]/20 to-[#A78BFA]/10 border border-[#A78BFA]/40 flex items-center justify-center shadow-xs shrink-0">
+                  <span className="font-black text-[#A78BFA] text-xs font-mono">
                     {companyBrandName.charAt(0)}
                   </span>
                 </div>
@@ -460,7 +504,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <span className="font-bold text-xs text-white tracking-tight block truncate uppercase">
                     {companyBrandName}
                   </span>
-                  <span className="text-[9px] uppercase tracking-wider text-slate-400 block truncate font-bold">
+                  <span className="text-[9px] uppercase tracking-wider text-[#929BAD] block truncate font-bold">
                     Admin Console
                   </span>
                 </div>
@@ -481,11 +525,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               const isOperations = section.title.toLowerCase().includes("operations");
 
               return (
-                <div key={section.title} className={`space-y-1 ${isOperations ? "pt-2.5 mt-2.5 border-t border-white/[0.08]" : ""}`}>
+                <div key={section.title} className={`space-y-1 ${isOperations ? "pt-2.5 mt-2.5 border-t border-[#272B35]" : ""}`}>
                   {/* Category Header */}
                   {!sidebarCollapsed && (
                     <div className="animate-in fade-in duration-150 mb-1">
-                      <span className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500 px-3 block whitespace-nowrap">
+                      <span className="text-[9.5px] font-bold uppercase tracking-wider text-[#929BAD] px-3 block whitespace-nowrap">
                         {section.title}
                       </span>
                     </div>
@@ -508,16 +552,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       }
 
                       return (
-                        <SidebarNavGroup
-                          key={item.label}
-                          label={item.label}
-                          icon={item.icon}
-                          badge={item.badge}
-                          items={item.items}
-                          sidebarCollapsed={sidebarCollapsed}
-                          pathname={pathname}
-                          hasItemAccess={hasItemAccess}
-                        />
+                        <Suspense key={item.label} fallback={null}>
+                          <SidebarNavGroup
+                            label={item.label}
+                            icon={item.icon}
+                            badge={item.badge}
+                            items={item.items}
+                            sidebarCollapsed={sidebarCollapsed}
+                            pathname={pathname}
+                            hasItemAccess={hasItemAccess}
+                          />
+                        </Suspense>
                       );
                     })}
                   </div>
@@ -528,7 +573,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* User Card Bottom */}
-        <div className="p-2.5 border-t border-white/10 bg-black/20 shrink-0 overflow-hidden">
+        <div className="p-2.5 border-t border-[#272B35] bg-[#090B10]/40 shrink-0 overflow-hidden">
           <div className="flex items-center justify-between gap-2">
             <Link
               href="/admin/profile"
@@ -538,7 +583,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <img
                 src={adminUser?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"}
                 alt={adminUser?.name || "Admin"}
-                className="w-7 h-7 rounded-md object-cover ring-1 ring-white/10 group-hover:ring-amber-400 transition-all shrink-0"
+                className="w-7 h-7 rounded-md object-cover ring-1 ring-[#272B35] group-hover:ring-[#A78BFA] transition-all shrink-0"
               />
               
               <div 
@@ -546,10 +591,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   sidebarCollapsed ? "w-0 opacity-0 pointer-events-none" : "w-auto opacity-100 max-w-[120px]"
                 }`}
               >
-                <span className="text-[11px] font-bold text-white block truncate group-hover:text-amber-300 transition-colors">
+                <span className="text-[11px] font-bold text-white block truncate group-hover:text-[#B9A3FF] transition-colors">
                   {adminUser?.name}
                 </span>
-                <span className="text-[9.5px] text-slate-400 truncate block capitalize">
+                <span className="text-[9.5px] text-[#929BAD] truncate block capitalize">
                   {adminUser?.role?.replace("_", " ")}
                 </span>
               </div>
@@ -558,7 +603,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {!sidebarCollapsed && (
               <button
                 onClick={handleLogout}
-                className="p-1.5 rounded-md text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
+                className="p-1.5 rounded-md text-[#929BAD] hover:text-rose-400 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
                 title="Sign Out"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -572,46 +617,42 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         
         {/* Top Header */}
-        <header className="h-14 shrink-0 border-b border-white/[0.06] bg-[#090b10]/95 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between z-30">
+        <header className="h-14 shrink-0 border-b border-[#272B35] bg-[#090B10]/95 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between z-30">
           
           {/* Left: Sidebar Toggle + Breadcrumb */}
           <div className="flex items-center gap-2.5">
             <button
               onClick={toggleSidebar}
-              className="hidden lg:flex items-center justify-center p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white cursor-pointer transition-colors"
+              className="hidden lg:flex items-center justify-center p-1.5 rounded-md bg-[#171B26] hover:bg-[#171B26]/80 border border-[#272B35] text-[#929BAD] hover:text-[#E5E7EB] cursor-pointer transition-colors"
               title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
-              <Menu className="w-3.5 h-3.5 text-slate-300" />
+              <Menu className="w-3.5 h-3.5 text-[#929BAD]" />
             </button>
 
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileNavOpen(!mobileNavOpen)}
-              className="lg:hidden p-1.5 rounded-lg bg-white/[0.04] text-slate-300 hover:text-white cursor-pointer"
+              className="lg:hidden p-1.5 rounded-md bg-[#171B26] border border-[#272B35] text-[#929BAD] hover:text-[#E5E7EB] cursor-pointer"
             >
               {mobileNavOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
 
             {/* Dynamic Breadcrumbs */}
-            {currentNavItem && (
-              <div className="hidden sm:flex items-center gap-1.5 text-xs">
-                <span className="text-slate-500 font-medium">{currentNavItem.section}</span>
-                <ChevronRight className="w-3 h-3 text-slate-600" />
-                <span className="font-semibold text-slate-200">{currentNavItem.label}</span>
-              </div>
-            )}
+            <Suspense fallback={null}>
+              <AdminDynamicBreadcrumb allItems={allNavAndSubItems} pathname={pathname} />
+            </Suspense>
           </div>
 
           {/* Center: Command Palette Trigger */}
           <button
             onClick={() => setCommandOpen(true)}
-            className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-400 hover:text-slate-200 text-xs transition-colors cursor-pointer w-60 justify-between shadow-xs"
+            className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#171B26] hover:bg-[#171B26]/80 border border-[#272B35] text-[#929BAD] hover:text-[#E5E7EB] text-xs transition-colors cursor-pointer w-60 justify-between shadow-xs"
           >
             <div className="flex items-center gap-1.5">
-              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <Search className="w-3.5 h-3.5 text-[#929BAD]" />
               <span className="text-[11px]">Quick navigation...</span>
             </div>
-            <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-[9.5px] font-mono text-slate-300">
+            <kbd className="px-1.5 py-0.5 rounded bg-[#090B10] border border-[#272B35] text-[9.5px] font-mono text-[#929BAD]">
               Ctrl+K
             </kbd>
           </button>
@@ -621,7 +662,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link
               href="/"
               target="_blank"
-              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-[11px] font-semibold text-slate-300 hover:text-white border border-white/[0.08] transition-colors flex items-center gap-1.5"
+              className="px-2.5 py-1.5 rounded-md bg-[#171B26] hover:bg-[#171B26]/80 text-[11px] font-semibold text-[#929BAD] hover:text-[#E5E7EB] border border-[#272B35] transition-colors flex items-center gap-1.5"
               title="Open customer storefront in new tab"
             >
               <span>Live Store</span>
@@ -633,7 +674,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Scrollable Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#090b10]">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#090B10]">
           <CursorScrollProvider />
           {children}
         </main>
@@ -644,27 +685,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
         <SheetContent
           side="left"
-          className="w-72 max-w-[85vw] bg-[#090b10] border-r border-white/[0.08] p-0 flex flex-col justify-between"
+          className="w-72 max-w-[85vw] bg-[#11141D] border-r border-[#272B35] p-0 flex flex-col justify-between"
           showCloseButton={false}
         >
           {/* Minimal Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#272B35]">
             <div className="flex items-center gap-2.5">
               {companyBrandLogo ? (
                 <div 
-                  className="w-7 h-7 rounded-full border border-cyan-400/40 bg-white/5 p-0.5 flex items-center justify-center shrink-0 overflow-hidden"
+                  className="w-7 h-7 rounded border border-cyan-400/40 bg-white/5 p-0.5 flex items-center justify-center shrink-0 overflow-hidden"
                   suppressHydrationWarning
                 >
                   <img
                     src={companyBrandLogo}
                     alt={companyBrandName}
-                    className="w-full h-full object-contain rounded-full"
+                    className="w-full h-full object-contain rounded"
                     suppressHydrationWarning
                   />
                 </div>
               ) : (
-                <div className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
-                  <span className="font-black text-amber-400 text-xs font-mono">
+                <div className="w-7 h-7 rounded bg-[#A78BFA]/20 border border-[#A78BFA]/40 flex items-center justify-center shrink-0">
+                  <span className="font-black text-[#A78BFA] text-xs font-mono">
                     {companyBrandName.charAt(0)}
                   </span>
                 </div>
@@ -676,7 +717,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button 
               type="button"
               onClick={() => setMobileNavOpen(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+              className="p-1.5 rounded-md text-[#929BAD] hover:text-white hover:bg-white/5 transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -697,8 +738,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               const isOperations = section.title.toLowerCase().includes("operations");
 
               return (
-                <div key={section.title} className={`space-y-1 ${isOperations ? "pt-2.5 mt-2.5 border-t border-white/[0.08]" : ""}`}>
-                  <span className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500 px-3 block">
+                <div key={section.title} className={`space-y-1 ${isOperations ? "pt-2.5 mt-2.5 border-t border-[#272B35]" : ""}`}>
+                  <span className="text-[9.5px] font-bold uppercase tracking-wider text-[#929BAD] px-3 block">
                     {section.title}
                   </span>
                   <div className="space-y-0.5">
@@ -719,17 +760,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       }
 
                       return (
-                        <SidebarNavGroup
-                          key={item.label}
-                          label={item.label}
-                          icon={item.icon}
-                          badge={item.badge}
-                          items={item.items}
-                          sidebarCollapsed={false}
-                          pathname={pathname}
-                          hasItemAccess={hasItemAccess}
-                          onNavigate={() => setMobileNavOpen(false)}
-                        />
+                        <Suspense key={item.label} fallback={null}>
+                          <SidebarNavGroup
+                            label={item.label}
+                            icon={item.icon}
+                            badge={item.badge}
+                            items={item.items}
+                            sidebarCollapsed={false}
+                            pathname={pathname}
+                            hasItemAccess={hasItemAccess}
+                            onNavigate={() => setMobileNavOpen(false)}
+                          />
+                        </Suspense>
                       );
                     })}
                   </div>
@@ -739,10 +781,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
 
           {/* Footer Sign Out */}
-          <div className="p-3 border-t border-white/[0.06] bg-[#07090e]">
+          <div className="p-3 border-t border-[#272B35] bg-[#090B10]">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
@@ -758,70 +800,70 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="fixed inset-0 bg-black/75 backdrop-blur-sm"
             onClick={() => setCommandOpen(false)}
           />
-          <div className="relative w-full max-w-lg bg-[#0e121e] border border-white/15 rounded-xl shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-2.5 px-3.5 py-3 border-b border-white/10">
-              <Search className="w-4 h-4 text-slate-400 shrink-0" />
+          <div className="relative w-full max-w-lg bg-[#11141D] border border-[#272B35] rounded-lg shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-2.5 px-3.5 py-3 border-b border-[#272B35]">
+              <Search className="w-4 h-4 text-[#929BAD] shrink-0" />
               <input
                 type="text"
                 autoFocus
                 value={commandQuery}
                 onChange={(e) => setCommandQuery(e.target.value)}
                 placeholder="Search admin pages..."
-                className="w-full bg-transparent text-xs text-white placeholder:text-slate-500 focus:outline-none"
+                className="w-full bg-transparent text-xs text-[#E5E7EB] placeholder:text-[#929BAD] focus:outline-none"
               />
-              <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-slate-400">ESC</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-[#171B26] border border-[#272B35] text-[10px] text-[#929BAD]">ESC</kbd>
             </div>
 
             <div className="max-h-80 overflow-y-auto p-2 space-y-1">
               {/* Contextual Entity Quick Jumps when query entered */}
               {commandQuery.trim().length > 1 && (
-                <div className="pb-2 mb-2 border-b border-white/10 space-y-1">
-                  <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400">
+                <div className="pb-2 mb-2 border-b border-[#272B35] space-y-1">
+                  <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A78BFA]">
                     Search Live Records
                   </div>
                   <Link
                     href={`/admin/orders?search=${encodeURIComponent(commandQuery.trim())}`}
                     onClick={() => setCommandOpen(false)}
-                    className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-amber-500/10 hover:text-amber-300 text-slate-300 transition-colors"
+                    className="flex items-center justify-between px-3 py-1.5 rounded-md text-xs hover:bg-[#211B32] hover:text-[#A78BFA] text-[#E5E7EB] transition-colors"
                   >
                     <div className="flex items-center gap-2">
-                      <ShoppingBag className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <ShoppingBag className="w-3.5 h-3.5 text-[#A78BFA] shrink-0" />
                       <span>Search Orders for <strong className="text-white">"{commandQuery.trim()}"</strong></span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase">Orders</span>
+                    <span className="text-[10px] text-[#929BAD] uppercase">Orders</span>
                   </Link>
                   <Link
                     href={`/admin/products?search=${encodeURIComponent(commandQuery.trim())}`}
                     onClick={() => setCommandOpen(false)}
-                    className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-amber-500/10 hover:text-amber-300 text-slate-300 transition-colors"
+                    className="flex items-center justify-between px-3 py-1.5 rounded-md text-xs hover:bg-[#211B32] hover:text-[#A78BFA] text-[#E5E7EB] transition-colors"
                   >
                     <div className="flex items-center gap-2">
                       <Boxes className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                       <span>Search Products for <strong className="text-white">"{commandQuery.trim()}"</strong></span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase">Catalog</span>
+                    <span className="text-[10px] text-[#929BAD] uppercase">Catalog</span>
                   </Link>
                   <Link
                     href={`/admin/customers?search=${encodeURIComponent(commandQuery.trim())}`}
                     onClick={() => setCommandOpen(false)}
-                    className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-amber-500/10 hover:text-amber-300 text-slate-300 transition-colors"
+                    className="flex items-center justify-between px-3 py-1.5 rounded-md text-xs hover:bg-[#211B32] hover:text-[#A78BFA] text-[#E5E7EB] transition-colors"
                   >
                     <div className="flex items-center gap-2">
-                      <Users className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <Users className="w-3.5 h-3.5 text-[#34D399] shrink-0" />
                       <span>Search Customers for <strong className="text-white">"{commandQuery.trim()}"</strong></span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase">Customers</span>
+                    <span className="text-[10px] text-[#929BAD] uppercase">Customers</span>
                   </Link>
                   <Link
                     href={`/admin/promotions?search=${encodeURIComponent(commandQuery.trim())}`}
                     onClick={() => setCommandOpen(false)}
-                    className="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-amber-500/10 hover:text-amber-300 text-slate-300 transition-colors"
+                    className="flex items-center justify-between px-3 py-1.5 rounded-md text-xs hover:bg-[#211B32] hover:text-[#A78BFA] text-[#E5E7EB] transition-colors"
                   >
                     <div className="flex items-center gap-2">
                       <Percent className="w-3.5 h-3.5 text-purple-400 shrink-0" />
                       <span>Search Promotions for <strong className="text-white">"{commandQuery.trim()}"</strong></span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase">Promotions</span>
+                    <span className="text-[10px] text-[#929BAD] uppercase">Promotions</span>
                   </Link>
                 </div>
               )}
@@ -834,19 +876,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       key={item.href}
                       href={item.href}
                       onClick={() => setCommandOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-slate-200 hover:text-white transition-colors"
+                      className="flex items-center justify-between px-3 py-2 rounded-md text-xs hover:bg-[#211B32] text-[#E5E7EB] hover:text-[#A78BFA] transition-colors"
                     >
                       <div className="flex items-center gap-2.5">
-                        {Icon && <Icon className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
+                        {Icon && <Icon className="w-3.5 h-3.5 text-[#A78BFA] shrink-0" />}
                         <span className="font-semibold">{item.label}</span>
                       </div>
-                      <span className="text-[10px] text-slate-500 uppercase">{item.section}</span>
+                      <span className="text-[10px] text-[#929BAD] uppercase">{item.section}</span>
                     </Link>
                   );
                 })
               ) : (
                 commandQuery.trim().length <= 1 && (
-                  <div className="p-4 text-center text-xs text-slate-500">
+                  <div className="p-4 text-center text-xs text-[#929BAD]">
                     No matching admin pages found.
                   </div>
                 )

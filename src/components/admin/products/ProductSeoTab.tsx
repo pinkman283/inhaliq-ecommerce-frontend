@@ -53,7 +53,7 @@ export function ProductSeoTab({ formData, onChange, slug }: ProductSeoTabProps) 
             value={formData.meta_title}
             onChange={(e) => onChange("meta_title", e.target.value)}
             placeholder="Custom title tag (recommended 50-60 characters)..."
-            className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
+            className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-md px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
           />
         </div>
 
@@ -74,7 +74,7 @@ export function ProductSeoTab({ formData, onChange, slug }: ProductSeoTabProps) 
             value={formData.meta_description}
             onChange={(e) => onChange("meta_description", e.target.value)}
             placeholder="Brief search snippet summarizing key features and value proposition..."
-            className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-y leading-relaxed"
+            className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-md px-3.5 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-y leading-relaxed"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@ export function ProductSeoTab({ formData, onChange, slug }: ProductSeoTabProps) 
           Live Search Snippet Preview
         </h5>
 
-        <div className="p-4 rounded-xl bg-[#121624] border border-white/10 space-y-1.5 shadow-md max-w-2xl">
+        <div className="p-4 rounded-md bg-[#121624] border border-white/10 space-y-1.5 shadow-md max-w-2xl">
           <div className="flex items-center gap-2 text-[11px] text-slate-400">
             <Globe className="w-3.5 h-3.5 text-slate-500" />
             <span className="truncate text-slate-300 font-mono">
@@ -103,7 +103,7 @@ export function ProductSeoTab({ formData, onChange, slug }: ProductSeoTabProps) 
       </div>
 
       {/* Quick Best Practice Tips */}
-      <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-2 text-xs text-slate-400">
+      <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-2 text-xs text-slate-400">
         <p className="font-semibold text-white text-[11px] flex items-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
           SEO Guidelines:

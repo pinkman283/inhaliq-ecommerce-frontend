@@ -134,14 +134,14 @@ export default function AdminNotificationTemplatesPage() {
       <SettingsNavTabs />
 
       {loading ? (
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-8 space-y-4 animate-pulse">
-          <div className="h-6 w-48 bg-[#161a26] rounded-xl" />
-          <div className="h-40 bg-[#161a26] rounded-xl" />
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-8 space-y-4 animate-pulse">
+          <div className="h-6 w-48 bg-[#161a26] rounded-md" />
+          <div className="h-40 bg-[#161a26] rounded-md" />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Column: Event List */}
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4 space-y-2 h-fit">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4 space-y-2 h-fit">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block px-2 mb-2">
               Lifecycle Events
             </span>
@@ -151,9 +151,9 @@ export default function AdminNotificationTemplatesPage() {
                 <button
                   key={item.key}
                   onClick={() => setSelectedKey(item.key)}
-                  className={`w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center justify-between ${
+                  className={`w-full text-left px-3.5 py-3 rounded-md text-xs font-semibold transition-all cursor-pointer flex items-center justify-between ${
                     isSelected
-                      ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                      ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                       : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
                   }`}
                 >
@@ -173,7 +173,7 @@ export default function AdminNotificationTemplatesPage() {
                     key={v.chip}
                     type="button"
                     onClick={() => handleInsertVariable(v.chip)}
-                    className="px-2 py-1 rounded-lg text-[10px] font-mono bg-[#161a26] hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-white/5 transition-all cursor-pointer"
+                    className="px-2 py-1 rounded text-[10px] font-mono bg-[#161a26] hover:bg-[#211B32] text-slate-300 hover:text-[#A78BFA] border border-white/5 transition-all cursor-pointer"
                     title={v.desc}
                   >
                     {v.chip}
@@ -186,10 +186,10 @@ export default function AdminNotificationTemplatesPage() {
           {/* Right 3 Columns: Editor */}
           <div className="lg:col-span-3 space-y-6">
             {/* SMS Template */}
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4">
               <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-amber-400" />
+                  <MessageSquare className="w-4 h-4 text-[#A78BFA]" />
                   <h3 className="text-sm font-bold text-white">SMS Broadcast Copy</h3>
                 </div>
                 <span className="text-[11px] font-mono text-slate-400">
@@ -203,17 +203,17 @@ export default function AdminNotificationTemplatesPage() {
                   rows={4}
                   value={currentTpl.sms_body || ""}
                   onChange={(e) => handleUpdateCurrent("sms_body", e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 resize-none font-mono leading-relaxed"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 resize-none font-mono leading-relaxed"
                   placeholder="Type SMS text..."
                 />
               </div>
 
               {/* Live Preview Bubble */}
-              <div className="p-4 bg-[#161a26]/40 rounded-xl border border-white/5 space-y-2">
+              <div className="p-4 bg-[#161a26]/40 rounded-md border border-white/5 space-y-2">
                 <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">
                   Simulated Customer Phone SMS Preview
                 </span>
-                <div className="max-w-md bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs p-3.5 rounded-2xl rounded-tl-none font-mono leading-relaxed">
+                <div className="max-w-md bg-[#211B32] border border-[#A78BFA]/30 text-[#A78BFA] text-xs p-3.5 rounded-md rounded-tl-none font-mono leading-relaxed">
                   {(currentTpl.sms_body || "")
                     .replace(/\{customer_name\}/g, "Ahsan Habib")
                     .replace(/\{order_number\}/g, "ORD-2026-992")
@@ -227,7 +227,7 @@ export default function AdminNotificationTemplatesPage() {
             </div>
 
             {/* Email Subject Template */}
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4">
               <div className="flex items-center gap-2 border-b border-white/[0.06] pb-3">
                 <Mail className="w-4 h-4 text-sky-400" />
                 <h3 className="text-sm font-bold text-white">Transactional Email Subject Line</h3>
@@ -239,7 +239,7 @@ export default function AdminNotificationTemplatesPage() {
                   type="text"
                   value={currentTpl.email_subject || ""}
                   onChange={(e) => handleUpdateCurrent("email_subject", e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   placeholder="e.g. Order Confirmed #{order_number} - AETHER"
                 />
               </div>

@@ -378,14 +378,14 @@ export default function AdminContentBannersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A78BFA] bg-[#211B32] px-2.5 py-0.5 rounded border border-[#A78BFA]/30">
               Content / CMS
             </span>
             <span className="text-xs text-slate-500">·</span>
             <span className="text-xs text-slate-400 font-medium">Banners & Advertisements</span>
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2.5">
-            <Sparkles className="w-6 h-6 text-amber-400" />
+            <Sparkles className="w-6 h-6 text-[#A78BFA]" />
             Banners & Ads
           </h1>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
@@ -397,13 +397,13 @@ export default function AdminContentBannersPage() {
           {canManage ? (
             <button
               onClick={() => handleCreate()}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-lg shadow-amber-400/20 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-[#A78BFA]/20 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Create Banner</span>
             </button>
           ) : (
-            <div className="px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-xs text-slate-400">
+            <div className="px-3 py-1.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-xs text-slate-400">
               Read-Only View
             </div>
           )}
@@ -412,19 +412,19 @@ export default function AdminContentBannersPage() {
 
       {/* 2. KPI Summary Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+        <div className="p-4 rounded-md bg-white/[0.02] border border-white/[0.06]">
           <span className="text-xs font-semibold text-slate-400">Total Banners</span>
           <p className="text-2xl font-black text-white mt-1">{totalCount}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20">
+        <div className="p-4 rounded-md bg-emerald-500/[0.04] border border-emerald-500/20">
           <span className="text-xs font-semibold text-emerald-400">Active Live</span>
           <p className="text-2xl font-black text-emerald-300 mt-1">{activeCount}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-blue-500/[0.04] border border-blue-500/20">
+        <div className="p-4 rounded-md bg-blue-500/[0.04] border border-blue-500/20">
           <span className="text-xs font-semibold text-blue-400">Scheduled</span>
           <p className="text-2xl font-black text-blue-300 mt-1">{scheduledCount}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-purple-500/[0.04] border border-purple-500/20">
+        <div className="p-4 rounded-md bg-purple-500/[0.04] border border-purple-500/20">
           <span className="text-xs font-semibold text-purple-400">Placements Covered</span>
           <p className="text-2xl font-black text-purple-300 mt-1">
             {new Set(banners.map((b) => b.placement)).size}
@@ -443,17 +443,17 @@ export default function AdminContentBannersPage() {
               <button
                 key={pill.id}
                 onClick={() => setActivePill(pill.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-amber-400/15 text-amber-300 border border-amber-400/35 shadow-sm"
+                    ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-sm"
                     : "bg-white/[0.02] text-slate-400 hover:text-white hover:bg-white/[0.06] border border-white/[0.06]"
                 }`}
               >
                 <span>{pill.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
+                  className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
                     isSelected
-                      ? "bg-amber-400/30 text-amber-200"
+                      ? "bg-[#211B32] text-[#A78BFA]"
                       : "bg-white/[0.06] text-slate-400"
                   }`}
                 >
@@ -466,7 +466,7 @@ export default function AdminContentBannersPage() {
 
         {/* Selected Placement Guidance Strip */}
         {activePill !== "all" && (
-          <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-4 text-xs">
+          <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-2 text-slate-300">
               <span className="font-bold text-white">{activePillDef.label}:</span>
               <span className="text-slate-400 text-[11px]">{activePillDef.description}</span>
@@ -478,7 +478,7 @@ export default function AdminContentBannersPage() {
               {canManage && (
                 <button
                   onClick={() => handleCreate(activePillDef.placementKey)}
-                  className="px-2.5 py-1 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] font-bold border border-[#A78BFA]/30 transition-colors cursor-pointer"
                 >
                   + Add to {activePillDef.label}
                 </button>
@@ -489,7 +489,7 @@ export default function AdminContentBannersPage() {
       </div>
 
       {/* 4. Search & Controls Bar */}
-      <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -497,7 +497,7 @@ export default function AdminContentBannersPage() {
             placeholder="Search banners by title, subtitle, CTA text or link..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full pl-9 pr-4 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
         </div>
 
@@ -507,7 +507,7 @@ export default function AdminContentBannersPage() {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             aria-label="Filter by banner status"
-            className="px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-slate-300 focus:outline-none focus:border-amber-400"
+            className="px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-slate-300 focus:outline-none focus:border-[#A78BFA]/50"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active Live Only</option>
@@ -524,18 +524,18 @@ export default function AdminContentBannersPage() {
                 setActivePill("all");
                 setStatusFilter("all");
               }}
-              className="px-3 py-2 text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
+              className="px-3 py-2 text-xs font-semibold text-[#A78BFA] hover:text-[#B9A3FF] transition-colors cursor-pointer"
             >
               Reset Filters
             </button>
           )}
 
           {/* View Toggle */}
-          <div className="flex items-center gap-0.5 bg-slate-900 p-1 rounded-xl border border-white/[0.08]">
+          <div className="flex items-center gap-0.5 bg-slate-900 p-1 rounded-md border border-white/[0.08]">
             <button
               onClick={() => setViewMode("table")}
-              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                viewMode === "table" ? "bg-amber-400 text-slate-950" : "text-slate-400 hover:text-white"
+              className={`p-1.5 rounded-md transition-colors cursor-pointer ${
+                viewMode === "table" ? "bg-[#A78BFA] text-[#090B10]" : "text-slate-400 hover:text-white"
               }`}
               title="Table list view"
             >
@@ -543,8 +543,8 @@ export default function AdminContentBannersPage() {
             </button>
             <button
               onClick={() => setViewMode("cards")}
-              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                viewMode === "cards" ? "bg-amber-400 text-slate-950" : "text-slate-400 hover:text-white"
+              className={`p-1.5 rounded-md transition-colors cursor-pointer ${
+                viewMode === "cards" ? "bg-[#A78BFA] text-[#090B10]" : "text-slate-400 hover:text-white"
               }`}
               title="Visual cards view"
             >
@@ -556,12 +556,12 @@ export default function AdminContentBannersPage() {
 
       {/* 5. Main Content: Table or Cards View */}
       {loading ? (
-        <div className="p-16 text-center rounded-2xl bg-white/[0.01] border border-white/[0.06] text-slate-400 text-xs">
-          <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2.5" />
+        <div className="p-16 text-center rounded-md bg-white/[0.01] border border-white/[0.06] text-slate-400 text-xs">
+          <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2.5" />
           <span>Loading storefront banners from server...</span>
         </div>
       ) : filteredBanners.length === 0 ? (
-        <div className="p-14 text-center rounded-2xl bg-white/[0.01] border border-white/[0.06]">
+        <div className="p-14 text-center rounded-md bg-white/[0.01] border border-white/[0.06]">
           <ImageIcon className="w-12 h-12 text-slate-600 mx-auto mb-3" />
           <h3 className="text-sm font-bold text-white mb-1">No Banners Found</h3>
           <p className="text-xs text-slate-400 max-w-sm mx-auto mb-4">
@@ -572,7 +572,7 @@ export default function AdminContentBannersPage() {
           {canManage && (
             <button
               onClick={() => handleCreate()}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-400/20 cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md bg-[#A78BFA] text-[#090B10] font-bold text-xs shadow-lg shadow-amber-400/20 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Create First Banner</span>
@@ -581,7 +581,7 @@ export default function AdminContentBannersPage() {
         </div>
       ) : viewMode === "table" ? (
         /* TABLE VIEW */
-        <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-slate-950/60 shadow-xl">
+        <div className="overflow-hidden rounded-md border border-white/[0.08] bg-slate-950/60 shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -615,7 +615,7 @@ export default function AdminContentBannersPage() {
                       onDragOver={handleDragOver}
                       onDrop={() => handleDrop(banner.id)}
                       className={`hover:bg-white/[0.02] transition-colors group ${
-                        isDragging ? "opacity-30 bg-amber-400/5" : ""
+                        isDragging ? "opacity-30 bg-[#211B32]" : ""
                       }`}
                     >
                       {/* Order Controls */}
@@ -658,7 +658,7 @@ export default function AdminContentBannersPage() {
                       {/* Creative Preview & Title */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-20 h-12 rounded-xl overflow-hidden bg-slate-900 border border-white/[0.1] relative shrink-0">
+                          <div className="w-20 h-12 rounded-md overflow-hidden bg-slate-900 border border-white/[0.1] relative shrink-0">
                             {banner.image_url ? (
                               <img
                                 src={banner.image_url}
@@ -672,7 +672,7 @@ export default function AdminContentBannersPage() {
                             )}
                           </div>
                           <div>
-                            <p className="font-bold text-white group-hover:text-amber-300 transition-colors">
+                            <p className="font-bold text-white group-hover:text-[#B9A3FF] transition-colors">
                               {banner.title}
                             </p>
                             {banner.subtitle && (
@@ -687,7 +687,7 @@ export default function AdminContentBannersPage() {
                                 </span>
                               )}
                               {banner.badge && (
-                                <span className="text-[10px] text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded font-semibold">
+                                <span className="text-[10px] text-[#A78BFA] bg-[#211B32] px-1.5 py-0.5 rounded font-semibold">
                                   {banner.badge}
                                 </span>
                               )}
@@ -703,7 +703,7 @@ export default function AdminContentBannersPage() {
 
                       {/* Placement / Zone */}
                       <td className="py-3 px-4">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] font-semibold text-slate-200">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-semibold text-slate-200">
                           {placementDef?.label || banner.placement}
                         </span>
                         {placementDef?.dimensions && (
@@ -738,7 +738,7 @@ export default function AdminContentBannersPage() {
                             <span>Starts {starts?.toLocaleDateString()}</span>
                           </div>
                         ) : expires ? (
-                          <div className="flex items-center gap-1.5 text-[11px] text-amber-300">
+                          <div className="flex items-center gap-1.5 text-[11px] text-[#A78BFA]">
                             <Calendar className="w-3.5 h-3.5" />
                             <span>Ends {expires.toLocaleDateString()}</span>
                           </div>
@@ -752,7 +752,7 @@ export default function AdminContentBannersPage() {
                         <button
                           onClick={() => handleToggleStatus(banner)}
                           disabled={actionLoadingId === banner.id || !canManage}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer disabled:opacity-50 ${
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer disabled:opacity-50 ${
                             banner.is_active
                               ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25"
                               : "bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20"
@@ -770,7 +770,7 @@ export default function AdminContentBannersPage() {
                             <>
                               <button
                                 onClick={() => handleEdit(banner)}
-                                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
+                                className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
                                 title="Edit banner"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -778,7 +778,7 @@ export default function AdminContentBannersPage() {
                               <button
                                 onClick={() => handleDelete(banner)}
                                 disabled={actionLoadingId === banner.id}
-                                className="p-1.5 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors cursor-pointer disabled:opacity-50"
+                                className="p-1.5 rounded-md text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors cursor-pointer disabled:opacity-50"
                                 title="Delete banner"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -803,7 +803,7 @@ export default function AdminContentBannersPage() {
             return (
               <div
                 key={banner.id}
-                className="rounded-2xl border border-white/[0.08] bg-slate-950/60 overflow-hidden flex flex-col justify-between group hover:border-amber-400/30 transition-all shadow-lg"
+                className="rounded-md border border-white/[0.08] bg-slate-950/60 overflow-hidden flex flex-col justify-between group hover:border-[#A78BFA]/30 transition-all shadow-lg"
               >
                 {/* Visual Creative Thumbnail */}
                 <div className="relative aspect-[16/9] bg-slate-900 overflow-hidden">
@@ -825,7 +825,7 @@ export default function AdminContentBannersPage() {
                       {placementDef?.label || banner.placement}
                     </span>
                     {banner.badge && (
-                      <span className="px-2 py-0.5 rounded-md bg-amber-500 text-[10px] font-bold text-slate-950">
+                      <span className="px-2 py-0.5 rounded-md bg-[#A78BFA] text-[10px] font-bold text-[#090B10]">
                         {banner.badge}
                       </span>
                     )}
@@ -833,7 +833,7 @@ export default function AdminContentBannersPage() {
 
                   <div className="absolute top-2.5 right-2.5">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold backdrop-blur-sm ${
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold backdrop-blur-sm ${
                         banner.is_active
                           ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
                           : "bg-rose-500/20 text-rose-300 border border-rose-500/40"
@@ -848,7 +848,7 @@ export default function AdminContentBannersPage() {
                 {/* Content Details */}
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-bold text-white text-sm group-hover:text-amber-300 transition-colors">
+                    <h3 className="font-bold text-white text-sm group-hover:text-[#B9A3FF] transition-colors">
                       {banner.title}
                     </h3>
                     {banner.subtitle && (
@@ -875,7 +875,7 @@ export default function AdminContentBannersPage() {
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleToggleStatus(banner)}
-                            className="p-1 rounded text-slate-400 hover:text-amber-300 transition cursor-pointer"
+                            className="p-1 rounded text-slate-400 hover:text-[#A78BFA] transition cursor-pointer"
                             title="Toggle active status"
                           >
                             <Power className="w-3.5 h-3.5" />

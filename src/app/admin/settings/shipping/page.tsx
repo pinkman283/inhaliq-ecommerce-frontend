@@ -268,7 +268,7 @@ export default function AdminShippingSettingsPage() {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            className="px-3.5 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Shipping Zone</span>
@@ -279,11 +279,11 @@ export default function AdminShippingSettingsPage() {
       <SettingsNavTabs />
 
       {/* Content Container */}
-      <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-6">
+      <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
-              <Truck className="w-4 h-4 text-amber-400" />
+              <Truck className="w-4 h-4 text-[#A78BFA]" />
               Zone-Based Delivery Rates & Transit Windows
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -292,7 +292,7 @@ export default function AdminShippingSettingsPage() {
           </div>
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 hover:bg-[#A78BFA]/20 transition-all cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>New Zone</span>
@@ -302,7 +302,7 @@ export default function AdminShippingSettingsPage() {
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-[#161a26] rounded-xl animate-pulse" />
+              <div key={i} className="h-16 bg-[#161a26] rounded-md animate-pulse" />
             ))}
           </div>
         ) : zones.length === 0 ? (
@@ -330,7 +330,7 @@ export default function AdminShippingSettingsPage() {
                     <td className="py-3.5 px-4 font-semibold text-white">
                       {zone.name}
                     </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-amber-400">
+                    <td className="py-3.5 px-4 font-mono font-bold text-[#A78BFA]">
                       ৳ {zone.rate.toFixed(2)}
                     </td>
                     <td className="py-3.5 px-4 text-slate-400 flex items-center gap-1.5 mt-2">
@@ -348,7 +348,7 @@ export default function AdminShippingSettingsPage() {
                     </td>
                     <td className="py-3.5 px-4">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
                           zone.is_active
                             ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                             : "bg-slate-700/30 text-slate-400 border border-slate-700/50"
@@ -361,14 +361,14 @@ export default function AdminShippingSettingsPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleOpenEdit(index)}
-                          className="p-1.5 text-slate-400 hover:text-amber-300 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-[#A78BFA] hover:bg-white/5 rounded-md transition-colors cursor-pointer"
                           title="Edit Zone"
                         >
                           <Edit className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteZone(index)}
-                          className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-white/5 rounded-md transition-colors cursor-pointer"
                           title="Delete Zone"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -421,7 +421,7 @@ export default function AdminShippingSettingsPage() {
                   placeholder="e.g. Inside Dhaka Metro, Outside Dhaka"
                   value={zoneName}
                   onChange={(e) => setZoneName(e.target.value)}
-                  className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                  className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                   required
                 />
               </div>
@@ -434,7 +434,7 @@ export default function AdminShippingSettingsPage() {
                     step="1"
                     value={rate}
                     onChange={(e) => setRate(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
                     required
                   />
                 </div>
@@ -446,13 +446,13 @@ export default function AdminShippingSettingsPage() {
                     placeholder="e.g. 24-48 Hours, 3-5 Days"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition"
                   />
                 </div>
               </div>
 
               {/* Free Shipping Section */}
-              <div className="p-3.5 rounded-lg bg-white/[0.02] border border-white/5 space-y-3">
+              <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xs font-medium text-white block">Free Shipping Perk</span>
@@ -481,13 +481,13 @@ export default function AdminShippingSettingsPage() {
                         }
                       }}
                       placeholder="e.g. 3000"
-                      className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
+                      className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none transition font-mono"
                     />
                   </div>
                 )}
               </div>
 
-              <div className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5">
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <AdminCheckbox
                     checked={isActive}
@@ -512,7 +512,7 @@ export default function AdminShippingSettingsPage() {
               </button>
               <button
                 type="submit"
-                className="h-8 px-4 rounded-lg bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer shadow-sm"
+                className="h-8 px-4 rounded-md bg-white hover:bg-slate-200 text-slate-950 font-semibold text-xs transition cursor-pointer shadow-sm"
               >
                 Confirm Zone
               </button>

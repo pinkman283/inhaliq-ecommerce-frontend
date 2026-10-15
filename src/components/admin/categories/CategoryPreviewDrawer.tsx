@@ -79,11 +79,11 @@ export function CategoryPreviewDrawer({
               <SheetTitle className="text-sm font-bold text-white tracking-wide shrink-0">
                 Category Preview
               </SheetTitle>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-full shrink-0">
+              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded shrink-0">
                 #{category.id}
               </span>
               {category.is_featured && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full shrink-0">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 px-2 py-0.5 rounded shrink-0">
                   <Sparkles className="w-2.5 h-2.5" />
                   Featured
                 </span>
@@ -92,7 +92,7 @@ export function CategoryPreviewDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+              className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
               title="Close Preview"
             >
               <X className="w-4 h-4" />
@@ -104,7 +104,7 @@ export function CategoryPreviewDrawer({
             {/* Cover Image or Fallback */}
             <div>
               {category.image ? (
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-slate-950 aspect-[16/9] shadow-inner group">
+                <div className="relative rounded-md overflow-hidden border border-white/10 bg-slate-950 aspect-[16/9] shadow-inner group">
                   <img
                     src={category.image}
                     alt={category.image_alt || category.name}
@@ -121,8 +121,8 @@ export function CategoryPreviewDrawer({
                   </div>
                 </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.01] aspect-[16/7] flex flex-col items-center justify-center p-6 text-center">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 mb-2">
+                <div className="rounded-md border border-dashed border-white/10 bg-white/[0.01] aspect-[16/7] flex flex-col items-center justify-center p-6 text-center">
+                  <div className="w-10 h-10 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 mb-2">
                     <ImageIcon className="w-5 h-5" />
                   </div>
                   <p className="text-xs font-semibold text-slate-300">No cover image uploaded</p>
@@ -139,21 +139,21 @@ export function CategoryPreviewDrawer({
                 General Overview
               </h4>
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Category Name</span>
                   <p className="text-white font-bold text-xs truncate">{category.name}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Level & Role</span>
-                  <p className="font-semibold text-xs text-amber-400">
+                  <p className="font-semibold text-xs text-[#A78BFA]">
                     {isRoot ? "Root Department (L1)" : level === 2 ? "Subcategory (L2)" : `Deep Item (L${level})`}
                   </p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">URL Slug</span>
                   <p className="text-cyan-400 font-mono font-medium text-[11px] truncate">/{category.slug}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Badge Tag</span>
                   <p className="text-slate-200 font-medium text-xs">
                     {category.badge ? (
@@ -165,15 +165,15 @@ export function CategoryPreviewDrawer({
                     )}
                   </p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Display Order</span>
                   <p className="text-slate-300 font-mono text-xs">{category.display_order ?? 0}</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Menu Status</span>
                   <p className="text-xs font-semibold text-slate-300">
                     {category.is_featured ? (
-                      <span className="text-amber-400">Featured in Highlights</span>
+                      <span className="text-[#A78BFA]">Featured in Highlights</span>
                     ) : (
                       <span className="text-slate-400">Standard Navigation</span>
                     )}
@@ -182,7 +182,7 @@ export function CategoryPreviewDrawer({
               </div>
 
               {category.description && (
-                <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1.5">
+                <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-1.5">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                     Description
                   </span>
@@ -198,7 +198,7 @@ export function CategoryPreviewDrawer({
                 Hierarchy & Tree Position
               </h4>
 
-              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
+              <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-3">
                 <div>
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
                     Lineage Trail
@@ -210,7 +210,7 @@ export function CategoryPreviewDrawer({
                         <React.Fragment key={item.id}>
                           <span
                             className={`font-semibold ${
-                              isLast ? "text-amber-400 font-bold" : "text-slate-300 hover:text-white"
+                              isLast ? "text-[#A78BFA] font-bold" : "text-slate-300 hover:text-white"
                             }`}
                           >
                             {item.name}
@@ -238,7 +238,7 @@ export function CategoryPreviewDrawer({
                   </span>
                 </div>
                 {directChildren.length === 0 ? (
-                  <p className="text-[11px] text-slate-500 italic p-3 rounded-xl bg-white/[0.01] border border-white/5 text-center">
+                  <p className="text-[11px] text-slate-500 italic p-3 rounded-md bg-white/[0.01] border border-white/5 text-center">
                     No nested subcategories under this category.
                   </p>
                 ) : (
@@ -246,10 +246,10 @@ export function CategoryPreviewDrawer({
                     {directChildren.map((child) => (
                       <div
                         key={child.id}
-                        className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 flex items-center justify-between gap-3 transition"
+                        className="p-2.5 rounded-md bg-white/[0.02] border border-white/5 hover:border-white/10 flex items-center justify-between gap-3 transition"
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <Layers className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <Layers className="w-3.5 h-3.5 text-[#A78BFA] shrink-0" />
                           <span className="text-white font-semibold truncate text-xs">{child.name}</span>
                           {child.badge && (
                             <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[9px] font-bold shrink-0">
@@ -281,18 +281,18 @@ export function CategoryPreviewDrawer({
             {/* Assigned Catalog Products */}
             <div className="space-y-3">
               <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Package className="w-3.5 h-3.5 text-amber-400" />
+                <Package className="w-3.5 h-3.5 text-[#A78BFA]" />
                 Product Assignments
               </h4>
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                     Primary Category
                   </span>
                   <p className="text-lg font-black text-white">{category.products_count ?? 0}</p>
                   <p className="text-[10px] text-slate-500">Products via category_id</p>
                 </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                     Subcategory Role
                   </span>
@@ -308,7 +308,7 @@ export function CategoryPreviewDrawer({
                 <Search className="w-3.5 h-3.5 text-emerald-400" />
                 Search Engine Optimization
               </h4>
-              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-2.5">
+              <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-2.5">
                 <div>
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                     Meta Title
@@ -354,7 +354,7 @@ export function CategoryPreviewDrawer({
                 onClose();
                 onEdit(category);
               }}
-              className="h-8 px-4 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="h-8 px-4 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-sm"
             >
               <Edit className="w-3.5 h-3.5" />
               <span>Edit Category</span>

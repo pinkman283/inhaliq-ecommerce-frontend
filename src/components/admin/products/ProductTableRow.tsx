@@ -30,7 +30,7 @@ export function ProductTableRow({
   return (
     <tr
       className={`hover:bg-white/[0.02] transition-colors ${
-        isSelected ? "bg-amber-500/5" : ""
+        isSelected ? "bg-[#211B32]" : ""
       }`}
     >
       {/* Selection Checkbox */}
@@ -51,7 +51,7 @@ export function ProductTableRow({
               <img
                 src={img}
                 alt={product.name}
-                className="w-9 h-9 rounded-lg object-cover bg-slate-900 border border-white/10"
+                className="w-9 h-9 rounded-md object-cover bg-slate-900 border border-white/10"
               />
             ) : (
               <button
@@ -60,10 +60,10 @@ export function ProductTableRow({
                   e.stopPropagation();
                   onOpenMedia?.(product);
                 }}
-                className="w-9 h-9 rounded-lg bg-rose-500/10 border border-dashed border-rose-500/30 hover:border-amber-400/60 hover:bg-amber-500/10 flex items-center justify-center transition-colors group cursor-pointer"
+                className="w-9 h-9 rounded-md bg-rose-500/10 border border-dashed border-rose-500/30 hover:border-[#A78BFA]/60 hover:bg-[#A78BFA]/10 flex items-center justify-center transition-colors group cursor-pointer"
                 title="No media uploaded — Click to add images"
               >
-                <ImageIcon className="w-4 h-4 text-rose-400 group-hover:text-amber-400" />
+                <ImageIcon className="w-4 h-4 text-rose-400 group-hover:text-[#A78BFA]" />
               </button>
             )}
             <span
@@ -80,7 +80,7 @@ export function ProductTableRow({
 
           <div className="min-w-0 max-w-[200px] sm:max-w-[240px]">
             <span
-              className="font-bold text-white block truncate hover:text-amber-400 transition-colors cursor-pointer"
+              className="font-bold text-white block truncate hover:text-[#A78BFA] transition-colors cursor-pointer"
               title={product.name}
               onClick={() => onEdit(product)}
             >
@@ -96,7 +96,7 @@ export function ProductTableRow({
                     e.stopPropagation();
                     onOpenMedia?.(product);
                   }}
-                  className="text-amber-400 hover:underline font-medium cursor-pointer"
+                  className="text-[#A78BFA] hover:text-[#B9A3FF] hover:underline font-medium cursor-pointer"
                 >
                   + Add photo
                 </button>
@@ -153,7 +153,7 @@ export function ProductTableRow({
       <td className="p-3 text-left whitespace-nowrap">
         <div className="flex items-center gap-1">
           {product.is_featured && (
-            <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[9.5px] font-bold border border-amber-500/20">
+            <span className="px-1.5 py-0.5 rounded bg-[#211B32] text-[#A78BFA] text-[9.5px] font-bold border border-[#A78BFA]/30">
               Featured
             </span>
           )}
@@ -192,7 +192,7 @@ export function ProductTableRow({
           <button
             type="button"
             onClick={() => onEdit(product)}
-            className="p-1.5 rounded-md text-slate-400 hover:text-amber-400 hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded-md text-slate-400 hover:text-[#A78BFA] hover:bg-white/10 transition-colors cursor-pointer"
             title="Edit product"
           >
             <Edit className="w-3.5 h-3.5" />

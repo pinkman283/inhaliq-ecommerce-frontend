@@ -33,7 +33,7 @@ export default function AdminCourierSettlementsPage() {
   return (
     <Suspense fallback={
       <div className="p-12 text-center text-slate-500">
-        <Loader2 className="w-6 h-6 animate-spin mx-auto text-amber-400 mb-2" />
+        <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#A78BFA] mb-2" />
         Loading Courier Settlements...
       </div>
     }>
@@ -228,14 +228,14 @@ function SettlementsContent() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => fetchSettlements()}
-            className="p-2 border border-border rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition"
+            className="p-2 border border-border rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition"
             title="Refresh"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
           <button
             onClick={() => setBatchModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             New Settlement Statement
@@ -245,24 +245,24 @@ function SettlementsContent() {
 
       {/* Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Statements</span>
           <div className="mt-1 text-2xl font-bold text-foreground">{stats.total_settlements}</div>
           <span className="text-xs text-muted-foreground">{stats.reconciled_count} reconciled, {stats.pending_count} pending</span>
         </div>
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-blue-500 uppercase tracking-wider flex items-center gap-1">
             <Coins className="w-3.5 h-3.5" /> Total COD Collected
           </span>
           <div className="mt-1 text-2xl font-bold text-blue-500">{formatPrice(stats.total_cod_collected)}</div>
         </div>
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className="text-xs font-medium text-emerald-500 uppercase tracking-wider flex items-center gap-1">
             <Landmark className="w-3.5 h-3.5" /> Net Actual Payout
           </span>
           <div className="mt-1 text-2xl font-bold text-emerald-500">{formatPrice(stats.total_actual_payout)}</div>
         </div>
-        <div className="p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="p-4 rounded-md border border-border bg-card shadow-sm">
           <span className={`text-xs font-medium uppercase tracking-wider flex items-center gap-1 ${
             stats.total_variance !== 0 ? "text-amber-500" : "text-muted-foreground"
           }`}>
@@ -280,7 +280,7 @@ function SettlementsContent() {
           <select
             value={providerFilter}
             onChange={(e) => setProviderFilter(e.target.value)}
-            className="text-xs p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="text-xs p-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
           >
             <option value="all">All Couriers</option>
             <option value="steadfast">Steadfast Courier</option>
@@ -291,7 +291,7 @@ function SettlementsContent() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="text-xs p-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
           >
             <option value="all">All Statuses</option>
             <option value="pending">Pending</option>
@@ -307,7 +307,7 @@ function SettlementsContent() {
             placeholder="Search statement #..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-1.5 text-sm bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full pl-9 pr-8 py-1.5 text-sm bg-background border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
           {searchQuery && (
             <button
@@ -462,7 +462,7 @@ function SettlementsContent() {
             ) : (
               <div className="space-y-6 text-sm">
                 {/* 1. Summary Cards */}
-                <div className="grid grid-cols-3 gap-3 p-4 bg-muted/30 rounded-xl border border-border">
+                <div className="grid grid-cols-3 gap-3 p-4 bg-muted/30 rounded-md border border-border">
                   <div>
                     <span className="text-xs text-muted-foreground block">Provider</span>
                     <span className="font-semibold text-foreground uppercase text-xs">
@@ -484,7 +484,7 @@ function SettlementsContent() {
                 </div>
 
                 {/* 2. Reconciliation Financials */}
-                <div className="border border-border rounded-xl p-4 space-y-3">
+                <div className="border border-border rounded-md p-4 space-y-3">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Financial Settlement Breakdown
                   </h3>
@@ -525,7 +525,7 @@ function SettlementsContent() {
                 </div>
 
                 {/* 3. Matched Consignments */}
-                <div className="border border-border rounded-xl p-4 space-y-3">
+                <div className="border border-border rounded-md p-4 space-y-3">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Consignments in this Batch ({selectedSettlement.items?.length || 0})
                   </h3>
@@ -559,7 +559,7 @@ function SettlementsContent() {
                 {selectedSettlement.status !== "reconciled" && (
                   <button
                     onClick={() => openReconcileModal(selectedSettlement)}
-                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-medium transition text-center"
+                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md font-medium transition text-center"
                   >
                     Reconcile to Bank Account
                   </button>
@@ -573,7 +573,7 @@ function SettlementsContent() {
       {/* Reconcile Modal */}
       {reconcileModalOpen && selectedSettlement && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl w-full max-w-md shadow-2xl p-6 space-y-4">
+          <div className="bg-card border border-border rounded-lg w-full max-w-md shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                 <Landmark className="w-5 h-5 text-emerald-500" />
@@ -594,7 +594,7 @@ function SettlementsContent() {
                 <select
                   value={reconcileBankId}
                   onChange={(e) => setReconcileBankId(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 >
                   {bankAccounts.map((b) => (
                     <option key={b.id} value={b.id}>
@@ -611,7 +611,7 @@ function SettlementsContent() {
                   step="0.01"
                   value={reconcilePayout}
                   onChange={(e) => setReconcilePayout(parseFloat(e.target.value) || 0)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground font-semibold focus:outline-none"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground font-semibold focus:outline-none"
                 />
               </div>
 
@@ -622,7 +622,7 @@ function SettlementsContent() {
                   placeholder="e.g. Bank advice slip #..."
                   value={reconcileNotes}
                   onChange={(e) => setReconcileNotes(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none"
                 />
               </div>
             </div>
@@ -631,7 +631,7 @@ function SettlementsContent() {
               <button
                 type="button"
                 onClick={() => setReconcileModalOpen(false)}
-                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition"
+                className="px-4 py-2 border border-border rounded-md text-sm hover:bg-muted text-muted-foreground transition"
               >
                 Cancel
               </button>
@@ -639,7 +639,7 @@ function SettlementsContent() {
                 type="button"
                 disabled={reconcileSubmitting}
                 onClick={handleReconcileSubmit}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
               >
                 {reconcileSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Post Reconciliation
@@ -652,7 +652,7 @@ function SettlementsContent() {
       {/* New Statement Batch Modal */}
       {batchModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl w-full max-w-lg shadow-2xl p-6 space-y-4">
+          <div className="bg-card border border-border rounded-lg w-full max-w-lg shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                 <Plus className="w-5 h-5 text-emerald-500" />
@@ -670,7 +670,7 @@ function SettlementsContent() {
                   <select
                     value={batchProvider}
                     onChange={(e) => setBatchProvider(e.target.value)}
-                    className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none"
+                    className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none"
                   >
                     <option value="steadfast">Steadfast Courier</option>
                     <option value="pathao">Pathao Courier</option>
@@ -683,7 +683,7 @@ function SettlementsContent() {
                     type="date"
                     value={batchDate}
                     onChange={(e) => setBatchDate(e.target.value)}
-                    className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none"
+                    className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none"
                   />
                 </div>
               </div>
@@ -695,7 +695,7 @@ function SettlementsContent() {
                   placeholder="e.g. ST-20260913-01"
                   value={batchNumber}
                   onChange={(e) => setBatchNumber(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg text-foreground focus:outline-none"
+                  className="w-full p-2 bg-background border border-border rounded-md text-foreground focus:outline-none"
                 />
               </div>
 
@@ -708,7 +708,7 @@ function SettlementsContent() {
                   placeholder={`1234567, 1500, 60, 0\n7654321, 850, 60, 0`}
                   value={batchItemsRaw}
                   onChange={(e) => setBatchItemsRaw(e.target.value)}
-                  className="w-full p-2 bg-background border border-border rounded-lg font-mono text-xs text-foreground focus:outline-none"
+                  className="w-full p-2 bg-background border border-border rounded-md font-mono text-xs text-foreground focus:outline-none"
                 />
                 <span className="text-xs text-muted-foreground block mt-0.5">
                   Enter 1 consignment per line. The system automatically links booked shipments.
@@ -720,7 +720,7 @@ function SettlementsContent() {
               <button
                 type="button"
                 onClick={() => setBatchModalOpen(false)}
-                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-muted text-muted-foreground transition"
+                className="px-4 py-2 border border-border rounded-md text-sm hover:bg-muted text-muted-foreground transition"
               >
                 Cancel
               </button>
@@ -728,7 +728,7 @@ function SettlementsContent() {
                 type="button"
                 disabled={batchSubmitting}
                 onClick={handleCreateBatch}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
               >
                 {batchSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Create Batch

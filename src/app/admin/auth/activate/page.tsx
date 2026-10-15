@@ -54,8 +54,8 @@ function ActivateAdminForm() {
 
   if (activated) {
     return (
-      <div className="w-full max-w-sm p-8 rounded-3xl bg-[#0b0e17]/80 backdrop-blur-xl border border-emerald-500/30 text-center space-y-4">
-        <div className="mx-auto w-12 h-12 bg-emerald-500/20 text-emerald-400 flex items-center justify-center rounded-xl">
+      <div className="w-full max-w-sm p-8 rounded-md bg-[#0b0e17]/80 backdrop-blur-xl border border-emerald-500/30 text-center space-y-4">
+        <div className="mx-auto w-12 h-12 bg-emerald-500/20 text-emerald-400 flex items-center justify-center rounded-md">
           <ShieldCheck className="w-6 h-6" />
         </div>
         <h2 className="text-xl font-black text-white">Activation Complete</h2>
@@ -68,7 +68,7 @@ function ActivateAdminForm() {
   }
 
   return (
-    <div className="w-full max-w-sm p-8 rounded-3xl bg-[#0b0e17]/80 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden">
+    <div className="w-full max-w-sm p-8 rounded-lg bg-[#0b0e17]/80 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500" />
       
       <div className="flex items-center gap-2 mb-8">
@@ -90,7 +90,7 @@ function ActivateAdminForm() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             required
-            inputClassName="h-11 rounded-xl border border-white/10 bg-[#131722] px-4 text-sm text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none transition-all"
+            inputClassName="h-11 rounded-md border border-white/10 bg-[#131722] px-4 text-sm text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none transition-all"
           />
         </div>
 
@@ -101,14 +101,14 @@ function ActivateAdminForm() {
             onChange={(e) => setPasswordConfirm(e.target.value)}
             placeholder="••••••••"
             required
-            inputClassName="h-11 rounded-xl border border-white/10 bg-[#131722] px-4 text-sm text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none transition-all"
+            inputClassName="h-11 rounded-md border border-white/10 bg-[#131722] px-4 text-sm text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none transition-all"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading || !token || !email}
-          className="w-full h-11 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-wider text-xs transition-all shadow-lg shadow-purple-900/20 disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+          className="w-full h-11 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-wider text-xs transition-all shadow-lg shadow-purple-900/20 disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Activate Account"}
         </button>

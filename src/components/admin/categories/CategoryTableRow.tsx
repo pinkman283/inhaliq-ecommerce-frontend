@@ -33,7 +33,7 @@ export function CategoryTableRow({
   return (
     <tr
       className={`hover:bg-white/[0.02] transition-colors border-b border-white/[0.04] ${
-        isSelected ? "bg-amber-500/5" : ""
+        isSelected ? "bg-[#211B32]" : ""
       }`}
     >
       {/* Checkbox */}
@@ -56,23 +56,23 @@ export function CategoryTableRow({
             <img
               src={category.image}
               alt={category.image_alt || category.name}
-              className="w-8 h-8 rounded-lg object-cover bg-slate-900 border border-white/10 shrink-0"
+              className="w-8 h-8 rounded-md object-cover bg-slate-900 border border-white/10 shrink-0"
             />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-md bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
               <Folder className="w-4 h-4 text-slate-500" />
             </div>
           )}
 
           <div className="min-w-0 max-w-[200px] sm:max-w-[280px]">
             <span
-              className="font-bold text-white block truncate hover:text-amber-400 transition-colors"
+              className="font-bold text-white block truncate hover:text-[#A78BFA] transition-colors"
               title={category.name}
             >
               {category.name}
             </span>
             {!isRoot ? (
-              <span className="text-[10px] text-amber-400/90 font-medium truncate block">
+              <span className="text-[10px] text-[#A78BFA]/90 font-medium truncate block">
                 ↳ {path.slice(0, -1).map((p) => p.name).join(" › ")}
               </span>
             ) : (
@@ -91,7 +91,7 @@ export function CategoryTableRow({
             Root (L1)
           </span>
         ) : level === 2 ? (
-          <span className="inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+          <span className="inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
             Sub (L2)
           </span>
         ) : (
@@ -109,7 +109,7 @@ export function CategoryTableRow({
       {/* Badge */}
       <td className="p-3 text-left whitespace-nowrap">
         {category.badge ? (
-          <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+          <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
             {category.badge}
           </span>
         ) : (
@@ -119,7 +119,7 @@ export function CategoryTableRow({
 
       {/* Products Count */}
       <td className="p-3 text-left whitespace-nowrap">
-        <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/5 border border-white/10 text-white">
+        <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-white/5 border border-white/10 text-white">
           {category.products_count ?? 0} items
         </span>
       </td>
@@ -135,7 +135,7 @@ export function CategoryTableRow({
           <button
             type="button"
             onClick={() => onAddSubcategory(category)}
-            className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
+            className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
             title={`Add Subcategory under ${category.name}`}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -143,7 +143,7 @@ export function CategoryTableRow({
           <button
             type="button"
             onClick={() => onView(category)}
-            className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
+            className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
             title="View Category Details"
           >
             <Eye className="w-3.5 h-3.5" />
@@ -151,7 +151,7 @@ export function CategoryTableRow({
           <button
             type="button"
             onClick={() => onEdit(category)}
-            className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
+            className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] hover:scale-105 transition-all shadow-sm cursor-pointer"
             title="Edit Category"
           >
             <Edit className="w-3.5 h-3.5" />
@@ -159,7 +159,7 @@ export function CategoryTableRow({
           <button
             type="button"
             onClick={() => onDelete(category)}
-            className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
+            className="w-7 h-7 rounded-md shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm cursor-pointer"
             title="Delete Category"
           >
             <Trash2 className="w-3.5 h-3.5" />

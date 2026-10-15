@@ -111,19 +111,19 @@ export default function AdminSeoSettingsPage() {
       <SettingsNavTabs />
 
       {loading ? (
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-8 space-y-4 animate-pulse">
-          <div className="h-6 w-48 bg-[#161a26] rounded-xl" />
-          <div className="h-32 bg-[#161a26] rounded-xl" />
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-8 space-y-4 animate-pulse">
+          <div className="h-6 w-48 bg-[#161a26] rounded-md" />
+          <div className="h-32 bg-[#161a26] rounded-md" />
         </div>
       ) : (
         <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left 2 Columns: Input Controls */}
           <div className="lg:col-span-2 space-y-6">
             {/* Meta Tags Card */}
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Search className="w-4 h-4 text-amber-400" />
+                  <Search className="w-4 h-4 text-[#A78BFA]" />
                   Global Meta Tags & Titles
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -143,7 +143,7 @@ export default function AdminSeoSettingsPage() {
                   value={seo.meta_title || ""}
                   onChange={(e) => setSeo({ ...seo, meta_title: e.target.value })}
                   placeholder="e.g. AETHER | Precision Audio, Hi-Fi Acoustics & Studio Monitors"
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -159,7 +159,7 @@ export default function AdminSeoSettingsPage() {
                   value={seo.meta_description || ""}
                   onChange={(e) => setSeo({ ...seo, meta_description: e.target.value })}
                   placeholder="Brief synopsis summarizing your store catalog for search result snippets."
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 resize-none leading-relaxed"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 resize-none leading-relaxed"
                 />
               </div>
 
@@ -170,7 +170,7 @@ export default function AdminSeoSettingsPage() {
                   value={seo.meta_keywords || ""}
                   onChange={(e) => setSeo({ ...seo, meta_keywords: e.target.value })}
                   placeholder="audiophile, planar magnetic, headphones, DAC, hi-fi"
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -182,7 +182,7 @@ export default function AdminSeoSettingsPage() {
                     value={seo.canonical_base_url || ""}
                     onChange={(e) => setSeo({ ...seo, canonical_base_url: e.target.value })}
                     placeholder="https://aether-audio.com"
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
 
@@ -196,14 +196,14 @@ export default function AdminSeoSettingsPage() {
                     value={seo.og_image || ""}
                     onChange={(e) => setSeo({ ...seo, og_image: e.target.value })}
                     placeholder="https://images.unsplash.com/photo-..."
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
               </div>
             </div>
 
             {/* Webmaster Search Verification */}
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -222,7 +222,7 @@ export default function AdminSeoSettingsPage() {
                     value={seo.google_site_verification || ""}
                     onChange={(e) => setSeo({ ...seo, google_site_verification: e.target.value })}
                     placeholder="google-site-verification=..."
-                    className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                    className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
               </div>
@@ -234,7 +234,7 @@ export default function AdminSeoSettingsPage() {
                   value={seo.bing_site_verification || ""}
                   onChange={(e) => setSeo({ ...seo, bing_site_verification: e.target.value })}
                   placeholder="bing-site-auth-..."
-                  className="w-full bg-[#161a26] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 font-mono"
+                  className="w-full bg-[#161a26] border border-white/10 rounded-md px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                 />
               </div>
             </div>
@@ -243,16 +243,16 @@ export default function AdminSeoSettingsPage() {
           {/* Right Column: Live Previews */}
           <div className="space-y-6">
             {/* Google Snippet Simulator */}
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-5 space-y-3">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-5 space-y-3">
               <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
                 <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5 text-amber-400" />
+                  <Globe className="w-3.5 h-3.5 text-[#A78BFA]" />
                   Google Search Snippet Preview
                 </span>
                 <span className="text-[10px] text-slate-500 uppercase font-mono">SERP Simulator</span>
               </div>
 
-              <div className="p-4 bg-[#161a26] rounded-xl border border-white/5 space-y-1.5">
+              <div className="p-4 bg-[#161a26] rounded-md border border-white/5 space-y-1.5">
                 <div className="text-[11px] text-slate-400 flex items-center gap-1 font-mono truncate">
                   <span>{seo.canonical_base_url || "https://aether-audio.com"}</span>
                 </div>
@@ -266,7 +266,7 @@ export default function AdminSeoSettingsPage() {
             </div>
 
             {/* Social Share Card Preview */}
-            <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-5 space-y-3">
+            <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-5 space-y-3">
               <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
                 <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
                   <Share2 className="w-3.5 h-3.5 text-sky-400" />
@@ -274,7 +274,7 @@ export default function AdminSeoSettingsPage() {
                 </span>
               </div>
 
-              <div className="bg-[#161a26] rounded-xl border border-white/5 overflow-hidden">
+              <div className="bg-[#161a26] rounded-md border border-white/5 overflow-hidden">
                 {seo.og_image ? (
                   <div 
                     className="h-32 bg-cover bg-center"

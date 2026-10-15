@@ -9,6 +9,7 @@ import {
   Search,
   Filter,
   Tag,
+  Ticket,
   Gift,
   Zap,
   Award,
@@ -211,14 +212,14 @@ export default function AdminPromotionsPage() {
             <button
               onClick={() => fetchPromotions()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+              className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
             <Link
               href="/admin/promotions/new"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Create Promotion
@@ -234,7 +235,7 @@ export default function AdminPromotionsPage() {
       <div className="flex items-center gap-2 border-b border-white/[0.08] overflow-x-auto no-scrollbar pb-1 text-xs">
         {[
           { label: "All Promotions", href: "/admin/promotions", icon: Percent, active: true },
-          { label: "Discount Codes", href: "/admin/promotions/codes", icon: Tag },
+          { label: "Discount Codes", href: "/admin/promotions/codes", icon: Ticket },
           { label: "Claimable Coupons", href: "/admin/promotions/claimable", icon: Gift },
           { label: "Automatic Rules", href: "/admin/promotions/automatic", icon: Zap },
           { label: "Customer Rewards", href: "/admin/promotions/rewards", icon: Award },
@@ -247,9 +248,9 @@ export default function AdminPromotionsPage() {
             <Link
               key={tab.href}
               href={tab.href}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
+              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-md font-medium whitespace-nowrap transition-colors ${
                 tab.active
-                  ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                  ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
                   : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -261,7 +262,7 @@ export default function AdminPromotionsPage() {
       </div>
 
       {/* Filters Strip */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
           {/* Search */}
           <div className="relative flex-1 min-w-[200px] max-w-md">
@@ -271,7 +272,7 @@ export default function AdminPromotionsPage() {
               placeholder="Search by promotion name, code, slug..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+              className="w-full pl-9 pr-4 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
             />
           </div>
 
@@ -279,7 +280,7 @@ export default function AdminPromotionsPage() {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-amber-400 outline-none"
+            className="px-3 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-[#A78BFA]/50 outline-none"
           >
             <option value="all">All Types</option>
             <option value="discount_code">Discount Code</option>
@@ -293,7 +294,7 @@ export default function AdminPromotionsPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-amber-400 outline-none"
+            className="px-3 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-[#A78BFA]/50 outline-none"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active</option>
@@ -307,7 +308,7 @@ export default function AdminPromotionsPage() {
           <select
             value={storefrontFilter}
             onChange={(e) => setStorefrontFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-amber-400 outline-none"
+            className="px-3 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-[#A78BFA]/50 outline-none"
           >
             <option value="all">All Storefront Status</option>
             <option value="storefront">Storefront Visible</option>
@@ -329,7 +330,7 @@ export default function AdminPromotionsPage() {
               setStorefrontFilter("all");
               setPage(1);
             }}
-            className="text-xs text-slate-400 hover:text-amber-400 underline transition-colors"
+            className="text-xs text-slate-400 hover:text-[#A78BFA] underline transition-colors cursor-pointer"
           >
             Reset Filters
           </button>
@@ -368,7 +369,7 @@ export default function AdminPromotionsPage() {
             {loading ? (
               <tr>
                 <td colSpan={8} className="p-12 text-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                  <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   Loading promotions...
                 </td>
               </tr>
@@ -388,7 +389,7 @@ export default function AdminPromotionsPage() {
                   <tr
                     key={p.id}
                     className={`hover:bg-white/[0.02] transition-colors ${
-                      isSelected ? "bg-amber-500/5" : ""
+                      isSelected ? "bg-[#211B32]" : ""
                     }`}
                   >
                     <td className="p-4" onClick={(e) => e.stopPropagation()}>
@@ -410,7 +411,7 @@ export default function AdminPromotionsPage() {
                       <div className="space-y-1 max-w-xs">
                         <Link
                           href={`/admin/promotions/${p.id}`}
-                          className="font-bold text-white hover:text-amber-400 transition-colors flex items-center gap-1.5"
+                          className="font-bold text-white hover:text-[#A78BFA] transition-colors flex items-center gap-1.5"
                         >
                           {p.name}
                         </Link>
@@ -441,7 +442,7 @@ export default function AdminPromotionsPage() {
                     {/* Discount value */}
                     <td className="p-4 whitespace-nowrap">
                       <div className="space-y-0.5">
-                        <span className="font-mono font-bold text-amber-300 text-xs px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                        <span className="font-mono font-semibold text-[#A78BFA] text-xs px-2.5 py-1 rounded bg-[#211B32] border border-[#A78BFA]/30">
                           {getDiscountBadge(p)}
                         </span>
                         {p.max_discount_amount && (
@@ -455,8 +456,8 @@ export default function AdminPromotionsPage() {
                     {/* Trigger / Code */}
                     <td className="p-4">
                       {primaryCode ? (
-                        <div className="flex items-center gap-1.5 font-mono text-xs text-white bg-black/40 border border-white/10 px-2.5 py-1 rounded w-fit">
-                          <Tag className="w-3 h-3 text-amber-400" />
+                        <div className="flex items-center gap-1.5 font-mono text-xs text-[#A78BFA] bg-[#211B32] border border-[#A78BFA]/30 px-2.5 py-1 rounded w-fit">
+                          <Tag className="w-3 h-3 text-[#A78BFA]" />
                           <span>{primaryCode}</span>
                         </div>
                       ) : p.promotion_type === "automatic_discount" ? (
@@ -515,7 +516,7 @@ export default function AdminPromotionsPage() {
                           <Link
                             href={`/promotions/${p.slug}`}
                             target="_blank"
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-amber-400 transition-colors"
+                            className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-[#A78BFA] transition-colors"
                             title="View Public Campaign Page"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -523,7 +524,7 @@ export default function AdminPromotionsPage() {
                         )}
                         <Link
                           href={`/admin/promotions/${p.id}`}
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
                           title="Edit Promotion"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -532,7 +533,7 @@ export default function AdminPromotionsPage() {
                           type="button"
                           onClick={() => handleDelete(p.id)}
                           disabled={actionLoadingId === p.id}
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

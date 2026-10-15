@@ -287,27 +287,27 @@ export default function AdminCouponsPage() {
     const isScheduled = c.starts_at && new Date(c.starts_at).getTime() > Date.now();
     if (!c.is_active) {
       return (
-        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-500/15 text-slate-400 border border-slate-500/30">
+        <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-500/15 text-slate-400 border border-slate-500/30">
           Inactive
         </span>
       );
     }
     if (isScheduled) {
       return (
-        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 flex items-center gap-1 w-fit">
+        <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 flex items-center gap-1 w-fit">
           <Calendar className="w-3 h-3 text-cyan-400 shrink-0" /> Scheduled
         </span>
       );
     }
     if (isExpired) {
       return (
-        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1 w-fit">
+        <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1 w-fit">
           <Clock className="w-3 h-3 text-rose-400 shrink-0" /> Expired
         </span>
       );
     }
     return (
-      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 w-fit">
+      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 w-fit">
         <Check className="w-3 h-3 text-emerald-400 shrink-0" /> Active
       </span>
     );
@@ -379,10 +379,12 @@ export default function AdminCouponsPage() {
       countdownText = `${diffMins} mins remaining`;
     }
 
+    const isUrgent = diffHours < 24;
+
     return (
       <div className="flex flex-col text-xs">
-        <span className="text-amber-300 font-bold flex items-center gap-1">
-          <Clock className="w-3 h-3 text-amber-400 shrink-0" /> {countdownText}
+        <span className={`font-bold flex items-center gap-1 ${isUrgent ? "text-amber-400" : "text-[#A78BFA]"}`}>
+          <Clock className={`w-3 h-3 shrink-0 ${isUrgent ? "text-amber-400" : "text-[#A78BFA]"}`} /> {countdownText}
         </span>
         <span className="text-[10px] text-slate-400 font-mono">
           Until {formatDate(c.expires_at)}, {formatTime(c.expires_at)}
@@ -396,7 +398,7 @@ export default function AdminCouponsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#A78BFA]">
             Promotions & Discounts
           </span>
           <h1 className="text-2xl font-black text-white">Coupons & Campaigns ({coupons.length})</h1>
@@ -404,16 +406,16 @@ export default function AdminCouponsPage() {
 
         <button
           onClick={handleOpenCreate}
-          className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition-all shadow-lg shadow-amber-500/20"
+          className="px-4 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-black flex items-center gap-1.5 transition-all shadow-lg shadow-purple-500/20 cursor-pointer"
         >
           <Plus className="w-4 h-4" /> Create Coupon
         </button>
       </div>
 
       {/* PromotionEngine Modern Bridge Banner */}
-      <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 via-purple-500/5 to-transparent border border-purple-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+      <div className="p-4 rounded-md bg-gradient-to-r from-purple-500/10 via-purple-500/5 to-transparent border border-purple-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-md bg-purple-500/20 border border-purple-500/40 flex items-center justify-center shrink-0">
             <Percent className="w-4 h-4 text-purple-400" />
           </div>
           <div>
@@ -429,14 +431,14 @@ export default function AdminCouponsPage() {
         <div className="flex items-center gap-2 shrink-0">
           <Link
             href="/admin/promotions/new"
-            className="px-3.5 py-1.5 rounded-lg bg-purple-500 hover:bg-purple-400 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+            className="px-3.5 py-1.5 rounded-md bg-purple-500 hover:bg-purple-400 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Promotion Builder</span>
           </Link>
           <Link
             href="/admin/promotions"
-            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition flex items-center justify-center"
+            className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition flex items-center justify-center"
           >
             All Promotions
           </Link>
@@ -444,7 +446,7 @@ export default function AdminCouponsPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl bg-[#0e121e] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="p-4 rounded-md bg-[#0e121e] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
         <form onSubmit={(e) => { e.preventDefault(); loadCoupons(); }} className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -452,7 +454,7 @@ export default function AdminCouponsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search coupon codes..."
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-9.5 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full bg-white/5 border border-white/10 rounded-md pl-9.5 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
         </form>
 
@@ -472,7 +474,7 @@ export default function AdminCouponsPage() {
           <button
             type="button"
             onClick={handleResetFilters}
-            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+            className="px-3 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
             title="Reset all coupon filters"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -524,7 +526,7 @@ export default function AdminCouponsPage() {
                     key={c.id}
                     className={`transition-colors ${
                       isSelected
-                        ? "bg-amber-500/10 border-l-2 border-amber-500"
+                        ? "bg-[#211B32] border-l-2 border-[#A78BFA]"
                         : "hover:bg-white/[0.02]"
                     }`}
                   >
@@ -535,9 +537,11 @@ export default function AdminCouponsPage() {
                         title={`Select coupon ${c.code}`}
                       />
                     </td>
-                    <td className="p-3.5 font-mono font-black text-amber-400 text-sm tracking-wider whitespace-nowrap">
-                    {c.code}
-                  </td>
+                    <td className="p-3.5 whitespace-nowrap">
+                      <span className="font-mono font-semibold text-[#A78BFA] bg-[#211B32] border border-[#A78BFA]/30 px-2 py-0.5 rounded text-xs tracking-wider inline-block">
+                        {c.code}
+                      </span>
+                    </td>
                   <td className="p-3.5 font-bold text-white whitespace-nowrap">
                     {c.type === "percentage" ? `${c.value}% OFF` : `${formatPrice(c.value)} OFF`}
                   </td>
@@ -558,14 +562,14 @@ export default function AdminCouponsPage() {
                     <div className="flex items-center justify-start gap-1.5 flex-wrap w-[146px] mx-auto">
                       <button
                         onClick={() => handleOpenEdit(c)}
-                        className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:scale-105 transition-all shadow-sm"
+                        className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] hover:scale-105 transition-all shadow-sm"
                         title="Edit Coupon & Duration"
                       >
                         <Edit className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setDeletingCoupon(c)}
-                        className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm"
+                        className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all shadow-sm"
                         title="Delete Coupon"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -596,7 +600,7 @@ export default function AdminCouponsPage() {
                 </SheetTitle>
                 {editingCoupon && (
                   <>
-                    <span className="text-[10px] font-mono text-amber-400 bg-amber-400/10 border border-amber-400/20 px-1.5 py-0.5 rounded shrink-0">
+                    <span className="text-[10px] font-mono text-[#A78BFA] bg-[#211B32] border border-[#A78BFA]/30 px-2 py-0.5 rounded shrink-0">
                       {editingCoupon.code}
                     </span>
                     <span className="text-slate-600 text-xs shrink-0">·</span>
@@ -627,7 +631,7 @@ export default function AdminCouponsPage() {
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     placeholder="e.g. STUDIO25"
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none font-mono uppercase font-bold transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none font-mono uppercase font-bold transition"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -636,7 +640,7 @@ export default function AdminCouponsPage() {
                     value={type}
                     onChange={(val: any) => setType(val)}
                     className="w-full"
-                    buttonClassName="w-full h-9 rounded-lg"
+                    buttonClassName="w-full h-9 rounded-md"
                     options={[
                       { value: "percentage", label: "Percentage (%)" },
                       { value: "fixed", label: "Fixed Amount ($)" },
@@ -656,7 +660,7 @@ export default function AdminCouponsPage() {
                     required
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -666,7 +670,7 @@ export default function AdminCouponsPage() {
                     step="0.01"
                     value={minOrderAmount}
                     onChange={(e) => setMinOrderAmount(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -675,16 +679,16 @@ export default function AdminCouponsPage() {
                     type="number"
                     value={usageLimit}
                     onChange={(e) => setUsageLimit(e.target.value)}
-                    className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition"
+                    className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition"
                   />
                 </div>
               </div>
 
               {/* Campaign Duration & Timing Policy Panel */}
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3.5">
+              <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 space-y-3.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Timer className="w-4 h-4 text-amber-400" />
+                    <Timer className="w-4 h-4 text-[#A78BFA]" />
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                       Campaign Duration & Timing
                     </span>
@@ -704,10 +708,10 @@ export default function AdminCouponsPage() {
                         setExpiresAt("");
                       }
                     }}
-                    className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                    className={`text-[10px] font-semibold px-2.5 py-1 rounded transition cursor-pointer flex items-center gap-1.5 ${
                       hasDuration
                         ? "bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30"
-                        : "bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold"
+                        : "bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold"
                     }`}
                   >
                     {hasDuration ? (
@@ -741,7 +745,7 @@ export default function AdminCouponsPage() {
                             key={p.label}
                             type="button"
                             onClick={() => applyDurationPreset(p.hours)}
-                            className="py-1 px-2 rounded-md bg-white/[0.03] hover:bg-amber-400/20 hover:text-amber-300 border border-white/5 text-[10px] font-medium text-slate-300 transition text-center cursor-pointer"
+                            className="py-1 px-2 rounded-md bg-white/[0.03] hover:bg-[#A78BFA]/20 hover:text-[#B9A3FF] border border-white/5 text-[10px] font-medium text-slate-300 transition text-center cursor-pointer"
                           >
                             {p.label}
                           </button>
@@ -750,8 +754,8 @@ export default function AdminCouponsPage() {
                     </div>
 
                     {/* Custom Duration Section */}
-                    <div className="p-2.5 rounded-lg bg-white/[0.02] border border-white/5 space-y-2">
-                      <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider block">
+                    <div className="p-2.5 rounded-md bg-white/[0.02] border border-white/5 space-y-2">
+                      <span className="text-[10px] font-semibold text-[#A78BFA] uppercase tracking-wider block">
                         Custom Duration
                       </span>
                       <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
@@ -761,12 +765,12 @@ export default function AdminCouponsPage() {
                           value={customDurationVal}
                           onChange={(e) => setCustomDurationVal(e.target.value)}
                           placeholder="e.g. 10"
-                          className="w-20 bg-[#131722] border border-white/10 rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-amber-400 font-mono text-xs"
+                          className="w-20 bg-[#131722] border border-white/10 rounded-md px-2.5 py-1 text-white focus:outline-none focus:border-[#A78BFA]/50 font-mono text-xs"
                         />
                         <select
                           value={customDurationUnit}
                           onChange={(e) => setCustomDurationUnit(e.target.value as any)}
-                          className="bg-[#131722] border border-white/10 rounded-lg px-2 py-1 text-white focus:outline-none focus:border-amber-400 text-xs cursor-pointer"
+                          className="bg-[#131722] border border-white/10 rounded-md px-2 py-1 text-white focus:outline-none focus:border-[#A78BFA]/50 text-xs cursor-pointer"
                         >
                           <option value="hours">Hours</option>
                           <option value="days">Days</option>
@@ -775,7 +779,7 @@ export default function AdminCouponsPage() {
                         <button
                           type="button"
                           onClick={applyCustomDuration}
-                          className="px-3 py-1 rounded-lg bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/30 text-amber-300 font-semibold text-[10px] uppercase tracking-wider transition shrink-0 cursor-pointer"
+                          className="px-3 py-1 rounded-md bg-[#A78BFA]/15 hover:bg-[#A78BFA]/25 border border-[#A78BFA]/30 text-[#A78BFA] font-semibold text-[10px] uppercase tracking-wider transition shrink-0 cursor-pointer"
                         >
                           Apply Custom
                         </button>
@@ -801,7 +805,7 @@ export default function AdminCouponsPage() {
                           type="datetime-local"
                           value={startsAt}
                           onChange={(e) => setStartsAt(e.target.value)}
-                          className="w-full bg-[#131722] border border-white/10 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-amber-400 font-mono text-xs [color-scheme:dark]"
+                          className="w-full bg-[#131722] border border-white/10 rounded-md px-3 py-1.5 text-white focus:outline-none focus:border-[#A78BFA]/50 font-mono text-xs [color-scheme:dark]"
                         />
                       </div>
 
@@ -824,7 +828,7 @@ export default function AdminCouponsPage() {
                           type="datetime-local"
                           value={expiresAt}
                           onChange={(e) => setExpiresAt(e.target.value)}
-                          className="w-full bg-[#131722] border border-white/10 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-amber-400 font-mono text-xs [color-scheme:dark]"
+                          className="w-full bg-[#131722] border border-white/10 rounded-md px-3 py-1.5 text-white focus:outline-none focus:border-[#A78BFA]/50 font-mono text-xs [color-scheme:dark]"
                         />
                       </div>
                     </div>
@@ -857,10 +861,10 @@ export default function AdminCouponsPage() {
               <button
                 type="submit"
                 disabled={saving || (editingCoupon ? !isEditDirty : false)}
-                className={`h-8 px-4 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
+                className={`h-8 px-4 rounded-md text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
                   editingCoupon && !isEditDirty
                     ? "bg-white/10 text-slate-500 cursor-not-allowed border border-white/5"
-                    : "bg-amber-400 hover:bg-amber-300 text-slate-950"
+                    : "bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold"
                 }`}
                 title={editingCoupon && !isEditDirty ? "No changes made to coupon details" : undefined}
               >
@@ -877,17 +881,17 @@ export default function AdminCouponsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div onClick={() => setDeletingCoupon(null)} className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
 
-          <div className="relative w-full max-w-md rounded-3xl bg-[#0e121e] border border-rose-500/30 p-6 z-10 space-y-4 text-xs">
+          <div className="relative w-full max-w-md rounded-md bg-[#0e121e] border border-rose-500/30 p-6 z-10 space-y-4 text-xs">
             <h3 className="text-base font-black text-white">Delete Coupon</h3>
             <p className="text-slate-300">
-              Are you sure you want to deactivate and remove coupon <span className="font-mono font-bold text-amber-400">{deletingCoupon.code}</span>?
+              Are you sure you want to deactivate and remove coupon <span className="font-mono font-bold text-[#A78BFA] bg-[#211B32] border border-[#A78BFA]/30 px-1.5 py-0.5 rounded">{deletingCoupon.code}</span>?
             </p>
 
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setDeletingCoupon(null)}
-                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                className="px-4 py-2 rounded-md text-slate-400 hover:text-white"
               >
                 Cancel
               </button>
@@ -895,7 +899,7 @@ export default function AdminCouponsPage() {
                 type="button"
                 disabled={deleting}
                 onClick={handleDeleteCoupon}
-                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all shadow-md"
+                className="px-5 py-2.5 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all shadow-md"
               >
                 {deleting ? "Deleting..." : "Confirm Delete"}
               </button>

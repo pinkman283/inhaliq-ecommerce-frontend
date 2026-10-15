@@ -37,7 +37,7 @@ export function ProductGeneralTab({
     <div className="space-y-5">
       {/* Read-only metadata if editing an existing product */}
       {editingProduct && (
-        <div className="flex flex-wrap items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 text-xs text-slate-400">
+        <div className="flex flex-wrap items-center gap-3 p-3 rounded-md bg-white/[0.02] border border-white/5 text-xs text-slate-400">
           <div className="flex items-center gap-1.5 font-mono">
             <Hash className="w-3.5 h-3.5 text-slate-500" />
             <span className="text-slate-400">SKU:</span>
@@ -63,7 +63,7 @@ export function ProductGeneralTab({
           value={formData.name}
           onChange={(e) => onChange("name", e.target.value)}
           placeholder="e.g. AeroPack X-Pac 24L Modular Travel Pack"
-          className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 focus:bg-white/[0.05] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
+          className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 focus:bg-white/[0.05] rounded-md px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none"
         />
       </div>
 
@@ -76,7 +76,7 @@ export function ProductGeneralTab({
             <button
               type="button"
               onClick={onOpenQuickCategory}
-              className="text-[11px] font-medium text-amber-400/80 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer"
+              className="text-[11px] font-medium text-[#A78BFA] hover:text-[#B9A3FF] transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Plus className="w-3 h-3" /> New
             </button>
@@ -88,7 +88,7 @@ export function ProductGeneralTab({
                 onChange("category_id", e.target.value);
                 onChange("subcategory_id", "");
               }}
-              className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
+              className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
             >
               {activeRootList.map((c) => (
                 <option key={c.id} value={c.id.toString()} className="bg-[#0e121e]">
@@ -114,7 +114,7 @@ export function ProductGeneralTab({
             <select
               value={formData.subcategory_id}
               onChange={(e) => onChange("subcategory_id", e.target.value)}
-              className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
+              className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
             >
               <option value="" className="bg-[#0e121e]">-- No Subcategory --</option>
               {subcategories.map((sub) => (
@@ -138,7 +138,7 @@ export function ProductGeneralTab({
             <button
               type="button"
               onClick={onOpenQuickBrand}
-              className="text-[11px] font-medium text-amber-400/80 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer"
+              className="text-[11px] font-medium text-[#A78BFA] hover:text-[#B9A3FF] transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Plus className="w-3 h-3" /> New
             </button>
@@ -156,7 +156,7 @@ export function ProductGeneralTab({
                   onChange("brand", val);
                 }
               }}
-              className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
+              className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3 py-2.5 text-xs text-white appearance-none transition-all outline-none cursor-pointer pr-9"
             >
               {brands.map((b) => (
                 <option key={b.id} value={b.id.toString()} className="bg-[#0e121e]">
@@ -184,7 +184,7 @@ export function ProductGeneralTab({
           value={formData.short_description}
           onChange={(e) => onChange("short_description", e.target.value)}
           placeholder="Concise overview or headline for product listings and search results..."
-          className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-y leading-relaxed"
+          className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3.5 py-2 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-y leading-relaxed"
         />
       </div>
 
@@ -199,7 +199,7 @@ export function ProductGeneralTab({
           value={formData.description}
           onChange={(e) => onChange("description", e.target.value)}
           placeholder="Detailed specifications, features, dimensions, materials, care instructions..."
-          className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-amber-400/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-y leading-relaxed"
+          className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#A78BFA]/50 rounded-md px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 transition-all outline-none resize-y leading-relaxed"
         />
       </div>
 
@@ -207,7 +207,7 @@ export function ProductGeneralTab({
       <div className="pt-4 border-t border-white/[0.06] space-y-3">
         <h4 className="text-xs font-semibold text-white tracking-wide">Visibility & Badges</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+          <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-white">Active Status</p>
               <p className="text-[10px] text-slate-400">Live on storefront</p>
@@ -219,7 +219,7 @@ export function ProductGeneralTab({
             />
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+          <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-white">Featured</p>
               <p className="text-[10px] text-slate-400">Hero & curated spotlight</p>
@@ -231,7 +231,7 @@ export function ProductGeneralTab({
             />
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+          <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-white">New Arrival</p>
               <p className="text-[10px] text-slate-400">Highlight new badge</p>
@@ -243,7 +243,7 @@ export function ProductGeneralTab({
             />
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+          <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-white">Best Seller</p>
               <p className="text-[10px] text-slate-400">Popular collection badge</p>

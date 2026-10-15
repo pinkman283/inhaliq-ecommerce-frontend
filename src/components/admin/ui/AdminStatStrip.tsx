@@ -41,17 +41,17 @@ export const AdminStatStrip: React.FC<AdminStatStripProps> = ({
   const getVariantTextColor = (v?: string) => {
     switch (v) {
       case "emerald":
-        return "text-emerald-400";
+        return "text-[#34D399]";
       case "amber":
-        return "text-amber-400";
+        return "text-[#FBBF24]";
       case "rose":
-        return "text-rose-400";
+        return "text-[#F87171]";
       case "cyan":
-        return "text-cyan-400";
+        return "text-[#A78BFA]";
       case "purple":
-        return "text-purple-300";
+        return "text-[#A78BFA]";
       default:
-        return "text-white";
+        return "text-[#E5E7EB]";
     }
   };
 
@@ -65,11 +65,11 @@ export const AdminStatStrip: React.FC<AdminStatStripProps> = ({
         return (
           <div
             key={idx}
-            className="p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-xs hover:border-white/[0.14] transition-colors flex flex-col justify-between gap-1"
+            className="p-3.5 rounded-md bg-[#11141D] border border-[#272B35] shadow-xs hover:border-[#A78BFA]/30 transition-colors flex flex-col justify-between gap-1"
           >
-            <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
+            <div className="flex items-center justify-between text-[#929BAD] text-[11px] font-semibold uppercase tracking-wider">
               <span>{stat.label}</span>
-              {Icon && <Icon className="w-3.5 h-3.5 text-slate-500" />}
+              {Icon && <Icon className="w-3.5 h-3.5 text-[#626B7B]" />}
             </div>
 
             <div className="flex items-baseline justify-between gap-2 mt-0.5">
@@ -81,10 +81,10 @@ export const AdminStatStrip: React.FC<AdminStatStripProps> = ({
                 <span
                   className={`text-[11px] font-mono font-semibold flex items-center gap-0.5 shrink-0 ${
                     effectiveTrend === "up"
-                      ? "text-emerald-400"
+                      ? "text-[#34D399]"
                       : effectiveTrend === "down"
-                      ? "text-rose-400"
-                      : "text-slate-400"
+                      ? "text-[#F87171]"
+                      : "text-[#929BAD]"
                   }`}
                 >
                   {effectiveTrend === "up" && <TrendingUp className="w-3 h-3" />}
@@ -95,7 +95,7 @@ export const AdminStatStrip: React.FC<AdminStatStripProps> = ({
             </div>
 
             {effectiveMeta && (
-              <span className="text-[10.5px] text-slate-500 truncate block">
+              <span className="text-[10.5px] text-[#626B7B] truncate block">
                 {effectiveMeta}
               </span>
             )}

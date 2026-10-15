@@ -156,19 +156,19 @@ export default function AdminSalesPage() {
     switch (source) {
       case "pos":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
             <Calculator className="w-3 h-3" /> POS Terminal
           </span>
         );
       case "online":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
             <ShoppingBag className="w-3 h-3" /> Online Store
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/30">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
             Direct Admin
           </span>
         );
@@ -178,13 +178,13 @@ export default function AdminSalesPage() {
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
       case "paid":
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PAID</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PAID</span>;
       case "pending":
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">PENDING</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">PENDING</span>;
       case "refunded":
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">REFUNDED</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">REFUNDED</span>;
       default:
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/5 text-slate-400 border border-white/10 uppercase">{status}</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/5 text-slate-400 border border-white/10 uppercase">{status}</span>;
     }
   };
 
@@ -201,14 +201,14 @@ export default function AdminSalesPage() {
             <button
               onClick={fetchSales}
               disabled={loading}
-              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-amber-400" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#A78BFA]" : ""}`} />
               Refresh
             </button>
             <button
               onClick={handleExportCSV}
-              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/[0.08] text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
               Export CSV
@@ -218,15 +218,15 @@ export default function AdminSalesPage() {
       />
 
       {/* Workspace Unification Banner */}
-      <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+      <div className="p-4 rounded-md bg-gradient-to-r from-[#A78BFA]/10 via-[#A78BFA]/5 to-transparent border border-[#A78BFA]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center shrink-0">
             <ShoppingBag className="w-4 h-4 text-amber-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h4 className="text-xs font-bold text-white tracking-wide">Orders & Invoices Unified</h4>
-              <span className="px-1.5 py-0.5 rounded text-[9.5px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30">Canonical Workspace</span>
+              <span className="px-1.5 py-0.5 rounded text-[9.5px] font-bold uppercase tracking-wider bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">Canonical Workspace</span>
             </div>
             <p className="text-[11px] text-slate-400">
               Sales, commercial invoice generation, and POS/web channel fulfillment are unified into the main <strong>Orders & Fulfillment</strong> workspace.
@@ -235,7 +235,7 @@ export default function AdminSalesPage() {
         </div>
         <Link
           href="/admin/orders"
-          className="px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 shadow-sm"
+          className="px-3.5 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 shadow-sm"
         >
           <span>Open Orders Workspace</span>
           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -276,7 +276,7 @@ export default function AdminSalesPage() {
       />
 
       {/* Filter Toolbar */}
-      <div className="bg-[#0f121b] p-4 rounded-xl border border-white/[0.08] space-y-3">
+      <div className="bg-[#0f121b] p-4 rounded-md border border-white/[0.08] space-y-3">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
           
           {/* Channel Tabs */}
@@ -290,9 +290,9 @@ export default function AdminSalesPage() {
               <button
                 key={tab.id}
                 onClick={() => { setSourceFilter(tab.id); setPage(1); }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
                   sourceFilter === tab.id
-                    ? "bg-amber-400 text-slate-950 font-bold shadow-sm"
+                    ? "bg-[#A78BFA] text-[#090B10] font-bold shadow-sm"
                     : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
                 }`}
               >
@@ -310,7 +310,7 @@ export default function AdminSalesPage() {
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
                 placeholder="Search invoice #, customer, phone..."
-                className="w-full bg-[#161a26] border border-white/[0.08] focus:border-amber-400/50 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none transition"
+                className="w-full bg-[#161a26] border border-white/[0.08] focus:border-[#A78BFA]/50 rounded-md pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none transition"
               />
             </div>
 
@@ -322,7 +322,7 @@ export default function AdminSalesPage() {
                   setOpenPaymentStatusFilter(!openPaymentStatusFilter);
                   setOpenPaymentMethodFilter(false);
                 }}
-                className="bg-[#161a26] hover:bg-[#1c2232] border border-white/[0.08] hover:border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer"
+                className="bg-[#161a26] hover:bg-[#1c2232] border border-white/[0.08] hover:border-white/20 rounded-md px-3 py-1.5 text-xs font-medium text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer"
               >
                 <span>
                   {paymentStatusFilter === "all" && "All Statuses"}
@@ -330,13 +330,13 @@ export default function AdminSalesPage() {
                   {paymentStatusFilter === "pending" && "Pending"}
                   {paymentStatusFilter === "refunded" && "Refunded"}
                 </span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openPaymentStatusFilter ? "rotate-180 text-amber-400" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openPaymentStatusFilter ? "rotate-180 text-[#A78BFA]" : ""}`} />
               </button>
 
               {openPaymentStatusFilter && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setOpenPaymentStatusFilter(false)} />
-                  <div className="absolute right-0 top-full mt-1.5 w-48 rounded-xl bg-[#0f121b] border border-white/[0.1] shadow-xl p-1.5 z-40 space-y-1">
+                  <div className="absolute right-0 top-full mt-1.5 w-48 rounded-md bg-[#0f121b] border border-white/[0.1] shadow-xl p-1.5 z-40 space-y-1">
                     {[
                       { id: "all", label: "All Payment Statuses" },
                       { id: "paid", label: "Paid" },
@@ -351,14 +351,14 @@ export default function AdminSalesPage() {
                           setPage(1);
                           setOpenPaymentStatusFilter(false);
                         }}
-                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center justify-between transition cursor-pointer ${
+                        className={`w-full text-left px-2.5 py-1.5 rounded-md text-xs font-medium flex items-center justify-between transition cursor-pointer ${
                           paymentStatusFilter === st.id
-                            ? "bg-amber-400/10 text-amber-300 font-semibold"
+                            ? "bg-[#211B32] text-[#A78BFA] font-semibold"
                             : "text-slate-300 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         <span>{st.label}</span>
-                        {paymentStatusFilter === st.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                        {paymentStatusFilter === st.id && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                       </button>
                     ))}
                   </div>
@@ -374,7 +374,7 @@ export default function AdminSalesPage() {
                   setOpenPaymentMethodFilter(!openPaymentMethodFilter);
                   setOpenPaymentStatusFilter(false);
                 }}
-                className="bg-[#161a26] hover:bg-[#1c2232] border border-white/[0.08] hover:border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer"
+                className="bg-[#161a26] hover:bg-[#1c2232] border border-white/[0.08] hover:border-white/20 rounded-md px-3 py-1.5 text-xs font-medium text-slate-200 flex items-center justify-between gap-2 transition cursor-pointer"
               >
                 <span>
                   {paymentMethodFilter === "all" && "All Tender Methods"}
@@ -383,13 +383,13 @@ export default function AdminSalesPage() {
                   {paymentMethodFilter === "bank_transfer" && "Bank Wire"}
                   {paymentMethodFilter === "mobile_money" && "Mobile Banking"}
                 </span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openPaymentMethodFilter ? "rotate-180 text-amber-400" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openPaymentMethodFilter ? "rotate-180 text-[#A78BFA]" : ""}`} />
               </button>
 
               {openPaymentMethodFilter && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setOpenPaymentMethodFilter(false)} />
-                  <div className="absolute right-0 top-full mt-1.5 w-52 rounded-xl bg-[#0f121b] border border-white/[0.1] shadow-xl p-1.5 z-40 space-y-1">
+                  <div className="absolute right-0 top-full mt-1.5 w-52 rounded-md bg-[#0f121b] border border-white/[0.1] shadow-xl p-1.5 z-40 space-y-1">
                     {[
                       { id: "all", label: "All Tender Methods" },
                       { id: "cash", label: "Cash" },
@@ -405,14 +405,14 @@ export default function AdminSalesPage() {
                           setPage(1);
                           setOpenPaymentMethodFilter(false);
                         }}
-                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center justify-between transition cursor-pointer ${
+                        className={`w-full text-left px-2.5 py-1.5 rounded-md text-xs font-medium flex items-center justify-between transition cursor-pointer ${
                           paymentMethodFilter === m.id
-                            ? "bg-amber-400/10 text-amber-300 font-semibold"
+                            ? "bg-[#211B32] text-[#A78BFA] font-semibold"
                             : "text-slate-300 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         <span>{m.label}</span>
-                        {paymentMethodFilter === m.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                        {paymentMethodFilter === m.id && <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA]" />}
                       </button>
                     ))}
                   </div>
@@ -424,7 +424,7 @@ export default function AdminSalesPage() {
       </div>
 
       {/* Sales Transactions & Invoices Table */}
-      <div className="rounded-xl bg-[#0f121b] border border-white/[0.08] shadow-sm overflow-hidden">
+      <div className="rounded-md bg-[#0f121b] border border-white/[0.08] shadow-sm overflow-hidden">
         <div 
           ref={tableContainerRef}
           onMouseDown={handleMouseDown}
@@ -451,7 +451,7 @@ export default function AdminSalesPage() {
               {loading ? (
                 <tr>
                   <td colSpan={8} className="py-16 text-center text-slate-500">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading sales records...
                   </td>
                 </tr>
@@ -478,7 +478,7 @@ export default function AdminSalesPage() {
                           onClick={() => openInvoiceModal(order.id)}
                           className="text-left group cursor-pointer"
                         >
-                          <span className="font-mono font-bold text-amber-400 group-hover:text-amber-300 block transition">
+                          <span className="font-mono font-bold text-[#A78BFA] group-hover:text-[#B9A3FF] block transition">
                             {order.invoice_number || `INV-${String(order.id).padStart(6, '0')}`}
                           </span>
                           <span className="text-[10px] font-mono text-slate-400">
@@ -504,7 +504,7 @@ export default function AdminSalesPage() {
                           <div className="text-[11px] text-slate-400 flex items-center gap-2">
                             {order.customer_phone && <span className="font-mono">{order.customer_phone}</span>}
                             {order.cashier_user && (
-                              <span className="text-[10px] text-amber-300/80 bg-amber-500/10 px-1.5 py-0.5 rounded font-mono">
+                              <span className="text-[10px] text-[#A78BFA] bg-[#211B32] px-1.5 py-0.5 rounded font-mono">
                                 Cashier: {order.cashier_user.name}
                               </span>
                             )}
@@ -561,7 +561,7 @@ export default function AdminSalesPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => openInvoiceModal(order.id)}
-                            className="px-2.5 py-1 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-300 text-xs font-medium transition flex items-center gap-1.5 cursor-pointer"
+                            className="px-2.5 py-1 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] text-xs font-medium transition flex items-center gap-1.5 cursor-pointer"
                             title="View Formal Commercial Invoice"
                           >
                             <Receipt className="w-3.5 h-3.5" />

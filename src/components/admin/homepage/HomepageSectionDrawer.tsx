@@ -407,7 +407,7 @@ export function HomepageSectionDrawer({
           {/* Drawer Top Header */}
           <div className="px-6 py-4 border-b border-white/[0.08] bg-[#080b12] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-9 h-9 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shrink-0">
                 <Layers className="w-5 h-5" />
               </div>
               <div>
@@ -425,7 +425,7 @@ export function HomepageSectionDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
+              className="p-2 rounded-md text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
               title="Close drawer"
             >
               <X className="w-5 h-5" />
@@ -454,7 +454,7 @@ export function HomepageSectionDrawer({
                   placeholder="e.g. Flagship Audio & Acoustics"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -468,7 +468,7 @@ export function HomepageSectionDrawer({
                   placeholder="e.g. Audiophile-grade studio monitors, active noise-cancelling headphones..."
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -483,7 +483,7 @@ export function HomepageSectionDrawer({
                     placeholder="e.g. HI-RES LOSSLESS"
                     value={badgeText}
                     onChange={(e) => setBadgeText(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
 
@@ -495,7 +495,7 @@ export function HomepageSectionDrawer({
                   <select
                     value={badgeIcon}
                     onChange={(e) => setBadgeIcon(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400 font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-medium"
                   >
                     {AVAILABLE_ICONS.map((icon) => (
                       <option key={icon.id} value={icon.id}>
@@ -519,7 +519,7 @@ export function HomepageSectionDrawer({
                     max={30}
                     value={productLimit}
                     onChange={(e) => setProductLimit(parseInt(e.target.value, 10) || 14)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
 
@@ -530,7 +530,7 @@ export function HomepageSectionDrawer({
                   <select
                     value={displayStyle}
                     onChange={(e) => setDisplayStyle(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400 font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-medium"
                   >
                     <option value="carousel">Interactive Carousel Slider</option>
                     <option value="grid">Responsive Grid</option>
@@ -548,13 +548,13 @@ export function HomepageSectionDrawer({
               </div>
 
               {/* Mode Switcher */}
-              <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-slate-900 border border-white/[0.08]">
+              <div className="grid grid-cols-2 gap-2 p-1 rounded-md bg-slate-900 border border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setHasTabs(true)}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                  className={`py-2 px-3 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
                     hasTabs
-                      ? "bg-amber-400 text-slate-950 shadow-sm"
+                      ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -564,9 +564,9 @@ export function HomepageSectionDrawer({
                 <button
                   type="button"
                   onClick={() => setHasTabs(false)}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                  className={`py-2 px-3 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
                     !hasTabs
-                      ? "bg-amber-400 text-slate-950 shadow-sm"
+                      ? "bg-[#A78BFA] text-[#090B10] shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -585,7 +585,7 @@ export function HomepageSectionDrawer({
                     <button
                       type="button"
                       onClick={handleAddTab}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold transition cursor-pointer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 text-xs font-bold transition cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add Tab</span>
@@ -596,11 +596,11 @@ export function HomepageSectionDrawer({
                     {tabs.map((tab, idx) => (
                       <div
                         key={tab.id || idx}
-                        className="p-3.5 rounded-xl bg-slate-900/80 border border-white/[0.08] space-y-3"
+                        className="p-3.5 rounded-md bg-slate-900/80 border border-white/[0.08] space-y-3"
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex items-center gap-2 flex-1">
-                            <span className="text-xs font-mono font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded">
+                            <span className="text-xs font-mono font-bold text-[#A78BFA] bg-[#211B32] px-1.5 py-0.5 rounded border border-[#A78BFA]/30">
                               #{idx + 1}
                             </span>
                             <input
@@ -608,7 +608,7 @@ export function HomepageSectionDrawer({
                               placeholder="Tab Label (e.g. New Arrivals)"
                               value={tab.name}
                               onChange={(e) => handleUpdateTab(idx, { name: e.target.value })}
-                              className="flex-1 px-3 py-1.5 rounded-lg bg-slate-950 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400 font-bold"
+                              className="flex-1 px-3 py-1.5 rounded-md bg-slate-950 border border-white/[0.1] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-bold"
                             />
                           </div>
 
@@ -616,7 +616,7 @@ export function HomepageSectionDrawer({
                             type="button"
                             onClick={() => handleRemoveTab(idx)}
                             disabled={tabs.length <= 1}
-                            className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10 transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="p-1.5 rounded-md text-rose-400 hover:bg-rose-500/10 transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                             title="Remove tab"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -632,7 +632,7 @@ export function HomepageSectionDrawer({
                             <select
                               value={tab.source_type}
                               onChange={(e) => handleUpdateTab(idx, { source_type: e.target.value as any })}
-                              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                              className="w-full px-2.5 py-1.5 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                             >
                               <option value="dynamic">Dynamic (Parent Section Category)</option>
                               <option value="category">Specific Category</option>
@@ -648,7 +648,7 @@ export function HomepageSectionDrawer({
                             <select
                               value={tab.sort_by}
                               onChange={(e) => handleUpdateTab(idx, { sort_by: e.target.value as any })}
-                              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                              className="w-full px-2.5 py-1.5 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                             >
                               {SORT_OPTIONS.map((opt) => (
                                 <option key={opt.id} value={opt.id}>
@@ -665,7 +665,7 @@ export function HomepageSectionDrawer({
                             <select
                               value={tab.category_id || ""}
                               onChange={(e) => handleUpdateTab(idx, { category_id: e.target.value ? Number(e.target.value) : undefined })}
-                              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                              className="w-full px-2.5 py-1.5 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                             >
                               <option value="">Choose category...</option>
                               {categories.map((c) => (
@@ -683,7 +683,7 @@ export function HomepageSectionDrawer({
                             <select
                               value={tab.brand_id || ""}
                               onChange={(e) => handleUpdateTab(idx, { brand_id: e.target.value ? Number(e.target.value) : undefined })}
-                              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                              className="w-full px-2.5 py-1.5 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                             >
                               <option value="">Choose brand...</option>
                               {brands.map((b) => (
@@ -697,14 +697,14 @@ export function HomepageSectionDrawer({
 
                         {/* If Manual */}
                         {tab.source_type === "manual" && (
-                          <div className="pt-1 flex items-center justify-between bg-black/30 p-2 rounded-lg border border-white/[0.06]">
+                          <div className="pt-1 flex items-center justify-between bg-black/30 p-2 rounded-md border border-white/[0.06]">
                             <span className="text-xs text-slate-300">
-                              Selected: <strong className="text-amber-400">{tab.product_ids?.length || 0}</strong> products
+                              Selected: <strong className="text-[#A78BFA]">{tab.product_ids?.length || 0}</strong> products
                             </span>
                             <button
                               type="button"
                               onClick={() => openProductPicker(tab.id)}
-                              className="px-2.5 py-1 rounded bg-amber-400/10 text-amber-300 hover:bg-amber-400/20 text-xs font-semibold cursor-pointer"
+                              className="px-2.5 py-1 rounded bg-[#211B32] text-[#A78BFA] hover:bg-[#A78BFA]/20 text-xs font-semibold cursor-pointer"
                             >
                               Select Products...
                             </button>
@@ -716,7 +716,7 @@ export function HomepageSectionDrawer({
                 </div>
               ) : (
                 /* MODE B: SINGLE SOURCE CONFIGURATION */
-                <div className="p-4 rounded-xl bg-slate-900/60 border border-white/[0.08] space-y-4">
+                <div className="p-4 rounded-md bg-slate-900/60 border border-white/[0.08] space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     <div>
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
@@ -725,7 +725,7 @@ export function HomepageSectionDrawer({
                       <select
                         value={sourceType}
                         onChange={(e) => setSourceType(e.target.value as any)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                        className="w-full px-3 py-2 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                       >
                         <option value="category">Category Filter</option>
                         <option value="brand">Brand Filter</option>
@@ -741,7 +741,7 @@ export function HomepageSectionDrawer({
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as any)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                        className="w-full px-3 py-2 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                       >
                         {SORT_OPTIONS.map((opt) => (
                           <option key={opt.id} value={opt.id}>
@@ -761,7 +761,7 @@ export function HomepageSectionDrawer({
                       <select
                         value={categoryId || ""}
                         onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : undefined)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                        className="w-full px-3 py-2 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                       >
                         <option value="">Select Category...</option>
                         {categories.map((c) => (
@@ -782,7 +782,7 @@ export function HomepageSectionDrawer({
                       <select
                         value={brandId || ""}
                         onChange={(e) => setBrandId(e.target.value ? Number(e.target.value) : undefined)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                        className="w-full px-3 py-2 rounded-md bg-slate-950 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                       >
                         <option value="">Select Brand...</option>
                         {brands.map((b) => (
@@ -796,7 +796,7 @@ export function HomepageSectionDrawer({
 
                   {/* Manual Products */}
                   {sourceType === "manual" && (
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/[0.06]">
+                    <div className="flex items-center justify-between p-3 rounded-md bg-black/40 border border-white/[0.06]">
                       <div>
                         <span className="text-xs font-bold text-white block">
                           Handpicked Products
@@ -808,7 +808,7 @@ export function HomepageSectionDrawer({
                       <button
                         type="button"
                         onClick={() => openProductPicker(null)}
-                        className="px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300 transition cursor-pointer"
+                        className="px-3 py-1.5 rounded-md bg-[#A78BFA] text-[#090B10] font-bold text-xs hover:bg-[#B9A3FF] transition cursor-pointer"
                       >
                         Choose Products...
                       </button>
@@ -833,7 +833,7 @@ export function HomepageSectionDrawer({
                     type="text"
                     value={viewAllLabel}
                     onChange={(e) => setViewAllLabel(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
 
@@ -844,7 +844,7 @@ export function HomepageSectionDrawer({
                   <select
                     value={viewAllType}
                     onChange={(e) => setViewAllType(e.target.value as any)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="category">Link to Category Page</option>
                     <option value="brand">Link to Brand Page</option>
@@ -862,7 +862,7 @@ export function HomepageSectionDrawer({
                   <select
                     value={viewAllCategoryId || categoryId || ""}
                     onChange={(e) => setViewAllCategoryId(e.target.value ? Number(e.target.value) : undefined)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="">Default (Parent Section Category)</option>
                     {categories.map((c) => (
@@ -882,7 +882,7 @@ export function HomepageSectionDrawer({
                   <select
                     value={viewAllBrandId || brandId || ""}
                     onChange={(e) => setViewAllBrandId(e.target.value ? Number(e.target.value) : undefined)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-slate-200 focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="">Default (Parent Section Brand)</option>
                     {brands.map((b) => (
@@ -904,7 +904,7 @@ export function HomepageSectionDrawer({
                     placeholder="/products?collection=summer"
                     value={viewAllCustomUrl}
                     onChange={(e) => setViewAllCustomUrl(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/[0.08] text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+                    className="w-full px-3 py-2 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-white focus:outline-none focus:border-[#A78BFA]/50 font-mono"
                   />
                 </div>
               )}
@@ -912,7 +912,7 @@ export function HomepageSectionDrawer({
 
             {/* 4. Active Status Toggle */}
             <div className="space-y-4 pt-2 border-t border-white/[0.06]">
-              <div className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+              <div className="flex items-center justify-between p-3.5 rounded-md bg-white/[0.02] border border-white/[0.06]">
                 <div>
                   <span className="text-xs font-bold text-white block">
                     Showcase Visibility Status
@@ -931,7 +931,7 @@ export function HomepageSectionDrawer({
                     onChange={(e) => setIsActive(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                  <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                 </label>
               </div>
             </div>
@@ -943,7 +943,7 @@ export function HomepageSectionDrawer({
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer disabled:opacity-50"
+              className="px-4 py-2.5 rounded-md text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
@@ -952,7 +952,7 @@ export function HomepageSectionDrawer({
               type="submit"
               form="homepage-section-form"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-lg shadow-amber-400/20 transition-all cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold text-xs shadow-lg shadow-[#A78BFA]/20 transition-all cursor-pointer disabled:opacity-50"
             >
               {saving ? (
                 <>
@@ -973,7 +973,7 @@ export function HomepageSectionDrawer({
       {/* Nested Product Picker Modal (For Manual Product Picking) */}
       {isProductPickerOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl rounded-2xl bg-[#0d1017] border border-white/[0.1] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+          <div className="relative w-full max-w-2xl rounded-lg bg-[#0d1017] border border-white/[0.1] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
             <div className="px-5 py-3.5 border-b border-white/[0.08] flex items-center justify-between bg-[#080b12]">
               <div>
                 <h3 className="text-sm font-bold text-white">
@@ -986,7 +986,7 @@ export function HomepageSectionDrawer({
               <button
                 type="button"
                 onClick={() => setIsProductPickerOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer"
+                className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1001,14 +1001,14 @@ export function HomepageSectionDrawer({
                   placeholder="Search products by name or SKU..."
                   value={pickerSearch}
                   onChange={(e) => setPickerSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
               <select
                 value={pickerCatFilter}
                 onChange={(e) => setPickerCatFilter(e.target.value)}
-                className="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08] text-xs text-slate-300 focus:outline-none focus:border-amber-400 max-w-[150px]"
+                className="px-2.5 py-1.5 rounded-md bg-slate-900 border border-white/[0.08] text-xs text-slate-300 focus:outline-none focus:border-[#A78BFA]/50 max-w-[150px]"
               >
                 <option value="">All Categories</option>
                 {categories.map((c) => (
@@ -1032,15 +1032,15 @@ export function HomepageSectionDrawer({
                     <div
                       key={p.id}
                       onClick={() => toggleProductSelection(p.id)}
-                      className={`flex items-center justify-between py-2 px-2.5 rounded-xl cursor-pointer transition-colors ${
-                        selected ? "bg-amber-400/10 text-white" : "hover:bg-white/[0.02]"
+                      className={`flex items-center justify-between py-2 px-2.5 rounded-md cursor-pointer transition-colors ${
+                        selected ? "bg-[#211B32] text-white" : "hover:bg-white/[0.02]"
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div
                           className={`w-4 h-4 rounded border flex items-center justify-center ${
                             selected
-                              ? "bg-amber-400 border-amber-400 text-slate-950"
+                              ? "bg-[#A78BFA] border-[#A78BFA] text-[#090B10]"
                               : "border-slate-600 bg-slate-900"
                           }`}
                         >
@@ -1055,7 +1055,7 @@ export function HomepageSectionDrawer({
                       </div>
 
                       {selected && (
-                        <span className="text-[10px] font-bold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-bold text-[#A78BFA] bg-[#211B32] px-2 py-0.5 rounded border border-[#A78BFA]/30">
                           Selected
                         </span>
                       )}
@@ -1075,7 +1075,7 @@ export function HomepageSectionDrawer({
               <button
                 type="button"
                 onClick={() => setIsProductPickerOpen(false)}
-                className="px-4 py-1.5 rounded-lg bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300 cursor-pointer"
+                className="px-4 py-1.5 rounded-md bg-[#A78BFA] text-[#090B10] font-bold text-xs hover:bg-[#B9A3FF] cursor-pointer"
               >
                 Done
               </button>

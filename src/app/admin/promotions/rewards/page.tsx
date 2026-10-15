@@ -121,14 +121,14 @@ export default function CustomerRewardsPage() {
             <button
               onClick={() => fetchRewards()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+              className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
             <button
               onClick={openDrawer}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
               Issue Customer Reward
@@ -138,7 +138,7 @@ export default function CustomerRewardsPage() {
       />
 
       {/* Filter strip */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
@@ -146,7 +146,7 @@ export default function CustomerRewardsPage() {
             placeholder="Search by customer name, email, reward code..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+            className="w-full pl-9 pr-4 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
           />
         </div>
         <span className="text-xs text-slate-400 font-mono">
@@ -172,7 +172,7 @@ export default function CustomerRewardsPage() {
             {loading ? (
               <tr>
                 <td colSpan={7} className="p-12 text-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                  <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   Loading customer rewards...
                 </td>
               </tr>
@@ -188,7 +188,7 @@ export default function CustomerRewardsPage() {
                 <tr key={reward.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center font-bold text-amber-400">
+                      <div className="w-8 h-8 rounded bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center font-bold text-[#A78BFA]">
                         {reward.user?.name?.charAt(0) || "U"}
                       </div>
                       <div>
@@ -205,8 +205,8 @@ export default function CustomerRewardsPage() {
                   </td>
 
                   <td className="p-4">
-                    <div className="flex items-center gap-1.5 font-mono text-xs text-amber-300 font-bold bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded w-fit">
-                      <Tag className="w-3 h-3 text-amber-400" />
+                    <div className="flex items-center gap-1.5 font-mono text-xs text-[#A78BFA] font-semibold bg-[#211B32] border border-[#A78BFA]/30 px-2.5 py-1 rounded w-fit">
+                      <Tag className="w-3 h-3 text-[#A78BFA]" />
                       {reward.claimed_code}
                     </div>
                   </td>
@@ -217,10 +217,15 @@ export default function CustomerRewardsPage() {
 
                   <td className="p-4 whitespace-nowrap text-slate-300 font-mono text-[11px]">
                     {reward.expires_at ? (
-                      <span className="flex items-center gap-1 text-amber-400">
-                        <Clock className="w-3 h-3" />
-                        {new Date(reward.expires_at).toLocaleDateString()}
-                      </span>
+                      (() => {
+                        const isExpiringSoon = new Date(reward.expires_at).getTime() - Date.now() < 24 * 3600 * 1000;
+                        return (
+                          <span className={`flex items-center gap-1 ${isExpiringSoon ? "text-amber-400" : "text-slate-300"}`}>
+                            <Clock className="w-3 h-3" />
+                            {new Date(reward.expires_at).toLocaleDateString()}
+                          </span>
+                        );
+                      })()
                     ) : (
                       "Never expires"
                     )}
@@ -275,7 +280,7 @@ export default function CustomerRewardsPage() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -303,7 +308,7 @@ export default function CustomerRewardsPage() {
                   required
                   value={rewardName}
                   onChange={(e) => setRewardName(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-xl text-xs text-white focus:border-amber-400 outline-none"
+                  className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-md text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                 />
               </div>
 
@@ -313,7 +318,7 @@ export default function CustomerRewardsPage() {
                   <select
                     value={discountType}
                     onChange={(e) => setDiscountType(e.target.value as any)}
-                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-xl text-xs text-white focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-md text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                   >
                     <option value="percentage">Percentage (%)</option>
                     <option value="fixed_amount">Fixed Amount (৳)</option>
@@ -330,7 +335,7 @@ export default function CustomerRewardsPage() {
                     required
                     value={discountValue}
                     onChange={(e) => setDiscountValue(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-xl text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-md text-xs text-white font-mono focus:border-[#A78BFA]/50 outline-none"
                   />
                 </div>
               </div>
@@ -343,7 +348,7 @@ export default function CustomerRewardsPage() {
                     min={0}
                     value={minOrderAmount}
                     onChange={(e) => setMinOrderAmount(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-xl text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-md text-xs text-white font-mono focus:border-[#A78BFA]/50 outline-none"
                   />
                 </div>
 
@@ -354,7 +359,7 @@ export default function CustomerRewardsPage() {
                     min={1}
                     value={daysValid}
                     onChange={(e) => setDaysValid(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-xl text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-md text-xs text-white font-mono focus:border-[#A78BFA]/50 outline-none"
                   />
                 </div>
               </div>
@@ -368,7 +373,7 @@ export default function CustomerRewardsPage() {
                     placeholder="No limit"
                     value={maxDiscountAmount}
                     onChange={(e) => setMaxDiscountAmount(e.target.value ? Number(e.target.value) : "")}
-                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-xl text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 bg-[#12151f] border border-white/10 rounded-md text-xs text-white font-mono focus:border-[#A78BFA]/50 outline-none"
                   />
                 </div>
               )}
@@ -379,7 +384,7 @@ export default function CustomerRewardsPage() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer"
               >
                 Cancel
               </button>
@@ -387,7 +392,7 @@ export default function CustomerRewardsPage() {
                 type="button"
                 onClick={handleIssueReward}
                 disabled={issuing || !selectedUserId}
-                className="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-black transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="px-4 py-2 rounded-md text-xs font-semibold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 {issuing ? "Granting..." : "Grant Reward"}
               </button>

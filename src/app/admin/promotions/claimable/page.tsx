@@ -81,14 +81,14 @@ export default function ClaimableCouponsPage() {
             <button
               onClick={() => fetchClaims()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+              className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
             <Link
               href="/admin/promotions/new"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               New Claimable Coupon
@@ -100,18 +100,18 @@ export default function ClaimableCouponsPage() {
       {/* Active Claimable Campaigns Strip */}
       <div className="space-y-3">
         <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <Gift className="w-4 h-4 text-purple-400" />
+          <Gift className="w-4 h-4 text-[#A78BFA]" />
           Active Claimable Campaigns
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {claimablePromotions.map((p) => (
             <div
               key={p.id}
-              className="p-4 rounded-xl border border-purple-500/20 bg-[#0e1017] flex flex-col justify-between gap-3"
+              className="p-4 rounded-md border border-[#A78BFA]/20 bg-[#0e1017] flex flex-col justify-between gap-3"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#A78BFA]/20 text-[#A78BFA]">
                     {p.badge_text || `${p.discount_value}% OFF`}
                   </span>
                   <span className="text-xs font-mono text-slate-400">
@@ -124,11 +124,11 @@ export default function ClaimableCouponsPage() {
 
               <div className="text-[11px] text-slate-400 pt-2 border-t border-white/10 flex items-center justify-between">
                 <span>
-                  Validity: <strong className="text-purple-300">{p.claim_validity_days || 7} days</strong> post-claim
+                  Validity: <strong className="text-[#A78BFA]">{p.claim_validity_days || 7} days</strong> post-claim
                 </span>
                 <Link
                   href={`/admin/promotions/${p.id}`}
-                  className="text-xs text-amber-400 hover:underline"
+                  className="text-xs text-[#A78BFA] hover:text-[#B9A3FF] hover:underline"
                 >
                   Edit Rule →
                 </Link>
@@ -139,7 +139,7 @@ export default function ClaimableCouponsPage() {
       </div>
 
       {/* Claims Tracker Filters */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
           <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -148,14 +148,14 @@ export default function ClaimableCouponsPage() {
               placeholder="Search by code, customer name, email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+              className="w-full pl-9 pr-4 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-amber-400 outline-none"
+            className="px-3 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-slate-300 focus:border-[#A78BFA]/50 outline-none"
           >
             <option value="all">All Claim Statuses</option>
             <option value="claimed">Claimed (Active in Wallet)</option>
@@ -187,7 +187,7 @@ export default function ClaimableCouponsPage() {
             {loading ? (
               <tr>
                 <td colSpan={7} className="p-12 text-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                  <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   Loading customer coupon claims...
                 </td>
               </tr>
@@ -203,7 +203,7 @@ export default function ClaimableCouponsPage() {
                 <tr key={claim.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 font-bold">
+                      <div className="w-7 h-7 rounded bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 font-bold">
                         {claim.user?.name?.charAt(0) || "U"}
                       </div>
                       <div>
@@ -220,7 +220,7 @@ export default function ClaimableCouponsPage() {
                   </td>
 
                   <td className="p-4">
-                    <span className="font-mono font-bold text-amber-300 text-xs bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
+                    <span className="font-mono font-semibold text-[#A78BFA] text-xs bg-[#211B32] border border-[#A78BFA]/30 px-2.5 py-1 rounded">
                       {claim.claimed_code}
                     </span>
                   </td>
@@ -231,10 +231,15 @@ export default function ClaimableCouponsPage() {
 
                   <td className="p-4 whitespace-nowrap text-slate-300 font-mono text-[11px]">
                     {claim.expires_at ? (
-                      <span className="flex items-center gap-1 text-amber-400">
-                        <Clock className="w-3 h-3" />
-                        {new Date(claim.expires_at).toLocaleDateString()}
-                      </span>
+                      (() => {
+                        const isExpiringSoon = new Date(claim.expires_at).getTime() - Date.now() < 24 * 3600 * 1000;
+                        return (
+                          <span className={`flex items-center gap-1 ${isExpiringSoon ? "text-amber-400" : "text-slate-300"}`}>
+                            <Clock className="w-3 h-3" />
+                            {new Date(claim.expires_at).toLocaleDateString()}
+                          </span>
+                        );
+                      })()
                     ) : (
                       "No expiry"
                     )}

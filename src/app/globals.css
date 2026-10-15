@@ -7,6 +7,26 @@
   --color-cyber-dark: #090a0f;
   --color-cyber-card: #0e121e;
   --color-cyber-border: rgba(255, 255, 255, 0.08);
+
+  /* Inhaliq Admin Panel Premium Dark Theme Tokens */
+  --color-admin-bg: #090B10;
+  --color-admin-surface: #11141D;
+  --color-admin-elevated: #171B26;
+  --color-admin-border: #272B35;
+  --color-admin-accent: #A78BFA;
+  --color-admin-accent-hover: #B9A3FF;
+  --color-admin-accent-active: #211B32;
+  --color-admin-success: #34D399;
+  --color-admin-text-primary: #E5E7EB;
+  --color-admin-text-secondary: #929BAD;
+  --color-admin-text-disabled: #626B7B;
+  --color-admin-error: #F87171;
+  --color-admin-warning: #FBBF24;
+
+  /* Inhaliq Admin Panel Radius Tokens */
+  --radius-admin-sm: 4px;
+  --radius-admin-md: 6px;
+  --radius-admin-lg: 8px;
 }
 
 
@@ -212,8 +232,24 @@ body.theme-light-mode:not(.admin-body) .theme-tab-pill-inactive:hover {
 
 /* Fixed Admin Console Isolation (Admin NEVER inherits storefront light theme) */
 body.admin-body {
-  background-color: #07080c !important;
-  color: #f1f5f9 !important;
+  --admin-bg: #090B10;
+  --admin-surface: #11141D;
+  --admin-elevated: #171B26;
+  --admin-border: #272B35;
+  --admin-accent: #A78BFA;
+  --admin-accent-hover: #B9A3FF;
+  --admin-accent-active: #211B32;
+  --admin-success: #34D399;
+  --admin-text-primary: #E5E7EB;
+  --admin-text-secondary: #929BAD;
+  --admin-text-disabled: #626B7B;
+  --admin-error: #F87171;
+  --admin-warning: #FBBF24;
+  --admin-radius-sm: 4px;
+  --admin-radius-md: 6px;
+  --admin-radius-lg: 8px;
+  background-color: #090B10 !important;
+  color: #E5E7EB !important;
 }
 
 body.admin-body h1,
@@ -223,11 +259,11 @@ body.admin-body h4,
 body.admin-body h5,
 body.admin-body h6,
 body.admin-body .theme-heading {
-  color: #ffffff !important;
+  color: #E5E7EB !important;
 }
 
 body.admin-body label {
-  color: #cbd5e1 !important;
+  color: #929BAD !important;
 }
 
 /* ========================================================================= */
@@ -763,11 +799,11 @@ select option {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 158, 11, 0.8) !important;
+  background: rgba(167, 139, 250, 0.8) !important;
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: rgba(245, 158, 11, 1) !important;
+  background: rgba(185, 163, 255, 1) !important;
 }
 
 ::-webkit-scrollbar-corner {
@@ -805,11 +841,11 @@ select option {
 }
 
 .hover-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 158, 11, 0.85) !important;
+  background: rgba(167, 139, 250, 0.85) !important;
 }
 
 .hover-scrollbar::-webkit-scrollbar-thumb:active {
-  background: rgba(245, 158, 11, 1) !important;
+  background: rgba(185, 163, 255, 1) !important;
 }
 
 /* Complete Scrollbar Hide Utility */
@@ -827,7 +863,7 @@ select option {
 /* Dedicated Visible Horizontal Scrollbar for Table Cards */
 .custom-horizontal-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(245, 158, 11, 0.4) rgba(255, 255, 255, 0.04);
+  scrollbar-color: rgba(167, 139, 250, 0.4) rgba(255, 255, 255, 0.04);
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar {
@@ -840,12 +876,12 @@ select option {
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(245, 158, 11, 0.4);
+  background: rgba(167, 139, 250, 0.4);
   border-radius: 8px;
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 158, 11, 0.75);
+  background: rgba(185, 163, 255, 0.75);
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-button {
@@ -935,7 +971,13 @@ select option {
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover,
 [data-scrollable-card]::-webkit-scrollbar-thumb:hover,
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(167, 139, 250, 0.6);
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb:active,
+[data-scrollable-card]::-webkit-scrollbar-thumb:active,
+.overflow-x-auto::-webkit-scrollbar-thumb:active {
+  background: rgba(185, 163, 255, 0.9);
 }
 
 /* ==========================================================================
@@ -1002,7 +1044,10 @@ select option {
   border-radius: 9999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(167, 139, 250, 0.6);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(185, 163, 255, 0.9);
 }
 .custom-scrollbar {
   scrollbar-width: thin;

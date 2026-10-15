@@ -69,7 +69,7 @@ export function VariantBulkToolbar({
   };
 
   return (
-    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div className="p-3 rounded-md bg-white/[0.02] border border-white/[0.06] flex flex-wrap items-center justify-between gap-3 text-xs">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-1.5 text-slate-400 font-medium">
           <Wrench className="w-3.5 h-3.5 text-emerald-400" />
@@ -84,13 +84,13 @@ export function VariantBulkToolbar({
             placeholder="Stock"
             value={stockInput}
             onChange={(e) => setStockInput(e.target.value)}
-            className="w-16 bg-white/[0.04] border border-white/10 focus:border-emerald-400/50 rounded-lg px-2 py-1 text-xs text-white placeholder:text-slate-500 outline-none"
+            className="w-16 bg-white/[0.04] border border-white/10 focus:border-emerald-400/50 rounded-md px-2 py-1 text-xs text-white placeholder:text-slate-500 outline-none"
           />
           <button
             type="button"
             onClick={handleApplyStock}
             disabled={stockInput === ""}
-            className="px-2 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-white/10 text-[11px] font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-2 py-1 rounded-md bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-white/10 text-[11px] font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Apply
           </button>
@@ -104,13 +104,13 @@ export function VariantBulkToolbar({
             placeholder="+$ Mod"
             value={priceModInput}
             onChange={(e) => setPriceModInput(e.target.value)}
-            className="w-20 bg-white/[0.04] border border-white/10 focus:border-emerald-400/50 rounded-lg px-2 py-1 text-xs text-white placeholder:text-slate-500 outline-none"
+            className="w-20 bg-white/[0.04] border border-white/10 focus:border-emerald-400/50 rounded-md px-2 py-1 text-xs text-white placeholder:text-slate-500 outline-none"
           />
           <button
             type="button"
             onClick={handleApplyPriceModifier}
             disabled={priceModInput === ""}
-            className="px-2 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-white/10 text-[11px] font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-2 py-1 rounded-md bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-white/10 text-[11px] font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Apply
           </button>
@@ -124,13 +124,13 @@ export function VariantBulkToolbar({
             placeholder="Cost"
             value={costInput}
             onChange={(e) => setCostInput(e.target.value)}
-            className="w-18 bg-white/[0.04] border border-white/10 focus:border-emerald-400/50 rounded-lg px-2 py-1 text-xs text-white placeholder:text-slate-500 outline-none"
+            className="w-18 bg-white/[0.04] border border-white/10 focus:border-emerald-400/50 rounded-md px-2 py-1 text-xs text-white placeholder:text-slate-500 outline-none"
           />
           <button
             type="button"
             onClick={handleApplyCostPrice}
             disabled={costInput === ""}
-            className="px-2 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-white/10 text-[11px] font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-2 py-1 rounded-md bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-white/10 text-[11px] font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Apply
           </button>
@@ -140,7 +140,7 @@ export function VariantBulkToolbar({
       {/* Clear Matrix Action with Confirmation */}
       <div className="flex items-center gap-2">
         {showClearConfirm ? (
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-[11px]">
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-rose-500/10 border border-rose-500/30 text-rose-300 text-[11px]">
             <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
             <span>Clear all {totalVariantsCount} variants in editor?</span>
             <button
@@ -162,7 +162,7 @@ export function VariantBulkToolbar({
           <button
             type="button"
             onClick={() => setShowClearConfirm(true)}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition cursor-pointer text-[11px]"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition cursor-pointer text-[11px]"
           >
             <Trash2 className="w-3.5 h-3.5" />
             Clear Matrix

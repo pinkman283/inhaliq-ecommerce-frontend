@@ -182,7 +182,7 @@ export default function AdminReportsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-all cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               Print
@@ -190,7 +190,7 @@ export default function AdminReportsPage() {
 
             <button
               onClick={handleExportCsv}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-[#A78BFA]/20 transition-all cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               Export CSV
@@ -208,13 +208,13 @@ export default function AdminReportsPage() {
             <button
               key={mod.id}
               onClick={() => setSelectedReport(mod.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 isActive
-                  ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-sm"
+                  ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-sm"
                   : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? "text-amber-400" : "text-slate-500"}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#A78BFA]" : "text-slate-500"}`} />
               <span>{mod.label}</span>
             </button>
           );
@@ -222,7 +222,7 @@ export default function AdminReportsPage() {
       </div>
 
       {/* Date Filter Bar & Search */}
-      <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         {/* Preset Date Buttons */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {[
@@ -237,9 +237,9 @@ export default function AdminReportsPage() {
               key={preset.id}
               type="button"
               onClick={() => handleDatePresetChange(preset.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 ${
                 datePreset === preset.id
-                  ? "bg-amber-500 text-slate-950 font-bold"
+                  ? "bg-[#A78BFA] text-[#090B10] font-bold"
                   : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -257,10 +257,10 @@ export default function AdminReportsPage() {
               setCustomEnd(endDate);
               setIsCustomDrawerOpen(true);
             }}
-            className="flex items-center gap-2 rounded-xl bg-[#161a26] border border-white/10 hover:border-amber-400/40 px-3 py-1.5 text-xs text-slate-300 hover:text-white transition cursor-pointer"
+            className="flex items-center gap-2 rounded-md bg-[#161a26] border border-white/10 hover:border-[#A78BFA]/40 px-3 py-1.5 text-xs text-slate-300 hover:text-white transition cursor-pointer"
             title="Click to customize date interval"
           >
-            <Calendar className="h-3.5 w-3.5 text-amber-400" />
+            <Calendar className="h-3.5 w-3.5 text-[#A78BFA]" />
             <span className="font-mono text-[11px]">{startDate}</span>
             <span className="text-slate-500">→</span>
             <span className="font-mono text-[11px]">{endDate}</span>
@@ -274,7 +274,7 @@ export default function AdminReportsPage() {
               placeholder="Search table rows..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#161a26] border border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 w-44"
+              className="bg-[#161a26] border border-white/10 rounded-md pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50 w-44"
             />
           </div>
         </div>
@@ -286,15 +286,15 @@ export default function AdminReportsPage() {
       )}
 
       {/* Report Table Card */}
-      <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+      <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <CurrentIcon className="w-4 h-4 text-amber-400" />
+              <CurrentIcon className="w-4 h-4 text-[#A78BFA]" />
               {reportData?.title || currentModule.label}
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              {currentModule.desc} • Showing data from <span className="font-mono text-amber-300">{startDate}</span> to <span className="font-mono text-amber-300">{endDate}</span>
+              {currentModule.desc} • Showing data from <span className="font-mono text-[#A78BFA]">{startDate}</span> to <span className="font-mono text-[#A78BFA]">{endDate}</span>
             </p>
           </div>
 
@@ -306,7 +306,7 @@ export default function AdminReportsPage() {
         {loading ? (
           <div className="space-y-3 py-8">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-12 bg-[#161a26] rounded-xl animate-pulse" />
+              <div key={i} className="h-12 bg-[#161a26] rounded-md animate-pulse" />
             ))}
           </div>
         ) : filteredRows.length === 0 ? (
@@ -342,7 +342,7 @@ export default function AdminReportsPage() {
                               ৳ {Number(val).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                             </span>
                           ) : isStatus ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/5 text-amber-300 border border-amber-500/20">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/5 text-[#A78BFA] border border-[#A78BFA]/30">
                               {String(val)}
                             </span>
                           ) : (
@@ -441,7 +441,7 @@ export default function AdminReportsPage() {
                 type="date"
                 value={customStart}
                 onChange={(e) => setCustomStart(e.target.value)}
-                className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition [color-scheme:dark]"
+                className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition [color-scheme:dark]"
               />
             </div>
 
@@ -451,7 +451,7 @@ export default function AdminReportsPage() {
                 type="date"
                 value={customEnd}
                 onChange={(e) => setCustomEnd(e.target.value)}
-                className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-none transition [color-scheme:dark]"
+                className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-none transition [color-scheme:dark]"
               />
             </div>
           </div>

@@ -2580,8 +2580,13 @@ export const adminApi = {
     return res.data;
   },
 
-  async testIntegration(provider: string): Promise<{ success: boolean; message: string; latency_ms: number; last_tested_at: string; test_status: string }> {
-    const res = await adminClient.post(`/admin/integrations/${provider}/test`);
+  async testIntegration(provider: string, data?: { credentials?: Record<string, any>; settings?: Record<string, any> }): Promise<{ success: boolean; message: string; latency_ms: number; last_tested_at: string; test_status: string }> {
+    const res = await adminClient.post(`/admin/integrations/${provider}/test`, data || {});
+    return res.data;
+  },
+
+  async rotateIntegrationKey(provider: string): Promise<{ message: string; primary_api_key: string; secondary_api_key: string | null; last_rotated_at: string }> {
+    const res = await adminClient.post(`/admin/integrations/${provider}/rotate-key`);
     return res.data;
   },
 

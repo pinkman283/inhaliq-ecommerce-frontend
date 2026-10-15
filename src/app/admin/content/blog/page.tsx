@@ -699,7 +699,7 @@ function AdminContentBlogPageContent() {
               href="/blog"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-300 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-300 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-md transition-colors cursor-pointer"
               title="Open storefront blog"
             >
               <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
@@ -709,7 +709,7 @@ function AdminContentBlogPageContent() {
             {activeTab === "posts" && (
               <button
                 onClick={handleOpenCreatePost}
-                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-black bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#090B10] bg-[#A78BFA] hover:bg-[#B9A3FF] rounded-md transition-colors cursor-pointer shadow-sm font-bold"
               >
                 <Plus className="w-4 h-4" />
                 <span>Write Article</span>
@@ -719,7 +719,7 @@ function AdminContentBlogPageContent() {
             {activeTab === "categories" && (
               <button
                 onClick={handleOpenCreateCategory}
-                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 rounded-xl transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Category</span>
@@ -729,7 +729,7 @@ function AdminContentBlogPageContent() {
             {activeTab === "tags" && (
               <button
                 onClick={handleOpenCreateTag}
-                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 rounded-xl transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Tag</span>
@@ -785,16 +785,16 @@ function AdminContentBlogPageContent() {
       <div className="flex items-center gap-2 border-b border-white/[0.08] pb-1 overflow-x-auto no-scrollbar">
         <button
           onClick={() => handleTabChange("posts")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-md transition-all cursor-pointer ${
             activeTab === "posts"
-              ? "bg-amber-400/15 text-amber-300 border border-amber-400/30 shadow-sm"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
           }`}
         >
           <FileText className="w-4 h-4" />
           <span>Articles</span>
           {summary && (
-            <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded-full text-slate-300 font-mono">
+            <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded text-slate-300 font-mono">
               {summary.metrics.total_posts}
             </span>
           )}
@@ -802,7 +802,7 @@ function AdminContentBlogPageContent() {
 
         <button
           onClick={() => handleTabChange("categories")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-md transition-all cursor-pointer ${
             activeTab === "categories"
               ? "bg-cyan-400/15 text-cyan-300 border border-cyan-400/30 shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
@@ -810,14 +810,14 @@ function AdminContentBlogPageContent() {
         >
           <FolderTree className="w-4 h-4" />
           <span>Categories</span>
-          <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded-full text-slate-300 font-mono">
+          <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded text-slate-300 font-mono">
             {categories.length}
           </span>
         </button>
 
         <button
           onClick={() => handleTabChange("tags")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-md transition-all cursor-pointer ${
             activeTab === "tags"
               ? "bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
@@ -825,14 +825,14 @@ function AdminContentBlogPageContent() {
         >
           <Tag className="w-4 h-4" />
           <span>Keyword Tags</span>
-          <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded-full text-slate-300 font-mono">
+          <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded text-slate-300 font-mono">
             {tags.length}
           </span>
         </button>
 
         <button
           onClick={() => handleTabChange("comments")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer relative ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-md transition-all cursor-pointer relative ${
             activeTab === "comments"
               ? "bg-purple-400/15 text-purple-300 border border-purple-400/30 shadow-sm"
               : "text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
@@ -841,11 +841,11 @@ function AdminContentBlogPageContent() {
           <MessageSquare className="w-4 h-4" />
           <span>Comments</span>
           {(summary?.metrics.pending_comments ?? 0) > 0 ? (
-            <span className="text-[10px] bg-amber-500 text-black font-extrabold px-1.5 py-0.2 rounded-full animate-pulse">
+            <span className="text-[10px] bg-amber-500 text-black font-extrabold px-1.5 py-0.2 rounded animate-pulse">
               {summary?.metrics.pending_comments}
             </span>
           ) : (
-            <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded-full text-slate-300 font-mono">
+            <span className="text-[10px] bg-white/[0.08] px-1.5 py-0.5 rounded text-slate-300 font-mono">
               {summary?.metrics.total_comments ?? 0}
             </span>
           )}
@@ -858,7 +858,7 @@ function AdminContentBlogPageContent() {
       {activeTab === "posts" && (
         <div className="space-y-4">
           {/* Filters & Search */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08]">
             <div className="relative w-full md:w-80">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -869,13 +869,13 @@ function AdminContentBlogPageContent() {
                   setPostSearch(e.target.value);
                   setPostCurrentPage(1);
                 }}
-                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
               />
             </div>
 
             <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
               {/* Category Filter */}
-              <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-lg text-xs text-slate-300">
+              <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-md text-xs text-slate-300">
                 <FolderTree className="w-3.5 h-3.5 text-cyan-400" />
                 <select
                   value={postCategoryFilter}
@@ -897,8 +897,8 @@ function AdminContentBlogPageContent() {
               </div>
 
               {/* Status Filter */}
-              <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-lg text-xs text-slate-300">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400" />
+              <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-md text-xs text-slate-300">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#A78BFA]" />
                 <select
                   value={postStatusFilter}
                   onChange={(e) => {
@@ -925,21 +925,21 @@ function AdminContentBlogPageContent() {
               <button
                 onClick={fetchPosts}
                 disabled={postsLoading}
-                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-md transition-colors cursor-pointer"
                 title="Refresh article list"
               >
                 <RefreshCw
-                  className={`w-3.5 h-3.5 ${postsLoading ? "animate-spin text-amber-400" : ""}`}
+                  className={`w-3.5 h-3.5 ${postsLoading ? "animate-spin text-[#A78BFA]" : ""}`}
                 />
               </button>
             </div>
           </div>
 
           {/* Posts Table */}
-          <div className="rounded-xl bg-[#0f121b] border border-white/[0.08] overflow-hidden">
+          <div className="rounded-md bg-[#0f121b] border border-white/[0.08] overflow-hidden">
             {postsLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-3 text-slate-400">
-                <Loader2 className="w-7 h-7 text-amber-400 animate-spin" />
+                <Loader2 className="w-7 h-7 text-[#A78BFA] animate-spin" />
                 <span className="text-xs uppercase tracking-wider font-semibold">
                   Loading articles...
                 </span>
@@ -956,7 +956,7 @@ function AdminContentBlogPageContent() {
                   action={
                     <button
                       onClick={handleOpenCreatePost}
-                      className="px-4 py-2 text-xs font-semibold text-black bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors cursor-pointer"
+                      className="px-4 py-2 text-xs font-semibold text-[#090B10] bg-[#A78BFA] hover:bg-[#B9A3FF] rounded-md transition-colors cursor-pointer font-bold"
                     >
                       + Write New Article
                     </button>
@@ -988,17 +988,17 @@ function AdminContentBlogPageContent() {
                               <img
                                 src={post.featured_image}
                                 alt={post.featured_image_alt || post.title}
-                                className="w-12 h-12 rounded-lg object-cover border border-white/10 shrink-0"
+                                className="w-12 h-12 rounded-md object-cover border border-white/10 shrink-0"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center text-slate-500 shrink-0">
+                              <div className="w-12 h-12 rounded-md bg-white/[0.04] border border-white/10 flex items-center justify-center text-slate-500 shrink-0">
                                 <FileText className="w-5 h-5" />
                               </div>
                             )}
                             <div className="min-w-0">
                               <button
                                 onClick={() => handleOpenEditPost(post)}
-                                className="font-bold text-white hover:text-amber-400 transition-colors block truncate text-left cursor-pointer"
+                                className="font-bold text-white hover:text-[#A78BFA] transition-colors block truncate text-left cursor-pointer"
                               >
                                 {post.title}
                               </button>
@@ -1098,14 +1098,14 @@ function AdminContentBlogPageContent() {
                           <div className="flex items-center justify-end gap-1">
                             <button
                               onClick={() => handleOpenEditPost(post)}
-                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
                               title="Edit Article"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => setDeletingPost(post)}
-                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors cursor-pointer"
                               title="Delete Article"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1141,7 +1141,7 @@ function AdminContentBlogPageContent() {
       {activeTab === "categories" && (
         <div className="space-y-4">
           {/* Header Action Bar */}
-          <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+          <div className="flex items-center justify-between gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08]">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -1149,7 +1149,7 @@ function AdminContentBlogPageContent() {
                 placeholder="Search categories..."
                 value={categorySearch}
                 onChange={(e) => setCategorySearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
+                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
               />
             </div>
 
@@ -1157,7 +1157,7 @@ function AdminContentBlogPageContent() {
               <button
                 onClick={fetchCategoriesList}
                 disabled={categoriesLoading}
-                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-md transition-colors cursor-pointer"
                 title="Refresh categories"
               >
                 <RefreshCw
@@ -1169,7 +1169,7 @@ function AdminContentBlogPageContent() {
 
               <button
                 onClick={handleOpenCreateCategory}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 rounded-lg transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 rounded-md transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Category</span>
@@ -1178,7 +1178,7 @@ function AdminContentBlogPageContent() {
           </div>
 
           {/* Categories Table */}
-          <div className="rounded-xl bg-[#0f121b] border border-white/[0.08] overflow-hidden">
+          <div className="rounded-md bg-[#0f121b] border border-white/[0.08] overflow-hidden">
             {categoriesLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-3 text-slate-400">
                 <Loader2 className="w-7 h-7 text-cyan-400 animate-spin" />
@@ -1198,7 +1198,7 @@ function AdminContentBlogPageContent() {
                   action={
                     <button
                       onClick={handleOpenCreateCategory}
-                      className="px-4 py-2 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 rounded-lg transition-colors cursor-pointer"
+                      className="px-4 py-2 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 rounded-md transition-colors cursor-pointer"
                     >
                       + Add Category
                     </button>
@@ -1223,7 +1223,7 @@ function AdminContentBlogPageContent() {
                       <tr key={cat.id} className="hover:bg-white/[0.02] transition-colors">
                         <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                            <div className="w-7 h-7 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
                               <FolderTree className="w-3.5 h-3.5" />
                             </div>
                             <span>{cat.name}</span>
@@ -1258,14 +1258,14 @@ function AdminContentBlogPageContent() {
                           <div className="flex items-center justify-end gap-1">
                             <button
                               onClick={() => handleOpenEditCategory(cat)}
-                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
                               title="Edit Category"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => setDeletingCategory(cat)}
-                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors cursor-pointer"
                               title="Delete Category"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1288,7 +1288,7 @@ function AdminContentBlogPageContent() {
       {activeTab === "tags" && (
         <div className="space-y-4">
           {/* Header Action Bar */}
-          <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+          <div className="flex items-center justify-between gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08]">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -1296,7 +1296,7 @@ function AdminContentBlogPageContent() {
                 placeholder="Search tags..."
                 value={tagSearch}
                 onChange={(e) => setTagSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-400/50"
+                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-400/50"
               />
             </div>
 
@@ -1304,7 +1304,7 @@ function AdminContentBlogPageContent() {
               <button
                 onClick={fetchTagsList}
                 disabled={tagsLoading}
-                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-md transition-colors cursor-pointer"
                 title="Refresh tags"
               >
                 <RefreshCw
@@ -1314,7 +1314,7 @@ function AdminContentBlogPageContent() {
 
               <button
                 onClick={handleOpenCreateTag}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 rounded-md transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Tag</span>
@@ -1323,7 +1323,7 @@ function AdminContentBlogPageContent() {
           </div>
 
           {/* Tags Table */}
-          <div className="rounded-xl bg-[#0f121b] border border-white/[0.08] overflow-hidden">
+          <div className="rounded-md bg-[#0f121b] border border-white/[0.08] overflow-hidden">
             {tagsLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-3 text-slate-400">
                 <Loader2 className="w-7 h-7 text-emerald-400 animate-spin" />
@@ -1343,7 +1343,7 @@ function AdminContentBlogPageContent() {
                   action={
                     <button
                       onClick={handleOpenCreateTag}
-                      className="px-4 py-2 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors cursor-pointer"
+                      className="px-4 py-2 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 rounded-md transition-colors cursor-pointer"
                     >
                       + Add Tag
                     </button>
@@ -1387,14 +1387,14 @@ function AdminContentBlogPageContent() {
                           <div className="flex items-center justify-end gap-1">
                             <button
                               onClick={() => handleOpenEditTag(t)}
-                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
                               title="Edit Tag"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => setDeletingTag(t)}
-                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors cursor-pointer"
                               title="Delete Tag"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1417,7 +1417,7 @@ function AdminContentBlogPageContent() {
       {activeTab === "comments" && (
         <div className="space-y-4">
           {/* Header Action Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-[#0f121b] border border-white/[0.08]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-md bg-[#0f121b] border border-white/[0.08]">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -1428,12 +1428,12 @@ function AdminContentBlogPageContent() {
                   setCommentSearch(e.target.value);
                   setCommentCurrentPage(1);
                 }}
-                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-purple-400/50"
+                className="w-full pl-9 pr-4 py-1.5 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-purple-400/50"
               />
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-lg text-xs text-slate-300">
+              <div className="flex items-center gap-1.5 bg-[#161a26] border border-white/[0.08] px-2.5 py-1.5 rounded-md text-xs text-slate-300">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
                 <select
                   value={commentApprovalFilter}
@@ -1458,7 +1458,7 @@ function AdminContentBlogPageContent() {
               <button
                 onClick={fetchComments}
                 disabled={commentsLoading}
-                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-white bg-[#161a26] hover:bg-white/[0.08] border border-white/[0.08] rounded-md transition-colors cursor-pointer"
                 title="Refresh comments"
               >
                 <RefreshCw
@@ -1471,7 +1471,7 @@ function AdminContentBlogPageContent() {
           </div>
 
           {/* Comments List */}
-          <div className="rounded-xl bg-[#0f121b] border border-white/[0.08] overflow-hidden">
+          <div className="rounded-md bg-[#0f121b] border border-white/[0.08] overflow-hidden">
             {commentsLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-3 text-slate-400">
                 <Loader2 className="w-7 h-7 text-purple-400 animate-spin" />
@@ -1522,7 +1522,7 @@ function AdminContentBlogPageContent() {
                       </div>
 
                       {/* Comment text */}
-                      <p className="text-xs text-slate-300 leading-relaxed bg-[#161a26] p-3 rounded-lg border border-white/[0.06]">
+                      <p className="text-xs text-slate-300 leading-relaxed bg-[#161a26] p-3 rounded-md border border-white/[0.06]">
                         {comment.comment}
                       </p>
                     </div>
@@ -1541,7 +1541,7 @@ function AdminContentBlogPageContent() {
 
                       <button
                         onClick={() => handleToggleCommentApproval(comment)}
-                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg border flex items-center gap-1 transition-colors cursor-pointer ${
+                        className={`px-3 py-1.5 text-xs font-semibold rounded-md border flex items-center gap-1 transition-colors cursor-pointer ${
                           comment.is_approved
                             ? "bg-[#161a26] border-white/[0.08] text-slate-300 hover:text-white"
                             : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
@@ -1552,7 +1552,7 @@ function AdminContentBlogPageContent() {
 
                       <button
                         onClick={() => setDeletingComment(comment)}
-                        className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors cursor-pointer"
                         title="Delete Comment"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -1584,11 +1584,11 @@ function AdminContentBlogPageContent() {
       {/* ========================================================================= */}
       {isPostModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs overflow-y-auto">
-          <div className="relative w-full max-w-4xl bg-[#0f121b] border border-white/[0.12] rounded-2xl p-6 shadow-2xl space-y-5 my-8 animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-4xl bg-[#0f121b] border border-white/[0.12] rounded-lg p-6 shadow-2xl space-y-5 my-8 animate-in fade-in zoom-in-95 duration-150">
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400">
+                <div className="w-8 h-8 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA]">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div>
@@ -1602,7 +1602,7 @@ function AdminContentBlogPageContent() {
               </div>
               <button
                 onClick={() => setIsPostModalOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1620,7 +1620,7 @@ function AdminContentBlogPageContent() {
                     placeholder="e.g. Inside the Acoustic Chamber: Designing the Next-Gen Driver"
                     value={postTitle}
                     onChange={(e) => setPostTitle(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                     required
                   />
                 </div>
@@ -1635,7 +1635,7 @@ function AdminContentBlogPageContent() {
                     placeholder="inside-the-acoustic-chamber"
                     value={postSlug}
                     onChange={(e) => setPostSlug(e.target.value)}
-                    className="w-full px-3 py-2 text-xs font-mono bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                    className="w-full px-3 py-2 text-xs font-mono bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -1647,7 +1647,7 @@ function AdminContentBlogPageContent() {
                   <select
                     value={postCategoryId}
                     onChange={(e) => setPostCategoryId(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white focus:outline-hidden focus:border-amber-400/50 cursor-pointer"
+                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white focus:outline-hidden focus:border-[#A78BFA]/50 cursor-pointer"
                   >
                     <option value="">No Category (Uncategorized)</option>
                     {categories.map((c) => (
@@ -1663,7 +1663,7 @@ function AdminContentBlogPageContent() {
                   <select
                     value={postStatus}
                     onChange={(e) => setPostStatus(e.target.value as any)}
-                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white focus:outline-hidden focus:border-amber-400/50 cursor-pointer"
+                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white focus:outline-hidden focus:border-[#A78BFA]/50 cursor-pointer"
                   >
                     <option value="draft">Draft (Private)</option>
                     <option value="published">Published (Live on Storefront)</option>
@@ -1678,19 +1678,19 @@ function AdminContentBlogPageContent() {
                     placeholder="Describe image for search & screen readers"
                     value={postImageAlt}
                     onChange={(e) => setPostImageAlt(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                    className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
 
               {/* Featured Image URL & Upload */}
-              <div className="space-y-2 p-3 bg-[#161a26] rounded-xl border border-white/[0.08]">
+              <div className="space-y-2 p-3 bg-[#161a26] rounded-md border border-white/[0.08]">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                    <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+                    <ImageIcon className="w-3.5 h-3.5 text-[#A78BFA]" />
                     <span>Featured Hero Image</span>
                   </label>
-                  <label className="cursor-pointer text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1 transition-colors">
+                  <label className="cursor-pointer text-xs font-semibold text-[#A78BFA] hover:text-[#B9A3FF] flex items-center gap-1 transition-colors">
                     <Upload className="w-3.5 h-3.5" />
                     <span>{imageUploading ? "Uploading..." : "Upload File"}</span>
                     <input
@@ -1709,7 +1709,7 @@ function AdminContentBlogPageContent() {
                     placeholder="Paste image URL (e.g. https://images.unsplash.com/...)"
                     value={postImage}
                     onChange={(e) => setPostImage(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs bg-[#0f121b] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                    className="w-full px-3 py-1.5 text-xs bg-[#0f121b] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                   />
                   {postImage && (
                     <button
@@ -1723,7 +1723,7 @@ function AdminContentBlogPageContent() {
                 </div>
 
                 {postImage && (
-                  <div className="relative w-full h-32 rounded-lg overflow-hidden border border-white/10 bg-black/40">
+                  <div className="relative w-full h-32 rounded-md overflow-hidden border border-white/10 bg-black/40">
                     <img
                       src={postImage}
                       alt={postImageAlt || "Featured preview"}
@@ -1744,7 +1744,7 @@ function AdminContentBlogPageContent() {
                   placeholder="Short summary displayed on catalog cards and search previews..."
                   value={postExcerpt}
                   onChange={(e) => setPostExcerpt(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -1760,7 +1760,7 @@ function AdminContentBlogPageContent() {
                       onClick={() => setPreviewContentMode(false)}
                       className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
                         !previewContentMode
-                          ? "bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30"
+                          ? "bg-[#211B32] text-[#A78BFA] font-bold border border-[#A78BFA]/30"
                           : "text-slate-400 hover:text-white"
                       }`}
                     >
@@ -1771,7 +1771,7 @@ function AdminContentBlogPageContent() {
                       onClick={() => setPreviewContentMode(true)}
                       className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
                         previewContentMode
-                          ? "bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30"
+                          ? "bg-[#211B32] text-[#A78BFA] font-bold border border-[#A78BFA]/30"
                           : "text-slate-400 hover:text-white"
                       }`}
                     >
@@ -1783,7 +1783,7 @@ function AdminContentBlogPageContent() {
                 {!previewContentMode ? (
                   <div className="space-y-1">
                     {/* Quick Formatting Toolbar */}
-                    <div className="flex flex-wrap items-center gap-1 bg-[#161a26] border border-white/[0.08] px-2 py-1 rounded-t-lg text-slate-300">
+                    <div className="flex flex-wrap items-center gap-1 bg-[#161a26] border border-white/[0.08] px-2 py-1 rounded-t-md text-slate-300">
                       <button
                         type="button"
                         onClick={() => insertMarkdownFormatting("**", "**")}
@@ -1858,12 +1858,12 @@ function AdminContentBlogPageContent() {
                       placeholder="## Engineering Overview&#10;&#10;Write the narrative here. Markdown formatting is fully supported..."
                       value={postContent}
                       onChange={(e) => setPostContent(e.target.value)}
-                      className="w-full font-mono px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-b-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50 leading-relaxed"
+                      className="w-full font-mono px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-b-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50 leading-relaxed"
                       required
                     />
                   </div>
                 ) : (
-                  <div className="w-full min-h-[220px] max-h-[300px] overflow-y-auto p-4 bg-[#161a26] border border-white/[0.08] rounded-lg text-slate-200 text-xs leading-relaxed space-y-3 prose prose-invert">
+                  <div className="w-full min-h-[220px] max-h-[300px] overflow-y-auto p-4 bg-[#161a26] border border-white/[0.08] rounded-md text-slate-200 text-xs leading-relaxed space-y-3 prose prose-invert">
                     {postContent ? (
                       <div className="whitespace-pre-wrap">{postContent}</div>
                     ) : (
@@ -1895,7 +1895,7 @@ function AdminContentBlogPageContent() {
                           onClick={() => toggleTagSelection(t.id)}
                           className={`px-2 py-1 text-[11px] rounded-md border transition-colors cursor-pointer ${
                             isSelected
-                              ? "bg-amber-400/10 border-amber-400/30 text-amber-300 font-semibold"
+                              ? "bg-[#211B32] border-[#A78BFA]/30 text-[#A78BFA] font-semibold"
                               : "bg-[#161a26] border-white/[0.08] text-slate-400 hover:text-slate-200"
                           }`}
                         >
@@ -1908,14 +1908,14 @@ function AdminContentBlogPageContent() {
               )}
 
               {/* Collapsible SEO Section */}
-              <div className="border border-white/[0.08] rounded-xl overflow-hidden">
+              <div className="border border-white/[0.08] rounded-md overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setShowSeoSection(!showSeoSection)}
                   className="w-full flex items-center justify-between p-3 bg-[#161a26] text-xs font-bold text-white hover:bg-white/[0.04] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <Search className="w-3.5 h-3.5 text-amber-400" />
+                    <Search className="w-3.5 h-3.5 text-[#A78BFA]" />
                     <span>Search Engine Optimization (SEO & Meta)</span>
                   </div>
                   {showSeoSection ? (
@@ -1940,7 +1940,7 @@ function AdminContentBlogPageContent() {
                         value={postMetaTitle}
                         onChange={(e) => setPostMetaTitle(e.target.value)}
                         placeholder="Custom SEO title..."
-                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                       />
                     </div>
 
@@ -1953,7 +1953,7 @@ function AdminContentBlogPageContent() {
                         value={postMetaDescription}
                         onChange={(e) => setPostMetaDescription(e.target.value)}
                         placeholder="Custom SEO search snippet..."
-                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400/50"
+                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-[#A78BFA]/50"
                       />
                     </div>
                   </div>
@@ -1965,14 +1965,14 @@ function AdminContentBlogPageContent() {
                 <button
                   type="button"
                   onClick={() => setIsPostModalOpen(false)}
-                  className="px-4 py-2 text-xs text-slate-400 hover:text-white bg-transparent hover:bg-white/[0.06] rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs text-slate-400 hover:text-white bg-transparent hover:bg-white/[0.06] rounded-md transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={postSaving || imageUploading}
-                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-semibold text-black bg-amber-400 hover:bg-amber-300 disabled:opacity-50 rounded-lg transition-colors cursor-pointer shadow-sm"
+                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-semibold text-[#090B10] bg-[#A78BFA] hover:bg-[#B9A3FF] disabled:opacity-50 rounded-md transition-colors cursor-pointer shadow-sm font-bold"
                 >
                   {postSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{editingPost ? "Update Article" : "Publish Article"}</span>
@@ -1988,10 +1988,10 @@ function AdminContentBlogPageContent() {
       {/* ========================================================================= */}
       {isCategoryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="relative w-full max-w-md bg-[#0f121b] border border-white/[0.12] rounded-2xl p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-md bg-[#0f121b] border border-white/[0.12] rounded-lg p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400">
+                <div className="w-7 h-7 rounded-md bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400">
                   <FolderTree className="w-4 h-4" />
                 </div>
                 <h2 className="text-base font-bold text-white">
@@ -2000,7 +2000,7 @@ function AdminContentBlogPageContent() {
               </div>
               <button
                 onClick={() => setIsCategoryModalOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -2016,7 +2016,7 @@ function AdminContentBlogPageContent() {
                   placeholder="e.g. Ergonomics & Desk Tech"
                   value={catName}
                   onChange={(e) => setCatName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
+                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
                   required
                 />
               </div>
@@ -2028,7 +2028,7 @@ function AdminContentBlogPageContent() {
                   placeholder="ergonomics-desk-tech"
                   value={catSlug}
                   onChange={(e) => setCatSlug(e.target.value)}
-                  className="w-full px-3 py-2 text-xs font-mono bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
+                  className="w-full px-3 py-2 text-xs font-mono bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
                 />
               </div>
 
@@ -2039,12 +2039,12 @@ function AdminContentBlogPageContent() {
                   placeholder="Brief description of the topic area..."
                   value={catDescription}
                   onChange={(e) => setCatDescription(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
+                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
                 />
               </div>
 
               {/* Collapsible SEO */}
-              <div className="border border-white/[0.08] rounded-xl overflow-hidden">
+              <div className="border border-white/[0.08] rounded-md overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setShowCatSeo(!showCatSeo)}
@@ -2072,7 +2072,7 @@ function AdminContentBlogPageContent() {
                         value={catMetaTitle}
                         onChange={(e) => setCatMetaTitle(e.target.value)}
                         placeholder="Custom SEO title..."
-                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
+                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
                       />
                     </div>
 
@@ -2085,7 +2085,7 @@ function AdminContentBlogPageContent() {
                         value={catMetaDescription}
                         onChange={(e) => setCatMetaDescription(e.target.value)}
                         placeholder="Custom SEO description..."
-                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
+                        className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-cyan-400/50"
                       />
                     </div>
                   </div>
@@ -2096,14 +2096,14 @@ function AdminContentBlogPageContent() {
                 <button
                   type="button"
                   onClick={() => setIsCategoryModalOpen(false)}
-                  className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-transparent hover:bg-white/[0.06] rounded-lg transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-transparent hover:bg-white/[0.06] rounded-md transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={catSaving}
-                  className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 disabled:opacity-50 rounded-lg transition-colors cursor-pointer shadow-sm"
+                  className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 disabled:opacity-50 rounded-md transition-colors cursor-pointer shadow-sm"
                 >
                   {catSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{editingCategory ? "Update Category" : "Create Category"}</span>
@@ -2119,10 +2119,10 @@ function AdminContentBlogPageContent() {
       {/* ========================================================================= */}
       {isTagModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="relative w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-lg p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center text-emerald-400">
+                <div className="w-7 h-7 rounded-md bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center text-emerald-400">
                   <Tag className="w-4 h-4" />
                 </div>
                 <h2 className="text-base font-bold text-white">
@@ -2131,7 +2131,7 @@ function AdminContentBlogPageContent() {
               </div>
               <button
                 onClick={() => setIsTagModalOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -2147,7 +2147,7 @@ function AdminContentBlogPageContent() {
                   placeholder="e.g. Audiophile, GasketMount"
                   value={tagName}
                   onChange={(e) => setTagName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-400/50"
+                  className="w-full px-3 py-2 text-xs bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-400/50"
                   required
                 />
               </div>
@@ -2159,7 +2159,7 @@ function AdminContentBlogPageContent() {
                   placeholder="audiophile"
                   value={tagSlug}
                   onChange={(e) => setTagSlug(e.target.value)}
-                  className="w-full px-3 py-2 text-xs font-mono bg-[#161a26] border border-white/[0.08] rounded-lg text-white placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-400/50"
+                  className="w-full px-3 py-2 text-xs font-mono bg-[#161a26] border border-white/[0.08] rounded-md text-white placeholder:text-slate-500 focus:outline-hidden focus:border-emerald-400/50"
                 />
               </div>
 
@@ -2167,14 +2167,14 @@ function AdminContentBlogPageContent() {
                 <button
                   type="button"
                   onClick={() => setIsTagModalOpen(false)}
-                  className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-transparent hover:bg-white/[0.06] rounded-lg transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-transparent hover:bg-white/[0.06] rounded-md transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={tagSaving}
-                  className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 disabled:opacity-50 rounded-lg transition-colors cursor-pointer shadow-sm"
+                  className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-black bg-emerald-400 hover:bg-emerald-300 disabled:opacity-50 rounded-md transition-colors cursor-pointer shadow-sm"
                 >
                   {tagSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{editingTag ? "Update Tag" : "Create Tag"}</span>
@@ -2190,8 +2190,8 @@ function AdminContentBlogPageContent() {
       {/* ========================================================================= */}
       {deletingPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-lg p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-10 h-10 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div className="text-center space-y-1">
@@ -2205,14 +2205,14 @@ function AdminContentBlogPageContent() {
             <div className="flex items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setDeletingPost(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeletePost}
                 disabled={postDeleting}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 {postDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Confirm Delete</span>
@@ -2224,8 +2224,8 @@ function AdminContentBlogPageContent() {
 
       {deletingCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-lg p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-10 h-10 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div className="text-center space-y-1">
@@ -2239,14 +2239,14 @@ function AdminContentBlogPageContent() {
             <div className="flex items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setDeletingCategory(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteCategory}
                 disabled={catDeleting}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 {catDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Confirm Delete</span>
@@ -2258,8 +2258,8 @@ function AdminContentBlogPageContent() {
 
       {deletingTag && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-lg p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-10 h-10 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div className="text-center space-y-1">
@@ -2273,14 +2273,14 @@ function AdminContentBlogPageContent() {
             <div className="flex items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setDeletingTag(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteTag}
                 disabled={tagDeleting}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 {tagDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Confirm Delete</span>
@@ -2292,8 +2292,8 @@ function AdminContentBlogPageContent() {
 
       {deletingComment && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
-          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-2xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+          <div className="w-full max-w-sm bg-[#0f121b] border border-white/[0.12] rounded-lg p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-10 h-10 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div className="text-center space-y-1">
@@ -2306,14 +2306,14 @@ function AdminContentBlogPageContent() {
             <div className="flex items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setDeletingComment(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-lg transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-300 hover:bg-white/[0.08] rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteComment}
                 disabled={commentDeleting}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md transition-colors cursor-pointer shadow-sm"
               >
                 {commentDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Confirm Delete</span>
@@ -2331,7 +2331,7 @@ export default function AdminContentBlogPage() {
     <React.Suspense
       fallback={
         <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-6 h-6 animate-spin text-amber-400" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#A78BFA]" />
           <p className="text-xs">Loading editorial studio...</p>
         </div>
       }

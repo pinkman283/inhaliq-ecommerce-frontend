@@ -253,7 +253,7 @@ export default function AdminPurchaseOrdersPage() {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           toast.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -264,9 +264,9 @@ export default function AdminPurchaseOrdersPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <FileText className="w-6 h-6" />
           </div>
           <div>
@@ -279,7 +279,7 @@ export default function AdminPurchaseOrdersPage() {
 
         <button
           onClick={openCreateModal}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-bold text-xs flex items-center gap-2 shadow-lg shadow-purple-500/20 transition self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           Draft Purchase Order
@@ -288,26 +288,26 @@ export default function AdminPurchaseOrdersPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Total Spend</span>
-          <span className="text-2xl font-black text-amber-400 font-mono">${stats.total_procurement_spend?.toFixed(2) || "0.00"}</span>
+          <span className="text-2xl font-black text-[#A78BFA] font-mono">${stats.total_procurement_spend?.toFixed(2) || "0.00"}</span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Approved & Open</span>
           <span className="text-2xl font-black text-blue-400 font-mono">{(stats.approved_count || 0) + (stats.partially_received_count || 0)}</span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Pending Approval</span>
           <span className="text-2xl font-black text-amber-300 font-mono">{stats.submitted_count || 0}</span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Fully Received</span>
           <span className="text-2xl font-black text-emerald-400 font-mono">{stats.received_count || 0}</span>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -315,7 +315,7 @@ export default function AdminPurchaseOrdersPage() {
             value={search}
             onChange={e => { setSearch(e.target.value); setPage(1); }}
             placeholder="Search PO number or vendor..."
-            className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
           />
         </div>
 
@@ -324,9 +324,9 @@ export default function AdminPurchaseOrdersPage() {
             <button
               key={st}
               onClick={() => { setStatusFilter(st); setPage(1); }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize whitespace-nowrap transition ${
+              className={`px-3 py-1.5 rounded-md text-xs font-bold capitalize whitespace-nowrap transition ${
                 statusFilter === st 
-                  ? "bg-amber-400 text-black shadow-md" 
+                  ? "bg-[#A78BFA] text-[#090B10] shadow-md" 
                   : "bg-white/5 text-slate-400 hover:bg-white/10 text-slate-300"
               }`}
             >
@@ -337,7 +337,7 @@ export default function AdminPurchaseOrdersPage() {
       </div>
 
       {/* PO Table */}
-      <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+      <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
@@ -355,7 +355,7 @@ export default function AdminPurchaseOrdersPage() {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading purchase orders...
                   </td>
                 </tr>
@@ -383,12 +383,12 @@ export default function AdminPurchaseOrdersPage() {
                       {po.items_count || po.items?.length || 0} line items
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="font-bold text-amber-400 font-mono text-sm block">
+                      <span className="font-bold text-[#A78BFA] font-mono text-sm block">
                         ${po.total_amount.toFixed(2)}
                       </span>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase ${getStatusBadge(po.status)}`}>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold border uppercase ${getStatusBadge(po.status)}`}>
                         {po.status.replace("_", " ")}
                       </span>
                     </td>
@@ -398,7 +398,7 @@ export default function AdminPurchaseOrdersPage() {
                           <button
                             onClick={() => handleSubmitForApproval(po)}
                             title="Submit for Approval"
-                            className="px-2.5 py-1 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 font-bold text-[10px] flex items-center gap-1 border border-amber-400/30"
+                            className="px-2.5 py-1 rounded bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 text-[#A78BFA] font-bold text-[10px] flex items-center gap-1 border border-[#A78BFA]/30"
                           >
                             <Send className="w-3 h-3" />
                             Submit
@@ -408,7 +408,7 @@ export default function AdminPurchaseOrdersPage() {
                           <button
                             onClick={() => handleApprovePo(po)}
                             title="Approve Purchase Order"
-                            className="px-2.5 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 font-bold text-[10px] flex items-center gap-1 border border-blue-500/30"
+                            className="px-2.5 py-1 rounded bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 font-bold text-[10px] flex items-center gap-1 border border-blue-500/30"
                           >
                             <ShieldCheck className="w-3 h-3" />
                             Approve
@@ -417,7 +417,7 @@ export default function AdminPurchaseOrdersPage() {
                         <button
                           onClick={() => openViewPo(po)}
                           title="Inspect PO"
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                          className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 transition"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
@@ -425,7 +425,7 @@ export default function AdminPurchaseOrdersPage() {
                           <button
                             onClick={() => { setSelectedPo(po); setCancelModal(true); }}
                             title="Cancel PO"
-                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition"
+                            className="p-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition"
                           >
                             <Ban className="w-3.5 h-3.5" />
                           </button>
@@ -447,14 +447,14 @@ export default function AdminPurchaseOrdersPage() {
               <button
                 disabled={page <= 1}
                 onClick={() => setPage(p => Math.max(1, p - 1))}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Next
               </button>
@@ -466,9 +466,9 @@ export default function AdminPurchaseOrdersPage() {
       {/* MODAL: Draft Purchase Order */}
       {createModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-3xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-3xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <FileText className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Draft New Purchase Order</h3>
               </div>
@@ -485,7 +485,7 @@ export default function AdminPurchaseOrdersPage() {
                     required
                     value={vendorId}
                     onChange={e => setVendorId(e.target.value)}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   >
                     <option value="">-- Choose Vendor --</option>
                     {vendors.map(v => (
@@ -502,7 +502,7 @@ export default function AdminPurchaseOrdersPage() {
                     required
                     value={orderDate}
                     onChange={e => setOrderDate(e.target.value)}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
                 <div>
@@ -511,7 +511,7 @@ export default function AdminPurchaseOrdersPage() {
                     type="date"
                     value={expectedDate}
                     onChange={e => setExpectedDate(e.target.value)}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
                   />
                 </div>
               </div>
@@ -523,7 +523,7 @@ export default function AdminPurchaseOrdersPage() {
                   <button
                     type="button"
                     onClick={addItemLine}
-                    className="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1"
+                    className="text-[#A78BFA] hover:text-[#B9A3FF] font-bold flex items-center gap-1"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Add Product Line
@@ -532,13 +532,13 @@ export default function AdminPurchaseOrdersPage() {
 
                 <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
                   {items.map((item, idx) => (
-                    <div key={idx} className="bg-[#151824] p-3 rounded-xl border border-white/5 grid grid-cols-12 gap-2 items-center">
+                    <div key={idx} className="bg-[#151824] p-3 rounded-md border border-white/5 grid grid-cols-12 gap-2 items-center">
                       <div className="col-span-6">
                         <select
                           required
                           value={item.product_id}
                           onChange={e => updateItemLine(idx, "product_id", e.target.value)}
-                          className="w-full bg-[#0b0d14] border border-white/10 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-400"
+                          className="w-full bg-[#0b0d14] border border-white/10 rounded-md px-2.5 py-1.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                         >
                           <option value="">-- Choose Product --</option>
                           {allProducts.map(p => (
@@ -558,7 +558,7 @@ export default function AdminPurchaseOrdersPage() {
                           placeholder="Unit Cost $"
                           value={item.unit_cost}
                           onChange={e => updateItemLine(idx, "unit_cost", e.target.value)}
-                          className="w-full bg-[#0b0d14] border border-white/10 rounded-lg px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                          className="w-full bg-[#0b0d14] border border-white/10 rounded-md px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50"
                         />
                       </div>
 
@@ -570,7 +570,7 @@ export default function AdminPurchaseOrdersPage() {
                           placeholder="Qty"
                           value={item.quantity_ordered}
                           onChange={e => updateItemLine(idx, "quantity_ordered", parseInt(e.target.value) || 1)}
-                          className="w-full bg-[#0b0d14] border border-white/10 rounded-lg px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-center"
+                          className="w-full bg-[#0b0d14] border border-white/10 rounded-md px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50 text-center"
                         />
                       </div>
 
@@ -589,7 +589,7 @@ export default function AdminPurchaseOrdersPage() {
               </div>
 
               {/* Cost Breakdown */}
-              <div className="grid grid-cols-2 gap-3 pt-2 bg-[#12141e] p-3.5 rounded-xl border border-white/5">
+              <div className="grid grid-cols-2 gap-3 pt-2 bg-[#12141e] p-3.5 rounded-md border border-white/5">
                 <div>
                   <label className="block text-slate-400 mb-1">Shipping Cost ($)</label>
                   <input
@@ -598,7 +598,7 @@ export default function AdminPurchaseOrdersPage() {
                     min="0"
                     value={shippingCost}
                     onChange={e => setShippingCost(e.target.value)}
-                    className="w-full bg-[#181b28] border border-white/10 rounded-lg px-2.5 py-1.5 text-white font-mono"
+                    className="w-full bg-[#181b28] border border-white/10 rounded-md px-2.5 py-1.5 text-white font-mono"
                   />
                 </div>
                 <div>
@@ -609,28 +609,28 @@ export default function AdminPurchaseOrdersPage() {
                     min="0"
                     value={taxAmount}
                     onChange={e => setTaxAmount(e.target.value)}
-                    className="w-full bg-[#181b28] border border-white/10 rounded-lg px-2.5 py-1.5 text-white font-mono"
+                    className="w-full bg-[#181b28] border border-white/10 rounded-md px-2.5 py-1.5 text-white font-mono"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-between items-center bg-[#151824] p-3 rounded-xl font-bold">
+              <div className="flex justify-between items-center bg-[#151824] p-3 rounded-md font-bold">
                 <span className="text-slate-300">Total Purchase Commitment:</span>
-                <span className="text-amber-400 font-mono text-base">${totalAmount.toFixed(2)}</span>
+                <span className="text-[#A78BFA] font-mono text-base">${totalAmount.toFixed(2)}</span>
               </div>
 
               <div className="flex items-center gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setCreateModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold shadow-lg shadow-amber-400/20"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold shadow-lg shadow-purple-500/20"
                 >
                   {isSubmitting ? "Drafting..." : "Create Draft PO"}
                 </button>
@@ -643,9 +643,9 @@ export default function AdminPurchaseOrdersPage() {
       {/* MODAL: View Purchase Order Details */}
       {viewModal && selectedPo && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-2xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-2xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <FileText className="w-5 h-5" />
                 <div>
                   <h3 className="text-base font-bold text-white">{selectedPo.po_number}</h3>
@@ -658,10 +658,10 @@ export default function AdminPurchaseOrdersPage() {
             </div>
 
             {/* Status Banner */}
-            <div className="flex items-center justify-between bg-[#151824] p-3.5 rounded-xl border border-white/10">
+            <div className="flex items-center justify-between bg-[#151824] p-3.5 rounded-md border border-white/10">
               <div>
                 <span className="text-slate-400 block text-[10px] uppercase font-bold">Lifecycle Status</span>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase mt-1 ${getStatusBadge(selectedPo.status)}`}>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold border uppercase mt-1 ${getStatusBadge(selectedPo.status)}`}>
                   {selectedPo.status.replace("_", " ")}
                 </span>
               </div>
@@ -674,7 +674,7 @@ export default function AdminPurchaseOrdersPage() {
             {/* Line Items Progress Table */}
             <div className="space-y-2">
               <h4 className="font-bold text-white uppercase text-[11px]">Ordered Items Fulfillment</h4>
-              <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5">
+              <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5">
                 {selectedPo.items?.map(it => (
                   <div key={it.id} className="p-3 flex items-center justify-between gap-3">
                     <div className="flex-1">
@@ -703,7 +703,7 @@ export default function AdminPurchaseOrdersPage() {
       {/* MODAL: Cancel PO Confirmation */}
       {cancelModal && selectedPo && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95 text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95 text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2 text-rose-400">
                 <Ban className="w-5 h-5" />
@@ -715,7 +715,7 @@ export default function AdminPurchaseOrdersPage() {
             </div>
 
             <p className="text-slate-300">
-              Are you sure you want to cancel PO <span className="font-mono text-amber-400 font-bold">{selectedPo.po_number}</span>?
+              Are you sure you want to cancel PO <span className="font-mono text-[#A78BFA] font-bold">{selectedPo.po_number}</span>?
             </p>
 
             <form onSubmit={handleCancelPo} className="space-y-3">
@@ -727,7 +727,7 @@ export default function AdminPurchaseOrdersPage() {
                   value={cancellationReason}
                   onChange={e => setCancellationReason(e.target.value)}
                   placeholder="e.g. Vendor out of stock, Price renegotiation failed"
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-amber-400 text-xs"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md p-3 text-white focus:outline-none focus:border-[#A78BFA]/50 text-xs"
                 />
               </div>
 
@@ -735,13 +735,13 @@ export default function AdminPurchaseOrdersPage() {
                 <button
                   type="button"
                   onClick={() => setCancelModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Keep PO
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold shadow-lg shadow-rose-500/20"
+                  className="flex-1 py-2.5 rounded-md bg-rose-500 hover:bg-rose-600 text-white font-bold shadow-lg shadow-rose-500/20"
                 >
                   Confirm Cancellation
                 </button>

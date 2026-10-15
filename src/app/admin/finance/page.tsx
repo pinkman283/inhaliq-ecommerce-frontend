@@ -110,7 +110,7 @@ export default function AdminFinancePage() {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           toast.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -121,9 +121,9 @@ export default function AdminFinancePage() {
       )}
 
       {/* Header with Date Filter */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
@@ -136,7 +136,7 @@ export default function AdminFinancePage() {
 
         {/* Period Selector & Export Buttons */}
         <div className="flex flex-wrap items-center gap-2.5">
-          <div className="flex items-center bg-[#151824] p-1 rounded-xl border border-white/10 text-xs font-bold">
+          <div className="flex items-center bg-[#151824] p-1 rounded-md border border-white/10 text-xs font-bold">
             {[
               { id: "today", label: "Today" },
               { id: "this_week", label: "This Week" },
@@ -148,9 +148,9 @@ export default function AdminFinancePage() {
               <button
                 key={p.id}
                 onClick={() => setPeriod(p.id)}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-md transition ${
                   period === p.id 
-                    ? "bg-amber-400 text-black shadow-md" 
+                    ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20" 
                     : "text-slate-400 hover:text-white"
                 }`}
               >
@@ -162,14 +162,14 @@ export default function AdminFinancePage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => handleExport("pnl")}
-              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
+              className="px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
             >
-              <Download className="w-3.5 h-3.5 text-amber-400" />
+              <Download className="w-3.5 h-3.5 text-[#A78BFA]" />
               Export P&L
             </button>
             <button
               onClick={() => handleExport("sales")}
-              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
+              className="px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
               Export Ledger
@@ -182,9 +182,9 @@ export default function AdminFinancePage() {
       <div className="flex items-center gap-2 border-b border-white/10 pb-2 text-xs font-bold">
         <button
           onClick={() => setActiveTab("pnl")}
-          className={`px-4 py-2 rounded-xl transition flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-md transition flex items-center gap-2 ${
             activeTab === "pnl"
-              ? "bg-amber-400 text-black shadow-md"
+              ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
@@ -193,9 +193,9 @@ export default function AdminFinancePage() {
         </button>
         <button
           onClick={() => setActiveTab("products")}
-          className={`px-4 py-2 rounded-xl transition flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-md transition flex items-center gap-2 ${
             activeTab === "products"
-              ? "bg-amber-400 text-black shadow-md"
+              ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
@@ -204,9 +204,9 @@ export default function AdminFinancePage() {
         </button>
         <button
           onClick={() => setActiveTab("vendors")}
-          className={`px-4 py-2 rounded-xl transition flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-md transition flex items-center gap-2 ${
             activeTab === "vendors"
-              ? "bg-amber-400 text-black shadow-md"
+              ? "bg-[#A78BFA] text-[#090B10] shadow-md shadow-[#A78BFA]/20"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
@@ -224,7 +224,7 @@ export default function AdminFinancePage() {
             {/* 1. Net Sales Revenue */}
             <div 
               onClick={() => openDrilldown("sales")}
-              className="bg-[#0d0f18] p-5 rounded-2xl border border-white/10 hover:border-emerald-500/40 cursor-pointer transition space-y-2 group shadow-lg"
+              className="bg-[#0d0f18] p-5 rounded-md border border-white/10 hover:border-emerald-500/40 cursor-pointer transition space-y-2 group shadow-lg"
             >
               <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
                 <span>Net Sales Revenue</span>
@@ -244,27 +244,27 @@ export default function AdminFinancePage() {
             {/* 2. Cost of Goods Sold (FIFO) */}
             <div 
               onClick={() => openDrilldown("cogs")}
-              className="bg-[#0d0f18] p-5 rounded-2xl border border-white/10 hover:border-amber-500/40 cursor-pointer transition space-y-2 group shadow-lg"
+              className="bg-[#0d0f18] p-5 rounded-md border border-white/10 hover:border-[#A78BFA]/40 cursor-pointer transition space-y-2 group shadow-lg"
             >
               <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
                 <span>FIFO Cost of Goods Sold</span>
-                <span className="text-[10px] text-amber-400 group-hover:underline flex items-center gap-0.5">
+                <span className="text-[10px] text-[#A78BFA] group-hover:underline flex items-center gap-0.5">
                   Drill Down <ArrowUpRight className="w-3 h-3" />
                 </span>
               </div>
-              <div className="text-3xl font-black text-amber-400 font-mono">
+              <div className="text-3xl font-black text-[#A78BFA] font-mono">
                 ${m?.cogs?.toFixed(2) || "0.00"}
               </div>
               <div className="flex justify-between text-[11px] text-slate-400 pt-1 border-t border-white/5">
                 <span>Gross Profit: ${m?.gross_profit?.toFixed(2) || "0.00"}</span>
-                <span className="text-amber-400 font-bold">{m?.gross_margin_percentage || 0}% Margin</span>
+                <span className="text-[#A78BFA] font-bold">{m?.gross_margin_percentage || 0}% Margin</span>
               </div>
             </div>
 
             {/* 3. Operating Expenses */}
             <div 
               onClick={() => openDrilldown("expenses")}
-              className="bg-[#0d0f18] p-5 rounded-2xl border border-white/10 hover:border-rose-500/40 cursor-pointer transition space-y-2 group shadow-lg"
+              className="bg-[#0d0f18] p-5 rounded-md border border-white/10 hover:border-rose-500/40 cursor-pointer transition space-y-2 group shadow-lg"
             >
               <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
                 <span>Operating Overhead</span>
@@ -282,7 +282,7 @@ export default function AdminFinancePage() {
             </div>
 
             {/* 4. Net Operating Profit */}
-            <div className="bg-[#0d0f18] p-5 rounded-2xl border border-white/10 space-y-2 shadow-lg relative overflow-hidden">
+            <div className="bg-[#0d0f18] p-5 rounded-md border border-white/10 space-y-2 shadow-lg relative overflow-hidden">
               <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
                 <span>Net Operating Profit</span>
                 <span className={`text-xs font-black font-mono ${
@@ -303,10 +303,10 @@ export default function AdminFinancePage() {
           </div>
 
           {/* Income Statement Waterfall Table */}
-          <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+          <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
             <div className="p-4 bg-[#151824] border-b border-white/10 flex items-center justify-between">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-amber-400" />
+                <BarChart3 className="w-4 h-4 text-[#A78BFA]" />
                 Traceable Income Statement Breakdown
               </h3>
               <span className="text-xs text-slate-400 font-mono">
@@ -357,16 +357,16 @@ export default function AdminFinancePage() {
                   <span className="font-bold text-slate-300 block">Less: Cost of Goods Sold (FIFO Acquisition Cost)</span>
                   <span className="text-[10px] text-slate-400">Exact procurement layer cost of sold units (excl. unsold inventory)</span>
                 </div>
-                <span className="text-sm font-bold font-mono text-amber-400">-${m?.cogs?.toFixed(2) || "0.00"}</span>
+                <span className="text-sm font-bold font-mono text-[#A78BFA]">-${m?.cogs?.toFixed(2) || "0.00"}</span>
               </div>
 
               {/* Gross Profit */}
-              <div className="p-4 flex items-center justify-between bg-amber-500/[0.03] font-bold">
+              <div className="p-4 flex items-center justify-between bg-[#211B32]/40 font-bold">
                 <div>
-                  <span className="text-amber-300 text-sm block">= Gross Profit</span>
+                  <span className="text-[#A78BFA] text-sm block">= Gross Profit</span>
                   <span className="text-[10px] text-slate-400 font-normal">Gross Margin: {m?.gross_margin_percentage || 0}%</span>
                 </div>
-                <span className="text-base font-black font-mono text-amber-400">${m?.gross_profit?.toFixed(2) || "0.00"}</span>
+                <span className="text-base font-black font-mono text-[#A78BFA]">${m?.gross_profit?.toFixed(2) || "0.00"}</span>
               </div>
 
               {/* Operating Expenses */}
@@ -397,14 +397,14 @@ export default function AdminFinancePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Sales Channel Economics */}
-            <div className="bg-[#0d0f18] p-5 rounded-2xl border border-white/10 space-y-4">
+            <div className="bg-[#0d0f18] p-5 rounded-md border border-white/10 space-y-4">
               <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                <Coins className="w-4 h-4 text-amber-400" />
+                <Coins className="w-4 h-4 text-[#A78BFA]" />
                 Channel Contribution
               </h4>
 
               <div className="space-y-3 text-xs">
-                <div className="bg-[#151824] p-3.5 rounded-xl border border-white/5 flex items-center justify-between">
+                <div className="bg-[#151824] p-3.5 rounded-md border border-white/5 flex items-center justify-between">
                   <div>
                     <span className="font-bold text-white block">Online eCommerce Storefront</span>
                     <span className="text-[10px] text-slate-400">{summary?.channels?.online?.orders_count || 0} orders</span>
@@ -414,7 +414,7 @@ export default function AdminFinancePage() {
                   </span>
                 </div>
 
-                <div className="bg-[#151824] p-3.5 rounded-xl border border-white/5 flex items-center justify-between">
+                <div className="bg-[#151824] p-3.5 rounded-md border border-white/5 flex items-center justify-between">
                   <div>
                     <span className="font-bold text-white block">In-Store POS Retail Terminal</span>
                     <span className="text-[10px] text-slate-400">{summary?.channels?.pos?.orders_count || 0} checkout sales</span>
@@ -427,7 +427,7 @@ export default function AdminFinancePage() {
             </div>
 
             {/* Operating Expense Distribution */}
-            <div className="bg-[#0d0f18] p-5 rounded-2xl border border-white/10 space-y-4">
+            <div className="bg-[#0d0f18] p-5 rounded-md border border-white/10 space-y-4">
               <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                 <PieChart className="w-4 h-4 text-rose-400" />
                 Expense Distribution by Category
@@ -435,7 +435,7 @@ export default function AdminFinancePage() {
 
               <div className="space-y-2 text-xs max-h-48 overflow-y-auto pr-1">
                 {summary?.expense_categories?.map(ec => (
-                  <div key={ec.category_id} className="bg-[#151824] p-2.5 rounded-xl border border-white/5 flex items-center justify-between">
+                  <div key={ec.category_id} className="bg-[#151824] p-2.5 rounded-md border border-white/5 flex items-center justify-between">
                     <div>
                       <span className="font-bold text-white block">{ec.category_name}</span>
                       <span className="text-[10px] text-slate-400">{ec.count} expense vouchers</span>
@@ -453,10 +453,10 @@ export default function AdminFinancePage() {
 
       {/* TAB 2: Product Profitability & Margins */}
       {activeTab === "products" && (
-        <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+        <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
           <div className="p-4 bg-[#151824] border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 text-amber-400" />
+              <Layers className="w-4 h-4 text-[#A78BFA]" />
               Product-Level Gross Margins & Profit Contribution
             </h3>
           </div>
@@ -495,7 +495,7 @@ export default function AdminFinancePage() {
                       <td className="py-3.5 px-4 font-mono font-bold text-white">
                         ${p.net_revenue.toFixed(2)}
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-amber-400">
+                      <td className="py-3.5 px-4 font-mono text-[#A78BFA]">
                         ${p.cogs.toFixed(2)}
                       </td>
                       <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
@@ -506,7 +506,7 @@ export default function AdminFinancePage() {
                           p.gross_margin_percentage >= 40 
                             ? "text-emerald-400 bg-emerald-500/10" 
                             : p.gross_margin_percentage >= 20 
-                            ? "text-amber-400 bg-amber-500/10" 
+                            ? "text-[#A78BFA] bg-[#211B32]" 
                             : "text-rose-400 bg-rose-500/10"
                         }`}>
                           {p.gross_margin_percentage}%
@@ -529,10 +529,10 @@ export default function AdminFinancePage() {
 
       {/* TAB 3: Vendor Spend & Analytics */}
       {activeTab === "vendors" && (
-        <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+        <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
           <div className="p-4 bg-[#151824] border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Truck className="w-4 h-4 text-amber-400" />
+              <Truck className="w-4 h-4 text-[#A78BFA]" />
               Vendor Procurement Volume & Unit Economics
             </h3>
           </div>
@@ -563,7 +563,7 @@ export default function AdminFinancePage() {
                       <td className="py-3.5 px-4 font-bold text-white">
                         {v.name}
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-amber-400 font-bold">
+                      <td className="py-3.5 px-4 font-mono text-[#A78BFA] font-bold">
                         {v.vendor_code}
                       </td>
                       <td className="py-3.5 px-4 font-mono font-bold text-amber-400 text-sm">
@@ -593,9 +593,9 @@ export default function AdminFinancePage() {
       {/* MODAL: 100% Traceable Metric Drilldown */}
       {drilldownModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-4xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-4xl p-6 space-y-5 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <Eye className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white capitalize">
                   {drilldownMetric === "sales" ? "Sales Revenue Traceability" : drilldownMetric === "cogs" ? "FIFO Cost Layer Audit Traceability" : "Operating Expense Ledger Traceability"}
@@ -608,7 +608,7 @@ export default function AdminFinancePage() {
 
             {drilldownLoading ? (
               <div className="py-16 text-center text-slate-400">
-                <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                 Drilling down into individual ledger entries...
               </div>
             ) : !drilldownData || drilldownData.data?.length === 0 ? (
@@ -618,7 +618,7 @@ export default function AdminFinancePage() {
             ) : (
               <div className="space-y-3">
                 {drilldownMetric === "expenses" ? (
-                  <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5">
+                  <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5">
                     {drilldownData.data.map((exp: any) => (
                       <div key={exp.id} className="p-3 flex items-center justify-between">
                         <div>
@@ -634,25 +634,25 @@ export default function AdminFinancePage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-[#151824] rounded-xl border border-white/10 divide-y divide-white/5">
+                  <div className="bg-[#151824] rounded-md border border-white/10 divide-y divide-white/5">
                     {drilldownData.data.map((ord: any) => (
                       <div key={ord.id} className="p-3.5 space-y-2">
                         <div className="flex items-center justify-between">
                           <div>
                             <span className="font-bold text-white font-mono">{ord.order_number}</span>
                             <span className="text-[10px] text-slate-400 ml-2">
-                              Source: <strong className="uppercase text-amber-300">{ord.order_source}</strong> | Customer: {ord.customer_name}
+                              Source: <strong className="uppercase text-[#A78BFA]">{ord.order_source}</strong> | Customer: {ord.customer_name}
                             </span>
                           </div>
                           <div className="text-right font-mono">
                             <span className="font-bold text-emerald-400 block">${parseFloat(ord.total_amount).toFixed(2)}</span>
-                            <span className="text-[10px] text-amber-400">COGS: ${parseFloat(ord.cogs_amount).toFixed(2)}</span>
+                            <span className="text-[10px] text-[#A78BFA]">COGS: ${parseFloat(ord.cogs_amount).toFixed(2)}</span>
                           </div>
                         </div>
 
                         {/* Order Item Cost Layers */}
                         {ord.items && ord.items.length > 0 && (
-                          <div className="bg-[#0b0d14] p-2.5 rounded-lg border border-white/5 space-y-1">
+                          <div className="bg-[#0b0d14] p-2.5 rounded-md border border-white/5 space-y-1">
                             {ord.items.map((it: any) => (
                               <div key={it.id} className="flex justify-between text-[11px] text-slate-300">
                                 <span>{it.quantity}x {it.product_name}</span>

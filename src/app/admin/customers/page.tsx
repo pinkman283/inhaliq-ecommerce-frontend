@@ -402,7 +402,7 @@ function AdminCustomersContent() {
         actions={
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-semibold rounded-lg shadow-sm transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-semibold rounded-md shadow-sm transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>New Customer</span>
@@ -411,7 +411,7 @@ function AdminCustomersContent() {
       />
 
       {/* Search and Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#0f121b] p-3.5 rounded-xl border border-white/[0.08]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#0f121b] p-3.5 rounded-md border border-white/[0.08]">
         <div className="relative lg:col-span-1">
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -420,7 +420,7 @@ function AdminCustomersContent() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && loadCustomers()}
-            className="w-full bg-[#161a26] border border-white/[0.08] focus:border-amber-400/50 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none transition"
+            className="w-full bg-[#161a26] border border-white/[0.08] focus:border-[#A78BFA]/50 rounded-md pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none transition"
           />
         </div>
 
@@ -471,7 +471,7 @@ function AdminCustomersContent() {
       />
 
       {/* Main Customers Table */}
-      <div className="p-4 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-3 shadow-sm">
+      <div className="p-4 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-3 shadow-sm">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Customer Records ({customers.length})</h2>
         </div>
@@ -501,7 +501,7 @@ function AdminCustomersContent() {
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-500">
                     <div className="inline-flex items-center gap-2">
-                      <RefreshCw className="w-4 h-4 animate-spin text-amber-400" />
+                      <RefreshCw className="w-4 h-4 animate-spin text-[#A78BFA]" />
                       <span>Loading customer intelligence...</span>
                     </div>
                   </td>
@@ -527,7 +527,7 @@ function AdminCustomersContent() {
                     <tr
                       key={c.id}
                       className={`transition-colors group ${
-                        isSelected ? "bg-amber-500/10" : "hover:bg-white/[0.02]"
+                        isSelected ? "bg-[#211B32]" : "hover:bg-white/[0.02]"
                       }`}
                     >
                       <td className="py-3 px-3 w-10 min-w-[40px] max-w-[40px] text-center" onClick={(e) => e.stopPropagation()}>
@@ -549,12 +549,12 @@ function AdminCustomersContent() {
                             <div className="flex items-center gap-1.5">
                               <button
                                 onClick={() => openCustomerIntelligence(c)}
-                                className="font-semibold text-white hover:text-amber-400 transition-colors text-left block"
+                                className="font-semibold text-white hover:text-[#A78BFA] transition-colors text-left block"
                               >
                                 {c.name}
                               </button>
                               {c.customer_id && (
-                                <span className="font-mono text-[10px] text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/20 leading-none">
+                                <span className="font-mono text-[10px] text-[#A78BFA] bg-[#211B32] px-1.5 py-0.5 rounded border border-[#A78BFA]/30 leading-none">
                                   {c.customer_id}
                                 </span>
                               )}
@@ -576,7 +576,7 @@ function AdminCustomersContent() {
 
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                             riskLevel === "critical" ? "bg-red-500/20 text-red-400 border border-red-500/40" :
                             riskLevel === "high" ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
                             riskLevel === "medium" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" :
@@ -600,7 +600,7 @@ function AdminCustomersContent() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => openCustomerIntelligence(c)}
-                            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-purple-500/10 text-slate-400 hover:text-purple-400 border border-white/5 transition-all"
+                            className="p-1.5 rounded-md bg-white/[0.03] hover:bg-purple-500/10 text-slate-400 hover:text-purple-400 border border-white/5 transition-all"
                             title="Open Customer Intelligence Hub"
                           >
                             <Activity className="w-4 h-4" />
@@ -609,7 +609,7 @@ function AdminCustomersContent() {
                           {c.status === "active" ? (
                             <button
                               onClick={() => setSuspendingCustomer(c)}
-                              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-amber-500/10 text-slate-400 hover:text-amber-400 border border-white/5 transition-all"
+                              className="p-1.5 rounded-md bg-white/[0.03] hover:bg-[#211B32] text-slate-400 hover:text-[#A78BFA] border border-white/5 transition-all"
                               title="Suspend Customer"
                             >
                               <Lock className="w-4 h-4" />
@@ -617,7 +617,7 @@ function AdminCustomersContent() {
                           ) : (
                             <button
                               onClick={() => handleReactivateCustomer(c)}
-                              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-400 border border-white/5 transition-all"
+                              className="p-1.5 rounded-md bg-white/[0.03] hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-400 border border-white/5 transition-all"
                               title="Reactivate Customer"
                             >
                               <Unlock className="w-4 h-4" />
@@ -627,7 +627,7 @@ function AdminCustomersContent() {
                           {c.status !== "blocked" ? (
                             <button
                               onClick={() => handleBlockCustomer(c)}
-                              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/5 transition-all"
+                              className="p-1.5 rounded-md bg-white/[0.03] hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/5 transition-all"
                               title="Block Customer Account"
                             >
                               <Ban className="w-4 h-4" />
@@ -635,7 +635,7 @@ function AdminCustomersContent() {
                           ) : (
                             <button
                               onClick={() => handleUnblockCustomer(c)}
-                              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-400 border border-white/5 transition-all"
+                              className="p-1.5 rounded-md bg-white/[0.03] hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-400 border border-white/5 transition-all"
                               title="Unblock Customer Account"
                             >
                               <ShieldCheck className="w-4 h-4" />
@@ -645,7 +645,7 @@ function AdminCustomersContent() {
                           {canDeleteCustomer && (
                             <button
                               onClick={() => handleDeleteCustomer(c)}
-                              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/5 transition-all"
+                              className="p-1.5 rounded-md bg-white/[0.03] hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/5 transition-all"
                               title="Delete Customer Account"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -665,7 +665,7 @@ function AdminCustomersContent() {
       {/* Customer Intelligence Drawer / Modal */}
       {selectedCustomer && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-lg w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             {/* Drawer Header */}
             <div className="flex items-center justify-between p-5 border-b border-white/[0.08] bg-white/[0.01] shrink-0">
               <div className="flex items-center gap-3">
@@ -678,7 +678,7 @@ function AdminCustomersContent() {
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold text-white text-base">{selectedCustomer.name}</h3>
                     {selectedCustomer.customer_id && (
-                      <span className="font-mono text-xs text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">
+                      <span className="font-mono text-xs text-[#A78BFA] bg-[#211B32] px-2 py-0.5 rounded border border-[#A78BFA]/30">
                         {selectedCustomer.customer_id}
                       </span>
                     )}
@@ -696,7 +696,7 @@ function AdminCustomersContent() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setSelectedCustomer(null)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                  className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition-all"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -716,7 +716,7 @@ function AdminCustomersContent() {
                   onClick={() => setActiveDrawerTab(t.id as any)}
                   className={`flex items-center gap-2 py-2 px-3.5 border-b-2 transition-all ${
                     activeDrawerTab === t.id
-                      ? "border-amber-400 text-amber-300 bg-amber-400/5 rounded-t-lg font-semibold"
+                      ? "border-[#A78BFA] text-[#A78BFA] bg-[#211B32] rounded-t-md font-semibold"
                       : "border-transparent text-slate-400 hover:text-slate-200"
                   }`}
                 >
@@ -740,25 +740,25 @@ function AdminCustomersContent() {
                     <div className="space-y-5">
                       {/* Metric KPI Cards */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                        <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Total Orders</span>
                           <p className="text-lg font-mono font-bold text-white">{selectedCustomer.risk_metrics?.total_orders ?? selectedCustomer.orders_count ?? 0}</p>
                           <span className="text-[10px] text-emerald-400">{selectedCustomer.risk_metrics?.completed_orders ?? 0} Completed</span>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                        <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Cancellations</span>
                           <p className="text-lg font-mono font-bold text-red-400">{selectedCustomer.risk_metrics?.cancelled_orders ?? 0}</p>
                           <span className="text-[10px] text-slate-400">{selectedCustomer.risk_metrics?.cancellation_rate ?? 0}% Rate</span>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                        <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Total Spent</span>
                           <p className="text-lg font-mono font-bold text-emerald-400">{formatPrice(selectedCustomer.risk_metrics?.total_spent ?? selectedCustomer.total_spent ?? 0)}</p>
                           <span className="text-[10px] text-slate-400">AOV: {formatPrice(selectedCustomer.risk_metrics?.aov ?? 0)}</span>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                        <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Recent Velocity</span>
                           <p className="text-lg font-mono font-bold text-amber-400">{selectedCustomer.risk_metrics?.cancellations_24h ?? 0}</p>
                           <span className="text-[10px] text-slate-400">Cancels in 24h</span>
@@ -766,14 +766,14 @@ function AdminCustomersContent() {
                       </div>
 
                       {/* Transparent Risk Assessment Card */}
-                      <div className="p-4 rounded-2xl bg-gradient-to-br from-red-500/5 via-white/[0.02] to-transparent border border-red-500/20 space-y-3">
+                      <div className="p-4 rounded-md bg-gradient-to-br from-red-500/5 via-white/[0.02] to-transparent border border-red-500/20 space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <ShieldAlert className="w-5 h-5 text-red-400" />
                             <h4 className="font-bold text-white text-sm">Transparent Risk Scoring Engine</h4>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ${
+                            <span className={`px-2.5 py-0.5 rounded text-xs font-bold uppercase ${
                               selectedCustomer.risk_analysis?.level === "critical" ? "bg-red-500/20 text-red-400 border border-red-500/40" :
                               selectedCustomer.risk_analysis?.level === "high" ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
                               selectedCustomer.risk_analysis?.level === "medium" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" :
@@ -781,7 +781,7 @@ function AdminCustomersContent() {
                             }`}>
                               Risk Level: {selectedCustomer.risk_analysis?.level ?? selectedCustomer.risk_level ?? "LOW"}
                             </span>
-                            <span className="font-mono text-xs text-white font-bold bg-white/10 px-2 py-0.5 rounded-full">
+                            <span className="font-mono text-xs text-white font-bold bg-white/10 px-2 py-0.5 rounded">
                               {selectedCustomer.risk_analysis?.score ?? selectedCustomer.risk_score ?? 0} / 100
                             </span>
                           </div>
@@ -799,14 +799,14 @@ function AdminCustomersContent() {
                           </ul>
                         </div>
 
-                        <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-300">
+                        <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 text-[11px] text-slate-300">
                           <strong className="text-purple-300">Staff Recommendation: </strong>
                           {selectedCustomer.risk_analysis?.recommendation || "Account in good standing with standard transaction history."}
                         </div>
                       </div>
 
                       {/* Internal Security Notes */}
-                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+                      <div className="p-4 rounded-md bg-white/[0.02] border border-white/5 space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-white flex items-center gap-2">
                             <FileText className="w-3.5 h-3.5 text-slate-400" />
@@ -815,7 +815,7 @@ function AdminCustomersContent() {
                           <button
                             onClick={handleSaveNotes}
                             disabled={savingNotes}
-                            className="flex items-center gap-1.5 px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-[11px] font-bold transition-all disabled:opacity-50"
+                            className="flex items-center gap-1.5 px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-md text-[11px] font-bold transition-all disabled:opacity-50"
                           >
                             <Save className="w-3 h-3" />
                             <span>{savingNotes ? "Saving..." : "Save Notes"}</span>
@@ -826,7 +826,7 @@ function AdminCustomersContent() {
                           placeholder="Record investigation notes, phone verification logs, or special handling directives..."
                           value={customerNotes}
                           onChange={(e) => setCustomerNotes(e.target.value)}
-                          className="w-full bg-[#07080c] border border-white/10 rounded-xl p-3 text-white text-xs focus:outline-none focus:border-purple-500/50 resize-none"
+                          className="w-full bg-[#07080c] border border-white/10 rounded-md p-3 text-white text-xs focus:outline-none focus:border-purple-500/50 resize-none"
                         />
                       </div>
                     </div>
@@ -845,7 +845,7 @@ function AdminCustomersContent() {
                       {(!selectedCustomer.ip_history || selectedCustomer.ip_history.length === 0) ? (
                         <p className="text-slate-500 text-xs italic py-8 text-center">No IP telemetry records logged yet.</p>
                       ) : (
-                        <div className="border border-white/5 rounded-xl overflow-hidden">
+                        <div className="border border-white/5 rounded-md overflow-hidden">
                           <table className="w-full text-left text-xs border-collapse">
                             <thead>
                               <tr className="border-b border-white/5 bg-white/[0.01] text-slate-400 font-semibold text-[11px]">
@@ -912,7 +912,7 @@ function AdminCustomersContent() {
                                 item.severity === "warning" ? "bg-amber-500" :
                                 item.severity === "success" ? "bg-emerald-500" : "bg-cyan-500"
                               }`} />
-                              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
                                 <div className="flex items-center justify-between">
                                   <span className="font-bold text-white text-xs">{item.title}</span>
                                   <span className="text-[10px] text-slate-500 font-mono">{formatDate(item.timestamp)} {formatTime(item.timestamp)}</span>
@@ -934,7 +934,7 @@ function AdminCustomersContent() {
                       {(!selectedCustomer.orders || selectedCustomer.orders.length === 0) ? (
                         <p className="text-slate-500 text-xs italic py-8 text-center">No orders found for this customer.</p>
                       ) : (
-                        <div className="border border-white/5 rounded-xl overflow-hidden">
+                        <div className="border border-white/5 rounded-md overflow-hidden">
                           <table className="w-full text-left text-xs border-collapse">
                             <thead>
                               <tr className="border-b border-white/5 bg-white/[0.01] text-slate-400 font-semibold text-[11px]">
@@ -950,7 +950,7 @@ function AdminCustomersContent() {
                                 <tr key={ord.id} className="hover:bg-white/[0.02]">
                                   <td className="py-2.5 px-3 font-mono font-bold text-white">{ord.order_number}</td>
                                   <td className="py-2.5 px-3">
-                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                       ord.order_status === "cancelled" ? "bg-red-500/10 text-red-400" :
                                       ord.order_status === "delivered" ? "bg-emerald-500/10 text-emerald-400" :
                                       "bg-cyan-500/10 text-cyan-400"
@@ -979,7 +979,7 @@ function AdminCustomersContent() {
                 {selectedCustomer.status === "active" ? (
                   <button
                     onClick={() => setSuspendingCustomer(selectedCustomer)}
-                    className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-md bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 text-xs font-bold transition-all flex items-center gap-1.5"
                   >
                     <Lock className="w-3.5 h-3.5" />
                     <span>Suspend Customer</span>
@@ -987,7 +987,7 @@ function AdminCustomersContent() {
                 ) : (
                   <button
                     onClick={() => handleReactivateCustomer(selectedCustomer)}
-                    className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
                   >
                     <Unlock className="w-3.5 h-3.5" />
                     <span>Reactivate Customer</span>
@@ -997,7 +997,7 @@ function AdminCustomersContent() {
                 {selectedCustomer.status !== "blocked" ? (
                   <button
                     onClick={() => handleBlockCustomer(selectedCustomer)}
-                    className="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
                   >
                     <Ban className="w-3.5 h-3.5" />
                     <span>Block Identity</span>
@@ -1005,7 +1005,7 @@ function AdminCustomersContent() {
                 ) : (
                   <button
                     onClick={() => handleUnblockCustomer(selectedCustomer)}
-                    className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>Unblock Identity</span>
@@ -1015,7 +1015,7 @@ function AdminCustomersContent() {
                 {selectedCustomer.status !== "review" && (
                   <button
                     onClick={() => handleFlagReview(selectedCustomer)}
-                    className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-md bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 text-xs font-bold transition-all flex items-center gap-1.5"
                   >
                     <AlertTriangle className="w-3.5 h-3.5" />
                     <span>Flag for Review</span>
@@ -1025,7 +1025,7 @@ function AdminCustomersContent() {
 
               <button
                 onClick={() => setSelectedCustomer(null)}
-                className="px-4 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold transition-all"
+                className="px-4 py-1.5 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs font-semibold transition-all"
               >
                 Close
               </button>
@@ -1037,7 +1037,7 @@ function AdminCustomersContent() {
       {/* Quick Block IP Modal */}
       {quickBlockIp && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b0d14] border border-white/10 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#0b0d14] border border-white/10 rounded-lg w-full max-w-md p-5 space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-white text-sm flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-red-400" />
@@ -1057,7 +1057,7 @@ function AdminCustomersContent() {
                   placeholder="e.g. Excessive abusive cancellations"
                   value={quickBlockReason}
                   onChange={(e) => setQuickBlockReason(e.target.value)}
-                  className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-red-500/50"
+                  className="w-full bg-[#07080c] border border-white/10 rounded-md px-3 py-2 text-white text-xs focus:outline-none focus:border-red-500/50"
                 />
               </div>
 
@@ -1065,14 +1065,14 @@ function AdminCustomersContent() {
                 <button
                   type="button"
                   onClick={() => setQuickBlockIp(null)}
-                  className="px-3 py-1.5 rounded-xl bg-white/[0.04] text-slate-300 text-xs font-semibold"
+                  className="px-3 py-1.5 rounded-md bg-white/[0.04] text-slate-300 text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submittingQuickBlock}
-                  className="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-all disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-md bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-all disabled:opacity-50"
                 >
                   {submittingQuickBlock ? "Blocking..." : "Confirm 7-Day Block"}
                 </button>
@@ -1098,10 +1098,10 @@ function AdminCustomersContent() {
       {/* Create Customer Modal */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b0d14] border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#0b0d14] border border-white/10 rounded-lg w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between p-5 border-b border-white/10 bg-white/[0.02]">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                <div className="p-2 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20">
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
@@ -1111,7 +1111,7 @@ function AdminCustomersContent() {
               </div>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1136,7 +1136,7 @@ function AdminCustomersContent() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="John"
-                    className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#07080c] border border-white/10 rounded-md px-3 py-2 text-white text-xs"
                   />
                 </div>
                 <div>
@@ -1147,7 +1147,7 @@ function AdminCustomersContent() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="Doe"
-                    className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#07080c] border border-white/10 rounded-md px-3 py-2 text-white text-xs"
                   />
                 </div>
               </div>
@@ -1160,7 +1160,7 @@ function AdminCustomersContent() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="john@example.com"
-                  className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3 py-2 text-white text-xs"
+                  className="w-full bg-[#07080c] border border-white/10 rounded-md px-3 py-2 text-white text-xs"
                 />
               </div>
 
@@ -1171,7 +1171,7 @@ function AdminCustomersContent() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min 6 characters"
-                  className="w-full bg-[#07080c] border border-white/10 rounded-xl px-3 py-2 text-white text-xs"
+                  className="w-full bg-[#07080c] border border-white/10 rounded-md px-3 py-2 text-white text-xs"
                 />
               </div>
 
@@ -1179,14 +1179,14 @@ function AdminCustomersContent() {
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white/[0.04] text-slate-300 text-xs font-semibold"
+                  className="px-4 py-2 rounded-md bg-white/[0.04] text-slate-300 text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/20 disabled:opacity-50 transition-all flex items-center gap-2"
+                  className="px-5 py-2 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/20 disabled:opacity-50 transition-all flex items-center gap-2"
                 >
                   {creating && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
                   <span>Create Customer</span>

@@ -125,7 +125,7 @@ function ColorFormDrawerContent({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Midnight Black, Cyber Cyan"
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-hidden transition"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-hidden transition"
           />
         </div>
 
@@ -136,7 +136,7 @@ function ColorFormDrawerContent({
           </label>
           <div className="flex items-center gap-2.5">
             {/* Color Swatch Picker */}
-            <div className="relative w-9 h-9 rounded-lg border border-white/20 overflow-hidden shrink-0 shadow-inner group cursor-pointer">
+            <div className="relative w-9 h-9 rounded-md border border-white/20 overflow-hidden shrink-0 shadow-inner group cursor-pointer">
               <input
                 type="color"
                 value={hex.startsWith("#") ? hex : "#3B82F6"}
@@ -154,7 +154,7 @@ function ColorFormDrawerContent({
               value={hex}
               onChange={(e) => setHex(e.target.value)}
               placeholder="#3B82F6"
-              className="flex-1 h-9 rounded-lg border border-white/10 bg-[#131722] px-3 font-mono text-xs text-white uppercase placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-hidden transition"
+              className="flex-1 h-9 rounded-md border border-white/10 bg-[#131722] px-3 font-mono text-xs text-white uppercase placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-hidden transition"
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ function ColorFormDrawerContent({
         {/* Quick Palette Presets */}
         <div className="space-y-2 pt-2 border-t border-white/[0.04]">
           <div className="flex items-center gap-1.5 text-slate-400">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-[#A78BFA]" />
             <span className="text-[11px] font-semibold uppercase tracking-wider">
               Quick Palette Presets
             </span>
@@ -176,7 +176,7 @@ function ColorFormDrawerContent({
                   setHex(preset.hex);
                   if (!name.trim()) setName(preset.name);
                 }}
-                className="flex items-center gap-2 p-1.5 rounded-lg border border-white/5 hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.06] transition text-left cursor-pointer"
+                className="flex items-center gap-2 p-1.5 rounded-md border border-white/5 hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.06] transition text-left cursor-pointer"
               >
                 <div
                   className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0"
@@ -194,7 +194,7 @@ function ColorFormDrawerContent({
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as "active" | "inactive")}
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-amber-400/50 focus:outline-hidden transition cursor-pointer"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white focus:border-[#A78BFA]/50 focus:outline-hidden transition cursor-pointer"
           >
             <option value="active">Active (Available for variant selection)</option>
             <option value="inactive">Inactive (Hidden from catalog presets)</option>
@@ -209,7 +209,7 @@ function ColorFormDrawerContent({
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             placeholder="0"
-            className="w-full h-9 rounded-lg border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-amber-400/50 focus:outline-hidden transition"
+            className="w-full h-9 rounded-md border border-white/10 bg-[#131722] px-3 text-xs text-white placeholder:text-slate-500 focus:border-[#A78BFA]/50 focus:outline-hidden transition"
           />
         </div>
       </div>
@@ -226,10 +226,10 @@ function ColorFormDrawerContent({
         <button
           type="submit"
           disabled={saving || (editingColor ? !isEditDirty : false)}
-          className={`h-8 px-4 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
+          className={`h-8 px-4 rounded-md text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm ${
             editingColor && !isEditDirty
               ? "bg-white/10 text-slate-500 cursor-not-allowed border border-white/5"
-              : "bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold"
+              : "bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold"
           }`}
         >
           {saving && <Loader2 className="w-3 h-3 animate-spin" />}

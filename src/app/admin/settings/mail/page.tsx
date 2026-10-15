@@ -171,14 +171,14 @@ export default function AdminMailSettingsPage() {
       <SettingsNavTabs />
 
       {loading ? (
-        <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-8 space-y-4 animate-pulse w-full">
+        <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-8 space-y-4 animate-pulse w-full">
           <div className="h-5 w-40 bg-white/5 rounded" />
-          <div className="h-32 bg-white/5 rounded-xl" />
+          <div className="h-32 bg-white/5 rounded-md" />
         </div>
       ) : (
         <div className="space-y-6 w-full">
           {/* SMTP Gateway Credentials */}
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-5 w-full">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-5 w-full">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
               <div className="flex items-center gap-2">
                 <Server className="w-4 h-4 text-sky-400" />
@@ -193,7 +193,7 @@ export default function AdminMailSettingsPage() {
                 <select
                   value={config.MAIL_MAILER || "smtp"}
                   onChange={(e) => handleConfigUpdate("MAIL_MAILER", e.target.value)}
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 >
                   <option value="smtp">SMTP</option>
                   <option value="sendmail">Sendmail</option>
@@ -208,7 +208,7 @@ export default function AdminMailSettingsPage() {
                   value={config.MAIL_HOST || ""}
                   onChange={(e) => handleConfigUpdate("MAIL_HOST", e.target.value)}
                   placeholder="e.g. smtp.mailgun.org or smtp.gmail.com"
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 />
               </div>
 
@@ -219,7 +219,7 @@ export default function AdminMailSettingsPage() {
                   value={config.MAIL_PORT || ""}
                   onChange={(e) => handleConfigUpdate("MAIL_PORT", e.target.value)}
                   placeholder="587"
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 />
               </div>
 
@@ -228,7 +228,7 @@ export default function AdminMailSettingsPage() {
                 <select
                   value={config.MAIL_ENCRYPTION || "tls"}
                   onChange={(e) => handleConfigUpdate("MAIL_ENCRYPTION", e.target.value)}
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 >
                   <option value="tls">TLS</option>
                   <option value="ssl">SSL</option>
@@ -243,7 +243,7 @@ export default function AdminMailSettingsPage() {
                   value={config.MAIL_USERNAME || ""}
                   onChange={(e) => handleConfigUpdate("MAIL_USERNAME", e.target.value)}
                   placeholder="API key or username"
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 />
               </div>
 
@@ -254,7 +254,7 @@ export default function AdminMailSettingsPage() {
                   value={config.MAIL_PASSWORD || ""}
                   onChange={(e) => handleConfigUpdate("MAIL_PASSWORD", e.target.value)}
                   placeholder="••••••••••••••••"
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 />
               </div>
             </div>
@@ -270,7 +270,7 @@ export default function AdminMailSettingsPage() {
                   value={config.MAIL_FROM_ADDRESS || ""}
                   onChange={(e) => handleConfigUpdate("MAIL_FROM_ADDRESS", e.target.value)}
                   placeholder="noreply@yourdomain.com"
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 />
               </div>
               <div>
@@ -285,18 +285,18 @@ export default function AdminMailSettingsPage() {
                   value={config.MAIL_FROM_NAME || ""}
                   onChange={(e) => handleConfigUpdate("MAIL_FROM_NAME", e.target.value)}
                   placeholder="e.g. INHALIQ"
-                  className="w-full bg-[#141824] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  className="w-full bg-[#141824] border border-white/10 rounded-md px-3.5 py-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                 />
               </div>
             </div>
           </div>
 
           {/* Minimal Full-Width Sender Routing Table */}
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-2xl p-6 space-y-4 w-full">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-md p-6 space-y-4 w-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3 border-b border-white/[0.06]">
               <div>
                 <div className="flex items-center gap-2">
-                  <AtSign className="w-4 h-4 text-amber-400" />
+                  <AtSign className="w-4 h-4 text-[#A78BFA]" />
                   <h3 className="text-sm font-semibold text-white">Email Sender Routing</h3>
                 </div>
                 <p className="text-[11px] text-slate-400 mt-0.5">
@@ -335,7 +335,7 @@ export default function AdminMailSettingsPage() {
                         {/* Event Name */}
                         <td className="py-3.5 px-4 align-middle">
                           <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-lg bg-white/5 text-slate-300">
+                            <div className="p-2 rounded-md bg-white/5 text-slate-300">
                               <Icon className="w-4 h-4" />
                             </div>
                             <div>
@@ -352,7 +352,7 @@ export default function AdminMailSettingsPage() {
                             value={sender.address || ""}
                             onChange={(e) => handleSenderUpdate(item.key, "address", e.target.value)}
                             placeholder={`${item.emailPrefix}@... (or inherit)`}
-                            className={`w-full bg-[#141824] border rounded-xl px-3 py-2 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors ${
+                            className={`w-full bg-[#141824] border rounded-md px-3 py-2 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors ${
                               sender.address ? "border-amber-500/40 text-amber-300" : "border-white/10"
                             }`}
                           />
@@ -365,7 +365,7 @@ export default function AdminMailSettingsPage() {
                             value={sender.name || ""}
                             onChange={(e) => handleSenderUpdate(item.key, "name", e.target.value)}
                             placeholder={`${defaultName} ${item.nameSuffix}`}
-                            className="w-full bg-[#141824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                            className="w-full bg-[#141824] border border-white/10 rounded-md px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                           />
                         </td>
 
@@ -376,7 +376,7 @@ export default function AdminMailSettingsPage() {
                             value={sender.reply_to || ""}
                             onChange={(e) => handleSenderUpdate(item.key, "reply_to", e.target.value)}
                             placeholder="support@... (optional)"
-                            className="w-full bg-[#141824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-amber-400 transition-colors"
+                            className="w-full bg-[#141824] border border-white/10 rounded-md px-3 py-2 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50 transition-colors"
                           />
                         </td>
 
@@ -387,7 +387,7 @@ export default function AdminMailSettingsPage() {
                               type="button"
                               onClick={() => handleResetSender(item.key)}
                               title="Reset to inherit default"
-                              className="p-1.5 text-slate-500 hover:text-rose-400 transition-colors rounded-lg hover:bg-white/5 cursor-pointer"
+                              className="p-1.5 text-slate-500 hover:text-rose-400 transition-colors rounded-md hover:bg-white/5 cursor-pointer"
                             >
                               <RotateCcw className="w-3.5 h-3.5" />
                             </button>

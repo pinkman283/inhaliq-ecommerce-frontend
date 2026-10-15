@@ -165,7 +165,7 @@ export default function AdminInventoryValuationPage() {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
+        <div className={`p-4 rounded-md text-sm font-semibold flex items-center gap-3 border shadow-lg animate-in fade-in slide-in-from-top-2 ${
           toast.type === "success" 
             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" 
             : "bg-rose-500/10 border-rose-500/30 text-rose-300"
@@ -176,9 +176,9 @@ export default function AdminInventoryValuationPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-2xl border border-white/10 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d0f18] p-5 rounded-md border border-white/10 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-md">
             <Boxes className="w-6 h-6" />
           </div>
           <div>
@@ -192,7 +192,7 @@ export default function AdminInventoryValuationPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={openAdjustModal}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition"
+            className="px-4 py-2.5 rounded-md bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] hover:from-[#B9A3FF] hover:to-[#A78BFA] text-[#090B10] font-bold text-xs flex items-center gap-2 shadow-lg shadow-purple-500/20 transition"
           >
             <SlidersHorizontal className="w-4 h-4" />
             Manual Stock Adjustment
@@ -202,23 +202,23 @@ export default function AdminInventoryValuationPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Total Warehouse Units</span>
           <span className="text-2xl font-black text-white font-mono">{valuationSummary.total_units || 0}</span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">FIFO Asset Cost</span>
-          <span className="text-2xl font-black text-amber-400 font-mono">
+          <span className="text-2xl font-black text-[#A78BFA] font-mono">
             ${valuationSummary.total_asset_valuation?.toFixed(2) || "0.00"}
           </span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Potential Retail Value</span>
           <span className="text-2xl font-black text-emerald-400 font-mono">
             ${valuationSummary.total_potential_retail_value?.toFixed(2) || "0.00"}
           </span>
         </div>
-        <div className="bg-[#0d0f18] p-4 rounded-xl border border-white/10">
+        <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10">
           <span className="text-xs text-slate-400 font-bold uppercase block">Low / Out of Stock</span>
           <span className="text-2xl font-black text-rose-400 font-mono">
             {(valuationSummary.low_stock_count || 0) + (valuationSummary.out_of_stock_count || 0)}
@@ -230,9 +230,9 @@ export default function AdminInventoryValuationPage() {
       <div className="flex items-center gap-2 border-b border-white/10 pb-2">
         <button
           onClick={() => setActiveTab("valuation")}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 ${
             activeTab === "valuation"
-              ? "bg-amber-400 text-black shadow-md"
+              ? "bg-[#A78BFA] text-[#090B10] shadow-md"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
@@ -241,9 +241,9 @@ export default function AdminInventoryValuationPage() {
         </button>
         <button
           onClick={() => setActiveTab("ledger")}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-md text-xs font-bold transition flex items-center gap-2 ${
             activeTab === "ledger"
-              ? "bg-amber-400 text-black shadow-md"
+              ? "bg-[#A78BFA] text-[#090B10] shadow-md"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
@@ -255,7 +255,7 @@ export default function AdminInventoryValuationPage() {
       {/* TAB 1: FIFO Valuation Table */}
       {activeTab === "valuation" && (
         <div className="space-y-4">
-          <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 flex items-center justify-between">
+          <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex items-center justify-between">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -263,12 +263,12 @@ export default function AdminInventoryValuationPage() {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search hardware name, SKU..."
-                className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
           </div>
 
-          <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+          <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
@@ -286,7 +286,7 @@ export default function AdminInventoryValuationPage() {
                   {loading ? (
                     <tr>
                       <td colSpan={7} className="py-12 text-center text-slate-400">
-                        <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                        <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                         Calculating FIFO layer asset valuations...
                       </td>
                     </tr>
@@ -367,7 +367,7 @@ export default function AdminInventoryValuationPage() {
       {/* TAB 2: Auditable Movement Ledger Stream */}
       {activeTab === "ledger" && (
         <div className="space-y-4">
-          <div className="bg-[#0d0f18] p-4 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="bg-[#0d0f18] p-4 rounded-md border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -375,7 +375,7 @@ export default function AdminInventoryValuationPage() {
                 value={search}
                 onChange={e => { setSearch(e.target.value); setLedgerPage(1); }}
                 placeholder="Search reference # or notes..."
-                className="w-full bg-[#151824] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                className="w-full bg-[#151824] border border-white/10 rounded-md pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#A78BFA]/50"
               />
             </div>
 
@@ -384,9 +384,9 @@ export default function AdminInventoryValuationPage() {
                 <button
                   key={mt}
                   onClick={() => { setMovementTypeFilter(mt); setLedgerPage(1); }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize whitespace-nowrap transition ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold capitalize whitespace-nowrap transition ${
                     movementTypeFilter === mt 
-                      ? "bg-amber-400 text-black shadow-md" 
+                      ? "bg-[#A78BFA] text-[#090B10] shadow-md" 
                       : "bg-white/5 text-slate-400 hover:bg-white/10 text-slate-300"
                   }`}
                 >
@@ -396,7 +396,7 @@ export default function AdminInventoryValuationPage() {
             </div>
           </div>
 
-          <div className="bg-[#0d0f18] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+          <div className="bg-[#0d0f18] rounded-md border border-white/10 overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
@@ -414,7 +414,7 @@ export default function AdminInventoryValuationPage() {
                   {loading ? (
                     <tr>
                       <td colSpan={7} className="py-12 text-center text-slate-400">
-                        <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                        <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                         Loading ledger transaction stream...
                       </td>
                     </tr>
@@ -431,7 +431,7 @@ export default function AdminInventoryValuationPage() {
                           {m.created_at}
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase ${getMovementBadge(m.movement_type)}`}>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold border uppercase ${getMovementBadge(m.movement_type)}`}>
                             {m.movement_type.replace("_", " ")}
                           </span>
                         </td>
@@ -444,7 +444,7 @@ export default function AdminInventoryValuationPage() {
                             {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-amber-400 font-bold">
+                        <td className="py-3.5 px-4 font-mono text-[#A78BFA] font-bold">
                           ${m.unit_cost?.toFixed(2)}
                         </td>
                         <td className="py-3.5 px-4 font-mono font-bold text-white">
@@ -469,14 +469,14 @@ export default function AdminInventoryValuationPage() {
                   <button
                     disabled={ledgerPage <= 1}
                     onClick={() => setLedgerPage(p => Math.max(1, p - 1))}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     Previous
                   </button>
                   <button
                     disabled={ledgerPage >= totalLedgerPages}
                     onClick={() => setLedgerPage(p => Math.min(totalLedgerPages, p + 1))}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     Next
                   </button>
@@ -490,9 +490,9 @@ export default function AdminInventoryValuationPage() {
       {/* MODAL: Manual Stock Adjustment */}
       {adjustModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0e111a] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95 text-xs">
+          <div className="bg-[#0e111a] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl animate-in zoom-in-95 text-xs">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center gap-2 text-[#A78BFA]">
                 <SlidersHorizontal className="w-5 h-5" />
                 <h3 className="text-base font-bold text-white">Manual Stock Adjustment</h3>
               </div>
@@ -508,7 +508,7 @@ export default function AdminInventoryValuationPage() {
                   required
                   value={adjustForm.product_id}
                   onChange={e => setAdjustForm({ ...adjustForm, product_id: e.target.value })}
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 >
                   <option value="">-- Choose Product --</option>
                   {allProducts.map(p => (
@@ -528,7 +528,7 @@ export default function AdminInventoryValuationPage() {
                     placeholder="+5 or -3"
                     value={adjustForm.adjustment_quantity || ""}
                     onChange={e => setAdjustForm({ ...adjustForm, adjustment_quantity: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400 text-center font-bold"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50 text-center font-bold"
                   />
                   <span className="text-[10px] text-slate-500 mt-1 block">Positive adds, negative deducts.</span>
                 </div>
@@ -541,7 +541,7 @@ export default function AdminInventoryValuationPage() {
                     placeholder="Optional Cost"
                     value={adjustForm.unit_cost}
                     onChange={e => setAdjustForm({ ...adjustForm, unit_cost: e.target.value })}
-                    className="w-full bg-[#151824] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-400 text-right"
+                    className="w-full bg-[#151824] border border-white/10 rounded-md px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-[#A78BFA]/50 text-right"
                   />
                 </div>
               </div>
@@ -554,7 +554,7 @@ export default function AdminInventoryValuationPage() {
                   value={adjustForm.reason}
                   onChange={e => setAdjustForm({ ...adjustForm, reason: e.target.value })}
                   placeholder="e.g. Broken in showroom display, Annual physical audit sync"
-                  className="w-full bg-[#151824] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#151824] border border-white/10 rounded-md p-3 text-white focus:outline-none focus:border-[#A78BFA]/50"
                 />
               </div>
 
@@ -562,14 +562,14 @@ export default function AdminInventoryValuationPage() {
                 <button
                   type="button"
                   onClick={() => setAdjustModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
+                  className="flex-1 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold shadow-lg shadow-amber-400/20"
+                  className="flex-1 py-2.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-bold shadow-lg shadow-purple-500/20"
                 >
                   {isSubmitting ? "Adjusting..." : "Apply Adjustment"}
                 </button>

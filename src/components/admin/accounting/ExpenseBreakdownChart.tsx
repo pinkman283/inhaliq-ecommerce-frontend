@@ -80,7 +80,7 @@ export const ExpenseBreakdownChart: React.FC<ExpenseBreakdownChartProps> = ({
           <span className="text-xs text-slate-400 font-mono">
             Total: ${totalExpense.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
-          <div className="flex items-center rounded-lg bg-slate-800/80 p-0.5 border border-white/5 text-xs">
+          <div className="flex items-center rounded-md bg-slate-800/80 p-0.5 border border-white/5 text-xs">
             <button
               type="button"
               onClick={() => setChartType("bar")}
@@ -187,7 +187,7 @@ export const ExpenseBreakdownChart: React.FC<ExpenseBreakdownChartProps> = ({
           </div>
           <div className="flex-1 space-y-2 max-h-[240px] overflow-y-auto pr-2 w-full text-xs">
             {dataWithShare.map((cat, idx) => (
-              <div key={idx} className="flex items-center justify-between gap-3 p-1.5 rounded-lg bg-slate-900/40 border border-white/5">
+              <div key={idx} className="flex items-center justify-between gap-3 p-1.5 rounded-md bg-slate-900/40 border border-white/5">
                 <div className="flex items-center gap-2 truncate">
                   <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
                   <span className="truncate text-slate-300">{cat.name}</span>

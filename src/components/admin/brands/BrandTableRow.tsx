@@ -47,7 +47,7 @@ export function BrandTableRow({
 
       <td className="p-3.5 font-bold text-white">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-cyan-400 shrink-0 font-black text-xs overflow-hidden">
+          <div className="w-10 h-10 rounded-md bg-slate-900 border border-white/10 flex items-center justify-center text-cyan-400 shrink-0 font-black text-xs overflow-hidden">
             {brand.logo ? (
               <img
                 src={brand.logo}
@@ -86,7 +86,7 @@ export function BrandTableRow({
       <td className="p-3.5 whitespace-nowrap">
         <div className="flex items-center gap-2">
           <span
-            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+            className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${
               (brand.products_count ?? 0) > 0
                 ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
                 : "bg-slate-800 text-slate-400 border border-slate-700"
@@ -97,7 +97,7 @@ export function BrandTableRow({
 
           {(brand.categories_count ?? 0) > 0 && (
             <span
-              className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/5 text-slate-400 border border-white/10 flex items-center gap-1"
+              className="px-2 py-0.5 rounded text-[10px] font-medium bg-white/5 text-slate-400 border border-white/10 flex items-center gap-1"
               title={`${brand.categories_count} linked navigation categories`}
             >
               <Layers className="w-2.5 h-2.5 text-slate-400" />
@@ -109,7 +109,7 @@ export function BrandTableRow({
 
       <td className="p-3.5 whitespace-nowrap">
         {brand.is_featured ? (
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1 w-fit">
+          <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30 flex items-center gap-1 w-fit">
             <Star className="w-2.5 h-2.5 fill-amber-300" />
             Featured
           </span>
@@ -127,7 +127,7 @@ export function BrandTableRow({
           <button
             type="button"
             onClick={() => onInspect(brand)}
-            className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all cursor-pointer shadow-sm"
+            className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:scale-105 transition-all cursor-pointer shadow-sm"
             title="Inspect Brand"
           >
             <Eye className="w-3.5 h-3.5" />
@@ -135,7 +135,7 @@ export function BrandTableRow({
           <button
             type="button"
             onClick={() => onEdit(brand)}
-            className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:scale-105 transition-all cursor-pointer shadow-sm"
+            className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] hover:scale-105 transition-all cursor-pointer shadow-sm"
             title="Edit Brand"
           >
             <Edit className="w-3.5 h-3.5" />
@@ -143,7 +143,7 @@ export function BrandTableRow({
           <button
             type="button"
             onClick={() => onDelete(brand)}
-            className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all cursor-pointer shadow-sm"
+            className="w-8 h-8 rounded-md shrink-0 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:scale-105 transition-all cursor-pointer shadow-sm"
             title="Delete Brand"
           >
             <Trash2 className="w-3.5 h-3.5" />

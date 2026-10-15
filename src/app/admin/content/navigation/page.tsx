@@ -464,7 +464,7 @@ export default function AdminContentNavigationPage() {
         );
       case "dropdown_group":
         return (
-          <span className="text-[10px] px-2 py-0.5 rounded font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20">
+          <span className="text-[10px] px-2 py-0.5 rounded font-mono text-[#A78BFA] bg-[#211B32] border border-[#A78BFA]/30">
             Group Header
           </span>
         );
@@ -520,7 +520,7 @@ export default function AdminContentNavigationPage() {
     return (
       <div key={item.id} className="space-y-2">
         <div
-          className={`rounded-xl border transition-all duration-200 ${
+          className={`rounded-md border transition-all duration-200 ${
             isBroken
               ? "bg-rose-950/20 border-rose-500/40 shadow-xs"
               : item.is_active
@@ -534,7 +534,7 @@ export default function AdminContentNavigationPage() {
             {/* Left: Reorder & Hierarchy controls + Title info */}
             <div className="flex items-center gap-3 flex-1 min-w-0">
               {/* Hierarchy Position Controls: Move Up, Move Down, Indent, Outdent */}
-              <div className="flex items-center gap-0.5 shrink-0 bg-white/[0.03] border border-white/[0.07] rounded-lg p-0.5">
+              <div className="flex items-center gap-0.5 shrink-0 bg-white/[0.03] border border-white/[0.07] rounded-md p-0.5">
                 <button
                   type="button"
                   onClick={() => handleMoveOrder(siblings, index, "up")}
@@ -569,7 +569,7 @@ export default function AdminContentNavigationPage() {
                   onClick={() => handleOutdent(item, parent)}
                   disabled={!parent}
                   title={parent ? "Outdent to level above" : "Already top-level"}
-                  className="p-1 rounded text-slate-400 hover:text-amber-400 disabled:opacity-20 disabled:hover:text-slate-400 transition-colors"
+                  className="p-1 rounded text-slate-400 hover:text-[#A78BFA] disabled:opacity-20 disabled:hover:text-slate-400 transition-colors"
                 >
                   <Outdent className="w-3.5 h-3.5" />
                 </button>
@@ -664,7 +664,7 @@ export default function AdminContentNavigationPage() {
                 <button
                   type="button"
                   onClick={() => openCategoryBrands(item.category_id!, item.title)}
-                  className="px-2.5 py-1 text-xs font-medium text-purple-300 hover:text-purple-200 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 rounded-lg transition-colors flex items-center gap-1.5"
+                  className="px-2.5 py-1 text-xs font-medium text-purple-300 hover:text-purple-200 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 rounded-md transition-colors flex items-center gap-1.5"
                   title="Select brands visible in this category's dropdown"
                 >
                   <Building2 className="w-3.5 h-3.5" />
@@ -676,7 +676,7 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => openDrawer(undefined, item.id)}
-                className="px-2.5 py-1 text-xs text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-lg transition-colors flex items-center gap-1"
+                className="px-2.5 py-1 text-xs text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-md transition-colors flex items-center gap-1"
                 title={`Add sub-item under ${item.title}`}
               >
                 <Plus className="w-3.5 h-3.5 text-cyan-400" />
@@ -688,7 +688,7 @@ export default function AdminContentNavigationPage() {
                 type="button"
                 onClick={() => handleDuplicate(item)}
                 disabled={duplicatingId === item.id}
-                className="p-1.5 text-slate-400 hover:text-cyan-400 bg-white/[0.02] hover:bg-cyan-500/10 border border-white/10 rounded-lg transition-colors disabled:opacity-50"
+                className="p-1.5 text-slate-400 hover:text-cyan-400 bg-white/[0.02] hover:bg-cyan-500/10 border border-white/10 rounded-md transition-colors disabled:opacity-50"
                 title="Duplicate this item and all sub-items"
               >
                 {duplicatingId === item.id ? (
@@ -702,7 +702,7 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => handleToggleActive(item)}
-                className={`px-2 py-1 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-2 py-1 rounded-md text-xs font-medium transition-colors ${
                   item.is_active
                     ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20"
                     : "text-slate-400 bg-white/5 border border-white/10 hover:text-white"
@@ -716,7 +716,7 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => openDrawer(item)}
-                className="p-1.5 text-slate-400 hover:text-cyan-400 bg-white/[0.02] hover:bg-cyan-500/10 border border-white/10 rounded-lg transition-colors"
+                className="p-1.5 text-slate-400 hover:text-cyan-400 bg-white/[0.02] hover:bg-cyan-500/10 border border-white/10 rounded-md transition-colors"
                 title="Edit Item"
               >
                 <Edit2 className="w-3.5 h-3.5" />
@@ -726,7 +726,7 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => setDeletingItem(item)}
-                className="p-1.5 text-slate-400 hover:text-rose-400 bg-white/[0.02] hover:bg-rose-500/10 border border-white/10 rounded-lg transition-colors"
+                className="p-1.5 text-slate-400 hover:text-rose-400 bg-white/[0.02] hover:bg-rose-500/10 border border-white/10 rounded-md transition-colors"
                 title="Delete Item"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -768,14 +768,14 @@ export default function AdminContentNavigationPage() {
             <button
               onClick={() => fetchData()}
               disabled={loading}
-              className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-md transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
               Refresh
             </button>
             <button
               onClick={() => openDrawer()}
-              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-all shadow-sm shadow-cyan-600/20 flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-all shadow-sm shadow-cyan-600/20 flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Add Navigation Item
@@ -789,7 +789,7 @@ export default function AdminContentNavigationPage() {
 
       {/* Actionable Warning Banner for broken targets */}
       {brokenTargetCount > 0 && (
-        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between gap-3 text-rose-200 text-xs">
+        <div className="p-3.5 rounded-md bg-rose-500/10 border border-rose-500/30 flex items-center justify-between gap-3 text-rose-200 text-xs">
           <div className="flex items-center gap-2.5">
             <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
             <span>
@@ -805,7 +805,7 @@ export default function AdminContentNavigationPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveTab("tree")}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "tree"
                 ? "bg-white/10 text-white shadow-sm"
                 : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
@@ -816,7 +816,7 @@ export default function AdminContentNavigationPage() {
           </button>
           <button
             onClick={() => setActiveTab("preview")}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "preview"
                 ? "bg-white/10 text-white shadow-sm"
                 : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
@@ -837,7 +837,7 @@ export default function AdminContentNavigationPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Filter tree items..."
-                className="pl-8 pr-3 py-1 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 w-44 sm:w-56"
+                className="pl-8 pr-3 py-1 text-xs bg-black/40 border border-white/10 rounded-md text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 w-44 sm:w-56"
               />
               {searchQuery && (
                 <button
@@ -853,14 +853,14 @@ export default function AdminContentNavigationPage() {
             <button
               onClick={expandAll}
               title="Expand All Branches"
-              className="p-1.5 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs flex items-center gap-1 cursor-pointer"
+              className="p-1.5 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-md text-xs flex items-center gap-1 cursor-pointer"
             >
               <ChevronsDown className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={collapseAll}
               title="Collapse All Branches"
-              className="p-1.5 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs flex items-center gap-1 cursor-pointer"
+              className="p-1.5 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-md text-xs flex items-center gap-1 cursor-pointer"
             >
               <ChevronsUp className="w-3.5 h-3.5" />
             </button>
@@ -868,7 +868,7 @@ export default function AdminContentNavigationPage() {
         )}
 
         {activeTab === "preview" && (
-          <div className="flex items-center gap-1 bg-black/40 border border-white/10 p-0.5 rounded-lg text-xs">
+          <div className="flex items-center gap-1 bg-black/40 border border-white/10 p-0.5 rounded-md text-xs">
             <button
               onClick={() => setPreviewDevice("desktop")}
               className={`px-2.5 py-1 rounded flex items-center gap-1.5 transition-colors cursor-pointer ${
@@ -908,7 +908,7 @@ export default function AdminContentNavigationPage() {
                 <button
                   type="button"
                   onClick={() => openDrawer()}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-colors cursor-pointer"
                 >
                   Add First Navigation Item
                 </button>
@@ -927,7 +927,7 @@ export default function AdminContentNavigationPage() {
       {/* TAB 2: Live Storefront Navbar Dual Preview */}
       {activeTab === "preview" && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0B0F17] border border-white/10 space-y-4">
+          <div className="p-4 rounded-md bg-[#0B0F17] border border-white/10 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -942,7 +942,7 @@ export default function AdminContentNavigationPage() {
 
             {previewDevice === "desktop" ? (
               /* Desktop Header Preview using actual Presentation Renderers */
-              <div className="border border-white/10 rounded-lg overflow-visible bg-[#0F141E] shadow-xl relative min-h-[320px]">
+              <div className="border border-white/10 rounded-md overflow-visible bg-[#0F141E] shadow-xl relative min-h-[320px]">
                 {/* Mock Browser Header Bar */}
                 <div className="bg-[#080B11] px-4 py-2 flex items-center gap-2 border-b border-white/[0.06] text-xs text-slate-400">
                   <div className="flex items-center gap-1.5">
@@ -958,7 +958,7 @@ export default function AdminContentNavigationPage() {
                 {/* Rendered Dynamic Header Simulation */}
                 <div className="px-6 py-2.5 flex items-center justify-between border-b border-white/[0.08] bg-[#0F141E] relative">
                   <div className="flex items-center gap-3 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-[#005826] flex items-center justify-center font-bold text-white text-sm">
+                    <div className="w-8 h-8 rounded-md bg-[#005826] flex items-center justify-center font-bold text-white text-sm">
                       {theme?.store_brand_name?.charAt(0) || "S"}
                     </div>
                     <span className="font-bold text-white tracking-wide text-sm">
@@ -1054,7 +1054,7 @@ export default function AdminContentNavigationPage() {
               </div>
             ) : (
               /* Mobile Drawer Preview using actual MobileNavTree */
-              <div className="max-w-sm mx-auto border border-white/10 rounded-2xl overflow-hidden bg-[#0F141E] shadow-2xl">
+              <div className="max-w-sm mx-auto border border-white/10 rounded-lg overflow-hidden bg-[#0F141E] shadow-2xl">
                 <div className="bg-[#080B11] p-3 text-center text-[10px] font-mono text-slate-400 border-b border-white/[0.06]">
                   Mobile Accordion Simulation
                 </div>
@@ -1096,7 +1096,7 @@ export default function AdminContentNavigationPage() {
                 onChange={(e) => setFormTitle(e.target.value)}
                 placeholder="e.g. Disposable, Voltbar, 10mg Nic Salt..."
                 required
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
               />
             </div>
 
@@ -1108,7 +1108,7 @@ export default function AdminContentNavigationPage() {
               <select
                 value={formParentId}
                 onChange={(e) => setFormParentId(e.target.value === "root" ? "root" : Number(e.target.value))}
-                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 font-mono text-xs cursor-pointer"
+                className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 font-mono text-xs cursor-pointer"
               >
                 <option value="root">● Top-Level Header Item (Root)</option>
                 {options.potential_parents
@@ -1143,7 +1143,7 @@ export default function AdminContentNavigationPage() {
                         setFormTitle((prev) => prev || options.brands[0].name);
                       }
                     }}
-                    className={`py-2 px-2.5 rounded-lg text-xs font-medium capitalize border transition-all text-center cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-md text-xs font-medium capitalize border transition-all text-center cursor-pointer ${
                       formType === t
                         ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/40"
                         : "bg-black/20 text-slate-400 border-white/5 hover:border-white/10 hover:text-white"
@@ -1157,7 +1157,7 @@ export default function AdminContentNavigationPage() {
 
             {/* Conditional Target Selectors */}
             {formType === "category" && (
-              <div className="space-y-2 p-3 rounded-lg bg-black/30 border border-white/[0.08]">
+              <div className="space-y-2 p-3 rounded-md bg-black/30 border border-white/[0.08]">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-medium text-slate-300">Select Category Target</label>
                   <Link
@@ -1177,7 +1177,7 @@ export default function AdminContentNavigationPage() {
                     const selected = options.root_categories.find((c) => c.id === catId);
                     if (selected && !formTitle) setFormTitle(selected.name);
                   }}
-                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
                 >
                   <option value="">-- Choose Category --</option>
                   {options.root_categories.map((cat) => (
@@ -1190,7 +1190,7 @@ export default function AdminContentNavigationPage() {
             )}
 
             {formType === "subcategory" && (
-              <div className="space-y-3 p-3 rounded-lg bg-black/30 border border-white/[0.08]">
+              <div className="space-y-3 p-3 rounded-md bg-black/30 border border-white/[0.08]">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-slate-300">Subcategory Destination</span>
                   <Link
@@ -1210,7 +1210,7 @@ export default function AdminContentNavigationPage() {
                       setFormCategoryId(Number(e.target.value));
                       setFormSubcategoryId(null);
                     }}
-                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
                   >
                     <option value="">-- Select Parent Category --</option>
                     {options.root_categories.map((cat) => (
@@ -1232,7 +1232,7 @@ export default function AdminContentNavigationPage() {
                       if (selected && !formTitle) setFormTitle(selected.name);
                     }}
                     disabled={!formCategoryId}
-                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 disabled:opacity-40 cursor-pointer"
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 disabled:opacity-40 cursor-pointer"
                   >
                     <option value="">-- Select Subcategory --</option>
                     {filteredSubcategories.map((sub) => (
@@ -1246,7 +1246,7 @@ export default function AdminContentNavigationPage() {
             )}
 
             {formType === "brand" && (
-              <div className="space-y-2 p-3 rounded-lg bg-black/30 border border-white/[0.08]">
+              <div className="space-y-2 p-3 rounded-md bg-black/30 border border-white/[0.08]">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-medium text-slate-300">Select Brand Target</label>
                   <Link
@@ -1266,7 +1266,7 @@ export default function AdminContentNavigationPage() {
                     const selected = options.brands.find((b) => b.id === bId);
                     if (selected && !formTitle) setFormTitle(selected.name);
                   }}
-                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
                 >
                   <option value="">-- Choose Brand --</option>
                   {options.brands.map((b) => (
@@ -1279,14 +1279,14 @@ export default function AdminContentNavigationPage() {
             )}
 
             {formType === "custom" && (
-              <div className="space-y-2 p-3 rounded-lg bg-black/30 border border-white/[0.08]">
+              <div className="space-y-2 p-3 rounded-md bg-black/30 border border-white/[0.08]">
                 <label className="text-xs font-medium text-slate-300">Custom Destination URL</label>
                 <input
                   type="text"
                   value={formUrl}
                   onChange={(e) => setFormUrl(e.target.value)}
                   placeholder="e.g. /deals, /brands, https://..."
-                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white font-mono focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white font-mono focus:outline-none focus:border-cyan-500"
                 />
                 <div className="flex items-center gap-1.5 flex-wrap pt-1">
                   <span className="text-[10px] text-slate-500">Presets:</span>
@@ -1305,7 +1305,7 @@ export default function AdminContentNavigationPage() {
             )}
 
             {formType === "dropdown_group" && (
-              <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
+              <div className="p-3 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
                 <strong>Organizational Header:</strong> This item acts as a non-clickable title (e.g. &apos;Shop by Brand&apos;) that organizes child links in dropdowns.
               </div>
             )}
@@ -1317,7 +1317,7 @@ export default function AdminContentNavigationPage() {
                 <select
                   value={formMegaMenuType}
                   onChange={(e) => setFormMegaMenuType(e.target.value as MegaMenuType)}
-                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
                 >
                   <option value="none">Standard Cascading Flyout (Default, Compact)</option>
                   <option value="standard_dropdown">Standard Cascading Flyout</option>
@@ -1340,7 +1340,7 @@ export default function AdminContentNavigationPage() {
                   onChange={(e) => setFormBadge(e.target.value)}
                   placeholder="e.g. HOT, NEW, 50% OFF"
                   maxLength={20}
-                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -1357,7 +1357,7 @@ export default function AdminContentNavigationPage() {
                     type="text"
                     value={formBadgeColor}
                     onChange={(e) => setFormBadgeColor(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-xs font-mono text-white"
+                    className="flex-1 px-3 py-2 bg-black/40 border border-white/10 rounded-md text-xs font-mono text-white"
                   />
                 </div>
               </div>
@@ -1391,14 +1391,14 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-md transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="px-5 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg transition-all shadow-sm shadow-cyan-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                className="px-5 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-md transition-all shadow-sm shadow-cyan-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
               >
                 {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {editingItem ? "Save Changes" : "Create Item"}
@@ -1411,7 +1411,7 @@ export default function AdminContentNavigationPage() {
       {/* MODAL: Manage Category Brands */}
       {categoryBrandsModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="bg-[#0F141E] border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl space-y-4 p-6">
+          <div className="bg-[#0F141E] border border-white/10 rounded-lg w-full max-w-lg overflow-hidden shadow-2xl space-y-4 p-6">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div>
                 <h3 className="font-bold text-sm text-white flex items-center gap-2">
@@ -1443,7 +1443,7 @@ export default function AdminContentNavigationPage() {
                     return (
                       <div
                         key={brand.id}
-                        className={`p-2.5 rounded-lg border flex items-center justify-between transition-colors ${
+                        className={`p-2.5 rounded-md border flex items-center justify-between transition-colors ${
                           isLinked
                             ? "bg-purple-500/10 border-purple-500/30 text-white"
                             : "bg-white/[0.02] border-white/[0.06] text-slate-300"
@@ -1496,7 +1496,7 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => setCategoryBrandsModal((prev) => ({ ...prev, open: false }))}
-                className="px-3 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-3 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
@@ -1504,7 +1504,7 @@ export default function AdminContentNavigationPage() {
                 type="button"
                 onClick={handleSaveCategoryBrands}
                 disabled={categoryBrandsModal.saving}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-md flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {categoryBrandsModal.saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Save Brands Selection
@@ -1517,9 +1517,9 @@ export default function AdminContentNavigationPage() {
       {/* DIALOG: Delete Confirmation */}
       {deletingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="bg-[#0F141E] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#0F141E] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-4 shadow-2xl">
             <div className="flex items-center gap-3 text-rose-400">
-              <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
+              <div className="w-10 h-10 rounded bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
@@ -1536,7 +1536,7 @@ export default function AdminContentNavigationPage() {
               <button
                 type="button"
                 onClick={() => setDeletingItem(null)}
-                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-lg cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/5 rounded-md cursor-pointer"
               >
                 Cancel
               </button>
@@ -1544,7 +1544,7 @@ export default function AdminContentNavigationPage() {
                 type="button"
                 onClick={handleDeleteItem}
                 disabled={deleting}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Delete Item

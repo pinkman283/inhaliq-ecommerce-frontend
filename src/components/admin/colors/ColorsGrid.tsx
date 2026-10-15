@@ -30,7 +30,7 @@ export function ColorsGrid({
   if (loading) {
     return (
       <div className="py-24 flex flex-col items-center justify-center gap-3 text-slate-500">
-        <Loader2 className="w-6 h-6 animate-spin text-amber-400" />
+        <Loader2 className="w-6 h-6 animate-spin text-[#A78BFA]" />
         <span className="text-xs uppercase tracking-wider font-semibold">
           Loading color palette library...
         </span>
@@ -48,7 +48,7 @@ export function ColorsGrid({
           <button
             type="button"
             onClick={onOpenCreate}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             Add Swatch

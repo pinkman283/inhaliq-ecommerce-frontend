@@ -109,7 +109,7 @@ export default function BankingPage() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-md shadow-2xl border backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-950/90 text-emerald-200 border-emerald-500/40"
               : "bg-rose-950/90 text-rose-200 border-rose-500/40"
@@ -133,14 +133,14 @@ export default function BankingPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/admin/accounting"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-[#0f121b] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/[0.08] bg-[#0f121b] text-slate-300 hover:text-white text-xs font-semibold transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Accounting Hub</span>
             </Link>
             <button
               onClick={() => setTransferModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-sm"
             >
               <ArrowRightLeft className="w-3.5 h-3.5" />
               <span>Internal Transfer</span>
@@ -148,7 +148,7 @@ export default function BankingPage() {
             <button
               onClick={fetchBanking}
               disabled={loading}
-              className="p-1.5 rounded-lg border border-white/[0.08] bg-[#0f121b] text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="p-1.5 rounded-md border border-white/[0.08] bg-[#0f121b] text-slate-400 hover:text-white transition-colors disabled:opacity-50"
               title="Refresh"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-purple-400" : ""}`} />
@@ -199,17 +199,17 @@ export default function BankingPage() {
           return (
             <div
               key={account.id}
-              className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] flex flex-col justify-between gap-4 relative overflow-hidden group hover:border-purple-500/30 transition-all shadow-sm"
+              className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] flex flex-col justify-between gap-4 relative overflow-hidden group hover:border-purple-500/30 transition-all shadow-sm"
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-[#161a26] border border-white/[0.08] flex items-center justify-center text-purple-400">
-                    {isCash ? <DollarSign className="w-5 h-5 text-amber-400" /> :
+                  <div className="w-10 h-10 rounded-md bg-[#161a26] border border-white/[0.08] flex items-center justify-center text-purple-400">
+                    {isCash ? <DollarSign className="w-5 h-5 text-[#A78BFA]" /> :
                      isBank ? <Building2 className="w-5 h-5 text-blue-400" /> :
                      <Smartphone className="w-5 h-5 text-rose-400" />}
                   </div>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
-                    isCash ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                    isCash ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30" :
                     isBank ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" :
                     "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                   }`}>
@@ -242,7 +242,7 @@ export default function BankingPage() {
                     setFromAccountId(account.id);
                     setTransferModalOpen(true);
                   }}
-                  className="px-2.5 py-1 rounded-lg bg-[#161a26] hover:bg-white/10 text-[11px] font-semibold text-slate-300 transition-colors border border-white/[0.08]"
+                  className="px-2.5 py-1 rounded-md bg-[#161a26] hover:bg-white/10 text-[11px] font-semibold text-slate-300 transition-colors border border-white/[0.08]"
                 >
                   Transfer Funds
                 </button>
@@ -253,7 +253,7 @@ export default function BankingPage() {
       </div>
 
       {/* Recent Cash & Bank Transactions Register */}
-      <div className="p-5 rounded-xl bg-[#0f121b] border border-white/[0.08] space-y-4 shadow-sm">
+      <div className="p-5 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-4 shadow-sm">
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
           <div>
             <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -286,7 +286,7 @@ export default function BankingPage() {
               <tbody className="divide-y divide-white/5">
                 {data.recent_transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="py-2.5 font-mono font-bold text-amber-400">
+                    <td className="py-2.5 font-mono font-bold text-[#A78BFA]">
                       {tx.journalEntry?.entry_number || tx.journal_entry?.entry_number || `#${tx.journal_entry_id}`}
                     </td>
                     <td className="py-2.5 font-mono text-slate-300">{tx.journalEntry?.entry_date || tx.journal_entry?.entry_date || "—"}</td>
@@ -313,10 +313,10 @@ export default function BankingPage() {
       {/* Internal Transfer Modal */}
       {transferModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0f121b] border border-white/[0.08] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-[#0f121b] border border-white/[0.08] rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-purple-500/10 text-purple-400 flex items-center justify-center">
                   <ArrowRightLeft className="w-4 h-4" />
                 </div>
                 <div>
@@ -326,7 +326,7 @@ export default function BankingPage() {
               </div>
               <button
                 onClick={() => setTransferModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -338,7 +338,7 @@ export default function BankingPage() {
                 <select
                   value={fromAccountId}
                   onChange={(e) => setFromAccountId(Number(e.target.value))}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400"
                   required
                 >
                   {accounts.map((a) => (
@@ -354,7 +354,7 @@ export default function BankingPage() {
                 <select
                   value={toAccountId}
                   onChange={(e) => setToAccountId(Number(e.target.value))}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400"
                   required
                 >
                   {accounts.map((a) => (
@@ -373,7 +373,7 @@ export default function BankingPage() {
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-purple-400 font-bold"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-purple-400 font-bold"
                   required
                 />
                 {fromAccountObj && parseFloat(amount) > fromAccountObj.current_balance && (
@@ -390,7 +390,7 @@ export default function BankingPage() {
                   placeholder="e.g. WIRE-8819 or Cash Deposit Slip"
                   value={referenceNumber}
                   onChange={(e) => setReferenceNumber(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-purple-400"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-purple-400"
                 />
               </div>
 
@@ -401,7 +401,7 @@ export default function BankingPage() {
                   placeholder="Reason for fund movement..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400 resize-none"
+                  className="w-full bg-[#161a26] border border-white/[0.08] rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400 resize-none"
                 />
               </div>
 
@@ -409,14 +409,14 @@ export default function BankingPage() {
                 <button
                   type="button"
                   onClick={() => setTransferModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
+                  className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
+                  className="px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
                 >
                   {submitting ? "Transferring..." : "Execute Transfer"}
                 </button>

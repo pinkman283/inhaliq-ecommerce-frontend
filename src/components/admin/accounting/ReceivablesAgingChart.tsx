@@ -72,12 +72,12 @@ export const ReceivablesAgingChart: React.FC<ReceivablesAgingChartProps> = ({
   // Compact Mode: High-density horizontal distribution bar for operational pages
   if (compact) {
     if (isLoading) {
-      return <div className="p-4 rounded-xl bg-slate-900/60 border border-white/10 animate-pulse h-24" />;
+      return <div className="p-4 rounded-md bg-slate-900/60 border border-white/10 animate-pulse h-24" />;
     }
 
     if (total <= 0) {
       return (
-        <div className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/20 flex items-center justify-between text-xs">
+        <div className="p-3.5 rounded-md bg-emerald-950/30 border border-emerald-500/20 flex items-center justify-between text-xs">
           <div className="flex items-center gap-2 text-emerald-400">
             <CheckCircle2 className="w-4 h-4" />
             <span className="font-semibold">Zero Outstanding Receivables</span>
@@ -88,7 +88,7 @@ export const ReceivablesAgingChart: React.FC<ReceivablesAgingChartProps> = ({
     }
 
     return (
-      <div className="p-3.5 rounded-xl bg-slate-900/80 border border-white/10 shadow-sm space-y-2.5">
+      <div className="p-3.5 rounded-md bg-slate-900/80 border border-white/10 shadow-sm space-y-2.5">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Clock className="w-3.5 h-3.5 text-amber-400" />
@@ -125,7 +125,7 @@ export const ReceivablesAgingChart: React.FC<ReceivablesAgingChartProps> = ({
           {chartData.map((item, idx) => {
             const pct = total > 0 ? ((item.amount / total) * 100).toFixed(0) : "0";
             return (
-              <div key={idx} className="flex items-center gap-2 px-2 py-1 rounded-lg bg-black/20 border border-white/5">
+              <div key={idx} className="flex items-center gap-2 px-2 py-1 rounded-md bg-black/20 border border-white/5">
                 <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
                 <div className="min-w-0 flex-1 flex items-baseline justify-between gap-1">
                   <span className="text-slate-400 text-[10.5px] truncate">{item.name}</span>
@@ -150,13 +150,13 @@ export const ReceivablesAgingChart: React.FC<ReceivablesAgingChartProps> = ({
       height={height}
       action={
         <div className="flex items-center gap-3 text-xs">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/5">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/80 border border-white/5">
             <Clock className="h-3.5 w-3.5 text-amber-400" />
             <span className="text-slate-400">Overdue:</span>
             <span className="font-mono font-medium text-amber-400">{overduePercent}%</span>
           </div>
           {summary && (
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/5">
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/80 border border-white/5">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
               <span className="text-slate-400">Recovery Rate:</span>
               <span className="font-mono font-medium text-emerald-400">{collectionRate}%</span>
@@ -213,7 +213,7 @@ export const ReceivablesAgingChart: React.FC<ReceivablesAgingChartProps> = ({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/5 text-xs">
             {chartData.map((bracket, idx) => (
-              <div key={idx} className="p-2 rounded-xl bg-slate-900/40 border border-white/5">
+              <div key={idx} className="p-2 rounded-md bg-slate-900/40 border border-white/5">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] text-slate-400">{bracket.name}</span>
                   <span className="text-[10px] font-mono text-slate-500">

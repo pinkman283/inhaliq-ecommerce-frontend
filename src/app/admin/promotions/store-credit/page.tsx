@@ -137,14 +137,14 @@ export default function StoreCreditPage() {
             <button
               onClick={() => fetchData()}
               disabled={loading}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+              className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Adjust Store Credit
@@ -161,9 +161,9 @@ export default function StoreCreditPage() {
             setActiveTab("accounts");
             setPage(1);
           }}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-colors ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-md font-bold transition-colors cursor-pointer ${
             activeTab === "accounts"
-              ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -176,9 +176,9 @@ export default function StoreCreditPage() {
             setActiveTab("ledger");
             setPage(1);
           }}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-colors ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-md font-bold transition-colors cursor-pointer ${
             activeTab === "ledger"
-              ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+              ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -188,7 +188,7 @@ export default function StoreCreditPage() {
       </div>
 
       {/* Search Filter */}
-      <div className="p-4 rounded-xl border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-4 rounded-md border border-white/[0.06] bg-[#0c0e14] flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
@@ -200,7 +200,7 @@ export default function StoreCreditPage() {
             }
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-amber-400 outline-none"
+            className="w-full pl-9 pr-4 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-[#A78BFA]/50 outline-none"
           />
         </div>
         <span className="text-xs text-slate-400 font-mono">
@@ -227,7 +227,7 @@ export default function StoreCreditPage() {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="p-12 text-center text-slate-500">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading credit accounts...
                   </td>
                 </tr>
@@ -243,7 +243,7 @@ export default function StoreCreditPage() {
                   <tr key={acc.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center font-bold text-cyan-400">
+                        <div className="w-8 h-8 rounded bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center font-bold text-cyan-400">
                           {acc.user?.name?.charAt(0) || "U"}
                         </div>
                         <div>
@@ -282,7 +282,7 @@ export default function StoreCreditPage() {
                           setSelectedUserId(acc.user_id);
                           setIsModalOpen(true);
                         }}
-                        className="text-xs font-bold text-amber-400 hover:text-amber-300 hover:underline"
+                        className="text-xs font-bold text-[#A78BFA] hover:text-[#B9A3FF] hover:underline cursor-pointer"
                       >
                         Adjust Balance
                       </button>
@@ -314,7 +314,7 @@ export default function StoreCreditPage() {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="p-12 text-center text-slate-500">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading transaction ledger...
                   </td>
                 </tr>
@@ -393,16 +393,16 @@ export default function StoreCreditPage() {
       {/* Adjust Store Credit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#0e1017] border border-white/10 rounded-2xl w-full max-w-md p-6 space-y-5 shadow-2xl">
+          <div className="bg-[#0e1017] border border-white/10 rounded-lg w-full max-w-md p-6 space-y-5 shadow-2xl">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-amber-400" />
+                <Wallet className="w-4 h-4 text-[#A78BFA]" />
                 Adjust Customer Store Credit
               </h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
+                className="p-1 rounded-md text-slate-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -415,7 +415,7 @@ export default function StoreCreditPage() {
                   required
                   value={selectedUserId}
                   onChange={(e) => setSelectedUserId(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none"
+                  className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                 >
                   {customers.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -431,7 +431,7 @@ export default function StoreCreditPage() {
                   <select
                     value={adjustType}
                     onChange={(e) => setAdjustType(e.target.value as any)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none"
                   >
                     <option value="credit">Credit (+) Add to Wallet</option>
                     <option value="debit">Debit (-) Deduct from Wallet</option>
@@ -446,7 +446,7 @@ export default function StoreCreditPage() {
                     required
                     value={amount}
                     onChange={(e) => setAmount(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white font-mono focus:border-amber-400 outline-none"
+                    className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white font-mono focus:border-[#A78BFA]/50 outline-none"
                   />
                 </div>
               </div>
@@ -459,11 +459,11 @@ export default function StoreCreditPage() {
                   placeholder="e.g. VIP loyalty compensation, Order return compensation..."
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#12151f] border border-white/10 text-xs text-white focus:border-amber-400 outline-none resize-none"
+                  className="w-full px-3.5 py-2 rounded-md bg-[#12151f] border border-white/10 text-xs text-white focus:border-[#A78BFA]/50 outline-none resize-none"
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-[11px] text-cyan-300">
+              <div className="p-3 rounded-md bg-cyan-500/5 border border-cyan-500/20 text-[11px] text-cyan-300">
                 <strong>Accounting Note:</strong> Crediting automatically debits account <code>4090 - Sales Discounts</code> and credits liability <code>2020 - Customer Advances & Store Credit</code>.
               </div>
 
@@ -471,14 +471,14 @@ export default function StoreCreditPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={adjusting}
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/10 transition-all disabled:opacity-50"
+                  className="px-5 py-2 rounded-md text-xs font-bold bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] shadow-lg shadow-purple-500/10 transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {adjusting ? "Processing..." : "Confirm Adjustment"}
                 </button>
