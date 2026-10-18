@@ -39,19 +39,16 @@ export const STOREFRONT_CONFIG = {
    * Single source of truth for the storefront's default/fallback color palette.
    */
   THEME_COLORS: {
-    PRIMARY: process.env.NEXT_PUBLIC_THEME_PRIMARY || "#006B45",
-    PRIMARY_HOVER: process.env.NEXT_PUBLIC_THEME_PRIMARY_HOVER || "#005238",
-    SECONDARY: process.env.NEXT_PUBLIC_THEME_SECONDARY || "#C6A15B",
-    SECONDARY_HOVER: process.env.NEXT_PUBLIC_THEME_SECONDARY_HOVER || "#AD8A45",
+    PRIMARY: process.env.NEXT_PUBLIC_THEME_PRIMARY || "#0F172A",
+    PRIMARY_HOVER: process.env.NEXT_PUBLIC_THEME_PRIMARY_HOVER || "#1E293B",
+    SECONDARY: process.env.NEXT_PUBLIC_THEME_SECONDARY || "#475569",
+    SECONDARY_HOVER: process.env.NEXT_PUBLIC_THEME_SECONDARY_HOVER || "#334155",
   },
 
   /**
    * Controls theme color precedence:
-   * - When `true` (default during this temporary frontend phase): The frontend defaults above (#006B45 / #C6A15B)
-   *   take precedence over the uncustomized Senior API backend colors (#1c2942).
-   * - When `false` (when user's custom admin backend is ready): Backend/Admin theme settings
-   *   take precedence over frontend defaults.
-   * To disable override: set NEXT_PUBLIC_OVERRIDE_BACKEND_THEME_COLORS="false"
+   * - When `true` (default): The frontend premium minimal palette (#0f172a / #1e293b)
+   *   takes precedence on storefront pages.
    */
   OVERRIDE_BACKEND_THEME_COLORS: process.env.NEXT_PUBLIC_OVERRIDE_BACKEND_THEME_COLORS !== "false",
 };

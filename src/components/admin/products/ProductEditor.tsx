@@ -15,12 +15,14 @@ import {
   Category,
   Brand,
   Product,
+  ProductOption,
   ProductFormData,
   ProductFormImage,
   ProductFormVariant,
 } from "@/types";
 import { adminApi } from "@/lib/adminApi";
 import { toast } from "sonner";
+import { inferOptionsFromLegacyVariants } from "./variants";
 
 // Tab Components
 import { ProductGeneralTab } from "./ProductGeneralTab";
@@ -63,6 +65,7 @@ const DEFAULT_FORM_DATA: ProductFormData = {
   is_active: true,
   images: [],
   variants: [],
+  options: [],
 };
 
 function getInitialFormData(
@@ -96,6 +99,13 @@ function getInitialFormData(
       ];
     }
 
+    let initialOptions: ProductOption[] = [];
+    if (editingProduct.options && Array.isArray(editingProduct.options) && editingProduct.options.length > 0) {
+      initialOptions = editingProduct.options;
+    } else if (editingProduct.variants && editingProduct.variants.length > 0) {
+      initialOptions = inferOptionsFromLegacyVariants(editingProduct.variants);
+    }
+
     let initialVariants: ProductFormVariant[] = [];
     if (editingProduct.variants && editingProduct.variants.length > 0) {
       initialVariants = editingProduct.variants.map((v) => ({
@@ -105,10 +115,15 @@ function getInitialFormData(
         color_name: v.color_name || (v.color_hex ? v.name : null),
         color_hex: v.color_hex || null,
         stock_quantity: v.stock_quantity ?? 0,
+        price: v.price !== null && v.price !== undefined ? Number(v.price) : null,
         price_modifier: Number(v.price_modifier || 0),
         cost_price: v.cost_price ? Number(v.cost_price) : null,
         barcode: v.barcode || null,
         sku: v.sku || null,
+        attributes: v.attributes || (v.color_name || v.size ? { ...(v.color_name ? { Color: v.color_name } : {}), ...(v.size ? { Size: v.size } : {}) } : null),
+        image_id: v.image_id ? Number(v.image_id) : null,
+        image_url: v.image_url || null,
+        is_active: v.is_active !== undefined ? Boolean(v.is_active) : true,
       }));
     }
 
@@ -139,6 +154,7 @@ function getInitialFormData(
       is_active: editingProduct.is_active !== undefined ? Boolean(editingProduct.is_active) : true,
       images: initialImages,
       variants: initialVariants,
+      options: initialOptions,
     };
   }
 
@@ -338,16 +354,21 @@ function ProductEditorInner({
       is_new_arrival: formData.is_new_arrival,
       is_best_seller: formData.is_best_seller,
       is_active: formData.is_active,
+      options: formData.options && formData.options.length > 0 ? formData.options : null,
       variants: formData.variants.map((v) => ({
         id: v.id,
         name: v.name,
-        size: v.size || null,
-        color_name: v.color_name || (v.color_hex ? v.name : null),
+        attributes: v.attributes || null,
+        size: v.size || (v.attributes?.Size || v.attributes?.size || null),
+        color_name: v.color_name || (v.attributes?.Color || v.attributes?.color || (v.color_hex ? v.name : null)),
         color_hex: v.color_hex || null,
         stock_quantity: Number(v.stock_quantity || 0),
+        price: v.price !== null && v.price !== undefined && !isNaN(Number(v.price)) ? Number(v.price) : null,
         price_modifier: Number(v.price_modifier || 0),
         cost_price: v.cost_price ? Number(v.cost_price) : null,
         barcode: v.barcode || null,
+        image_id: v.image_id ? Number(v.image_id) : null,
+        is_active: v.is_active !== undefined ? Boolean(v.is_active) : true,
       })),
       meta_title: formData.meta_title.trim() || null,
       meta_description: formData.meta_description.trim() || null,
@@ -509,6 +530,10 @@ function ProductEditorInner({
               variants={formData.variants}
               onVariantsChange={(vars) => updateFormField("variants", vars)}
               onStockSync={(stockSum) => updateFormField("stock_quantity", stockSum.toString())}
+              basePrice={Number(formData.price) || 0}
+              options={formData.options}
+              onOptionsChange={(opts) => updateFormField("options", opts)}
+              availableImages={formData.images}
             />
           )}
 

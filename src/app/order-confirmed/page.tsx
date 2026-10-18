@@ -10,7 +10,8 @@ import {
   MapPin, 
   ArrowRight, 
   Copy,
-  Clock
+  Clock,
+  ShieldCheck
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Order } from "@/types";
@@ -52,6 +53,30 @@ function OrderConfirmedContent() {
         }
       } catch (err) {
         console.warn("Order fetch warning:", err);
+        // Fallback to locally verified order session from checkout (preserves guest privacy without public order IDOR)
+        if (typeof window !== "undefined") {
+          try {
+            const cached = sessionStorage.getItem(`order_confirmed_${orderNumber}`);
+            if (cached) {
+              const parsed = JSON.parse(cached);
+              setOrder(parsed);
+              if (parsed) {
+                trackPurchase({
+                  orderNumber: parsed.order_number || orderNumber,
+                  totalValue: Number(parsed.total_amount || 0),
+                  currency: "USD",
+                  items: (parsed.items || []).map((i: any) => ({
+                    id: i.product_id || i.id,
+                    name: i.product_name,
+                    price: Number(i.unit_price || 0),
+                    quantity: Number(i.quantity || 1),
+                  })),
+                  eventId: (parsed as any).event_id,
+                });
+              }
+            }
+          } catch (e) {}
+        }
       } finally {
         setLoading(false);
       }
@@ -192,131 +217,165 @@ function OrderConfirmedContent() {
           </div>
         )}
 
-        {/* Ordered Items List */}
-        <div className="space-y-3">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Items in Your Order
-          </h2>
+        {order ? (
+          <>
+            {/* Ordered Items List */}
+            <div className="space-y-3">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Items in Your Order
+              </h2>
 
-          <div className="divide-y divide-gray-100 dark:divide-white/5">
-            {order?.items && order.items.length > 0 ? (
-              order.items.map((item) => (
-                <div key={item.id} className="py-3 flex items-center justify-between gap-3 text-xs">
-                  <div className="flex items-center gap-3 min-w-0">
-                    {item.product_image ? (
-                      <img
-                        src={item.product_image}
-                        alt={item.product_name}
-                        className="w-12 h-12 rounded-xl object-cover bg-gray-50 dark:bg-slate-900 border border-gray-100 dark:border-white/10 shrink-0"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center text-slate-400 shrink-0">
-                        <Package className="w-5 h-5" />
+              <div className="divide-y divide-gray-100 dark:divide-white/5">
+                {order.items && order.items.length > 0 ? (
+                  order.items.map((item) => (
+                    <div key={item.id} className="py-3 flex items-center justify-between gap-3 text-xs">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {item.product_image ? (
+                          <img
+                            src={item.product_image}
+                            alt={item.product_name}
+                            className="w-12 h-12 rounded-xl object-cover bg-gray-50 dark:bg-slate-900 border border-gray-100 dark:border-white/10 shrink-0"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center text-slate-400 shrink-0">
+                            <Package className="w-5 h-5" />
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-slate-900 dark:text-white truncate">
+                            {item.product_name}
+                          </h3>
+                          {item.variant_name && (
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                              {item.variant_name}
+                            </p>
+                          )}
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            Qty: {item.quantity} • {formatPrice(item.unit_price)}
+                          </p>
+                        </div>
                       </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-semibold text-slate-900 dark:text-white truncate">
-                        {item.product_name}
-                      </h3>
-                      {item.variant_name && (
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-                          {item.variant_name}
-                        </p>
-                      )}
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        Qty: {item.quantity} • {formatPrice(item.unit_price)}
-                      </p>
-                    </div>
-                  </div>
 
-                  <span className="font-bold text-slate-900 dark:text-white shrink-0">
-                    {formatPrice(item.total_price)}
+                      <span className="font-bold text-slate-900 dark:text-white shrink-0">
+                        {formatPrice(item.total_price)}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-500 dark:text-slate-400 py-3">
+                    Items are confirmed and registered in our order system.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Pricing Summary */}
+            <div className="pt-4 border-t border-dashed border-gray-200 dark:border-white/10 space-y-2 text-xs">
+              <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
+                <span>Subtotal</span>
+                <span className="font-semibold text-slate-900 dark:text-white">
+                  {formatPrice(order.subtotal || 0)}
+                </span>
+              </div>
+
+              {order.discount_amount && order.discount_amount > 0 ? (
+                <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400">
+                  <span>Coupon Discount</span>
+                  <span className="font-semibold">-{formatPrice(order.discount_amount)}</span>
+                </div>
+              ) : null}
+
+              <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
+                <span>Delivery Fee</span>
+                <span className="font-semibold text-slate-900 dark:text-white">
+                  {order.shipping_amount === 0 ? "FREE" : formatPrice(order.shipping_amount || 0)}
+                </span>
+              </div>
+
+              {order.tax_amount && order.tax_amount > 0 ? (
+                <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
+                  <span>Tax</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">
+                    {formatPrice(order.tax_amount)}
                   </span>
                 </div>
-              ))
-            ) : (
-              <p className="text-xs text-slate-500 dark:text-slate-400 py-3">
-                Items are confirmed and registered in our order system.
-              </p>
+              ) : null}
+
+              <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-white/10">
+                <div>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white block">
+                    {order.payment_status === "paid" ? "Total Paid" : "Amount Due on Delivery"}
+                  </span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {order.payment_method === "cash_on_delivery"
+                      ? (order.payment_status === "paid" ? "Cash on Delivery • Paid" : "Cash on Delivery • Due upon receipt")
+                      : (order.payment_status === "paid" ? "Online Payment • Paid" : "Payment Pending")}
+                  </span>
+                </div>
+                <span className="text-xl font-bold text-slate-900 dark:text-white">
+                  {formatPrice(order.total_amount || 0)}
+                </span>
+              </div>
+            </div>
+
+            {/* Delivery Destination */}
+            {order.shipping_address && (
+              <div className="pt-4 border-t border-gray-100 dark:border-white/5 text-xs space-y-1.5">
+                <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400" /> Delivery Destination:
+                </span>
+                <div className="pl-5 text-slate-600 dark:text-slate-300 space-y-0.5">
+                  {order.shipping_address.full_name && (
+                    <p className="font-semibold text-slate-900 dark:text-white">
+                      {order.shipping_address.full_name}
+                    </p>
+                  )}
+                  {order.shipping_address.address_line1 && (
+                    <p>{order.shipping_address.address_line1}</p>
+                  )}
+                  {order.shipping_address.address_line2 && (
+                    <p>{order.shipping_address.address_line2}</p>
+                  )}
+                  <p>
+                    {[order.shipping_address.city, order.shipping_address.state, order.shipping_address.postal_code, order.shipping_address.country].filter(Boolean).join(", ")}
+                  </p>
+                  {order.customer_phone && (
+                    <p className="text-slate-500 dark:text-slate-400 text-[11px] pt-0.5">
+                      Phone: {order.customer_phone}
+                    </p>
+                  )}
+                </div>
+              </div>
             )}
-          </div>
-        </div>
-
-        {/* Pricing Summary */}
-        <div className="pt-4 border-t border-dashed border-gray-200 dark:border-white/10 space-y-2 text-xs">
-          <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-            <span>Subtotal</span>
-            <span className="font-semibold text-slate-900 dark:text-white">
-              {formatPrice(order?.subtotal || 0)}
-            </span>
-          </div>
-
-          {order?.discount_amount && order.discount_amount > 0 ? (
-            <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400">
-              <span>Coupon Discount</span>
-              <span className="font-semibold">-{formatPrice(order.discount_amount)}</span>
-            </div>
-          ) : null}
-
-          <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-            <span>Delivery Fee</span>
-            <span className="font-semibold text-slate-900 dark:text-white">
-              {order?.shipping_amount === 0 ? "FREE" : formatPrice(order?.shipping_amount || 0)}
-            </span>
-          </div>
-
-          {order?.tax_amount && order.tax_amount > 0 ? (
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-              <span>Tax</span>
-              <span className="font-semibold text-slate-900 dark:text-white">
-                {formatPrice(order.tax_amount)}
-              </span>
-            </div>
-          ) : null}
-
-          <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-white/10">
-            <div>
-              <span className="text-sm font-bold text-slate-900 dark:text-white block">
-                {order?.payment_status === "paid" ? "Total Paid" : "Amount Due on Delivery"}
-              </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                {order?.payment_method === "cash_on_delivery"
-                  ? (order?.payment_status === "paid" ? "Cash on Delivery • Paid" : "Cash on Delivery • Due upon receipt")
-                  : (order?.payment_status === "paid" ? "Online Payment • Paid" : "Payment Pending")}
-              </span>
-            </div>
-            <span className="text-xl font-bold text-slate-900 dark:text-white">
-              {formatPrice(order?.total_amount || 0)}
-            </span>
-          </div>
-        </div>
-
-        {/* Delivery Destination */}
-        {order?.shipping_address && (
-          <div className="pt-4 border-t border-gray-100 dark:border-white/5 text-xs space-y-1.5">
-            <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-slate-400" /> Delivery Destination:
-            </span>
-            <div className="pl-5 text-slate-600 dark:text-slate-300 space-y-0.5">
-              {order.shipping_address.full_name && (
-                <p className="font-semibold text-slate-900 dark:text-white">
-                  {order.shipping_address.full_name}
+          </>
+        ) : (
+          <div className="p-5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 space-y-3 text-xs">
+            <div className="flex items-start gap-2.5 text-slate-600 dark:text-slate-300">
+              <ShieldCheck className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-semibold text-slate-900 dark:text-white">Privacy & Account Security</p>
+                <p className="leading-relaxed text-slate-600 dark:text-slate-300">
+                  Itemized pricing, product lines, and address details are securely hidden because this session is unauthenticated or the checkout session has expired.
                 </p>
-              )}
-              {order.shipping_address.address_line1 && (
-                <p>{order.shipping_address.address_line1}</p>
-              )}
-              {order.shipping_address.address_line2 && (
-                <p>{order.shipping_address.address_line2}</p>
-              )}
-              <p>
-                {[order.shipping_address.city, order.shipping_address.state, order.shipping_address.postal_code, order.shipping_address.country].filter(Boolean).join(", ")}
-              </p>
-              {order.customer_phone && (
-                <p className="text-slate-500 dark:text-slate-400 text-[11px] pt-0.5">
-                  Phone: {order.customer_phone}
+                <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                  Your order is registered in our system and a complete confirmation receipt was dispatched to your email.
                 </p>
-              )}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-200 dark:border-white/10">
+              <Link
+                href={`/track?number=${displayOrderNumber}`}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs transition-colors"
+              >
+                <Truck className="w-3.5 h-3.5" /> Track Fulfillment Status →
+              </Link>
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-slate-200 font-medium text-xs transition-colors"
+              >
+                Sign In to Customer Account
+              </Link>
             </div>
           </div>
         )}

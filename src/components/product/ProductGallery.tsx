@@ -15,11 +15,18 @@ import { ProductImage } from "@/types";
 interface ProductGalleryProps {
   images?: ProductImage[];
   productName: string;
+  selectedImageId?: number | null;
+  selectedImageUrl?: string | null;
 }
 
 const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/%3E%3C/svg%3E";
 
-export function ProductGallery({ images = [], productName }: ProductGalleryProps) {
+export function ProductGallery({
+  images = [],
+  productName,
+  selectedImageId,
+  selectedImageUrl,
+}: ProductGalleryProps) {
   const defaultImages = images.length > 0 ? images : [
     {
       id: 1,
@@ -32,6 +39,29 @@ export function ProductGallery({ images = [], productName }: ProductGalleryProps
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = defaultImages[activeIndex] || defaultImages[0];
+  const lastSynchronizedRef = useRef<string | number | null>(null);
+
+  // Synchronize gallery active image when a variant with image is selected,
+  // while preserving user thumbnail navigation once synchronized
+  useEffect(() => {
+    const currentKey = selectedImageId || selectedImageUrl || null;
+    if (currentKey && currentKey !== lastSynchronizedRef.current) {
+      lastSynchronizedRef.current = currentKey;
+      if (selectedImageId) {
+        const idx = defaultImages.findIndex((img) => img.id === selectedImageId);
+        if (idx !== -1) {
+          setActiveIndex(idx);
+          setIsZoomed(false);
+        }
+      } else if (selectedImageUrl) {
+        const idx = defaultImages.findIndex((img) => img.image_url === selectedImageUrl);
+        if (idx !== -1) {
+          setActiveIndex(idx);
+          setIsZoomed(false);
+        }
+      }
+    }
+  }, [selectedImageId, selectedImageUrl, defaultImages]);
 
   // Fullscreen & Click-to-Zoom States
   const [isFullscreen, setIsFullscreen] = useState(false);

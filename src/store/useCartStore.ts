@@ -3,6 +3,9 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { CartItem, CartValidationItem, CartValidationResponse, CouponValidation, Product, ProductVariant, PromotionEvaluationResult } from "@/types";
 import { api } from "@/lib/api";
 import { trackAddToCart } from "@/lib/metaPixel";
+import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
+
+export { getVariantEffectivePrice };
 
 /**
  * Authoritatively resolve available stock for a product or variant from available data.
@@ -170,6 +173,7 @@ export const useCartStore = create<CartState>()(
               quantity: actualToAdd,
               selectedColor: variant?.color_name,
               selectedSize: variant?.size,
+              selectedAttributes: variant?.attributes || (variant?.color_name || variant?.size ? { ...(variant?.color_name ? { Color: variant.color_name } : {}), ...(variant?.size ? { Size: variant.size } : {}) } : null),
               availableStock,
               validationStatus: "valid" as const,
               validationMessage: null,
@@ -179,7 +183,7 @@ export const useCartStore = create<CartState>()(
           syncServerCart(newItems);
         }
 
-        const itemPrice = Number(product.price || 0) + (variant ? Number(variant.price_modifier || 0) : 0);
+        const itemPrice = getVariantEffectivePrice(product, variant);
         trackAddToCart({
           id: product.id,
           name: product.name,
@@ -308,7 +312,7 @@ export const useCartStore = create<CartState>()(
             product_id: item.product.id,
             variant_id: item.variant?.id ?? null,
             quantity: item.quantity,
-            price: Number(item.product.price) + (item.variant ? Number(item.variant.price_modifier) : 0),
+            price: getVariantEffectivePrice(item.product, item.variant),
           }));
 
           const response = await api.validateCart(payload, appliedCoupon?.code);
@@ -495,7 +499,7 @@ export const useCartStore = create<CartState>()(
           if (item.quantity <= 0 || item.validationStatus === "product_not_found" || item.validationStatus === "inactive") {
             return acc;
           }
-          const price = Number(item.product.price) + (item.variant ? Number(item.variant.price_modifier) : 0);
+          const price = getVariantEffectivePrice(item.product, item.variant);
           return acc + price * item.quantity;
         }, 0);
       },

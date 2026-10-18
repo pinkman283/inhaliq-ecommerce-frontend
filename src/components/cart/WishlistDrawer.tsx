@@ -128,7 +128,7 @@ export function WishlistDrawer() {
                 ) : (
                   items.map((product) => {
                     const img = product.primary_image?.image_url || product.images?.[0]?.image_url;
-                    const hasVariants = Boolean(product.variants && product.variants.length > 1);
+                    const hasVariants = Boolean(product.has_options || (product.variants && product.variants.length > 1));
                     const isOutOfStock = product.stock_quantity !== undefined && product.stock_quantity <= 0;
 
                     return (
@@ -251,9 +251,9 @@ export function WishlistDrawer() {
                     onClick={handleMoveAllToCart}
                     className="w-full py-3 rounded-md text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl"
                     style={{
-                      background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #006B45)), var(--theme-secondary, #C6A15B))",
+                      background: "var(--theme-btn-primary-bg, var(--theme-primary, #292947))",
                       color: "var(--theme-btn-primary-text, #ffffff)",
-                      boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)"
+                      boxShadow: "0 10px 24px -4px rgba(41, 41, 71, 0.25)"
                     }}
                   >
                     Move All to Cart <ArrowRight className="w-4 h-4" />

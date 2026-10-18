@@ -112,24 +112,24 @@ export const DEFAULT_THEME_SETTINGS: ThemeSettings = {
   theme_secondary_color: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY,
   theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
   theme_accent_gradient: "emerald-teal",
-  theme_bg_color: "#ffffff",
-  theme_card_bg_color: "#ffffff",
-  theme_card_border_color: "#e5e7eb",
-  theme_text_heading_color: "#0f172a",
+  theme_bg_color: "#F8FAFC",
+  theme_card_bg_color: "#FFFFFF",
+  theme_card_border_color: "#E2E8F0",
+  theme_text_heading_color: "#0F172A",
   theme_text_body_color: "#475569",
   theme_btn_primary_bg: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
-  theme_btn_primary_text: "#ffffff",
-  theme_btn_secondary_bg: "#f3f4f6",
-  theme_btn_secondary_text: "#0f172a",
+  theme_btn_primary_text: "#FFFFFF",
+  theme_btn_secondary_bg: "#F1F5F9",
+  theme_btn_secondary_text: "#0F172A",
   theme_tab_active_bg: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
-  theme_tab_active_text: "#ffffff",
+  theme_tab_active_text: "#FFFFFF",
   theme_view_all_color: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
-  theme_hover_bg: "rgba(0, 107, 69, 0.08)",
-  theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY,
-  theme_nav_btn_bg: "#ffffff",
-  theme_nav_btn_color: "#0f172a",
-  theme_footer_bg_color: "#0f172a",
-  theme_footer_text_color: "#94a3b8",
+  theme_hover_bg: "rgba(15, 23, 42, 0.05)",
+  theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+  theme_nav_btn_bg: "#FFFFFF",
+  theme_nav_btn_color: "#0F172A",
+  theme_footer_bg_color: "#0F172A",
+  theme_footer_text_color: "#94A3B8",
   theme_radius: "rounded-md",
   theme_card_radius: STOREFRONT_CONFIG.DEFAULT_CARD_RADIUS,
   announcement_enabled: STOREFRONT_CONFIG.SHOW_TOP_ANNOUNCEMENT,
@@ -160,7 +160,7 @@ export const DEFAULT_THEME_SETTINGS: ThemeSettings = {
   footer_feature_desc_4: "Prompt expert support",
   footer_feature_link_4: "/contact",
   customer_auth_bg_image: "",
-  customer_auth_bg_color: "#ffffff",
+  customer_auth_bg_color: "#F8FAFC",
   customer_auth_card_position: "left",
   store_brand_name: "INHALIQ",
   store_brand_tagline: "ELEVATE EVERY INHALE",
@@ -250,21 +250,21 @@ export function getAutoSynchronizedTokens(bgColor: string, primaryColor: string)
   const isLight = getHexLuminance(bgColor) > 0.45;
   if (isLight) {
     return {
-      theme_bg_color: bgColor,
-      theme_card_bg_color: "#ffffff",
-      theme_card_border_color: "#e2e8f0",
-      theme_text_heading_color: "#0f172a",
+      theme_bg_color: bgColor || "#F8FAFC",
+      theme_card_bg_color: "#FFFFFF",
+      theme_card_border_color: "#E2E8F0",
+      theme_text_heading_color: "#0F172A",
       theme_text_body_color: "#475569",
       theme_btn_primary_bg: primaryColor,
-      theme_btn_primary_text: getHexLuminance(primaryColor) > 0.5 ? "#0f172a" : "#ffffff",
-      theme_btn_secondary_bg: "#f1f5f9",
-      theme_btn_secondary_text: "#0f172a",
+      theme_btn_primary_text: getHexLuminance(primaryColor) > 0.5 ? "#0F172A" : "#FFFFFF",
+      theme_btn_secondary_bg: "#F1F5F9",
+      theme_btn_secondary_text: "#0F172A",
       theme_tab_active_bg: primaryColor,
-      theme_tab_active_text: getHexLuminance(primaryColor) > 0.5 ? "#0f172a" : "#ffffff",
-      theme_hover_bg: "rgba(0, 0, 0, 0.05)",
-      theme_hover_text: primaryColor,
-      theme_nav_btn_bg: "#ffffff",
-      theme_nav_btn_color: "#0f172a",
+      theme_tab_active_text: getHexLuminance(primaryColor) > 0.5 ? "#0F172A" : "#FFFFFF",
+      theme_hover_bg: "rgba(15, 23, 42, 0.05)",
+      theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+      theme_nav_btn_bg: "#FFFFFF",
+      theme_nav_btn_color: "#0F172A",
     };
   } else {
     return {
@@ -321,11 +321,12 @@ export function applyThemeToDOM(theme: ThemeSettings) {
   root.style.setProperty("--theme-primary-hover", primaryHover);
   root.style.setProperty("--theme-secondary", secondaryColor);
   root.style.setProperty("--theme-secondary-hover", secondaryHover);
-  root.style.setProperty("--theme-bg", theme.theme_bg_color);
-  root.style.setProperty("--theme-card-bg", theme.theme_card_bg_color);
+  root.style.setProperty("--theme-bg", theme.theme_bg_color || (isLightMode ? "#F8FAFC" : "#090a0f"));
+  root.style.setProperty("--theme-bg-muted", isLightMode ? "#F1F5F9" : "#0e121e");
+  root.style.setProperty("--theme-card-bg", theme.theme_card_bg_color || (isLightMode ? "#FFFFFF" : "#0c101d"));
 
   // Typography Tokens
-  const headingColor = theme.theme_text_heading_color || (isLightMode ? "#0f172a" : "#ffffff");
+  const headingColor = theme.theme_text_heading_color || (isLightMode ? "#0F172A" : "#ffffff");
   const bodyColor = theme.theme_text_body_color || (isLightMode ? "#475569" : "#94a3b8");
   root.style.setProperty("--theme-text-heading", headingColor);
   root.style.setProperty("--theme-text-body", bodyColor);
@@ -333,49 +334,49 @@ export function applyThemeToDOM(theme: ThemeSettings) {
   root.style.setProperty("--theme-text-sub", bodyColor);
 
   // Card Border Token
-  const cardBorder = theme.theme_card_border_color || (isLightMode ? "color-mix(in srgb, var(--theme-primary) 22%, rgba(0, 0, 0, 0.08))" : "color-mix(in srgb, var(--theme-primary) 22%, rgba(255, 255, 255, 0.08))");
+  const cardBorder = theme.theme_card_border_color || (isLightMode ? "#E2E8F0" : "rgba(255, 255, 255, 0.08)");
   root.style.setProperty("--theme-card-border", cardBorder);
   root.style.setProperty("--theme-border-sub", cardBorder);
 
   // Buttons & CTAs Tokens
-  root.style.setProperty("--theme-btn-primary-bg", theme.theme_btn_primary_bg || theme.theme_primary_color);
-  root.style.setProperty("--theme-btn-primary-text", theme.theme_btn_primary_text || "#ffffff");
-  root.style.setProperty("--theme-btn-secondary-bg", theme.theme_btn_secondary_bg || (isLightMode ? "#f1f5f9" : "rgba(255, 255, 255, 0.05)"));
-  root.style.setProperty("--theme-btn-secondary-text", theme.theme_btn_secondary_text || (isLightMode ? "#0f172a" : "#ffffff"));
-  root.style.setProperty("--theme-btn-bg", theme.theme_btn_primary_bg || theme.theme_primary_color);
+  root.style.setProperty("--theme-btn-primary-bg", theme.theme_btn_primary_bg || primaryColor);
+  root.style.setProperty("--theme-btn-primary-text", theme.theme_btn_primary_text || "#FFFFFF");
+  root.style.setProperty("--theme-btn-secondary-bg", theme.theme_btn_secondary_bg || (isLightMode ? "#F1F5F9" : "rgba(255, 255, 255, 0.05)"));
+  root.style.setProperty("--theme-btn-secondary-text", theme.theme_btn_secondary_text || (isLightMode ? "#0F172A" : "#ffffff"));
+  root.style.setProperty("--theme-btn-bg", theme.theme_btn_primary_bg || primaryColor);
 
   // Tabs & Navigation Tokens
-  const tabActiveBg = theme.theme_tab_active_bg || theme.theme_view_all_color || theme.theme_primary_color;
-  const tabActiveText = theme.theme_tab_active_text || (getHexLuminance(tabActiveBg) > 0.5 ? "#0f172a" : "#ffffff");
+  const tabActiveBg = theme.theme_tab_active_bg || theme.theme_view_all_color || primaryColor;
+  const tabActiveText = theme.theme_tab_active_text || (getHexLuminance(tabActiveBg) > 0.5 ? "#0F172A" : "#FFFFFF");
   const viewAllColor = theme.theme_view_all_color || tabActiveBg;
   root.style.setProperty("--theme-tab-active-bg", tabActiveBg);
   root.style.setProperty("--theme-tab-active-text", tabActiveText);
   root.style.setProperty("--theme-view-all-color", viewAllColor);
 
   // Carousel & Navigation Arrow Tokens
-  const navBg = theme.theme_nav_btn_bg || (isLightMode ? "#ffffff" : theme.theme_card_bg_color || "#0c101d");
-  const navColor = theme.theme_nav_btn_color || (isLightMode ? "#0f172a" : "#ffffff");
+  const navBg = theme.theme_nav_btn_bg || (isLightMode ? "#FFFFFF" : theme.theme_card_bg_color || "#0c101d");
+  const navColor = theme.theme_nav_btn_color || (isLightMode ? "#0F172A" : "#ffffff");
   root.style.setProperty("--theme-nav-btn-bg", navBg);
   root.style.setProperty("--theme-nav-btn-text", navColor);
 
   // Hover & Interactive Tokens
-  root.style.setProperty("--theme-hover-bg", theme.theme_hover_bg || (isLightMode ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.08)"));
-  root.style.setProperty("--theme-hover-text", theme.theme_hover_text || theme.theme_primary_color);
-  root.style.setProperty("--theme-hover-accent", theme.theme_hover_text || theme.theme_primary_color);
+  root.style.setProperty("--theme-hover-bg", theme.theme_hover_bg || (isLightMode ? "rgba(15, 23, 42, 0.05)" : "rgba(255, 255, 255, 0.08)"));
+  root.style.setProperty("--theme-hover-text", theme.theme_hover_text || (isLightMode ? primaryHover : primaryColor));
+  root.style.setProperty("--theme-hover-accent", theme.theme_hover_text || (isLightMode ? primaryHover : primaryColor));
 
   // Footer Surface & Typography Tokens
-  const footerBg = theme.theme_footer_bg_color || "#1f242e";
+  const footerBg = theme.theme_footer_bg_color || (isLightMode ? "#0F172A" : "#1f242e");
   const isFooterLight = getHexLuminance(footerBg) > 0.45;
-  const footerText = theme.theme_footer_text_color || (isFooterLight ? "#475569" : "#94a3b8");
-  const footerBorder = isFooterLight ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)";
-  const footerHeading = isFooterLight ? "#0f172a" : "#ffffff";
-  const footerRibbonBg = isFooterLight ? "rgba(0, 0, 0, 0.02)" : "rgba(255, 255, 255, 0.02)";
-  const footerInputBg = isFooterLight ? "#ffffff" : "rgba(255, 255, 255, 0.05)";
-  const footerInputBorder = isFooterLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.12)";
-  const footerInputText = isFooterLight ? "#0f172a" : "#ffffff";
-  const footerSocialBg = isFooterLight ? "#ffffff" : "rgba(255, 255, 255, 0.05)";
-  const footerSocialBorder = isFooterLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.1)";
-  const footerLogoBg = isFooterLight ? "#f8fafc" : "#0d1017";
+  const footerText = theme.theme_footer_text_color || (isFooterLight ? "#475569" : "#94A3B8");
+  const footerBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.08)";
+  const footerHeading = isFooterLight ? "#0F172A" : "#FFFFFF";
+  const footerRibbonBg = isFooterLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.02)";
+  const footerInputBg = isFooterLight ? "#FFFFFF" : "rgba(255, 255, 255, 0.08)";
+  const footerInputBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.15)";
+  const footerInputText = isFooterLight ? "#0F172A" : "#FFFFFF";
+  const footerSocialBg = isFooterLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.08)";
+  const footerSocialBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.1)";
+  const footerLogoBg = isFooterLight ? "#FFFFFF" : "#1E293B";
 
   root.style.setProperty("--theme-footer-bg", footerBg);
   root.style.setProperty("--theme-footer-text", footerText);
@@ -445,10 +446,25 @@ export function initThemeFromCache(): boolean {
 const getInitialClientTheme = (): ThemeSettings => {
   if (typeof window !== "undefined") {
     try {
+      const provider = process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior";
       const cached = localStorage.getItem("aether_active_theme_cache");
       if (cached) {
         const parsed = JSON.parse(cached);
         const restored = { ...DEFAULT_THEME_SETTINGS, ...parsed };
+        if (provider === "senior") {
+          restored.theme_bg_color = "#F8FAFC";
+          restored.theme_card_bg_color = "#FFFFFF";
+          restored.theme_card_border_color = "#E2E8F0";
+          restored.theme_text_heading_color = "#0F172A";
+          restored.theme_text_body_color = "#475569";
+          restored.theme_primary_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_primary_hover = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER;
+          restored.theme_btn_primary_bg = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_tab_active_bg = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_view_all_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
+          restored.theme_hover_text = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER;
+          restored.theme_hover_bg = "rgba(15, 23, 42, 0.05)";
+        }
         if (STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS) {
           restored.theme_primary_color = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY;
           restored.theme_primary_hover = STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER;
@@ -500,9 +516,10 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
             : (rawSecondary || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
 
           const loadedTheme: ThemeSettings = {
-            ...get().theme,
-            store_brand_name: init.general_settings?.name || get().theme.store_brand_name,
-            store_brand_logo: init.general_settings?.logo || get().theme.store_brand_logo,
+            ...DEFAULT_THEME_SETTINGS,
+            store_brand_name: init.general_settings?.name || DEFAULT_THEME_SETTINGS.store_brand_name,
+            store_brand_logo: init.general_settings?.white_logo || init.general_settings?.logo || DEFAULT_THEME_SETTINGS.store_brand_logo,
+            store_favicon: init.general_settings?.favicon || DEFAULT_THEME_SETTINGS.store_favicon,
             theme_primary_color: primaryColor,
             theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
             theme_secondary_color: secondaryColor,
@@ -510,7 +527,13 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
             theme_btn_primary_bg: primaryColor,
             theme_tab_active_bg: primaryColor,
             theme_view_all_color: primaryColor,
-            theme_hover_text: primaryColor,
+            theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+            theme_footer_bg_color: init.main_settings?.footer_color || "#0F172A",
+            theme_bg_color: "#F8FAFC",
+            theme_card_bg_color: "#FFFFFF",
+            theme_card_border_color: "#E2E8F0",
+            theme_text_heading_color: "#0F172A",
+            theme_text_body_color: "#475569",
           };
           set({ theme: loadedTheme, isLoaded: true });
           applyThemeToDOM(loadedTheme);

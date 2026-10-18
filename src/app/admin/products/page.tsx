@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, AlertTriangle, Download, Upload } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { Brand, Category, Product, ProductCatalogStats } from "@/types";
@@ -13,9 +14,6 @@ import { ProductsFilterToolbar } from "@/components/admin/products/ProductsFilte
 import { ProductsTable } from "@/components/admin/products/ProductsTable";
 import { ProductBulkActions, BulkUpdatePayload } from "@/components/admin/products/ProductBulkActions";
 import { ProductPagination } from "@/components/admin/products/ProductPagination";
-
-// Modularized Phase 3B Tabbed Product Editor
-import { ProductEditor } from "@/components/admin/products/ProductEditor";
 
 // Modularized Phase 3C Product Preview Modal
 import { ProductPreviewModal } from "@/components/admin/products/ProductPreviewModal";
@@ -44,11 +42,6 @@ export default function AdminProductsPage() {
   const [badgeFilter, setBadgeFilter] = useState("all");
   const [mediaFilter, setMediaFilter] = useState<"all" | "has_images" | "no_images">("all");
   const [sortBy, setSortBy] = useState("latest");
-
-  // Tabbed Product Editor Drawer State (Phase 3B + 3H initial tab)
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [editorInitialTab, setEditorInitialTab] = useState<"general" | "pricing" | "media" | "variants" | "seo">("general");
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   // View Product Modal State (Phase 3C)
   const [viewingProduct, setViewingProduct] = useState<Product | null>(null);
@@ -131,35 +124,18 @@ export default function AdminProductsPage() {
     }
   };
 
+  const router = useRouter();
+
   const handleOpenCreate = () => {
-    setEditingProduct(null);
-    setEditorInitialTab("general");
-    setIsEditorOpen(true);
+    router.push("/admin/products/create");
   };
 
   const handleOpenEdit = (product: Product) => {
-    setEditingProduct(product);
-    setEditorInitialTab("general");
-    setIsEditorOpen(true);
+    router.push(`/admin/products/${product.id}/edit`);
   };
 
   const handleOpenMedia = (product: Product) => {
-    setEditingProduct(product);
-    setEditorInitialTab("media");
-    setIsEditorOpen(true);
-  };
-
-  const handleProductSaved = (savedProduct: Product, isNew: boolean) => {
-    if (isNew) {
-      setProducts((prev) => [savedProduct, ...prev]);
-      setTotalItems((prev) => prev + 1);
-    } else {
-      setProducts((prev) =>
-        prev.map((p) => (p.id === savedProduct.id ? savedProduct : p))
-      );
-    }
-    // Refresh stats in background
-    loadData(currentPage, perPage);
+    router.push(`/admin/products/${product.id}/edit`);
   };
 
   const handleOpenView = (product: Product) => {
@@ -404,22 +380,6 @@ export default function AdminProductsPage() {
           setPerPage(newPerPage);
           setCurrentPage(1);
         }}
-      />
-
-      {/* TABBED PRODUCT CREATE / EDIT ARCHITECTURE (Phase 3B + 3H) */}
-      <ProductEditor
-        isOpen={isEditorOpen}
-        initialTab={editorInitialTab}
-        onClose={() => {
-          setIsEditorOpen(false);
-          setEditingProduct(null);
-        }}
-        editingProduct={editingProduct}
-        categories={categories}
-        brands={brands}
-        onProductSaved={handleProductSaved}
-        onCategoriesUpdated={setCategories}
-        onBrandsUpdated={setBrands}
       />
 
       {/* MODULARIZED PRODUCT PREVIEW MODAL (Phase 3C) */}

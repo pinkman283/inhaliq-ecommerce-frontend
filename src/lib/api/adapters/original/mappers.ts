@@ -44,6 +44,8 @@ export function mapOriginalProduct(raw: any): Product {
     brand: raw.brand,
     variants: Array.isArray(raw.variants) ? raw.variants : [],
     has_variants: Boolean(raw.has_variants || (raw.variants && raw.variants.length > 0)),
+    options: raw.options || null,
+    has_options: raw.has_options !== undefined ? Boolean(raw.has_options) : Boolean(raw.options && raw.options.length > 0),
     reviews: Array.isArray(raw.reviews) ? raw.reviews : [],
     video: raw.video || null,
     related_products: Array.isArray(raw.related_products) ? raw.related_products.map(mapOriginalProduct) : [],

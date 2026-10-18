@@ -309,9 +309,9 @@ function ProductCatalogContent({
       <div className="mb-6 sm:mb-8 space-y-2">
         <span 
           className="text-xs font-black uppercase tracking-widest block"
-          style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))" }}
+          style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
         >
-          {theme.store_brand_name || "INHALIQ"} Hardware Archive
+          {theme.store_brand_name || "INHALIQ"} Product Catalog
         </span>
         <h1 
           className="text-2xl sm:text-4xl font-black tracking-tight"
@@ -327,16 +327,16 @@ function ProductCatalogContent({
             : selectedCategories.length > 1
             ? `${selectedCategories.length} Categories Selected`
             : selectedBrands.length === 1
-            ? `${brands.find((b) => b.slug === selectedBrands[0] || b.name === selectedBrands[0])?.name || selectedBrands[0]} Gear`
+            ? `${brands.find((b) => b.slug === selectedBrands[0] || b.name === selectedBrands[0])?.name || selectedBrands[0]} Collection`
             : selectedBrands.length > 1
             ? `${selectedBrands.length} Brands Selected`
-            : "Complete Hardware Lineup"}
+            : "All Products & Collections"}
         </h1>
         <p 
           className="text-xs sm:text-sm max-w-2xl leading-relaxed"
           style={{ color: "var(--theme-text-body, #64748b)" }}
         >
-          Audiophile acoustic planar headphones, CNC anodized aluminum keyboards, weatherproof modular bags, and smart workstation accessories.
+          Browse authentic disposable vapes, advanced pod systems, replacement coils, and signature e-liquids from authorized brands.
         </p>
       </div>
 
@@ -354,28 +354,28 @@ function ProductCatalogContent({
           <button
             type="button"
             onClick={() => setIsFilterDrawerOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-md border text-xs font-bold transition-all cursor-pointer shadow-xs hover:border-[#005826] select-none shrink-0"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-md border text-xs font-bold transition-all cursor-pointer shadow-xs hover:border-[#006B45] select-none shrink-0"
             style={{
               backgroundColor: hasActiveFilters 
                 ? "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))" 
                 : "var(--theme-card-bg, #ffffff)",
               borderColor: hasActiveFilters
-                ? "var(--theme-primary, #005826)"
+                ? "var(--theme-primary, #006B45)"
                 : "var(--theme-card-border, #e5e7eb)",
               color: hasActiveFilters
-                ? "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))"
+                ? "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))"
                 : "var(--theme-text-heading, #0f172a)"
             }}
           >
             <Filter 
               className="w-4 h-4" 
-              style={{ color: "var(--theme-primary, #005826)" }}
+              style={{ color: "var(--theme-primary, #006B45)" }}
             />
             <span>Filter</span>
             {activeFilterCount > 0 && (
               <span 
                 className="min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black text-white flex items-center justify-center shadow-xs"
-                style={{ backgroundColor: "var(--theme-primary, #005826)" }}
+                style={{ backgroundColor: "var(--theme-primary, #006B45)" }}
               >
                 {activeFilterCount}
               </span>
@@ -491,7 +491,7 @@ function ProductCatalogContent({
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
                 style={{
                   backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                  color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                  color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                   borderColor: "var(--theme-card-border, #e5e7eb)"
                 }}
               >
@@ -516,7 +516,7 @@ function ProductCatalogContent({
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
                 style={{
                   backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                  color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                  color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                   borderColor: "var(--theme-card-border, #e5e7eb)"
                 }}
               >
@@ -536,7 +536,7 @@ function ProductCatalogContent({
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
               style={{
                 backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                 borderColor: "var(--theme-card-border, #e5e7eb)"
               }}
             >
@@ -559,7 +559,7 @@ function ProductCatalogContent({
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
               style={{
                 backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                 borderColor: "var(--theme-card-border, #e5e7eb)"
               }}
             >
@@ -572,7 +572,7 @@ function ProductCatalogContent({
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
               style={{
                 backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                 borderColor: "var(--theme-card-border, #e5e7eb)"
               }}
             >
@@ -585,7 +585,7 @@ function ProductCatalogContent({
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
               style={{
                 backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                 borderColor: "var(--theme-card-border, #e5e7eb)"
               }}
             >
@@ -598,7 +598,7 @@ function ProductCatalogContent({
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold shadow-2xs"
               style={{
                 backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                 borderColor: "var(--theme-card-border, #e5e7eb)"
               }}
             >
@@ -616,7 +616,7 @@ function ProductCatalogContent({
           style={{ color: "var(--theme-text-body, #64748b)" }}
         >
           <span>
-            Showing <strong style={{ color: "var(--theme-text-heading, #0f172a)" }}>{products.length}</strong> of <strong style={{ color: "var(--theme-text-heading, #0f172a)" }}>{totalCount || products.length}</strong> hardware models
+            Showing <strong style={{ color: "var(--theme-text-heading, #0f172a)" }}>{products.length}</strong> of <strong style={{ color: "var(--theme-text-heading, #0f172a)" }}>{totalCount || products.length}</strong> products
           </span>
           {lastPage > 1 && (
             <span className="text-[11px] font-mono">
@@ -662,7 +662,7 @@ function ProductCatalogContent({
           >
             <Search 
               className="w-8 h-8" 
-              style={{ color: "var(--theme-primary, #005826)" }}
+              style={{ color: "var(--theme-primary, #006B45)" }}
             />
           </div>
           <h3 
@@ -728,9 +728,9 @@ function ProductCatalogContent({
                         isActive ? "shadow-sm scale-105" : "hover:opacity-80"
                       }`}
                       style={isActive ? {
-                        backgroundColor: "var(--theme-tab-active-bg, var(--theme-primary, #005826))",
+                        backgroundColor: "var(--theme-tab-active-bg, var(--theme-primary, #006B45))",
                         color: "var(--theme-tab-active-text, #ffffff)",
-                        borderColor: "var(--theme-tab-active-bg, var(--theme-primary, #005826))"
+                        borderColor: "var(--theme-tab-active-bg, var(--theme-primary, #006B45))"
                       } : {
                         backgroundColor: "var(--theme-card-bg, #ffffff)",
                         borderColor: "var(--theme-card-border, #e5e7eb)",
@@ -801,7 +801,7 @@ function ProductCatalogContent({
                       borderColor: "var(--theme-card-border, #e5e7eb)"
                     }}
                   >
-                    <Filter className="w-4.5 h-4.5" style={{ color: "var(--theme-primary, #005826)" }} />
+                    <Filter className="w-4.5 h-4.5" style={{ color: "var(--theme-primary, #006B45)" }} />
                   </div>
                   <div>
                     <h2 
@@ -863,7 +863,7 @@ function ProductCatalogContent({
                           type="button"
                           onClick={() => handleCategoryToggle("")}
                           className="text-[10px] font-bold hover:underline cursor-pointer"
-                          style={{ color: "var(--theme-primary, #005826)" }}
+                          style={{ color: "var(--theme-primary, #006B45)" }}
                         >
                           Select All
                         </button>
@@ -883,7 +883,7 @@ function ProductCatalogContent({
                       }`}
                       style={selectedCategories.length === 0 ? {
                         backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                        color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                        color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                         borderColor: "var(--theme-card-border, #e5e7eb)"
                       } : {
                         color: "var(--theme-text-heading, #0f172a)"
@@ -895,7 +895,7 @@ function ProductCatalogContent({
                             selectedCategories.length === 0 ? "border-transparent shadow-xs" : "border-gray-300 dark:border-white/20 bg-transparent"
                           }`}
                           style={selectedCategories.length === 0 ? {
-                            backgroundColor: "var(--theme-primary, #005826)",
+                            backgroundColor: "var(--theme-primary, #006B45)",
                             color: "#ffffff"
                           } : undefined}
                         >
@@ -944,7 +944,7 @@ function ProductCatalogContent({
                               }`}
                               style={isSelected ? {
                                 backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                                 borderColor: "var(--theme-card-border, #e5e7eb)"
                               } : {
                                 color: "var(--theme-text-heading, #0f172a)"
@@ -978,7 +978,7 @@ function ProductCatalogContent({
                                     isSelected ? "border-transparent shadow-xs" : "border-gray-300 dark:border-white/20 bg-transparent group-hover:border-gray-400"
                                   }`}
                                   style={isSelected ? {
-                                    backgroundColor: "var(--theme-primary, #005826)",
+                                    backgroundColor: "var(--theme-primary, #006B45)",
                                     color: "#ffffff"
                                   } : undefined}
                                 >
@@ -994,7 +994,7 @@ function ProductCatalogContent({
                                 {!isExpanded && activeChildrenCount > 0 && (
                                   <span 
                                     className="px-1.5 py-0.2 rounded-full text-[9px] font-black text-white ml-1 shrink-0 shadow-2xs"
-                                    style={{ backgroundColor: "var(--theme-primary, #005826)" }}
+                                    style={{ backgroundColor: "var(--theme-primary, #006B45)" }}
                                     title={`${activeChildrenCount} subcategories selected`}
                                   >
                                     +{activeChildrenCount}
@@ -1054,7 +1054,7 @@ function ProductCatalogContent({
                           type="button"
                           onClick={() => handleBrandToggle("")}
                           className="text-[10px] font-bold hover:underline cursor-pointer"
-                          style={{ color: "var(--theme-primary, #005826)" }}
+                          style={{ color: "var(--theme-primary, #006B45)" }}
                         >
                           Select All
                         </button>
@@ -1073,7 +1073,7 @@ function ProductCatalogContent({
                         }`}
                         style={selectedBrands.length === 0 ? {
                           backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                          color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                          color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                           borderColor: "var(--theme-card-border, #e5e7eb)"
                         } : {
                           color: "var(--theme-text-heading, #0f172a)"
@@ -1085,7 +1085,7 @@ function ProductCatalogContent({
                               selectedBrands.length === 0 ? "border-transparent shadow-xs" : "border-gray-300 dark:border-white/20 bg-transparent"
                             }`}
                             style={selectedBrands.length === 0 ? {
-                              backgroundColor: "var(--theme-primary, #005826)",
+                              backgroundColor: "var(--theme-primary, #006B45)",
                               color: "#ffffff"
                             } : undefined}
                           >
@@ -1110,7 +1110,7 @@ function ProductCatalogContent({
                             }`}
                             style={isSelected ? {
                               backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                              color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                              color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                               borderColor: "var(--theme-card-border, #e5e7eb)"
                             } : {
                               color: "var(--theme-text-heading, #0f172a)"
@@ -1122,7 +1122,7 @@ function ProductCatalogContent({
                                   isSelected ? "border-transparent shadow-xs" : "border-gray-300 dark:border-white/20 bg-transparent"
                                 }`}
                                 style={isSelected ? {
-                                  backgroundColor: "var(--theme-primary, #005826)",
+                                  backgroundColor: "var(--theme-primary, #006B45)",
                                   color: "#ffffff"
                                 } : undefined}
                               >
@@ -1222,7 +1222,7 @@ function ProductCatalogContent({
                             }`}
                             style={isRatingSelected ? {
                               backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-                              color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))",
+                              color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
                               borderColor: "var(--theme-card-border, #e5e7eb)"
                             } : {
                               color: "var(--theme-text-heading, #0f172a)"
@@ -1232,7 +1232,7 @@ function ProductCatalogContent({
                             {isRatingSelected && (
                               <Check 
                                 className="w-3.5 h-3.5" 
-                                style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #005826)))" }}
+                                style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
                               />
                             )}
                           </button>
@@ -1268,7 +1268,7 @@ function ProductCatalogContent({
                       className="w-11 h-6 rounded-full transition-colors relative p-0.5 cursor-pointer shadow-2xs shrink-0 ml-3"
                       style={{
                         backgroundColor: discountedOnly
-                          ? "var(--theme-primary, #005826)"
+                          ? "var(--theme-primary, #006B45)"
                           : "var(--theme-card-border, #cbd5e1)"
                       }}
                     >
@@ -1301,7 +1301,7 @@ function ProductCatalogContent({
                       className="w-11 h-6 rounded-full transition-colors relative p-0.5 cursor-pointer shadow-2xs shrink-0 ml-3"
                       style={{
                         backgroundColor: inStockOnly
-                          ? "var(--theme-primary, #005826)"
+                          ? "var(--theme-primary, #006B45)"
                           : "var(--theme-card-border, #cbd5e1)"
                       }}
                     >
@@ -1340,7 +1340,7 @@ function ProductCatalogContent({
                   type="button"
                   onClick={() => setIsFilterDrawerOpen(false)}
                   className="flex-1 py-2.5 px-4 rounded-md text-xs font-bold text-white transition-all shadow-md cursor-pointer text-center hover:opacity-95 active:scale-[0.99]"
-                  style={{ backgroundColor: "var(--theme-primary, #005826)" }}
+                  style={{ backgroundColor: "var(--theme-primary, #006B45)" }}
                 >
                   View {totalCount || products.length} Results
                 </button>

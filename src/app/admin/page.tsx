@@ -1,387 +1,350 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { 
-  DollarSign, 
-  ShoppingBag, 
-  Users, 
-  Package, 
-  TrendingUp, 
-  AlertTriangle, 
-  ArrowUpRight, 
-  Truck, 
-  Clock, 
-  ShieldCheck,
-  ChevronRight,
-  Layers,
-  Sparkles,
-  Receipt,
-  Plus
-} from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
 import { adminApi } from "@/lib/adminApi";
-import { AdminAnalytics } from "@/types";
-import { formatPrice, formatDate } from "@/lib/utils";
-import {
-  AdminPageHeader,
-  AdminStatStrip,
-  AdminStatusBadge,
-  AdminEmptyState,
-} from "@/components/admin/ui";
+import { 
+  AdminAnalytics, 
+  FinancialSummary, 
+  AuditLog, 
+  Integration, 
+  Order, 
+  Product 
+} from "@/types";
+import { 
+  DashboardHeader,
+  ExecutiveKpiStrip,
+  OrderStatusPipeline,
+  RevenuePerformanceChart,
+  RecentOrdersWidget,
+  ProductAndInventoryGrid,
+  FinancialBreakdownCard,
+  MarketingAndAttributionCard,
+  SystemHealthAndActivity,
+  DateRangeState,
+  getPresetDateRange,
+  calculateDelta,
+  ComparisonDelta
+} from "@/components/admin/dashboard";
+import { AlertCircle, RefreshCw } from "lucide-react";
 
 export default function AdminDashboardOverview() {
-  const [analytics, setAnalytics] = useState<AdminAnalytics | null>(null);
-  const [loading, setLoading] = useState(true);
+  // 1. Date Range State
+  const defaultPreset = getPresetDateRange("this_month");
+  const [dateRange, setDateRange] = useState<DateRangeState>({
+    period: "this_month",
+    startDate: defaultPreset.startDate,
+    endDate: defaultPreset.endDate,
+    label: defaultPreset.label,
+    comparisonLabel: defaultPreset.comparisonLabel,
+  });
 
+  // 2. Data State
+  const [analytics, setAnalytics] = useState<AdminAnalytics | null>(null);
+  const [financeSummary, setFinanceSummary] = useState<FinancialSummary | null>(null);
+  const [prevFinanceSummary, setPrevFinanceSummary] = useState<FinancialSummary | null>(null);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
+  const [couponRows, setCouponRows] = useState<any[]>([]);
+
+  // 3. UI Status State
+  const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  // Security: Guarantee private admin pages are not indexed
   useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await adminApi.getAnalytics();
-        setAnalytics(data);
-      } catch (err) {
-        console.error("Failed to load admin analytics:", err);
-      } finally {
-        setLoading(false);
-      }
+    let meta = document.querySelector('meta[name="robots"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "robots");
+      document.head.appendChild(meta);
     }
-    loadData();
+    meta.setAttribute("content", "noindex, nofollow");
   }, []);
 
-  if (loading) {
-    return (
-      <div className="py-24 text-center text-[#929BAD] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin" />
-        <span className="text-xs font-bold uppercase tracking-wider text-[#E5E7EB]">
-          Loading Analytics Dashboard...
-        </span>
-      </div>
-    );
-  }
+  // Fetch Dashboard Telemetry with Graceful Partial-Failure Handling
+  const fetchDashboardData = useCallback(async (currentRange: DateRangeState, isManualRefresh = false) => {
+    if (isManualRefresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
+    setFetchError(null);
 
-  const stats = analytics?.stats || {
-    total_revenue: 39800,
-    total_orders: 134,
-    total_customers: 248,
-    total_products: 8,
-    low_stock_count: 2,
+    try {
+      // 1. Fetch Primary Analytics & Telemetry (stats, recent orders, top products, sales trend)
+      const analyticsPromise = adminApi.getAnalytics().catch((err) => {
+        console.error("Failed to fetch admin analytics:", err);
+        return null;
+      });
+
+      // 2. Fetch Current Period Financial Statement
+      const finParams = currentRange.period === "custom"
+        ? { date_from: currentRange.startDate, date_to: currentRange.endDate }
+        : { period: getPresetDateRange(currentRange.period).backendPeriod || currentRange.period };
+
+      const financePromise = adminApi.getFinanceSummary(finParams).catch((err) => {
+        console.error("Failed to fetch current finance summary:", err);
+        return null;
+      });
+
+      // 3. Fetch Previous Period Financial Statement for Accurate Comparison %
+      const presetInfo = getPresetDateRange(currentRange.period);
+      let prevFinParams: { period?: string; date_from?: string; date_to?: string } = { period: "last_month" };
+
+      if (currentRange.period === "this_month") {
+        prevFinParams = { period: "last_month" };
+      } else if (currentRange.period === "today") {
+        prevFinParams = { period: "yesterday" };
+      } else if (presetInfo.prevStartDate && presetInfo.prevEndDate) {
+        prevFinParams = { date_from: presetInfo.prevStartDate, date_to: presetInfo.prevEndDate };
+      }
+
+      const prevFinancePromise = adminApi.getFinanceSummary(prevFinParams).catch((err) => {
+        console.error("Failed to fetch previous finance summary:", err);
+        return null;
+      });
+
+      // 4. Fetch Audit Logs
+      const auditLogsPromise = adminApi.getAuditLogs({ per_page: 6 }).catch((err) => {
+        console.warn("Failed to fetch audit logs:", err);
+        return null;
+      });
+
+      // 5. Fetch Integrations
+      const integrationsPromise = adminApi.getIntegrations().catch((err) => {
+        console.warn("Failed to fetch integrations:", err);
+        return null;
+      });
+
+      // 6. Fetch Coupon Performance Report
+      const couponsPromise = adminApi.getReport("coupons", {
+        start_date: currentRange.startDate,
+        end_date: currentRange.endDate,
+      }).catch((err) => {
+        console.warn("Coupon report not available:", err);
+        return null;
+      });
+
+      // Await all concurrently
+      const [
+        analyticsRes,
+        financeRes,
+        prevFinanceRes,
+        auditLogsRes,
+        integrationsRes,
+        couponsRes,
+      ] = await Promise.all([
+        analyticsPromise,
+        financePromise,
+        prevFinancePromise,
+        auditLogsPromise,
+        integrationsPromise,
+        couponsPromise,
+      ]);
+
+      if (analyticsRes) {
+        setAnalytics(analyticsRes);
+      }
+      if (financeRes) {
+        setFinanceSummary(financeRes);
+      }
+      if (prevFinanceRes) {
+        setPrevFinanceSummary(prevFinanceRes);
+      }
+      if (auditLogsRes?.logs?.data) {
+        setAuditLogs(auditLogsRes.logs.data);
+      }
+      if (integrationsRes?.integrations) {
+        setIntegrations(integrationsRes.integrations);
+      }
+      if (couponsRes?.rows) {
+        setCouponRows(couponsRes.rows);
+      }
+
+      setLastUpdated(new Date());
+    } catch (err: any) {
+      console.error("Dashboard data load error:", err);
+      setFetchError("Could not refresh some dashboard telemetry. Check network connectivity.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Initial Load
+  useEffect(() => {
+    fetchDashboardData(dateRange);
+  }, [fetchDashboardData, dateRange]);
+
+  // Handle Date Range Updates
+  const handleDateRangeChange = (newRange: DateRangeState) => {
+    setDateRange(newRange);
   };
 
-  const avgOrderValue = stats.total_orders > 0 ? stats.total_revenue / stats.total_orders : 0;
+  // Handle Manual Refresh
+  const handleRefresh = () => {
+    fetchDashboardData(dateRange, true);
+  };
+
+  // Derived Metrics & Safe Comparison Calculations
+  const finMetrics = financeSummary?.metrics;
+  const prevFinMetrics = prevFinanceSummary?.metrics;
+
+  const netSales = finMetrics?.net_sales ?? analytics?.stats.total_revenue ?? 0;
+  const grossSales = finMetrics?.gross_sales;
+  const discounts = finMetrics?.discounts ?? 0;
+  const refunds = finMetrics?.refunds ?? 0;
+
+  const totalOrders = finMetrics?.total_orders ?? analytics?.stats.total_orders ?? 0;
+  const avgOrderValue = finMetrics?.avg_order_value ?? (totalOrders > 0 ? netSales / totalOrders : 0);
+
+  const operatingProfit = finMetrics?.operating_profit ?? 0;
+  const netMarginPercentage = finMetrics?.net_margin_percentage ?? 0;
+
+  const onlineSales = financeSummary?.channels?.online?.sales ?? netSales;
+  const posSales = financeSummary?.channels?.pos?.sales ?? 0;
+  const onlineOrdersCount = financeSummary?.channels?.online?.orders_count ?? totalOrders;
+  const posOrdersCount = financeSummary?.channels?.pos?.orders_count ?? 0;
+
+  // Comparison Deltas (safely preventing misleading infinity)
+  const salesDelta: ComparisonDelta | undefined = prevFinMetrics
+    ? calculateDelta(netSales, prevFinMetrics.net_sales)
+    : undefined;
+
+  const ordersDelta: ComparisonDelta | undefined = prevFinMetrics
+    ? calculateDelta(totalOrders, prevFinMetrics.total_orders)
+    : undefined;
+
+  const profitDelta: ComparisonDelta | undefined = prevFinMetrics
+    ? calculateDelta(operatingProfit, prevFinMetrics.operating_profit)
+    : undefined;
+
+  // Stats from analytics or safe fallbacks
+  const stats = analytics?.stats || {
+    total_revenue: 0,
+    total_orders: 0,
+    total_customers: 0,
+    total_products: 0,
+    low_stock_count: 0,
+    pending_orders: 0,
+    confirmed_orders: 0,
+    processing_orders: 0,
+    shipped_orders: 0,
+    delivered_orders: 0,
+    cancelled_orders: 0,
+    refunded_orders: 0,
+    pending_payments: 0,
+    paid_payments: 0,
+  };
 
   return (
-    <div className="space-y-6 pb-16">
+    <div className="-m-4 sm:-m-6 lg:-m-8 min-h-[calc(100vh-3.5rem)] p-4 sm:p-6 lg:p-8 bg-[#F8FAFC] text-[#111827] space-y-6">
       
-      {/* Top Header: Title & Quick Actions */}
-      <AdminPageHeader
-        title="Executive Command Center"
-        description="Real-time financial telemetry, order processing velocity, and inventory health."
-        actions={
+      {/* 1. Header & Global Controls */}
+      <DashboardHeader
+        dateRange={dateRange}
+        onDateRangeChange={handleDateRangeChange}
+        onRefresh={handleRefresh}
+        isRefreshing={refreshing}
+        lastUpdated={lastUpdated}
+      />
+
+      {/* Partial Failure Warning Banner */}
+      {fetchError && (
+        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-center justify-between text-xs animate-in fade-in">
           <div className="flex items-center gap-2">
-            <Link
-              href="/admin/pos"
-              className="px-3 py-1.5 rounded-md bg-[#171B26] hover:bg-[#272B35] border border-[#272B35] text-xs font-semibold text-[#E5E7EB] hover:text-white transition-all flex items-center gap-1.5"
-            >
-              <Receipt className="w-3.5 h-3.5 text-[#929BAD]" />
-              <span>POS Terminal</span>
-            </Link>
-            <Link
-              href="/admin/products"
-              className="px-3 py-1.5 rounded-md bg-[#171B26] hover:bg-[#272B35] border border-[#272B35] text-xs font-semibold text-[#E5E7EB] hover:text-white transition-all flex items-center gap-1.5"
-            >
-              <Layers className="w-3.5 h-3.5 text-[#A78BFA]" />
-              <span>Products</span>
-            </Link>
-            <Link
-              href="/admin/orders"
-              className="px-3 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Manage Orders</span>
-            </Link>
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>{fetchError}</span>
           </div>
-        }
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="font-bold underline hover:text-amber-900 cursor-pointer"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* 2. Executive KPI Strip (Phase 3 B) */}
+      <ExecutiveKpiStrip
+        netSales={netSales}
+        grossSales={grossSales}
+        discounts={discounts}
+        refunds={refunds}
+        totalOrders={totalOrders}
+        avgOrderValue={avgOrderValue}
+        onlineOrdersCount={onlineOrdersCount}
+        posOrdersCount={posOrdersCount}
+        operatingProfit={operatingProfit}
+        netMarginPercentage={netMarginPercentage}
+        pendingOrdersCount={stats.pending_orders ?? 0}
+        pendingPaymentsCount={stats.pending_payments ?? 0}
+        lowStockCount={stats.low_stock_count ?? 0}
+        totalProducts={stats.total_products ?? 0}
+        totalCustomers={stats.total_customers ?? 0}
+        salesDelta={salesDelta}
+        ordersDelta={ordersDelta}
+        profitDelta={profitDelta}
+        comparisonPeriodLabel={dateRange.comparisonLabel}
+        isLoading={loading}
       />
 
-      {/* KPI Cards Strip */}
-      <AdminStatStrip
-        stats={[
-          {
-            label: "Net Revenue",
-            value: formatPrice(stats.total_revenue),
-            change: "+28.4%",
-            trend: "up",
-            icon: DollarSign,
-            helper: "Gross sales volume",
-          },
-          {
-            label: "Total Orders",
-            value: stats.total_orders,
-            change: `${formatPrice(avgOrderValue)} AOV`,
-            icon: ShoppingBag,
-            helper: "Completed checkouts",
-          },
-          {
-            label: "Customers",
-            value: stats.total_customers,
-            icon: Users,
-            helper: "Verified buyer accounts",
-          },
-          {
-            label: "Catalog Items",
-            value: stats.total_products,
-            change: stats.low_stock_count > 0 ? `${stats.low_stock_count} low` : "Optimal",
-            trend: stats.low_stock_count > 0 ? "down" : "neutral",
-            icon: Package,
-            helper: "Active catalog SKUs",
-          },
-        ]}
+      {/* 3. Operational Fulfillment Pipeline (Phase 3 D) */}
+      <OrderStatusPipeline
+        pendingCount={stats.pending_orders ?? 0}
+        confirmedCount={stats.confirmed_orders ?? 0}
+        processingCount={stats.processing_orders ?? 0}
+        shippedCount={stats.shipped_orders ?? 0}
+        deliveredCount={stats.delivered_orders ?? 0}
+        cancelledCount={stats.cancelled_orders ?? 0}
+        pendingPaymentCount={stats.pending_payments ?? 0}
       />
 
-      {/* Operational Order & Fulfillment Pipeline */}
-      <div className="p-4 rounded-md bg-[#11141D] border border-[#272B35] space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#E5E7EB]">
-              Operational Order & Fulfillment Pipeline
-            </h3>
-            <p className="text-[11px] text-[#929BAD]">Live order state distribution and pending fulfillment tasks</p>
-          </div>
-          <Link
-            href="/admin/orders"
-            className="text-[11px] font-semibold text-[#A78BFA] hover:text-[#B9A3FF] flex items-center gap-1"
-          >
-            All Orders <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+      {/* 4. Sales Velocity & Channel Performance (Phase 3 C) */}
+      <RevenuePerformanceChart
+        data={analytics?.sales_trend || []}
+        onlineSales={onlineSales}
+        posSales={posSales}
+        onlineOrdersCount={onlineOrdersCount}
+        posOrdersCount={posOrdersCount}
+        isLoading={loading}
+      />
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
-          {[
-            {
-              label: "Pending",
-              count: stats.pending_orders ?? 0,
-              status: "pending",
-              badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/30",
-              hint: "Needs review",
-            },
-            {
-              label: "Confirmed",
-              count: stats.confirmed_orders ?? 0,
-              status: "confirmed",
-              badgeColor: "text-blue-400 bg-blue-500/10 border-blue-500/30",
-              hint: "Ready to pick",
-            },
-            {
-              label: "Processing",
-              count: stats.processing_orders ?? 0,
-              status: "processing",
-              badgeColor: "text-[#A78BFA] bg-[#211B32] border-[#A78BFA]/30",
-              hint: "In fulfillment",
-            },
-            {
-              label: "Shipped",
-              count: stats.shipped_orders ?? 0,
-              status: "shipped",
-              badgeColor: "text-sky-400 bg-sky-500/10 border-sky-500/30",
-              hint: "In transit",
-            },
-            {
-              label: "Delivered",
-              count: stats.delivered_orders ?? 0,
-              status: "delivered",
-              badgeColor: "text-[#34D399] bg-[#34D399]/10 border-[#34D399]/30",
-              hint: "Completed",
-            },
-            {
-              label: "Cancelled",
-              count: stats.cancelled_orders ?? 0,
-              status: "cancelled",
-              badgeColor: "text-rose-400 bg-rose-500/10 border-rose-500/30",
-              hint: "Restocked",
-            },
-            {
-              label: "Pending Pay",
-              count: stats.pending_payments ?? 0,
-              status: "all",
-              paymentStatus: "pending",
-              badgeColor: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-              hint: "COD / Unpaid",
-            },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              href={`/admin/orders?status=${item.status}${item.paymentStatus ? `&payment_status=${item.paymentStatus}` : ""}`}
-              className="p-3 rounded-md bg-[#171B26] hover:bg-[#171B26]/80 border border-[#272B35] hover:border-[#A78BFA]/40 transition-all group block"
-            >
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] uppercase font-bold text-[#929BAD] tracking-wider">
-                  {item.label}
-                </span>
-                <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded border font-bold ${item.badgeColor}`}>
-                  {item.count}
-                </span>
-              </div>
-              <span className="text-[10px] text-[#626B7B] group-hover:text-[#929BAD] transition-colors block">
-                {item.hint}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
+      {/* 5. Order Operations Recent Stream (Phase 3 D) */}
+      <RecentOrdersWidget
+        orders={analytics?.recent_orders || []}
+        isLoading={loading}
+      />
 
-      {/* Sales Velocity Chart & Top Products */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* Sales Trend Visualizer */}
-        <div className="lg:col-span-8 p-5 rounded-md bg-[#11141D] border border-[#272B35] space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#E5E7EB]">Revenue Velocity</h3>
-              <p className="text-[11px] text-[#929BAD]">Gross sales performance over the recent cycles</p>
-            </div>
-            <span className="text-[11px] font-semibold text-[#34D399] bg-[#34D399]/10 px-2 py-0.5 rounded border border-[#34D399]/20">
-              +120% YoY
-            </span>
-          </div>
+      {/* 6. Product & Inventory Intelligence (Phase 3 E) */}
+      <ProductAndInventoryGrid
+        topProducts={analytics?.top_products || []}
+        lowStockCount={stats.low_stock_count ?? 0}
+        totalProducts={stats.total_products ?? 0}
+        isLoading={loading}
+      />
 
-          {/* Bar Chart Visualizer */}
-          <div className="grid grid-cols-6 gap-3 items-end h-44 pt-4 pb-2 border-b border-[#272B35]">
-            {(analytics?.sales_trend || [
-              { month: "Mar", sales: 14200 },
-              { month: "Apr", sales: 18900 },
-              { month: "May", sales: 24500 },
-              { month: "Jun", sales: 31200 },
-              { month: "Jul", sales: 28400 },
-              { month: "Aug", sales: 39800 },
-            ]).map((item) => {
-              const heightPercent = Math.round((item.sales / 42000) * 100);
-              return (
-                <div key={item.month} className="flex flex-col items-center gap-1.5 h-full justify-end group">
-                  <span className="text-[10px] font-medium text-[#929BAD] group-hover:text-[#A78BFA] transition-colors">
-                    ${Math.round(item.sales / 1000)}k
-                  </span>
-                  <div className="w-full max-w-[36px] bg-[#171B26] rounded-md overflow-hidden flex items-end">
-                    <div
-                      className="w-full bg-gradient-to-t from-indigo-600 to-[#A78BFA] rounded-md transition-all duration-300 group-hover:brightness-125"
-                      style={{ height: `${heightPercent}%` }}
-                    />
-                  </div>
-                  <span className="text-[10px] font-medium text-[#929BAD]">{item.month}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      {/* 7. Accounting & Financial Visibility (Phase 3 G) */}
+      <FinancialBreakdownCard
+        summary={financeSummary}
+        isLoading={loading}
+      />
 
-        {/* Top Products */}
-        <div className="lg:col-span-4 p-5 rounded-md bg-[#11141D] border border-[#272B35] space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#E5E7EB]">Top Performing Items</h3>
-            <Link href="/admin/products" className="text-[11px] font-semibold text-[#A78BFA] hover:text-[#B9A3FF]">
-              View All →
-            </Link>
-          </div>
+      {/* 8. Customers, Promotions & Marketing Attribution (Phase 3 F) */}
+      <MarketingAndAttributionCard
+        couponRows={couponRows}
+        isLoading={loading}
+      />
 
-          <div className="divide-y divide-[#272B35]">
-            {analytics?.top_products && analytics.top_products.length > 0 ? (
-              analytics.top_products.map((p) => {
-                const img = p.primary_image?.image_url || p.images?.[0]?.image_url;
-                return (
-                  <div key={p.id} className="py-2.5 flex items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {img ? (
-                        <img src={img} alt={p.name} className="w-8 h-8 rounded-md object-cover bg-slate-900 shrink-0 border border-[#272B35]" />
-                      ) : (
-                        <div className="w-8 h-8 rounded-md bg-[#171B26] border border-[#272B35] flex items-center justify-center shrink-0">
-                          <Package className="w-4 h-4 text-[#929BAD]" />
-                        </div>
-                      )}
-                      <div className="truncate">
-                        <h4 className="font-medium text-white truncate">{p.name}</h4>
-                        <span className="text-[10px] text-[#929BAD]">{p.brand}</span>
-                      </div>
-                    </div>
-                    <span className="font-semibold text-[#A78BFA] shrink-0 font-mono">{formatPrice(p.price)}</span>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="text-xs text-[#929BAD] py-4 italic">No product ratings logged yet.</p>
-            )}
-          </div>
-        </div>
-
-      </div>
-
-      {/* Recent Orders Stream */}
-      <div className="p-5 rounded-md bg-[#11141D] border border-[#272B35] space-y-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#E5E7EB]">Recent Customer Orders</h3>
-            <p className="text-[11px] text-[#929BAD]">Latest orders submitted across all channels</p>
-          </div>
-          <Link
-            href="/admin/orders"
-            className="text-[11px] font-semibold text-[#A78BFA] hover:text-[#B9A3FF] flex items-center gap-1"
-          >
-            All Orders <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-[#E5E7EB]">
-            <thead className="bg-[#171B26]/60 border-b border-[#272B35] text-[#929BAD] font-semibold uppercase text-[10px] tracking-wider">
-              <tr>
-                <th className="py-2.5 px-3">Order</th>
-                <th className="py-2.5 px-3">Customer</th>
-                <th className="py-2.5 px-3">Amount</th>
-                <th className="py-2.5 px-3">Payment</th>
-                <th className="py-2.5 px-3">Fulfillment</th>
-                <th className="py-2.5 px-3">Date</th>
-                <th className="py-2.5 px-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#272B35]">
-              {analytics?.recent_orders && analytics.recent_orders.length > 0 ? (
-                analytics.recent_orders.map((ord) => (
-                  <tr key={ord.id} className="hover:bg-[#171B26]/40 transition-colors">
-                    <td className="py-3 px-3 font-mono font-semibold text-[#A78BFA]">{ord.order_number}</td>
-                    <td className="py-3 px-3">
-                      <span className="font-medium text-white block">{ord.customer_name}</span>
-                      <span className="text-[10px] text-[#929BAD]">{ord.customer_email}</span>
-                    </td>
-                    <td className="py-3 px-3 font-semibold text-white font-mono">{formatPrice(ord.total_amount)}</td>
-                    <td className="py-3 px-3">
-                      <AdminStatusBadge status={ord.payment_status} size="sm" />
-                    </td>
-                    <td className="py-3 px-3">
-                      <AdminStatusBadge status={ord.order_status} size="sm" />
-                    </td>
-                    <td className="py-3 px-3 text-[#929BAD] text-[11px]">{formatDate(ord.created_at)}</td>
-                    <td className="py-3 px-3 text-right">
-                      <Link
-                        href="/admin/orders"
-                        className="px-2.5 py-1 rounded-md bg-[#171B26] hover:bg-[#272B35] text-[11px] font-semibold text-[#E5E7EB] hover:text-white border border-[#272B35] transition-colors inline-block"
-                      >
-                        Inspect
-                      </Link>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={7} className="p-0">
-                    <AdminEmptyState
-                      icon={ShoppingBag}
-                      title="No orders logged yet"
-                      description="New customer orders will appear here as soon as transactions occur."
-                    />
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* 9. Activity, Alerts and System Health (Phase 3 H) */}
+      <SystemHealthAndActivity
+        auditLogs={auditLogs}
+        integrations={integrations}
+        isLoading={loading}
+      />
 
     </div>
   );

@@ -165,7 +165,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
               title="Search products, brands, categories... (Cmd+K)"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <Search className="w-4 h-4 text-gray-500 dark:text-slate-300 group-hover:text-[#006B45] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
+                <Search className="w-4 h-4 text-gray-500 dark:text-slate-300 group-hover:text-[#0f172a] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
                 <span className="text-xs text-gray-600 dark:text-slate-200 group-hover:text-gray-900 dark:group-hover:text-white font-medium truncate">
                   Search catalog, categories, authorized brands...
                 </span>
@@ -216,7 +216,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             {/* Shopping Cart Drawer Trigger */}
             <button
               onClick={openCart}
-              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-md border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#006B45] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-md border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#0f172a] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
               title="Shopping Cart"
             >
               {mounted && cartCount > 0 && (
@@ -224,12 +224,12 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] px-1 font-black text-[10px] rounded-full flex items-center justify-center shadow-md text-white ring-2 ring-white dark:ring-[#090b14] z-10"
-                  style={{ backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))" }}
+                  style={{ backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #0f172a))" }}
                 >
                   {cartCount}
                 </motion.span>
               )}
-              <ShoppingBag className="w-4 h-4 text-[#006B45] dark:text-indigo-400 transition-colors" />
+              <ShoppingBag className="w-4 h-4 text-[#0f172a] dark:text-indigo-400 transition-colors" />
               <span className="text-xs font-bold hidden sm:inline">
                 Cart
               </span>
@@ -242,9 +242,9 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
               ) : (
                 <Link
                   href="/login"
-                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-[11px] sm:text-xs font-bold text-slate-800 dark:text-white hover:border-[#006B45] transition-all cursor-pointer"
+                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-[11px] sm:text-xs font-bold text-slate-800 dark:text-white hover:border-[#0f172a] transition-all cursor-pointer"
                 >
-                  <UserIcon className="w-3.5 h-3.5 text-[#006B45] dark:text-indigo-400" />
+                  <UserIcon className="w-3.5 h-3.5 text-[#0f172a] dark:text-indigo-400" />
                   <span className="hidden min-[360px]:inline">Sign In</span>
                 </Link>
               )}
@@ -280,14 +280,14 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                 href="/products"
                 className="all-categories-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer"
                 style={{
-                  backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))",
+                  backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #0f172a))",
                   color: "#ffffff",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--theme-primary-hover, #005238)";
+                  e.currentTarget.style.backgroundColor = "var(--theme-primary-hover, #1e293b)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--theme-btn-primary-bg, var(--theme-primary, #006B45))";
+                  e.currentTarget.style.backgroundColor = "var(--theme-btn-primary-bg, var(--theme-primary, #0f172a))";
                 }}
               >
                 <Menu className="w-3.5 h-3.5 text-white shrink-0" style={{ color: "#ffffff" }} />

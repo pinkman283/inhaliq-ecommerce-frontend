@@ -1,32 +1,62 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Layers, Edit3 } from "lucide-react";
-import { ProductFormVariant } from "@/types";
+import { ProductFormVariant, ProductOption, ProductFormImage } from "@/types";
 import { toast } from "sonner";
 import {
-  VariantMatrixGenerator,
+  DynamicOptionGroupEditor,
   VariantBulkToolbar,
   VariantMatrixTable,
-  generateCartesianCombinations,
+  generateDynamicCombinations,
   checkDuplicateVariants,
+  buildDynamicVariantDisplayName,
   buildVariantDisplayName,
-  SelectedColorOption,
+  inferOptionsFromLegacyVariants,
 } from "./variants";
 
 interface ProductVariantsTabProps {
   variants: ProductFormVariant[];
   onVariantsChange: (variants: ProductFormVariant[]) => void;
   onStockSync: (newTotalStock: number) => void;
+  basePrice?: number;
+  options?: ProductOption[];
+  onOptionsChange?: (options: ProductOption[]) => void;
+  availableImages?: ProductFormImage[];
 }
 
 export function ProductVariantsTab({
   variants,
   onVariantsChange,
   onStockSync,
+  basePrice = 0,
+  options,
+  onOptionsChange,
+  availableImages,
 }: ProductVariantsTabProps) {
-  // Mode selection: Matrix Generator vs Manual Option Form
+  // Mode selection: Dynamic Option Matrix vs Manual Option Form
   const [activeMode, setActiveMode] = useState<"matrix" | "manual">("matrix");
+
+  // Internal options state fallback when uncontrolled
+  const [internalOptions, setInternalOptions] = useState<ProductOption[]>(() => {
+    if (options && options.length > 0) return options;
+    return inferOptionsFromLegacyVariants(variants);
+  });
+
+  useEffect(() => {
+    if (options && options.length > 0) {
+      setInternalOptions(options);
+    }
+  }, [options]);
+
+  const activeOptions = options || internalOptions;
+
+  const handleOptionsChange = (nextOpts: ProductOption[]) => {
+    if (onOptionsChange) {
+      onOptionsChange(nextOpts);
+    }
+    setInternalOptions(nextOpts);
+  };
 
   // Manual Form States
   const [manualName, setManualName] = useState("");
@@ -34,29 +64,27 @@ export function ProductVariantsTab({
   const [manualColorName, setManualColorName] = useState("");
   const [manualColorHex, setManualColorHex] = useState("");
   const [manualStock, setManualStock] = useState("20");
+  const [manualPrice, setManualPrice] = useState("");
   const [manualPriceMod, setManualPriceMod] = useState("0");
   const [manualCostPrice, setManualCostPrice] = useState("");
   const [manualBarcode, setManualBarcode] = useState("");
 
   const updateAndSync = (next: ProductFormVariant[]) => {
     onVariantsChange(next);
-    const sum = next.reduce((acc, v) => acc + (Number(v.stock_quantity) || 0), 0);
+    const sum = next
+      .filter((v) => v.is_active !== false)
+      .reduce((acc, v) => acc + (Number(v.stock_quantity) || 0), 0);
     onStockSync(sum);
   };
 
-  // 1. Matrix Generation Handler
-  const handleGenerateMatrix = (
-    selectedColors: SelectedColorOption[],
-    selectedSizes: string[],
-    defaultStock: number,
-    defaultPriceMod: number
-  ) => {
-    const nextVariants = generateCartesianCombinations({
-      selectedColors,
-      selectedSizes,
+  // 1. Matrix Synchronization Handler
+  const handleSyncMatrix = () => {
+    const nextVariants = generateDynamicCombinations({
+      options: activeOptions,
       existingVariants: variants,
-      defaultStock,
-      defaultPriceModifier: defaultPriceMod,
+      defaultStock: 20,
+      defaultPrice: basePrice || null,
+      defaultPriceModifier: 0,
     });
 
     const dupError = checkDuplicateVariants(nextVariants);
@@ -75,6 +103,11 @@ export function ProductVariantsTab({
     updateAndSync(next);
   };
 
+  const handleBulkSetDirectPrice = (price: number) => {
+    const next = variants.map((v) => ({ ...v, price }));
+    updateAndSync(next);
+  };
+
   const handleBulkSetPriceModifier = (mod: number) => {
     const next = variants.map((v) => ({ ...v, price_modifier: mod }));
     updateAndSync(next);
@@ -82,6 +115,11 @@ export function ProductVariantsTab({
 
   const handleBulkSetCostPrice = (cost: number | null) => {
     const next = variants.map((v) => ({ ...v, cost_price: cost }));
+    updateAndSync(next);
+  };
+
+  const handleBulkSetActive = (isActive: boolean) => {
+    const next = variants.map((v) => ({ ...v, is_active: isActive }));
     updateAndSync(next);
   };
 
@@ -119,16 +157,23 @@ export function ProductVariantsTab({
     const costPrice = manualCostPrice ? parseFloat(manualCostPrice) : null;
     const barcode = manualBarcode.trim() || null;
 
+    const attributes: Record<string, string> = {};
+    if (trimmedColor) attributes["Color"] = trimmedColor;
+    if (trimmedSize) attributes["Size"] = trimmedSize;
+
     const newVar: ProductFormVariant = {
       name: displayName,
+      attributes: Object.keys(attributes).length > 0 ? attributes : null,
       size: trimmedSize || null,
       color_name: trimmedColor || null,
       color_hex: manualColorHex || null,
       stock_quantity: stockQty,
+      price: manualPrice ? parseFloat(manualPrice) : null,
       price_modifier: priceMod,
       cost_price: costPrice,
       barcode,
       sku: null,
+      is_active: true,
     };
 
     const next = [...variants, newVar];
@@ -203,13 +248,19 @@ export function ProductVariantsTab({
       {/* Mode A: Combination Matrix Generator */}
       {activeMode === "matrix" && (
         <div className="space-y-4">
-          <VariantMatrixGenerator onGenerateMatrix={handleGenerateMatrix} />
+          <DynamicOptionGroupEditor
+            options={activeOptions}
+            onOptionsChange={handleOptionsChange}
+            onSyncMatrix={handleSyncMatrix}
+          />
 
           {variants.length > 0 && (
             <VariantBulkToolbar
               onBulkSetStock={handleBulkSetStock}
+              onBulkSetDirectPrice={handleBulkSetDirectPrice}
               onBulkSetPriceModifier={handleBulkSetPriceModifier}
               onBulkSetCostPrice={handleBulkSetCostPrice}
+              onBulkSetActive={handleBulkSetActive}
               onClearMatrix={handleClearMatrix}
               totalVariantsCount={variants.length}
             />
@@ -219,6 +270,8 @@ export function ProductVariantsTab({
             variants={variants}
             onUpdateVariant={handleUpdateVariant}
             onRemoveVariant={handleRemoveVariant}
+            basePrice={basePrice}
+            availableImages={availableImages}
           />
         </div>
       )}
@@ -341,6 +394,7 @@ export function ProductVariantsTab({
             variants={variants}
             onUpdateVariant={handleUpdateVariant}
             onRemoveVariant={handleRemoveVariant}
+            basePrice={basePrice}
           />
         </div>
       )}

@@ -20,6 +20,7 @@ import { useCartStore, getAvailableStock } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
 
 export function CartDrawer() {
   const router = useRouter();
@@ -102,7 +103,7 @@ export function CartDrawer() {
         items: items.map((i) => ({
           product_id: i.product.id,
           quantity: i.quantity,
-          price: Number(i.product.price) + (i.variant ? Number(i.variant.price_modifier) : 0),
+          price: getVariantEffectivePrice(i.product, i.variant),
           category_id: (i.product as { category_id?: number }).category_id,
         })),
         code: couponInput.trim(),
@@ -284,7 +285,7 @@ export function CartDrawer() {
                       className="text-xs max-w-xs mb-6"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      Explore our precision acoustic headphones, mechanical keyboards, and modular daily essentials.
+                      Explore our collection of authentic disposable vapes, premium devices, and signature e-liquids.
                     </p>
                     <button
                       onClick={closeCart}
@@ -300,8 +301,8 @@ export function CartDrawer() {
                   </div>
                 ) : (
                   items.map((item) => {
-                    const img = item.product.primary_image?.image_url || item.product.images?.[0]?.image_url;
-                    const itemPrice = Number(item.product.price) + (item.variant ? Number(item.variant.price_modifier) : 0);
+                    const img = item.variant?.image_url || item.product.primary_image?.image_url || item.product.images?.[0]?.image_url;
+                    const itemPrice = getVariantEffectivePrice(item.product, item.variant);
                     const availableStock = item.availableStock !== undefined
                       ? item.availableStock
                       : getAvailableStock(item.product, item.variant);
@@ -381,7 +382,7 @@ export function CartDrawer() {
                             </div>
 
                             {item.variant && (
-                              <div className="flex items-center gap-1.5 mt-1">
+                              <div className="flex flex-wrap items-center gap-1.5 mt-1">
                                 {item.variant.color_hex && (
                                   <span
                                     className="w-2.5 h-2.5 rounded-full border border-white/40 inline-block"
@@ -398,6 +399,25 @@ export function CartDrawer() {
                                 >
                                   {item.variant.name}
                                 </span>
+                                {item.selectedAttributes ? (
+                                  Object.entries(item.selectedAttributes).map(([k, v]) => (
+                                    <span
+                                      key={k}
+                                      className="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-mono border border-black/10 dark:border-white/10 text-slate-500 dark:text-slate-400"
+                                    >
+                                      {k}: {v}
+                                    </span>
+                                  ))
+                                ) : item.variant.attributes ? (
+                                  Object.entries(item.variant.attributes).map(([k, v]) => (
+                                    <span
+                                      key={k}
+                                      className="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-mono border border-black/10 dark:border-white/10 text-slate-500 dark:text-slate-400"
+                                    >
+                                      {k}: {v}
+                                    </span>
+                                  ))
+                                ) : null}
                               </div>
                             )}
 
@@ -649,9 +669,9 @@ export function CartDrawer() {
                     disabled={checkoutLoading || hasInvalidItems()}
                     className="w-full py-3.5 rounded-md text-xs font-extrabold tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-105 active:scale-[0.99] cursor-pointer shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
-                      background: "linear-gradient(135deg, var(--theme-btn-primary-bg, var(--theme-primary, #006B45)), var(--theme-secondary, #C6A15B))",
+                      background: "var(--theme-btn-primary-bg, var(--theme-primary, #292947))",
                       color: "var(--theme-btn-primary-text, #ffffff)",
-                      boxShadow: "0 10px 28px -4px color-mix(in srgb, var(--theme-primary, #006B45) 40%, transparent)"
+                      boxShadow: "0 10px 24px -4px rgba(41, 41, 71, 0.25)"
                     }}
                   >
                     {checkoutLoading ? (

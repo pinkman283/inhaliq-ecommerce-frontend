@@ -152,14 +152,9 @@ export function HomepageProductSection({ section }: HomepageProductSectionProps)
         <div>
           {section.badge_text && (
             <div
-              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider mb-1.5 border"
-              style={{
-                backgroundColor: "color-mix(in srgb, var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45))) 12%, transparent)",
-                borderColor: "color-mix(in srgb, var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45))) 30%, transparent)",
-                color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
-              }}
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold uppercase tracking-wider mb-2 border border-slate-200/90 bg-slate-100 text-slate-700 shadow-2xs"
             >
-              <Icon className="w-3 h-3" style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }} />
+              <Icon className="w-3 h-3 text-slate-500" />
               <span>{section.badge_text}</span>
             </div>
           )}

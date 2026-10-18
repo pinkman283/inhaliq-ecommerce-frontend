@@ -251,6 +251,8 @@ export function mapSeniorProduct(raw: any): Product {
     images,
     variants,
     has_variants: variants.length > 0,
+    options: raw.options || null,
+    has_options: raw.has_options !== undefined ? Boolean(raw.has_options) : Boolean(raw.options && raw.options.length > 0),
     in_stock: Number(raw.stock ?? raw.stock_quantity ?? 50) > 0,
     created_at: raw.created_at || new Date().toISOString(),
 

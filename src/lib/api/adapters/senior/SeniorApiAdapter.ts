@@ -110,7 +110,7 @@ export class SeniorApiAdapter implements IStorefrontApi {
   // System & Init Settings
   // ==========================================
   async getInitSettings(): Promise<StorefrontInitSettings> {
-    const res = await this.client.get("/init-settings");
+    const res = await this.client.get("/init-settings", { timeout: 12000 });
     return res.data?.data || res.data;
   }
 

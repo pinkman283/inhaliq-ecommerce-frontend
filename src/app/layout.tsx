@@ -81,7 +81,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function getServerTheme(): Promise<ThemeSettings> {
   return cachedFetch<ThemeSettings>(
-    "aether:theme:settings:v3",
+    "aether:theme:settings:premium:v1",
     async () => {
       try {
         const provider = process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior";
@@ -100,7 +100,8 @@ async function getServerTheme(): Promise<ThemeSettings> {
           return {
             ...DEFAULT_THEME_SETTINGS,
             store_brand_name: init.general_settings?.name || DEFAULT_THEME_SETTINGS.store_brand_name,
-            store_brand_logo: init.general_settings?.logo || DEFAULT_THEME_SETTINGS.store_brand_logo,
+            store_brand_logo: init.general_settings?.white_logo || init.general_settings?.logo || DEFAULT_THEME_SETTINGS.store_brand_logo,
+            store_favicon: init.general_settings?.favicon || DEFAULT_THEME_SETTINGS.store_favicon,
             theme_primary_color: primaryColor,
             theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
             theme_secondary_color: secondaryColor,
@@ -109,6 +110,12 @@ async function getServerTheme(): Promise<ThemeSettings> {
             theme_tab_active_bg: primaryColor,
             theme_view_all_color: primaryColor,
             theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+            theme_footer_bg_color: init.main_settings?.footer_color || "#0F172A",
+            theme_bg_color: "#F8FAFC",
+            theme_card_bg_color: "#FFFFFF",
+            theme_card_border_color: "#E2E8F0",
+            theme_text_heading_color: "#0F172A",
+            theme_text_body_color: "#475569",
           };
         }
 
@@ -167,18 +174,18 @@ export default async function RootLayout({
 
   useThemeStore.setState({ theme: initialTheme, isLoaded: true });
   const isLight = getHexLuminance(serverTheme.theme_bg_color) > 0.45;
-  const isFooterLight = getHexLuminance(serverTheme.theme_footer_bg_color || "#1f242e") > 0.45;
-  const footerBg = serverTheme.theme_footer_bg_color || "#1f242e";
-  const footerText = serverTheme.theme_footer_text_color || (isFooterLight ? "#475569" : "#94a3b8");
-  const footerBorder = isFooterLight ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)";
-  const footerHeading = isFooterLight ? "#0f172a" : "#ffffff";
-  const footerRibbonBg = isFooterLight ? "rgba(0, 0, 0, 0.02)" : "rgba(255, 255, 255, 0.02)";
-  const footerInputBg = isFooterLight ? "#ffffff" : "rgba(255, 255, 255, 0.05)";
-  const footerInputBorder = isFooterLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.12)";
-  const footerInputText = isFooterLight ? "#0f172a" : "#ffffff";
-  const footerSocialBg = isFooterLight ? "#ffffff" : "rgba(255, 255, 255, 0.05)";
-  const footerSocialBorder = isFooterLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.1)";
-  const footerLogoBg = isFooterLight ? "#f8fafc" : "#0d1017";
+  const isFooterLight = getHexLuminance(serverTheme.theme_footer_bg_color || (isLight ? "#0F172A" : "#1f242e")) > 0.45;
+  const footerBg = serverTheme.theme_footer_bg_color || (isLight ? "#0F172A" : "#1f242e");
+  const footerText = serverTheme.theme_footer_text_color || (isFooterLight ? "#475569" : "#94A3B8");
+  const footerBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.08)";
+  const footerHeading = isFooterLight ? "#0F172A" : "#FFFFFF";
+  const footerRibbonBg = isFooterLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.02)";
+  const footerInputBg = isFooterLight ? "#FFFFFF" : "rgba(255, 255, 255, 0.08)";
+  const footerInputBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.15)";
+  const footerInputText = isFooterLight ? "#0F172A" : "#FFFFFF";
+  const footerSocialBg = isFooterLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.08)";
+  const footerSocialBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.1)";
+  const footerLogoBg = isFooterLight ? "#FFFFFF" : "#1E293B";
 
   return (
     <html
@@ -206,22 +213,23 @@ export default async function RootLayout({
                 --theme-secondary: ${serverTheme.theme_secondary_color};
                 --theme-secondary-hover: ${serverTheme.theme_secondary_hover || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER};
                 --theme-bg: ${serverTheme.theme_bg_color};
+                --theme-bg-muted: ${isLight ? "#F1F5F9" : "#0e121e"};
                 --theme-card-bg: ${serverTheme.theme_card_bg_color};
-                --theme-card-border: ${serverTheme.theme_card_border_color || (isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)")};
+                --theme-card-border: ${serverTheme.theme_card_border_color || (isLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.08)")};
                 --theme-card-radius: ${serverTheme.theme_card_radius || STOREFRONT_CONFIG.DEFAULT_CARD_RADIUS || "10px"};
-                --theme-text-heading: ${serverTheme.theme_text_heading_color || (isLight ? "#0f172a" : "#ffffff")};
+                --theme-text-heading: ${serverTheme.theme_text_heading_color || (isLight ? "#0F172A" : "#ffffff")};
                 --theme-text-body: ${serverTheme.theme_text_body_color || (isLight ? "#475569" : "#94a3b8")};
                 --theme-btn-primary-bg: ${serverTheme.theme_btn_primary_bg || serverTheme.theme_primary_color};
-                --theme-btn-primary-text: ${serverTheme.theme_btn_primary_text || "#ffffff"};
-                --theme-btn-secondary-bg: ${serverTheme.theme_btn_secondary_bg || (isLight ? "#f1f5f9" : "rgba(255, 255, 255, 0.05)")};
-                --theme-btn-secondary-text: ${serverTheme.theme_btn_secondary_text || (isLight ? "#0f172a" : "#ffffff")};
+                --theme-btn-primary-text: ${serverTheme.theme_btn_primary_text || "#FFFFFF"};
+                --theme-btn-secondary-bg: ${serverTheme.theme_btn_secondary_bg || (isLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.05)")};
+                --theme-btn-secondary-text: ${serverTheme.theme_btn_secondary_text || (isLight ? "#0F172A" : "#ffffff")};
                 --theme-tab-active-bg: ${serverTheme.theme_tab_active_bg || serverTheme.theme_view_all_color || serverTheme.theme_primary_color};
-                --theme-tab-active-text: ${serverTheme.theme_tab_active_text || "#ffffff"};
+                --theme-tab-active-text: ${serverTheme.theme_tab_active_text || "#FFFFFF"};
                 --theme-view-all-color: ${serverTheme.theme_view_all_color || serverTheme.theme_tab_active_bg || serverTheme.theme_primary_color};
-                --theme-hover-bg: ${serverTheme.theme_hover_bg || (isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.08)")};
-                --theme-hover-text: ${serverTheme.theme_hover_text || serverTheme.theme_primary_color};
-                --theme-nav-btn-bg: ${serverTheme.theme_nav_btn_bg || (isLight ? "#ffffff" : "#0c101d")};
-                --theme-nav-btn-color: ${serverTheme.theme_nav_btn_color || (isLight ? "#0f172a" : "#ffffff")};
+                --theme-hover-bg: ${serverTheme.theme_hover_bg || (isLight ? "rgba(15, 23, 42, 0.05)" : "rgba(255, 255, 255, 0.08)")};
+                --theme-hover-text: ${serverTheme.theme_hover_text || serverTheme.theme_primary_hover || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER};
+                --theme-nav-btn-bg: ${serverTheme.theme_nav_btn_bg || (isLight ? "#FFFFFF" : "#0c101d")};
+                --theme-nav-btn-color: ${serverTheme.theme_nav_btn_color || (isLight ? "#0F172A" : "#ffffff")};
                 --theme-footer-bg: ${footerBg};
                 --theme-footer-text: ${footerText};
                 --theme-footer-border: ${footerBorder};

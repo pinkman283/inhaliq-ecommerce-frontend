@@ -31,12 +31,13 @@ interface CacheRule {
 
 // Rules mapping paths to Redis keys and TTLs
 function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRule | null {
+  const provider = (process.env.BACKEND_PROVIDER || process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior").toLowerCase();
   const pathStr = path.join("/");
 
   // 0. Header Navigation & Init Settings
   if (pathStr === "navigation/header" || pathStr === "nav-menu" || pathStr === "store-navigation") {
     return {
-      key: () => "aether:navigation:header",
+      key: () => `aether:${provider}:navigation:header:v2`,
       ttl: 86400, // 24 hours
       tags: ["navigation"],
     };
@@ -44,7 +45,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
 
   if (pathStr === "init-settings") {
     return {
-      key: () => "aether:settings:init",
+      key: () => `aether:${provider}:settings:init:v2`,
       ttl: 86400, // 24 hours
       tags: ["settings"],
     };
@@ -53,7 +54,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
   // 1. Homepage Banners
   if (pathStr === "homepage/banners" || pathStr === "home") {
     return {
-      key: () => "aether:banners:homepage",
+      key: () => `aether:${provider}:banners:homepage:v2`,
       ttl: 3600, // 1 hour
       tags: ["banners", "homepage"],
     };
@@ -62,7 +63,7 @@ function matchCacheRule(path: string[], searchParams: URLSearchParams): CacheRul
   // 2. Homepage Sections
   if (pathStr === "homepage/sections") {
     return {
-      key: () => "aether:sections:homepage",
+      key: () => `aether:${provider}:sections:homepage:v2`,
       ttl: 3600, // 1 hour
       tags: ["sections"],
     };

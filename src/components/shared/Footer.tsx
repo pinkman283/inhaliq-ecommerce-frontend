@@ -98,13 +98,13 @@ export function Footer() {
               {/* 1. Nationwide Delivery */}
               <Link
                 href={theme.footer_feature_link_1 || "/shipping-policy"}
-                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 rounded-lg transition-colors"
               >
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shrink-0 bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-slate-200 group-hover:bg-slate-900 group-hover:text-white shadow-2xs transition-all duration-200">
                   <Truck className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                     {theme.footer_feature_title_1 || "Nationwide Delivery"}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
@@ -116,13 +116,13 @@ export function Footer() {
               {/* 2. 100% Authentic Guarantee */}
               <Link
                 href={theme.footer_feature_link_2 || "/about"}
-                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 rounded-lg transition-colors"
               >
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shrink-0 bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-slate-200 group-hover:bg-slate-900 group-hover:text-white shadow-2xs transition-all duration-200">
                   <ShieldCheck className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                     {theme.footer_feature_title_2 || "100% Authentic Guarantee"}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
@@ -134,13 +134,13 @@ export function Footer() {
               {/* 3. Cash on Delivery */}
               <Link
                 href={theme.footer_feature_link_3 || "/track"}
-                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 rounded-lg transition-colors"
               >
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shrink-0 bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-slate-200 group-hover:bg-slate-900 group-hover:text-white shadow-2xs transition-all duration-200">
                   <Banknote className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                     {theme.footer_feature_title_3 || "Cash on Delivery"}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
@@ -152,13 +152,13 @@ export function Footer() {
               {/* 4. Dedicated Customer Care */}
               <Link
                 href={theme.footer_feature_link_4 || "/contact"}
-                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#009B55] rounded-lg transition-colors"
+                className="group flex items-center gap-3.5 px-2 lg:px-6 py-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 rounded-lg transition-colors"
               >
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#009B55]/10 dark:bg-[#009B55]/20 text-[#009B55] flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-[#009B55] group-hover:text-white shadow-2xs">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shrink-0 bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-slate-200 group-hover:bg-slate-900 group-hover:text-white shadow-2xs transition-all duration-200">
                   <Headphones className="w-5 h-5 transition-transform duration-200 group-hover:scale-105" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-[#009B55] transition-colors">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                     {theme.footer_feature_title_4 || "Dedicated Customer Care"}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">

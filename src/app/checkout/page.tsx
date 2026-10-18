@@ -38,6 +38,7 @@ import { api } from "@/lib/api";
 import { Address, PaymentMethodOption, PromotionClaim } from "@/types";
 import { trackInitiateCheckout, trackAddPaymentInfo } from "@/lib/metaPixel";
 import { toast } from "sonner";
+import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -360,7 +361,7 @@ export default function CheckoutPage() {
         items: items.map((i) => ({
           product_id: i.product.id,
           quantity: i.quantity,
-          price: Number(i.product.price) + (i.variant ? Number(i.variant.price_modifier) : 0),
+          price: getVariantEffectivePrice(i.product, i.variant),
           category_id: (i.product as any).category_id,
         })),
         code: couponInput.trim(),
@@ -401,7 +402,7 @@ export default function CheckoutPage() {
         items: items.map((i) => ({
           product_id: i.product.id,
           quantity: i.quantity,
-          price: Number(i.product.price) + (i.variant ? Number(i.variant.price_modifier) : 0),
+          price: getVariantEffectivePrice(i.product, i.variant),
           category_id: (i.product as any).category_id,
         })),
         code: code,
@@ -452,9 +453,9 @@ export default function CheckoutPage() {
           cart_items: items.map((i) => ({
             product_id: i.product.id,
             title: i.product.name,
-            price: i.product.price,
+            price: getVariantEffectivePrice(i.product, i.variant),
             quantity: i.quantity,
-            image: i.product.primary_image?.image_url || i.product.images?.[0]?.image_url,
+            image: i.variant?.image_url || i.product.primary_image?.image_url || i.product.images?.[0]?.image_url,
             variant_id: i.variant?.id ?? null,
             variant_name: i.variant?.name ?? null,
           })),
@@ -586,6 +587,12 @@ export default function CheckoutPage() {
       } catch (e) {}
 
       clearCart();
+      if (res.order && typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem(`order_confirmed_${res.order.order_number}`, JSON.stringify(res.order));
+        } catch (e) {}
+      }
+
       if (res.payment_url) {
         toast.success("Order registered. Redirecting to secure payment...");
         window.location.href = res.payment_url;
@@ -723,8 +730,8 @@ export default function CheckoutPage() {
               {/* Items List */}
               <div className="space-y-3 divide-y divide-white/5">
                 {items.map((item) => {
-                  const itemPrice = Number(item.product.price) + (item.variant ? Number(item.variant.price_modifier) : 0);
-                  const imageUrl = item.product.primary_image?.image_url || item.product.images?.[0]?.image_url || "/placeholder.png";
+                  const itemPrice = getVariantEffectivePrice(item.product, item.variant);
+                  const imageUrl = item.variant?.image_url || item.product.primary_image?.image_url || item.product.images?.[0]?.image_url || "/placeholder.png";
                   const availableStock = item.availableStock !== undefined
                     ? item.availableStock
                     : getAvailableStock(item.product, item.variant);
@@ -767,19 +774,35 @@ export default function CheckoutPage() {
                           {item.product.name}
                         </h4>
 
-                        {/* Variant / Color pill */}
-                        {(item.selectedColor || item.selectedSize || item.variant?.name) && (
-                          <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                        {/* Variant / Attributes pill */}
+                        {(item.variant?.name || item.selectedColor || item.selectedSize || item.selectedAttributes || item.variant?.attributes) && (
+                          <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400">
                             {item.variant?.name && <span>{item.variant.name}</span>}
-                            {item.selectedColor && (
-                              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-white/5 border border-white/10">
-                                {item.selectedColor}
-                              </span>
-                            )}
-                            {item.selectedSize && (
-                              <span className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10">
-                                {item.selectedSize}
-                              </span>
+                            {item.selectedAttributes ? (
+                              Object.entries(item.selectedAttributes).map(([k, v]) => (
+                                <span key={k} className="inline-flex items-center px-1.5 py-0.5 rounded bg-white/5 border border-white/10 font-mono">
+                                  {k}: {v}
+                                </span>
+                              ))
+                            ) : item.variant?.attributes ? (
+                              Object.entries(item.variant.attributes).map(([k, v]) => (
+                                <span key={k} className="inline-flex items-center px-1.5 py-0.5 rounded bg-white/5 border border-white/10 font-mono">
+                                  {k}: {v}
+                                </span>
+                              ))
+                            ) : (
+                              <>
+                                {item.selectedColor && (
+                                  <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-white/5 border border-white/10">
+                                    {item.selectedColor}
+                                  </span>
+                                )}
+                                {item.selectedSize && (
+                                  <span className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10">
+                                    {item.selectedSize}
+                                  </span>
+                                )}
+                              </>
                             )}
                           </div>
                         )}

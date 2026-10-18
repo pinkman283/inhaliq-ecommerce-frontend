@@ -82,16 +82,15 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
         <div>
           <span
-            className="text-[11px] font-black uppercase tracking-widest block mb-1"
-            style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
+            className="text-[11px] font-bold uppercase tracking-widest block mb-1 text-slate-500 dark:text-slate-400"
           >
-            Studio Selection
+            Curated Selection
           </span>
           <h2
             className="text-xl sm:text-2xl font-black tracking-tight"
             style={{ color: "var(--theme-text-heading, #0f172a)" }}
           >
-            Flagship Hardware Showcase
+            Featured Collection
           </h2>
         </div>
 
@@ -173,7 +172,7 @@ export function FeaturedGrid({ featuredProducts, newArrivals, bestSellers }: Fea
       <div className="text-center mt-6 mb-2 sm:mt-8 sm:mb-3">
         <Link
           href="/products"
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 theme-view-all-btn text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:scale-[1.02]"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md theme-btn-secondary theme-view-all-btn text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:scale-[1.02]"
         >
           <span>Explore All</span> <ArrowRight className="w-3.5 h-3.5" />
         </Link>

@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/lib/api";
 import { Product, ProductVariant } from "@/types";
 import { formatPrice } from "@/lib/utils";
+import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { VariantPicker } from "@/components/product/VariantPicker";
 import { ReviewSummary } from "@/components/product/ReviewSummary";
@@ -39,6 +40,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [hasVariantError, setHasVariantError] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
@@ -62,14 +64,24 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
         setProduct(data.product);
         setRelated(data.related || []);
         
-        // Pre-select first in-stock variant or first variant
+        // Pre-select first active in-stock variant or first active variant
         if (data.product.variants && data.product.variants.length > 0) {
-          const firstInStock = data.product.variants.find((v) => Number(v.stock_quantity) > 0) || data.product.variants[0];
+          const activeVariants = data.product.variants.filter((v) => v.is_active !== false);
+          const firstInStock = activeVariants.find((v) => Number(v.stock_quantity) > 0) || activeVariants[0] || data.product.variants[0];
           setSelectedVariant(firstInStock);
+          if (firstInStock.attributes && Object.keys(firstInStock.attributes).length > 0) {
+            setSelectedOptions({ ...firstInStock.attributes });
+          } else {
+            const initialOpts: Record<string, string> = {};
+            if (firstInStock.color_name) initialOpts["Color"] = firstInStock.color_name;
+            if (firstInStock.size) initialOpts["Size"] = firstInStock.size;
+            setSelectedOptions(initialOpts);
+          }
           if (firstInStock.color_name) setSelectedColor(firstInStock.color_name);
           if (firstInStock.size) setSelectedSize(firstInStock.size);
         } else {
           setSelectedVariant(null);
+          setSelectedOptions({});
         }
 
         // Track Meta Pixel ViewContent event
@@ -164,7 +176,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
     );
   }
 
-  const currentPrice = Number(product.price) + (selectedVariant ? Number(selectedVariant.price_modifier) : 0);
+  const currentPrice = getVariantEffectivePrice(product, selectedVariant);
   const inWishlist = isInWishlist(product.id);
   const availableStock = (selectedVariant && selectedVariant.stock_quantity !== undefined)
     ? Number(selectedVariant.stock_quantity)
@@ -172,31 +184,52 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
   const isOutOfStock = availableStock <= 0;
   const isStockExceeded = quantity > availableStock;
 
-  // Phase 3H: Variant/Color-aware storefront gallery resolution
-  // 1. If a color is selected and images exist for that color -> show color-specific images
-  // 2. Fall back to general product images (color_name is null/empty)
-  // 3. Fall back to all product images so the gallery is never empty
-  const activeColor = selectedColor || selectedVariant?.color_name || null;
+  // Phase 3H & 4D: Variant/Option-aware storefront gallery resolution
+  const activeColor = selectedOptions["Color"] || selectedOptions["color"] || selectedColor || selectedVariant?.color_name || (selectedVariant?.attributes?.["Color"] || selectedVariant?.attributes?.["color"]) || null;
   const galleryImages = (() => {
     if (!product.images || product.images.length === 0) {
+      if (selectedVariant?.image_url) {
+        return [{
+          id: selectedVariant.image_id || 1,
+          product_id: product.id,
+          image_url: selectedVariant.image_url,
+          is_primary: true,
+          display_order: 0,
+        }];
+      }
       return [];
     }
+    let baseImages = product.images;
     if (activeColor) {
       const normalizedColor = activeColor.trim().toLowerCase();
       const colorImages = product.images.filter(
         (img) => img.color_name && img.color_name.trim().toLowerCase() === normalizedColor
       );
       if (colorImages.length > 0) {
-        return colorImages;
+        baseImages = colorImages;
       }
     }
-    const generalImages = product.images.filter(
-      (img) => !img.color_name || img.color_name.trim() === ""
-    );
-    if (generalImages.length > 0) {
-      return generalImages;
+    // If selected variant has an image_url and it's not in baseImages, check if it's in product.images or prepend it
+    if (selectedVariant?.image_id && !baseImages.some((img) => img.id === selectedVariant.image_id)) {
+      const foundInProduct = product.images.find((img) => img.id === selectedVariant.image_id);
+      if (foundInProduct) {
+        baseImages = [foundInProduct, ...baseImages];
+      }
+    } else if (selectedVariant?.image_url && !baseImages.some((img) => img.image_url === selectedVariant.image_url)) {
+      const foundInProduct = product.images.find((img) => img.image_url === selectedVariant.image_url);
+      if (foundInProduct) {
+        baseImages = [foundInProduct, ...baseImages];
+      } else {
+        baseImages = [{
+          id: selectedVariant.image_id || 999999,
+          product_id: product.id,
+          image_url: selectedVariant.image_url,
+          is_primary: false,
+          display_order: -1
+        }, ...baseImages];
+      }
     }
-    return product.images;
+    return baseImages;
   })();
 
   const handleQuantityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,12 +295,16 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
       toast.error(`Not enough stock available. Maximum available is ${availableStock}.`);
       return;
     }
-    if (product.variants && product.variants.length > 1 && !selectedVariant) {
+    if (product.variants && product.variants.length > 0 && !selectedVariant) {
       setHasVariantError(true);
       if (variantPickerRef.current) {
         variantPickerRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-      toast.error("Please select a color finish before adding to cart.");
+      toast.error("Please select product options before adding to cart.");
+      return;
+    }
+    if (selectedVariant && selectedVariant.is_active === false) {
+      toast.error("The selected variant is currently inactive and cannot be purchased.");
       return;
     }
     setHasVariantError(false);
@@ -296,12 +333,16 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
       toast.error(`Not enough stock available. Maximum available is ${availableStock}.`);
       return;
     }
-    if (product.variants && product.variants.length > 1 && !selectedVariant) {
+    if (product.variants && product.variants.length > 0 && !selectedVariant) {
       setHasVariantError(true);
       if (variantPickerRef.current) {
         variantPickerRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-      toast.error("Please select a color finish before proceeding to checkout.");
+      toast.error("Please select product options before proceeding to checkout.");
+      return;
+    }
+    if (selectedVariant && selectedVariant.is_active === false) {
+      toast.error("The selected variant is currently inactive and cannot be purchased.");
       return;
     }
     setHasVariantError(false);
@@ -344,7 +385,12 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Left Column: Image Gallery */}
         <div className="lg:col-span-6 max-w-[530px] w-full mx-auto lg:mx-0">
-          <ProductGallery key={activeColor || "default"} images={galleryImages} productName={product.name} />
+          <ProductGallery
+            images={galleryImages}
+            productName={product.name}
+            selectedImageId={selectedVariant?.image_id}
+            selectedImageUrl={selectedVariant?.image_url}
+          />
         </div>
 
         {/* Right Info & Actions Panel */}
@@ -416,21 +462,31 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
             </div>
           </div>
 
-          {/* 5. SELECT COLOR & SELECT SIZE */}
+          {/* 5. DYNAMIC PRODUCT OPTION PICKER */}
           {product.variants && product.variants.length > 0 && (
             <div ref={variantPickerRef}>
               <VariantPicker
+                options={product.options}
                 variants={product.variants}
                 selectedVariant={selectedVariant}
+                selectedOptions={selectedOptions}
+                onSelectOption={(group, val) => {
+                  setSelectedOptions((prev) => ({ ...prev, [group]: val }));
+                  setHasVariantError(false);
+                }}
                 selectedColor={selectedColor}
                 onSelectColor={setSelectedColor}
                 selectedSize={selectedSize}
                 onSelectSize={setSelectedSize}
+                basePrice={Number(product.price)}
                 availableStock={availableStock}
                 hasError={hasVariantError}
                 onSelectVariant={(v) => {
                   setSelectedVariant(v);
                   if (v) {
+                    if (v.attributes && Object.keys(v.attributes).length > 0) {
+                      setSelectedOptions((prev) => ({ ...prev, ...v.attributes }));
+                    }
                     if (v.color_name) setSelectedColor(v.color_name);
                     if (v.size) setSelectedSize(v.size);
                   }

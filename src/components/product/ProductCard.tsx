@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Star, ShoppingBag, Heart, Check, Sparkles, Zap, AlertCircle } from "lucide-react";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
+import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useThemeStore } from "@/store/useThemeStore";
@@ -30,13 +31,37 @@ export function ProductCard({ product }: ProductCardProps) {
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/%3E%3C/svg%3E";
 
   const inWishlist = isInWishlist(product.id);
-  const isOutOfStock = product.stock_quantity !== undefined && product.stock_quantity <= 0;
+  const hasOptionsOrVariants = Boolean(
+    product.has_options || (product.variants && product.variants.length > 1)
+  );
+
+  const isOutOfStock = (() => {
+    if (product.variants && product.variants.length > 0) {
+      const active = product.variants.filter((v) => v.is_active !== false);
+      if (active.length === 0) return true;
+      return active.every((v) => Number(v.stock_quantity || 0) <= 0);
+    }
+    return product.stock_quantity !== undefined && product.stock_quantity <= 0;
+  })();
+
+  const variantPrices = product.variants && product.variants.length > 0
+    ? product.variants
+        .filter((v) => v.is_active !== false)
+        .map((v) => getVariantEffectivePrice(product, v))
+    : [];
+  const minPrice = variantPrices.length > 0 ? Math.min(...variantPrices) : product.price;
+  const maxPrice = variantPrices.length > 0 ? Math.max(...variantPrices) : product.price;
+  const hasPriceRange = variantPrices.length > 0 && minPrice !== maxPrice;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isOutOfStock) {
       toast.error("This product is currently out of stock.");
+      return;
+    }
+    if (hasOptionsOrVariants) {
+      router.push(`/products/${product.slug}`);
       return;
     }
     const result = addItem(product, product.variants?.[0] || null, 1);
@@ -56,6 +81,10 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     if (isOutOfStock) {
       toast.error("This product is currently out of stock.");
+      return;
+    }
+    if (hasOptionsOrVariants) {
+      router.push(`/products/${product.slug}`);
       return;
     }
     const result = addItem(product, product.variants?.[0] || null, 1);
@@ -130,7 +159,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span
                   className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider shadow-xs"
                   style={{
-                    backgroundColor: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
+                    backgroundColor: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #0f172a)))",
                     color: "var(--theme-btn-primary-text, #ffffff)",
                   }}
                 >
@@ -140,7 +169,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.is_best_seller && (
                 <span
                   className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-xs"
-                  style={{ backgroundColor: "var(--theme-secondary, #C6A15B)" }}
+                  style={{ backgroundColor: "var(--theme-secondary, #d97706)" }}
                 >
                   Best Seller
                 </span>
@@ -170,10 +199,9 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="space-y-1">
           <div className="flex items-center justify-between gap-1">
             <span
-              className="text-[9px] font-black uppercase tracking-wider block truncate max-w-[120px]"
-              style={{ color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))" }}
+              className="text-[9.5px] font-bold uppercase tracking-wider block truncate max-w-[120px] text-slate-500 dark:text-slate-400"
             >
-              {product.category?.name || product.brand || "Studio Edition"}
+              {product.category?.name || product.brand || "Inhaliq"}
             </span>
             {theme.reviews_enabled !== false && (
               <div className="flex items-center gap-0.5 text-amber-400 shrink-0">
@@ -214,7 +242,7 @@ export function ProductCard({ product }: ProductCardProps) {
               className="font-black text-sm"
               style={{ color: "var(--theme-text-heading, #0f172a)" }}
             >
-              {formatPrice(product.price)}
+              {hasPriceRange ? `From ${formatPrice(minPrice)}` : formatPrice(product.price)}
             </span>
             {hasDiscount && (
               <span className="text-[10px] text-slate-400 line-through">
@@ -251,10 +279,9 @@ export function ProductCard({ product }: ProductCardProps) {
             ) : (
               <>
                 <ShoppingBag
-                  className="w-2.5 h-2.5 shrink-0"
-                  style={{ color: "var(--theme-primary, #006B45)" }}
+                  className="w-2.5 h-2.5 shrink-0 text-slate-800 dark:text-slate-200"
                 />
-                <span className="truncate">Add to Cart</span>
+                <span className="truncate">{hasOptionsOrVariants ? "Options" : "Add to Cart"}</span>
               </>
             )}
           </button>
@@ -269,7 +296,7 @@ export function ProductCard({ product }: ProductCardProps) {
             }`}
           >
             <Zap className="w-2.5 h-2.5 shrink-0" />
-            <span className="truncate">Buy Now</span>
+            <span className="truncate">{hasOptionsOrVariants ? "View" : "Buy Now"}</span>
           </button>
         </div>
       </div>

@@ -47,6 +47,11 @@ export interface ProductImage {
   display_order: number;
 }
 
+export interface ProductOption {
+  name: string;
+  values: string[];
+}
+
 export interface ProductVariant {
   id: number;
   product_id: number;
@@ -56,9 +61,16 @@ export interface ProductVariant {
   color_hex?: string | null;
   sku?: string | null;
   price_modifier: number;
+  price?: number | null;
+  effective_price?: number;
   stock_quantity: number;
   cost_price?: number | null;
   barcode?: string | null;
+  attributes?: Record<string, string> | null;
+  image_id?: number | null;
+  image_url?: string | null;
+  image?: string | null;
+  is_active?: boolean;
 }
 
 export interface Review {
@@ -119,6 +131,8 @@ export interface Product {
   colors?: any[];
   event_id?: string | null;
   has_variants?: boolean;
+  options?: ProductOption[] | null;
+  has_options?: boolean;
   discount_percentage?: number;
   is_flash_deal?: boolean;
   created_at: string;
@@ -209,9 +223,14 @@ export interface ProductFormVariant {
   color_hex?: string | null;
   stock_quantity: number;
   price_modifier?: number;
+  price?: number | null;
   cost_price?: number | null;
   barcode?: string | null;
   sku?: string | null;
+  attributes?: Record<string, string> | null;
+  image_id?: number | null;
+  image_url?: string | null;
+  is_active?: boolean;
 }
 
 export interface ProductFormData {
@@ -234,6 +253,7 @@ export interface ProductFormData {
   is_active: boolean;
   images: ProductFormImage[];
   variants: ProductFormVariant[];
+  options?: ProductOption[];
 }
 
 export interface Address {
@@ -258,6 +278,7 @@ export interface CartItem {
   quantity: number;
   selectedColor?: string | null;
   selectedSize?: string | null;
+  selectedAttributes?: Record<string, string> | null;
   availableStock?: number;
   validationStatus?: 'valid' | 'quantity_adjusted' | 'price_changed' | 'out_of_stock' | 'inactive' | 'product_not_found' | 'variant_not_found' | 'variant_mismatch';
   validationMessage?: string | null;
