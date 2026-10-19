@@ -22,6 +22,9 @@ export interface SidebarNavGroupProps {
   pathname: string;
   hasItemAccess: (permission?: string) => boolean;
   onNavigate?: () => void;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  onActiveChildFound?: (groupLabel: string) => void;
 }
 
 export const SidebarNavGroup: React.FC<SidebarNavGroupProps> = ({
@@ -33,6 +36,9 @@ export const SidebarNavGroup: React.FC<SidebarNavGroupProps> = ({
   pathname,
   hasItemAccess,
   onNavigate,
+  isOpen: controlledIsOpen,
+  onToggle,
+  onActiveChildFound,
 }) => {
   const searchParams = useSearchParams();
 
@@ -82,24 +88,35 @@ export const SidebarNavGroup: React.FC<SidebarNavGroupProps> = ({
   // Determine if any child is currently active
   const hasActiveChild = visibleItems.some((item) => checkItemActive(item.href));
 
-  // Accordion state: open by default if active child is present
-  const [isOpen, setIsOpen] = useState(hasActiveChild);
+  // Accordion state: support controlled mode (single-accordion) or uncontrolled fallback
+  const isControlled = controlledIsOpen !== undefined;
+  const [internalIsOpen, setInternalIsOpen] = useState(hasActiveChild);
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
   const [flyoutOpen, setFlyoutOpen] = useState(false);
   const flyoutTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-expand if navigating to an active child
+  // Auto-expand and notify parent if navigating to an active child
   useEffect(() => {
     if (hasActiveChild) {
-      setIsOpen(true);
+      if (onActiveChildFound) {
+        onActiveChildFound(label);
+      }
+      if (!isControlled) {
+        setInternalIsOpen(true);
+      }
     }
-  }, [hasActiveChild, pathname, searchParams]);
+  }, [hasActiveChild, label, pathname, searchParams, isControlled, onActiveChildFound]);
 
   // If no visible items, hide entire group
   if (visibleItems.length === 0) return null;
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsOpen((prev) => !prev);
+    if (onToggle) {
+      onToggle();
+    } else {
+      setInternalIsOpen((prev) => !prev);
+    }
   };
 
   // Handlers for flyout menu in collapsed mode
@@ -219,6 +236,7 @@ export const SidebarNavGroup: React.FC<SidebarNavGroupProps> = ({
       {/* Parent Navigation Item (Header Button) */}
       <button
         type="button"
+        aria-expanded={isOpen}
         onClick={handleToggle}
         className={`w-full flex items-center justify-between px-3 h-9 text-xs font-medium transition-all duration-150 cursor-pointer ${
           isOpen

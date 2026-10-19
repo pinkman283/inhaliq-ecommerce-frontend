@@ -41,34 +41,34 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "delivered":
-        return "text-[#009B55] bg-emerald-50 border-emerald-200";
+        return "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
       case "shipped":
-        return "text-sky-700 bg-sky-50 border-sky-200";
+        return "text-sky-400 bg-sky-500/10 border-sky-500/20";
       case "processing":
       case "confirmed":
-        return "text-indigo-700 bg-indigo-50 border-indigo-200";
+        return "text-indigo-400 bg-indigo-500/10 border-indigo-500/20";
       case "pending":
-        return "text-amber-700 bg-amber-50 border-amber-200";
+        return "text-amber-400 bg-amber-500/10 border-amber-500/20";
       case "cancelled":
       case "refunded":
-        return "text-rose-700 bg-rose-50 border-rose-200";
+        return "text-rose-400 bg-rose-500/10 border-rose-500/20";
       default:
-        return "text-slate-600 bg-slate-100 border-slate-200";
+        return "text-[#929BAD] bg-[#171B26] border-[#272B35]";
     }
   };
 
   const getPaymentBadge = (status: string) => {
     switch (status) {
       case "paid":
-        return "text-[#009B55] bg-emerald-50 border-emerald-200";
+        return "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
       case "pending":
-        return "text-amber-700 bg-amber-50 border-amber-200";
+        return "text-amber-400 bg-amber-500/10 border-amber-500/20";
       case "failed":
-        return "text-rose-700 bg-rose-50 border-rose-200";
+        return "text-rose-400 bg-rose-500/10 border-rose-500/20";
       case "refunded":
-        return "text-purple-700 bg-purple-50 border-purple-200";
+        return "text-purple-400 bg-purple-500/10 border-purple-500/20";
       default:
-        return "text-slate-600 bg-slate-100 border-slate-200";
+        return "text-[#929BAD] bg-[#171B26] border-[#272B35]";
     }
   };
 
@@ -82,14 +82,14 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
   ];
 
   return (
-    <div className="p-5 rounded-xl bg-white border border-[#E5E7EB] shadow-xs space-y-4">
+    <div className="p-5 rounded-xl bg-[#11141D] border border-[#272B35] space-y-4">
       {/* Header & Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-sm font-bold text-[#111827] tracking-tight">
+          <h2 className="text-sm font-bold text-white tracking-tight">
             Recent Operational Orders
           </h2>
-          <p className="text-xs text-[#6B7280]">
+          <p className="text-xs text-[#929BAD]">
             Latest customer checkout activity across digital and physical registers
           </p>
         </div>
@@ -103,8 +103,8 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
               onClick={() => setFilter(tab.id)}
               className={`px-2.5 py-1 text-xs rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                 filter === tab.id
-                  ? "bg-[#111827] text-white font-semibold shadow-xs"
-                  : "text-[#4B5563] hover:text-[#111827] hover:bg-slate-100"
+                  ? "bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/40 font-semibold shadow-xs"
+                  : "text-[#929BAD] hover:text-white hover:bg-[#171B26]"
               }`}
             >
               {tab.label}
@@ -114,9 +114,9 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-lg border border-[#E5E7EB]">
+      <div className="overflow-x-auto rounded-lg border border-[#272B35]">
         <table className="w-full text-left text-xs">
-          <thead className="bg-[#F8FAFC] border-b border-[#E5E7EB] text-[#4B5563] font-semibold uppercase text-[10px] tracking-wider">
+          <thead className="bg-[#171B26] border-b border-[#272B35] text-[#929BAD] font-semibold uppercase text-[10px] tracking-wider">
             <tr>
               <th className="py-2.5 px-3.5">Order</th>
               <th className="py-2.5 px-3.5">Customer</th>
@@ -128,44 +128,44 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
               <th className="py-2.5 px-3.5 text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#F1F5F9] bg-white">
+          <tbody className="divide-y divide-[#272B35] bg-[#11141D]">
             {isLoading ? (
               <tr>
-                <td colSpan={8} className="py-8 text-center text-[#6B7280]">
-                  <div className="w-5 h-5 border-2 border-[#009B55] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                <td colSpan={8} className="py-8 text-center text-[#929BAD]">
+                  <div className="w-5 h-5 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   <span>Loading recent transactions...</span>
                 </td>
               </tr>
             ) : filteredOrders.length === 0 ? (
               <tr>
-                <td colSpan={8} className="py-8 text-center text-[#6B7280]">
-                  <ShoppingBag className="w-6 h-6 text-[#9CA3AF] mx-auto mb-2" />
-                  <p className="font-medium text-[#111827]">No orders found for this view</p>
-                  <p className="text-[11px] text-[#9CA3AF] mt-0.5">
+                <td colSpan={8} className="py-8 text-center text-[#929BAD]">
+                  <ShoppingBag className="w-6 h-6 text-[#6B7280] mx-auto mb-2" />
+                  <p className="font-medium text-white">No orders found for this view</p>
+                  <p className="text-[11px] text-[#929BAD] mt-0.5">
                     Orders will appear here automatically when customer checkouts occur.
                   </p>
                 </td>
               </tr>
             ) : (
               filteredOrders.map((ord) => (
-                <tr key={ord.id} className="hover:bg-[#F8FAFC] transition-colors group">
+                <tr key={ord.id} className="hover:bg-[#171B26]/60 transition-colors group">
                   {/* Order Number */}
-                  <td className="py-3 px-3.5 font-mono font-semibold text-[#111827]">
+                  <td className="py-3 px-3.5 font-mono font-semibold text-white">
                     <Link
                       href={`/admin/orders?search=${encodeURIComponent(ord.order_number)}`}
-                      className="hover:text-[#009B55] transition-colors inline-flex items-center gap-1"
+                      className="hover:text-[#A78BFA] transition-colors inline-flex items-center gap-1"
                     >
                       <span>{ord.order_number}</span>
-                      <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#9CA3AF]" />
+                      <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#6B7280]" />
                     </Link>
                   </td>
 
                   {/* Customer */}
                   <td className="py-3 px-3.5 max-w-[180px]">
-                    <span className="font-semibold text-[#111827] block truncate">
+                    <span className="font-semibold text-white block truncate">
                       {ord.customer_name || "Guest Checkout"}
                     </span>
-                    <span className="text-[11px] text-[#6B7280] block truncate">
+                    <span className="text-[11px] text-[#929BAD] block truncate">
                       {ord.customer_email || ord.customer_phone || "—"}
                     </span>
                   </td>
@@ -173,18 +173,18 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
                   {/* Channel */}
                   <td className="py-3 px-3.5">
                     {ord.order_source === "pos" ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                         <Store className="w-3 h-3" /> POS
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-[#009B55] border border-emerald-200">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-[#211B32] text-[#A78BFA] border border-[#A78BFA]/30">
                         <Monitor className="w-3 h-3" /> Online
                       </span>
                     )}
                   </td>
 
                   {/* Amount */}
-                  <td className="py-3 px-3.5 font-bold font-mono text-[#111827]">
+                  <td className="py-3 px-3.5 font-bold font-mono text-white">
                     {formatPrice(ord.total_amount)}
                   </td>
 
@@ -203,7 +203,7 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
                   </td>
 
                   {/* Date */}
-                  <td className="py-3 px-3.5 text-[#6B7280] text-[11px] whitespace-nowrap">
+                  <td className="py-3 px-3.5 text-[#929BAD] text-[11px] whitespace-nowrap">
                     {formatDate(ord.created_at)}
                   </td>
 
@@ -211,7 +211,7 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
                   <td className="py-3 px-3.5 text-right whitespace-nowrap">
                     <Link
                       href={`/admin/orders?search=${encodeURIComponent(ord.order_number)}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-[#E5E7EB] hover:bg-slate-50 text-[11px] font-semibold text-[#111827] hover:border-slate-300 transition-all shadow-xs"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#171B26] border border-[#272B35] hover:bg-[#202534] text-[11px] font-semibold text-[#E5E7EB] hover:border-[#383E4C] transition-all"
                     >
                       <span>Inspect</span>
                     </Link>
@@ -225,12 +225,12 @@ export const RecentOrdersWidget: React.FC<RecentOrdersWidgetProps> = ({
 
       {/* Footer link to full orders page */}
       <div className="flex items-center justify-between text-xs pt-1">
-        <span className="text-[#6B7280]">
+        <span className="text-[#929BAD]">
           Showing {filteredOrders.length} of {orders.length} loaded records
         </span>
         <Link
           href="/admin/orders"
-          className="font-semibold text-[#009B55] hover:text-[#008247] flex items-center gap-1 transition-colors"
+          className="font-semibold text-[#A78BFA] hover:text-[#B9A3FF] flex items-center gap-1 transition-colors"
         >
           <span>View All Orders Ledger</span>
           <ChevronRight className="w-3.5 h-3.5" />

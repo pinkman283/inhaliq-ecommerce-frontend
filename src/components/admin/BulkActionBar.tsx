@@ -4,6 +4,14 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, CheckSquare, X, AlertTriangle, Loader2 } from "lucide-react";
 
+export interface BulkActionItem {
+  label: string;
+  icon?: any;
+  onClick: () => Promise<void> | void;
+  disabled?: boolean;
+  variant?: "primary" | "secondary" | "emerald";
+}
+
 interface BulkActionBarProps {
   selectedCount: number;
   totalCount?: number;
@@ -12,6 +20,7 @@ interface BulkActionBarProps {
   onClearSelection: () => void;
   onSelectAll?: () => void;
   onConfirmDelete: () => Promise<void> | void;
+  extraActions?: BulkActionItem[];
 }
 
 export function BulkActionBar({
@@ -22,6 +31,7 @@ export function BulkActionBar({
   onClearSelection,
   onSelectAll,
   onConfirmDelete,
+  extraActions = [],
 }: BulkActionBarProps) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -65,11 +75,35 @@ export function BulkActionBar({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2 ml-auto">
+              <div className="flex items-center gap-2 ml-auto flex-wrap">
+                {extraActions.map((action, idx) => {
+                  const Icon = action.icon;
+                  const isPrimary = action.variant === "primary";
+                  const isEmerald = action.variant === "emerald";
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={action.onClick}
+                      disabled={action.disabled}
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
+                        isPrimary
+                          ? "bg-[#211B32] hover:bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 shadow-xs"
+                          : isEmerald
+                          ? "bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30"
+                          : "bg-[#171B26] hover:bg-[#272B35] text-[#E5E7EB] border border-[#272B35]"
+                      }`}
+                    >
+                      {Icon && <Icon className="w-3.5 h-3.5" />}
+                      <span>{action.label}</span>
+                    </button>
+                  );
+                })}
+
                 <button
                   type="button"
                   onClick={onClearSelection}
-                  className="px-3 py-1.5 rounded-md bg-[#171B26] hover:bg-[#272B35] text-[#929BAD] hover:text-[#E5E7EB] text-xs font-bold transition-all flex items-center gap-1"
+                  className="px-3 py-1.5 rounded-md bg-[#171B26] hover:bg-[#272B35] text-[#929BAD] hover:text-[#E5E7EB] text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                   <span>Clear</span>

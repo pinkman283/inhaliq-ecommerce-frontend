@@ -334,10 +334,63 @@ const INTEGRATION_SCHEMAS: Record<string, IntegrationSchema> = {
   },
   whatsapp_business: {
     credentials: [
-      { key: "phone_number_id", label: "Phone Number ID", type: "text", required: true },
-      { key: "whatsapp_business_account_id", label: "WhatsApp Business Account ID", type: "text", required: true },
-      { key: "access_token", label: "System User Access Token", type: "password", required: true },
-      { key: "webhook_verify_token", label: "Webhook Verify Token", type: "password" },
+      {
+        key: "phone_number_id",
+        label: "Phone Number ID",
+        type: "text",
+        placeholder: "e.g. 109283746591024",
+        required: true,
+        helpText: "Numeric Phone Number ID from Meta App Dashboard > WhatsApp > API Setup.",
+      },
+      {
+        key: "whatsapp_business_account_id",
+        label: "WhatsApp Business Account ID (WABA)",
+        type: "text",
+        placeholder: "e.g. 992019481726354",
+        required: true,
+        helpText: "Found in Meta Business Manager Settings > Accounts > WhatsApp Accounts.",
+      },
+      {
+        key: "access_token",
+        label: "Permanent System User Access Token",
+        type: "password",
+        placeholder: "EAAG...",
+        required: true,
+        helpText: "Permanent System User Token with 'whatsapp_business_messaging' and 'whatsapp_business_management' permissions.",
+      },
+      {
+        key: "webhook_verify_token",
+        label: "Webhook Verify Token (Optional)",
+        type: "password",
+        placeholder: "Enter custom verify token",
+        helpText: "Arbitrary secret token for verifying incoming Meta webhooks.",
+      },
+    ],
+    settings: [
+      {
+        key: "auto_confirm_order",
+        label: "Auto-send Order Confirmation WhatsApp",
+        type: "boolean",
+        helpText: "Instantly sends receipt, order total, and delivery address when an order is placed.",
+      },
+      {
+        key: "auto_dispatch_order",
+        label: "Auto-send Dispatch Alert with Tracking Code",
+        type: "boolean",
+        helpText: "Alerts customer with courier partner name, tracking code, and COD amount when shipped.",
+      },
+      {
+        key: "auto_deliver_order",
+        label: "Auto-send Delivery & Thank You Message",
+        type: "boolean",
+        helpText: "Sends customer feedback & review prompt upon successful parcel handover.",
+      },
+      {
+        key: "auto_cart_recovery",
+        label: "Enable 1-Click WhatsApp Abandoned Cart Automation",
+        type: "boolean",
+        helpText: "Enables instant WhatsApp recovery message action buttons on leads & abandoned checkouts.",
+      },
     ],
   },
 };
@@ -406,6 +459,15 @@ function AdminIntegrationsContent() {
   });
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
   const [saving, setSaving] = useState(false);
+
+  // Live WhatsApp message test states
+  const [testRecipientPhone, setTestRecipientPhone] = useState("");
+  const [testWhatsAppLoading, setTestWhatsAppLoading] = useState(false);
+  const [testWhatsAppResult, setTestWhatsAppResult] = useState<{
+    success: boolean;
+    message: string;
+    message_id?: string;
+  } | null>(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -530,6 +592,15 @@ function AdminIntegrationsContent() {
       settings.allowed_origins = settings.allowed_origins.join("\n");
     }
 
+    if (integration.provider === "whatsapp_business") {
+      setTestRecipientPhone("");
+      setTestWhatsAppResult(null);
+      if (settings.auto_confirm_order === undefined) settings.auto_confirm_order = true;
+      if (settings.auto_dispatch_order === undefined) settings.auto_dispatch_order = true;
+      if (settings.auto_deliver_order === undefined) settings.auto_deliver_order = true;
+      if (settings.auto_cart_recovery === undefined) settings.auto_cart_recovery = true;
+    }
+
     setFormData({
       is_enabled: integration.is_enabled,
       is_test_mode: integration.is_test_mode,
@@ -538,6 +609,33 @@ function AdminIntegrationsContent() {
     });
     setShowSecrets({});
     setIsModalOpen(true);
+  };
+
+  const handleSendTestWhatsApp = async () => {
+    if (!testRecipientPhone.trim()) {
+      toast.error("Please enter a recipient phone number (e.g. 017xxxxxxxx or 8801xxxxxxxxx)");
+      return;
+    }
+    setTestWhatsAppLoading(true);
+    setTestWhatsAppResult(null);
+    try {
+      const res = await adminApi.sendTestWhatsApp({
+        phone: testRecipientPhone.trim(),
+        message: "Hello! This is a test message from your store WhatsApp Cloud API integration.",
+      });
+      setTestWhatsAppResult(res);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || "Failed to send live test WhatsApp message.";
+      setTestWhatsAppResult({ success: false, message: msg });
+      toast.error(msg);
+    } finally {
+      setTestWhatsAppLoading(false);
+    }
   };
 
   const handleSaveModal = async (e: React.FormEvent) => {
@@ -1134,6 +1232,67 @@ function AdminIntegrationsContent() {
                           </div>
                         );
                       })}
+                    </div>
+                  )}
+
+                  {/* Live WhatsApp Testing Console */}
+                  {activeIntegration.provider === "whatsapp_business" && (
+                    <div className="p-3.5 bg-[#0D1017] rounded-lg border border-[#272B35] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                          <span className="text-xs font-semibold text-[#E5E7EB]">Send Live WhatsApp Test Message</span>
+                        </div>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#25D366]/10 text-[#25D366] font-medium border border-[#25D366]/20">
+                          Cloud API v21.0
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#929BAD] leading-relaxed">
+                        Test your credentials immediately. Enter your phone number below to receive a live verification message on WhatsApp.
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="tel"
+                          value={testRecipientPhone}
+                          onChange={(e) => setTestRecipientPhone(e.target.value)}
+                          placeholder="e.g. 01712345678 or 8801712345678"
+                          className="flex-1 bg-[#171B26] border border-[#272B35] rounded-md px-3 py-1.5 text-xs text-white placeholder-[#929BAD] focus:outline-none focus:border-[#A78BFA]/60"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleSendTestWhatsApp}
+                          disabled={testWhatsAppLoading || !testRecipientPhone.trim()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-[#25D366] hover:bg-[#20bd5a] text-[#090B10] transition disabled:opacity-50 cursor-pointer shadow-xs font-semibold"
+                        >
+                          {testWhatsAppLoading ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#090B10]" />
+                          ) : (
+                            <Zap className="w-3.5 h-3.5" />
+                          )}
+                          <span>{testWhatsAppLoading ? "Sending..." : "Send Test"}</span>
+                        </button>
+                      </div>
+                      {testWhatsAppResult && (
+                        <div
+                          className={`p-2.5 rounded text-[11px] font-mono flex items-start gap-2 ${
+                            testWhatsAppResult.success
+                              ? "bg-[#25D366]/10 border border-[#25D366]/20 text-[#25D366]"
+                              : "bg-red-500/10 border border-red-500/20 text-red-400"
+                          }`}
+                        >
+                          {testWhatsAppResult.success ? (
+                            <Check className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                          ) : (
+                            <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                          )}
+                          <div className="flex-1 break-words">
+                            <div>{testWhatsAppResult.message}</div>
+                            {testWhatsAppResult.message_id && (
+                              <div className="text-[10px] opacity-75 mt-0.5">Message ID: {testWhatsAppResult.message_id}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 

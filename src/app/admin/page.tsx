@@ -240,7 +240,7 @@ export default function AdminDashboardOverview() {
   };
 
   return (
-    <div className="-m-4 sm:-m-6 lg:-m-8 min-h-[calc(100vh-3.5rem)] p-4 sm:p-6 lg:p-8 bg-[#F8FAFC] text-[#111827] space-y-6">
+    <div className="space-y-6">
       
       {/* 1. Header & Global Controls */}
       <DashboardHeader
@@ -253,15 +253,15 @@ export default function AdminDashboardOverview() {
 
       {/* Partial Failure Warning Banner */}
       {fetchError && (
-        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-center justify-between text-xs animate-in fade-in">
+        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 flex items-center justify-between text-xs animate-in fade-in">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{fetchError}</span>
           </div>
           <button
             type="button"
             onClick={handleRefresh}
-            className="font-bold underline hover:text-amber-900 cursor-pointer"
+            className="font-bold underline hover:text-amber-200 cursor-pointer"
           >
             Retry
           </button>

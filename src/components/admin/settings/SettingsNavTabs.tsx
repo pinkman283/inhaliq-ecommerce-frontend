@@ -53,7 +53,7 @@ export function SettingsNavTabs() {
     { label: "Notifications", href: "/admin/settings/notifications", icon: Bell },
     { label: "SEO & Search", href: "/admin/settings/seo", icon: Search },
     { label: "Mobile & PWA", href: "/admin/settings/pwa", icon: Smartphone },
-    { label: "System & Cache", href: "/admin/settings/system", icon: Cpu },
+    { label: "System & Backups", href: "/admin/settings/system", icon: Cpu },
   ];
 
   const activeTabs = isAppearanceContext ? appearanceTabs : systemTabs;

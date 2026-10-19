@@ -36,7 +36,8 @@ import {
   Receipt,
   BadgeDollarSign,
   Printer,
-  Calculator
+  Calculator,
+  Barcode
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { Order, Product, SalesInvoice, SalesSummary } from "@/types";
@@ -140,6 +141,21 @@ function OrdersContent() {
   // Bulk Selection & Deletion State
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+
+  // Bulk Courier & Thermal Labels State
+  const [bulkBookingLoading, setBulkBookingLoading] = useState(false);
+  const [bulkLabelsData, setBulkLabelsData] = useState<any[] | null>(null);
+  const [isBulkLabelsModalOpen, setIsBulkLabelsModalOpen] = useState(false);
+
+  // Fraud & Risk Inspection Modal State
+  const [selectedRiskOrder, setSelectedRiskOrder] = useState<Order | null>(null);
+
+  // Quick Staff Note State
+  const [newStaffNoteText, setNewStaffNoteText] = useState("");
+  const [savingStaffNote, setSavingStaffNote] = useState(false);
+
+  // Smart View Triage Filter State
+  const [smartTriageFilter, setSmartTriageFilter] = useState<"all" | "high_risk" | "ready_pack" | "in_transit" | "rto_issues">("all");
 
   // Order Creation Modal
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -781,6 +797,59 @@ function OrdersContent() {
     }
   };
 
+  const handleBulkBookCourier = async (provider = "steadfast") => {
+    if (selectedIds.length === 0) return;
+    setBulkBookingLoading(true);
+    try {
+      const res = await adminApi.bulkBookCourier(selectedIds, provider);
+      toast.success(res.message);
+      setSelectedIds([]);
+      loadOrders();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Bulk courier booking failed.");
+    } finally {
+      setBulkBookingLoading(false);
+    }
+  };
+
+  const handleBulkPrintLabels = async () => {
+    if (selectedIds.length === 0) return;
+    try {
+      const res = await adminApi.getBulkShippingLabels(selectedIds);
+      setBulkLabelsData(res.labels || []);
+      setIsBulkLabelsModalOpen(true);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to load bulk thermal labels.");
+    }
+  };
+
+  const handleAddStaffNote = async () => {
+    if (!selectedOrder || !newStaffNoteText.trim()) return;
+    setSavingStaffNote(true);
+    try {
+      const timestamp = new Date().toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const currentNotes = selectedOrder.notes ? `${selectedOrder.notes}\n` : "";
+      const updatedNotes = `${currentNotes}[${timestamp} Staff]: ${newStaffNoteText.trim()}`;
+
+      const res = await adminApi.updateOrder(selectedOrder.id, {
+        notes: updatedNotes,
+      });
+      setSelectedOrder(res.order);
+      setOrders(orders.map((o) => (o.id === res.order.id ? res.order : o)));
+      setNewStaffNoteText("");
+      toast.success("Staff note appended to order.");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to save note.");
+    } finally {
+      setSavingStaffNote(false);
+    }
+  };
+
   const handleExecuteRefund = async () => {
     if (!selectedOrder) return;
     setRefunding(true);
@@ -821,6 +890,13 @@ function OrdersContent() {
     if (dateTo && new Date(ord.created_at) > new Date(dateTo + "T23:59:59")) return false;
     if (minTotal && ord.total_amount < parseFloat(minTotal)) return false;
     if (maxTotal && ord.total_amount > parseFloat(maxTotal)) return false;
+
+    // Smart Triage Presets
+    if (smartTriageFilter === "high_risk" && ord.risk_level !== "high" && ord.risk_level !== "moderate") return false;
+    if (smartTriageFilter === "ready_pack" && !["confirmed", "processing"].includes(ord.order_status)) return false;
+    if (smartTriageFilter === "in_transit" && ord.order_status !== "shipped") return false;
+    if (smartTriageFilter === "rto_issues" && !(ord.return_status && ord.return_status !== "none") && ord.order_status !== "returned") return false;
+
     return true;
   });
 
@@ -836,13 +912,23 @@ function OrdersContent() {
           { label: "Orders & Fulfillment" },
         ]}
         action={
-          <button
-            type="button"
-            onClick={() => setIsCreateModalOpen(true)}
-            className="px-3.5 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
-          >
-            <Plus className="w-3.5 h-3.5" /> Create Order
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/orders/scan-to-pack"
+              className="px-3 py-1.5 rounded-md bg-[#171B26] hover:bg-[#1E2333] border border-[#272B35] hover:border-[#A78BFA]/50 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+              title="Open Barcode Scan-to-Pack Fulfillment Workstation"
+            >
+              <Barcode className="w-3.5 h-3.5 text-[#A78BFA]" />
+              Scan-to-Pack
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsCreateModalOpen(true)}
+              className="px-3.5 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
+            >
+              <Plus className="w-3.5 h-3.5" /> Create Order
+            </button>
+          </div>
         }
       />
 
@@ -939,6 +1025,33 @@ function OrdersContent() {
           ))}
         </div>
       )}
+
+      {/* Smart Triage View Presets */}
+      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider shrink-0 flex items-center gap-1 mr-1">
+          <Sparkles className="w-3 h-3 text-[#A78BFA]" />
+          Smart Views:
+        </span>
+        {[
+          { id: "all", label: "Default All" },
+          { id: "high_risk", label: "⚠️ High Return Risk" },
+          { id: "ready_pack", label: "📦 Ready to Pack" },
+          { id: "in_transit", label: "🚚 In Courier Transit" },
+          { id: "rto_issues", label: "🚨 Failed / RTO" },
+        ].map((v) => (
+          <button
+            key={v.id}
+            onClick={() => setSmartTriageFilter(v.id as any)}
+            className={`px-2.5 py-1 rounded-md text-xs font-semibold shrink-0 border transition-all cursor-pointer ${
+              smartTriageFilter === v.id
+                ? "bg-[#211B32] text-[#A78BFA] border-[#A78BFA]/40 shadow-xs"
+                : "bg-white/[0.02] text-slate-400 hover:text-white border-white/[0.06] hover:bg-white/[0.04]"
+            }`}
+          >
+            {v.label}
+          </button>
+        ))}
+      </div>
 
       {/* Filter & Search Bar */}
       <div className="p-2.5 rounded-md bg-[#0f121b] border border-white/[0.08] space-y-2.5">
@@ -1144,6 +1257,28 @@ function OrdersContent() {
         onConfirmDelete={handleBulkDelete}
         isDeleting={isBulkDeleting}
         itemName="order"
+        extraActions={[
+          {
+            label: "Print 4×6 Labels",
+            icon: Printer,
+            variant: "primary",
+            onClick: handleBulkPrintLabels,
+          },
+          {
+            label: bulkBookingLoading ? "Booking Steadfast..." : "Book Steadfast",
+            icon: Truck,
+            variant: "emerald",
+            onClick: () => handleBulkBookCourier("steadfast"),
+            disabled: bulkBookingLoading,
+          },
+          {
+            label: bulkBookingLoading ? "Booking Pathao..." : "Book Pathao",
+            icon: Truck,
+            variant: "secondary",
+            onClick: () => handleBulkBookCourier("pathao"),
+            disabled: bulkBookingLoading,
+          },
+        ]}
       />
 
       {/* Orders Table Card */}
@@ -1345,17 +1480,39 @@ function OrdersContent() {
                         })()}
                       </td>
 
-                      {/* IP Security */}
+                      {/* Fraud & Return-Risk Shield */}
                       <td className="p-3 text-left whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={() => openIpBlockModal(ip)}
-                          className="px-2 py-0.5 rounded bg-black/40 border border-white/10 text-[10px] font-mono text-slate-400 hover:text-rose-400 hover:border-rose-500/30 transition-colors inline-flex items-center gap-1 cursor-pointer"
-                          title="Inspect or restrict IP address"
-                        >
-                          <Shield className="w-3 h-3 text-slate-500" />
-                          <span>{ip}</span>
-                        </button>
+                        <div className="flex flex-col gap-1">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedRiskOrder(order)}
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold inline-flex items-center gap-1 cursor-pointer transition-colors border ${
+                              order.risk_level === "high"
+                                ? "bg-rose-500/15 text-rose-300 border-rose-500/30 hover:bg-rose-500/25"
+                                : order.risk_level === "moderate"
+                                ? "bg-amber-500/15 text-amber-300 border-amber-500/30 hover:bg-amber-500/25"
+                                : "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/25"
+                            }`}
+                            title="View Customer Delivery History & Risk Breakdown"
+                          >
+                            {order.risk_level === "high" ? (
+                              <ShieldAlert className="w-3 h-3 text-rose-400" />
+                            ) : order.risk_level === "moderate" ? (
+                              <AlertTriangle className="w-3 h-3 text-amber-400" />
+                            ) : (
+                              <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                            )}
+                            <span className="capitalize">{order.risk_level || "low"} Risk</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openIpBlockModal(ip)}
+                            className="text-[9.5px] font-mono text-slate-500 hover:text-slate-300 transition-colors truncate max-w-[100px] text-left"
+                            title={`IP: ${ip} (Click to inspect or restrict)`}
+                          >
+                            {ip}
+                          </button>
+                        </div>
                       </td>
 
                       {/* Date */}
@@ -1953,6 +2110,46 @@ function OrdersContent() {
                   })}
                 </div>
               )}
+
+              {/* Internal Staff Notes & Team Collaboration */}
+              <div className="p-3.5 rounded-md bg-white/[0.02] border border-white/5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10.5px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    💬 Internal Staff Communication & Audit Notes
+                  </span>
+                  <span className="text-[10px] text-slate-500">Staff only (invisible to customer)</span>
+                </div>
+
+                {selectedOrder.notes && (
+                  <div className="p-2.5 rounded bg-[#090b12] border border-white/10 text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed max-h-36 overflow-y-auto">
+                    {selectedOrder.notes}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newStaffNoteText}
+                    onChange={(e) => setNewStaffNoteText(e.target.value)}
+                    placeholder="Type internal staff note (e.g. Verified customer by phone, requested Banani delivery)..."
+                    className="flex-1 bg-[#090b12] border border-white/10 rounded-md px-3 py-1.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-[#A78BFA]/50"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleAddStaffNote();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddStaffNote}
+                    disabled={savingStaffNote || !newStaffNoteText.trim()}
+                    className="px-3 py-1.5 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition disabled:opacity-50 cursor-pointer shrink-0"
+                  >
+                    {savingStaffNote ? "Saving..." : "Add Note"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2641,6 +2838,220 @@ function OrdersContent() {
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Thermal Label</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* BATCH BULK 4X6 THERMAL LABELS MODAL */}
+      {isBulkLabelsModalOpen && bulkLabelsData && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#0e121e] border border-white/20 rounded-lg shadow-2xl flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0 bg-[#0e121e] print:hidden">
+              <div className="flex items-center gap-2">
+                <Printer className="w-5 h-5 text-[#A78BFA]" />
+                <div>
+                  <h3 className="text-sm font-black text-white">Batch 4" × 6" Thermal Shipping Stickers</h3>
+                  <p className="text-[10px] text-slate-400">
+                    {bulkLabelsData.length} shipping labels ready for thermal continuous feed printing
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsBulkLabelsModalOpen(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto flex-1 space-y-6 custom-scrollbar print:p-0 print:space-y-0">
+              {bulkLabelsData.map((lbl, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white text-black p-5 rounded-md border-2 border-black font-sans space-y-3 print:border-none print:m-0 print:p-4 print:page-break-after-always shadow-md"
+                  style={{ pageBreakAfter: "always" }}
+                >
+                  <div className="flex justify-between items-start border-b-2 border-black pb-2">
+                    <div>
+                      <h2 className="text-lg font-black tracking-tight">{lbl.store_name}</h2>
+                      <p className="text-[10px] text-gray-700">{lbl.sender_phone}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="px-2 py-0.5 bg-black text-white text-[11px] font-black uppercase rounded">
+                        {lbl.courier_name}
+                      </span>
+                      <p className="text-[10px] font-mono mt-1 font-bold">{lbl.delivery_type}</p>
+                    </div>
+                  </div>
+
+                  <div className="text-center py-2 border-b-2 border-black bg-gray-50 rounded">
+                    <div className="font-mono text-xl tracking-[0.25em] font-black uppercase">
+                      {lbl.consignment_id || lbl.order_number}
+                    </div>
+                    <p className="text-[9px] text-gray-500 font-mono mt-0.5">CONSIGNMENT TRACKING ID</p>
+                  </div>
+
+                  <div className="border-b-2 border-black pb-2 space-y-1">
+                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-wider block">DELIVER TO:</span>
+                    <div className="text-sm font-black">{lbl.customer_name}</div>
+                    <div className="text-xs font-mono font-bold">{lbl.customer_phone}</div>
+                    <p className="text-xs leading-snug">{lbl.customer_address}</p>
+                    <p className="text-xs font-bold text-gray-800">{lbl.customer_city}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 border-b-2 border-black pb-2 text-xs">
+                    <div>
+                      <span className="text-[9px] text-gray-500 block">ORDER REF</span>
+                      <span className="font-mono font-black">{lbl.order_number}</span>
+                      <span className="text-[9px] text-gray-500 block mt-1">WEIGHT</span>
+                      <span className="font-mono font-bold">{lbl.weight}</span>
+                    </div>
+                    <div className="bg-black text-white p-2 rounded text-center flex flex-col justify-center">
+                      <span className="text-[9px] uppercase tracking-wider block opacity-80">COD AMOUNT</span>
+                      <span className="text-base font-mono font-black">
+                        {lbl.cod_amount > 0 ? `৳${lbl.cod_amount}` : "PAID (৳0)"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] text-gray-600 flex justify-between items-center pt-1">
+                    <span>{lbl.notes || "Standard Express Parcel"}</span>
+                    <span className="font-mono text-[9px]">{lbl.date}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-2 p-4 border-t border-white/10 bg-[#0e121e] shrink-0 print:hidden">
+              <button
+                type="button"
+                onClick={() => setIsBulkLabelsModalOpen(false)}
+                className="px-3.5 py-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="px-5 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-black text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-md"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Print All ({bulkLabelsData.length}) Labels</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOMER RISK & RTO AUDIT MODAL */}
+      {selectedRiskOrder && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-[#0e121e] border border-white/15 rounded-lg shadow-2xl p-5 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                {selectedRiskOrder.risk_level === "high" ? (
+                  <ShieldAlert className="w-5 h-5 text-rose-400" />
+                ) : selectedRiskOrder.risk_level === "moderate" ? (
+                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+                ) : (
+                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                )}
+                <div>
+                  <h3 className="text-sm font-black text-white">Fraud & Return-Risk Shield</h3>
+                  <p className="text-[10px] text-slate-400">Order #{selectedRiskOrder.order_number}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedRiskOrder(null)}
+                className="p-1 rounded text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Customer:</span>
+                  <span className="font-bold text-white">{selectedRiskOrder.customer_name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Phone:</span>
+                  <span className="font-mono text-cyan-400">{selectedRiskOrder.customer_phone || "N/A"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Payment:</span>
+                  <span className="uppercase font-semibold text-slate-200">
+                    {selectedRiskOrder.payment_method?.replace(/_/g, " ")} ({selectedRiskOrder.payment_status})
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-center">
+                <div className="p-3 rounded-md bg-[#131722] border border-white/5">
+                  <span className="text-[10px] text-slate-400 block uppercase">Total Past Orders</span>
+                  <span className="text-base font-black text-white">
+                    {selectedRiskOrder.customer_order_count || 1}
+                  </span>
+                </div>
+                <div className={`p-3 rounded-md border ${
+                  (selectedRiskOrder.customer_return_count || 0) > 0
+                    ? "bg-rose-500/10 border-rose-500/20 text-rose-300"
+                    : "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
+                }`}>
+                  <span className="text-[10px] block uppercase opacity-80">RTO / Returns</span>
+                  <span className="text-base font-black">
+                    {selectedRiskOrder.customer_return_count || 0}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 text-[11px] text-slate-300 leading-relaxed space-y-1">
+                <span className="font-bold text-white block">Recommendation:</span>
+                {selectedRiskOrder.risk_level === "high" ? (
+                  <p className="text-rose-300">
+                    ⚠️ Customer has a record of cancelled or returned parcels. It is strongly advised to call before dispatching or request partial advance bkash delivery fee.
+                  </p>
+                ) : selectedRiskOrder.risk_level === "moderate" ? (
+                  <p className="text-amber-300">
+                    🟡 First-time Cash on Delivery customer. Standard verification recommended before handing over to courier.
+                  </p>
+                ) : (
+                  <p className="text-emerald-300">
+                    🟢 High reliability customer with verified order delivery history. Safe for instant courier dispatch.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-white/10 text-xs">
+              {selectedRiskOrder.customer_phone ? (
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`tel:${selectedRiskOrder.customer_phone}`}
+                    className="px-2.5 py-1.5 rounded bg-white/5 hover:bg-white/10 text-slate-200 font-semibold"
+                  >
+                    Call
+                  </a>
+                  <a
+                    href={`https://wa.me/${selectedRiskOrder.customer_phone.replace(/[^0-9]/g, "").startsWith("01") ? "88" + selectedRiskOrder.customer_phone.replace(/[^0-9]/g, "") : selectedRiskOrder.customer_phone.replace(/[^0-9]/g, "")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-2.5 py-1.5 rounded bg-[#25D366]/20 hover:bg-[#25D366]/30 text-[#25D366] font-semibold"
+                  >
+                    WhatsApp
+                  </a>
+                </div>
+              ) : <div />}
+
+              <button
+                type="button"
+                onClick={() => setSelectedRiskOrder(null)}
+                className="px-3.5 py-1.5 rounded bg-[#A78BFA] text-[#090B10] font-bold"
+              >
+                Dismiss
               </button>
             </div>
           </div>

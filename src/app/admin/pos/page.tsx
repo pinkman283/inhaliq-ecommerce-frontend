@@ -82,12 +82,110 @@ export default function AdminPosPage() {
   const [completedReceipt, setCompletedReceipt] = useState<PosReceipt | null>(null);
 
   const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [activeLead, setActiveLead] = useState<{
+    leadId: number;
+    name: string;
+    phone: string;
+    email?: string;
+    notes?: string;
+  } | null>(null);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchInitialData();
+
+    // Check for incoming lead conversion via query param or sessionStorage
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const leadIdParam = params.get("lead_id");
+      const storedLeadRaw = sessionStorage.getItem("pos_lead_conversion");
+
+      let storedLead: any = null;
+      if (storedLeadRaw) {
+        try {
+          storedLead = JSON.parse(storedLeadRaw);
+        } catch (e) {
+          console.error("Failed to parse pos_lead_conversion", e);
+        }
+      }
+
+      if (leadIdParam || storedLead) {
+        initLeadConversion(leadIdParam ? Number(leadIdParam) : storedLead?.leadId, storedLead);
+      }
+    }
   }, []);
+
+  const initLeadConversion = async (leadId: number, cachedLead?: any) => {
+    let lead = cachedLead;
+    if (!lead || !lead.cart_items) {
+      try {
+        lead = await adminApi.getLead(leadId);
+      } catch (err) {
+        console.error("Could not fetch lead details for POS", err);
+        return;
+      }
+    }
+    if (!lead) return;
+
+    const leadNum = lead.id || lead.leadId || leadId;
+    setActiveLead({
+      leadId: leadNum,
+      name: lead.name || "Customer",
+      phone: lead.phone || "",
+      email: lead.email || "",
+      notes: lead.notes || "",
+    });
+
+    if (lead.name) setCustomerName(lead.name);
+    if (lead.phone) setCustomerPhone(lead.phone);
+    if (lead.notes) setNotes(`Lead #${leadNum} recovery: ${lead.notes}`);
+
+    // Map lead cart items to POS cart
+    const leadCart = lead.cart_items || [];
+    if (leadCart.length > 0) {
+      const preloaded: CartItem[] = leadCart.map((item: any, idx: number) => {
+        const prodId = item.product_id || item.id || 888000 + idx;
+        const uPrice = Number(item.price || item.unit_price || 0);
+        const qty = Number(item.quantity || 1);
+        const title = item.title || item.name || "Lead Cart Item";
+        const img = item.image || "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=200&q=80";
+
+        const tempProd = {
+          id: prodId,
+          name: title,
+          slug: `lead-item-${prodId}`,
+          price: uPrice,
+          sku: item.sku || `LEAD-SKU-${prodId}`,
+          stock_quantity: 999,
+          is_active: true,
+          category_id: 1,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          primary_image: {
+            id: 1,
+            product_id: prodId,
+            image_url: img,
+            is_primary: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        } as unknown as Product;
+
+        return {
+          product: tempProd,
+          variant: null,
+          unit_price: uPrice,
+          quantity: qty,
+          discount_amount: 0,
+        };
+      });
+
+      setCart(preloaded);
+    }
+
+    showToast("success", `Preloaded Lead #${leadNum} cart items and customer info into POS register.`);
+  };
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -273,6 +371,7 @@ export default function AdminPosPage() {
         discount_amount: orderDiscount,
         tax_amount: taxAmount,
         notes: notes || undefined,
+        lead_id: activeLead?.leadId ? Number(activeLead.leadId) : undefined,
         items: cart.map(item => ({
           product_id: item.product.id,
           variant_id: item.variant?.id ?? null,
@@ -284,6 +383,24 @@ export default function AdminPosPage() {
 
       const res = await adminApi.checkoutPosSale(payload);
       
+      // If sale originated from lead conversion, finalize lead and clear storage
+      if (activeLead) {
+        try {
+          await adminApi.updateLead(activeLead.leadId, {
+            status: "converted",
+            converted_order_id: res.order?.id,
+          });
+        } catch {
+          // Handled atomically by backend transaction
+        }
+        if (typeof window !== "undefined") {
+          sessionStorage.removeItem("pos_lead_conversion");
+        }
+        const convertedLeadId = activeLead.leadId;
+        setActiveLead(null);
+        showToast("success", `🎉 Lead #${convertedLeadId} converted into Order #${res.order?.order_number || res.order?.id}!`);
+      }
+
       // Update session live cash
       setSession(prev => {
         if (!prev) return null;
@@ -432,6 +549,43 @@ export default function AdminPosPage() {
           )}
         </div>
       </div>
+
+      {/* Active Lead Conversion Banner */}
+      {activeLead && (
+        <div className="bg-gradient-to-r from-emerald-500/15 via-[#A78BFA]/15 to-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300 shrink-0 shadow-xs">
+              <Sparkles className="w-5 h-5 text-emerald-400" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-white text-sm">
+                  Converting Abandoned Cart Lead #{activeLead.leadId}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase tracking-wider border border-emerald-500/30">
+                  Cart Preloaded
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-0.5 truncate">
+                Customer: <strong className="text-white">{activeLead.name}</strong> • Phone: <strong className="text-[#A78BFA] font-mono">{activeLead.phone}</strong> • Adjust products/quantities below as requested by customer.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveLead(null);
+              if (typeof window !== "undefined") {
+                sessionStorage.removeItem("pos_lead_conversion");
+              }
+              showToast("success", "Lead detached. Continuing as a regular walk-in POS sale.");
+            }}
+            className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-slate-300 hover:text-white text-xs font-bold border border-white/10 shrink-0 transition cursor-pointer"
+          >
+            Detach Lead
+          </button>
+        </div>
+      )}
 
       {/* Main POS Interface Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

@@ -235,6 +235,7 @@ export default function AdminPromotionsPage() {
       <div className="flex items-center gap-2 border-b border-white/[0.08] overflow-x-auto no-scrollbar pb-1 text-xs">
         {[
           { label: "All Promotions", href: "/admin/promotions", icon: Percent, active: true },
+          { label: "Bundles & Deals", href: "/admin/promotions/bundles", icon: Sparkles },
           { label: "Discount Codes", href: "/admin/promotions/codes", icon: Ticket },
           { label: "Claimable Coupons", href: "/admin/promotions/claimable", icon: Gift },
           { label: "Automatic Rules", href: "/admin/promotions/automatic", icon: Zap },

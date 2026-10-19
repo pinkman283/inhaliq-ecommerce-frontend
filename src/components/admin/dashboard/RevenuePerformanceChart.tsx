@@ -66,22 +66,22 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
   });
 
   return (
-    <div className="p-5 rounded-xl bg-white border border-[#E5E7EB] shadow-xs space-y-4">
+    <div className="p-5 rounded-xl bg-[#11141D] border border-[#272B35] space-y-4">
       {/* Chart Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold text-[#111827] tracking-tight">
+            <h2 className="text-sm font-bold text-white tracking-tight">
               Revenue Velocity & Performance
             </h2>
             <div
               className="group relative cursor-help"
               title="Consolidated gross and net sales trajectory plotted across cycles."
             >
-              <HelpCircle className="w-3.5 h-3.5 text-[#9CA3AF] hover:text-[#4B5563]" />
+              <HelpCircle className="w-3.5 h-3.5 text-[#6B7280] hover:text-[#929BAD]" />
             </div>
           </div>
-          <p className="text-xs text-[#6B7280]">
+          <p className="text-xs text-[#929BAD]">
             Operational sales volume and channel mix
           </p>
         </div>
@@ -89,27 +89,27 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
         {/* View Mode & Channel Split Quick Stats */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Channel split badges */}
-          <div className="hidden md:flex items-center gap-2 text-xs font-medium text-[#4B5563] bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200">
+          <div className="hidden md:flex items-center gap-2 text-xs font-medium text-[#929BAD] bg-[#171B26] px-2.5 py-1 rounded-lg border border-[#272B35]">
             <span className="flex items-center gap-1">
-              <Monitor className="w-3 h-3 text-emerald-600" />
-              Online: <strong className="font-mono text-[#111827]">{onlinePercent}%</strong>
+              <Monitor className="w-3 h-3 text-[#A78BFA]" />
+              Online: <strong className="font-mono text-white">{onlinePercent}%</strong>
             </span>
-            <span className="text-slate-300">|</span>
+            <span className="text-[#383E4C]">|</span>
             <span className="flex items-center gap-1">
-              <Store className="w-3 h-3 text-blue-600" />
-              POS: <strong className="font-mono text-[#111827]">{posPercent}%</strong>
+              <Store className="w-3 h-3 text-blue-400" />
+              POS: <strong className="font-mono text-white">{posPercent}%</strong>
             </span>
           </div>
 
           {/* Toggle buttons */}
-          <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200 text-xs">
+          <div className="inline-flex rounded-lg bg-[#090B10] p-0.5 border border-[#272B35] text-xs">
             <button
               type="button"
               onClick={() => setViewMode("sales")}
               className={`px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer ${
                 viewMode === "sales"
-                  ? "bg-white text-[#111827] shadow-xs font-semibold"
-                  : "text-[#6B7280] hover:text-[#111827]"
+                  ? "bg-[#171B26] text-white shadow-xs font-semibold"
+                  : "text-[#929BAD] hover:text-white"
               }`}
             >
               Revenue
@@ -119,8 +119,8 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
               onClick={() => setViewMode("breakdown")}
               className={`px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer ${
                 viewMode === "breakdown"
-                  ? "bg-white text-[#111827] shadow-xs font-semibold"
-                  : "text-[#6B7280] hover:text-[#111827]"
+                  ? "bg-[#171B26] text-white shadow-xs font-semibold"
+                  : "text-[#929BAD] hover:text-white"
               }`}
             >
               Margin Split
@@ -132,12 +132,12 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
       {/* Chart Canvas */}
       <div className="h-64 sm:h-72 w-full pt-2">
         {isLoading ? (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50/50 rounded-lg">
-            <div className="w-6 h-6 border-2 border-[#009B55] border-t-transparent rounded-full animate-spin mb-2" />
-            <span className="text-xs text-[#6B7280]">Loading sales trajectory...</span>
+          <div className="w-full h-full flex flex-col items-center justify-center bg-[#171B26]/30 rounded-lg">
+            <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mb-2" />
+            <span className="text-xs text-[#929BAD]">Loading sales trajectory...</span>
           </div>
         ) : chartData.length === 0 ? (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50/50 rounded-lg text-[#6B7280] text-xs">
+          <div className="w-full h-full flex flex-col items-center justify-center bg-[#171B26]/30 rounded-lg text-[#929BAD] text-xs">
             No sales activity recorded for the active period.
           </div>
         ) : (
@@ -145,29 +145,29 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="brandRevenueGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#009B55" stopOpacity={0.25} />
-                  <stop offset="95%" stopColor="#009B55" stopOpacity={0.0} />
+                  <stop offset="5%" stopColor="#A78BFA" stopOpacity={0.35} />
+                  <stop offset="95%" stopColor="#A78BFA" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2563EB" stopOpacity={0.25} />
-                  <stop offset="95%" stopColor="#2563EB" stopOpacity={0.0} />
+                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="cogsGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.25} />
+                  <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.3} />
                   <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#272B35" vertical={false} />
               <XAxis
                 dataKey="month"
-                stroke="#94A3B8"
+                stroke="#6B7280"
                 fontSize={11}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
                 tickFormatter={formatYAxis}
-                stroke="#94A3B8"
+                stroke="#6B7280"
                 fontSize={11}
                 tickLine={false}
                 axisLine={false}
@@ -177,22 +177,22 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
                   if (!active || !payload || !payload.length) return null;
                   const item = payload[0].payload;
                   return (
-                    <div className="p-3 rounded-lg bg-white border border-[#E5E7EB] shadow-md text-xs space-y-1.5 min-w-[160px]">
-                      <div className="font-bold text-[#111827] pb-1 border-b border-slate-100 flex items-center justify-between">
+                    <div className="p-3 rounded-lg bg-[#171B26] border border-[#272B35] shadow-xl text-xs space-y-1.5 min-w-[160px]">
+                      <div className="font-bold text-white pb-1 border-b border-[#272B35] flex items-center justify-between">
                         <span>{label}</span>
-                        <span className="font-mono text-[#6B7280] font-normal">{item.orders} orders</span>
+                        <span className="font-mono text-[#929BAD] font-normal">{item.orders} orders</span>
                       </div>
-                      <div className="flex items-center justify-between text-[#009B55]">
+                      <div className="flex items-center justify-between text-[#A78BFA]">
                         <span>Revenue:</span>
                         <span className="font-bold font-mono">{formatPrice(item.sales)}</span>
                       </div>
                       {viewMode === "breakdown" && (
                         <>
-                          <div className="flex items-center justify-between text-amber-600">
+                          <div className="flex items-center justify-between text-amber-400">
                             <span>COGS:</span>
                             <span className="font-mono">{formatPrice(item.cogs)}</span>
                           </div>
-                          <div className="flex items-center justify-between text-blue-600">
+                          <div className="flex items-center justify-between text-blue-400">
                             <span>Net Profit:</span>
                             <span className="font-bold font-mono">{formatPrice(item.profit)}</span>
                           </div>
@@ -211,7 +211,7 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
                 type="monotone"
                 dataKey="sales"
                 name="Gross Revenue"
-                stroke="#009B55"
+                stroke="#A78BFA"
                 strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#brandRevenueGrad)"
@@ -231,7 +231,7 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
                     type="monotone"
                     dataKey="profit"
                     name="Operating Profit"
-                    stroke="#2563EB"
+                    stroke="#3B82F6"
                     strokeWidth={1.5}
                     fillOpacity={1}
                     fill="url(#profitGrad)"
@@ -244,31 +244,31 @@ export const RevenuePerformanceChart: React.FC<RevenuePerformanceChartProps> = (
       </div>
 
       {/* Channel Breakdown Footer */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[#272B35] text-xs">
+        <div className="p-3 rounded-lg bg-[#171B26] border border-[#272B35] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-emerald-100 flex items-center justify-center text-[#009B55]">
+            <div className="w-7 h-7 rounded-md bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA]">
               <Monitor className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="font-semibold text-[#111827] block">Online Storefront</span>
-              <span className="text-[11px] text-[#6B7280]">{onlineOrdersCount} checkouts completed</span>
+              <span className="font-semibold text-white block">Online Storefront</span>
+              <span className="text-[11px] text-[#929BAD]">{onlineOrdersCount} checkouts completed</span>
             </div>
           </div>
-          <span className="font-mono font-bold text-sm text-[#111827]">{formatPrice(onlineSales)}</span>
+          <span className="font-mono font-bold text-sm text-white">{formatPrice(onlineSales)}</span>
         </div>
 
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+        <div className="p-3 rounded-lg bg-[#171B26] border border-[#272B35] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-blue-100 flex items-center justify-center text-blue-700">
+            <div className="w-7 h-7 rounded-md bg-blue-500/10 flex items-center justify-center text-blue-400">
               <Store className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="font-semibold text-[#111827] block">In-Store / POS Register</span>
-              <span className="text-[11px] text-[#6B7280]">{posOrdersCount} register receipts</span>
+              <span className="font-semibold text-white block">In-Store / POS Register</span>
+              <span className="text-[11px] text-[#929BAD]">{posOrdersCount} register receipts</span>
             </div>
           </div>
-          <span className="font-mono font-bold text-sm text-[#111827]">{formatPrice(posSales)}</span>
+          <span className="font-mono font-bold text-sm text-white">{formatPrice(posSales)}</span>
         </div>
       </div>
     </div>

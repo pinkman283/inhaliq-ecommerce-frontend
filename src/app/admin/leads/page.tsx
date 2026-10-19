@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { 
   Magnet, 
   Search, 
@@ -26,7 +27,9 @@ import {
   X, 
   ArrowRight,
   ShieldAlert,
-  ChevronDown
+  ChevronDown,
+  Plus,
+  Save
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
@@ -37,13 +40,15 @@ import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
 import { toast } from "sonner";
 
 export default function AdminLeadsPage() {
+  const router = useRouter();
   const { adminUser } = useAdminAuthStore();
 
   // Role & Permissions
-  const canView = adminUser?.role === "super_admin" || adminUser?.permissions?.includes("leads.view");
-  const canManage = adminUser?.role === "super_admin" || adminUser?.permissions?.includes("leads.manage");
-  const canConvert = adminUser?.role === "super_admin" || adminUser?.permissions?.includes("leads.convert") || adminUser?.permissions?.includes("leads.manage");
-  const canDelete = adminUser?.role === "super_admin" || adminUser?.permissions?.includes("leads.delete") || adminUser?.permissions?.includes("leads.manage");
+  const isPrivileged = adminUser?.role === "super_admin" || adminUser?.role === "admin";
+  const canView = isPrivileged || adminUser?.permissions?.includes("leads.view");
+  const canManage = isPrivileged || adminUser?.permissions?.includes("leads.manage");
+  const canConvert = isPrivileged || adminUser?.permissions?.includes("leads.convert") || adminUser?.permissions?.includes("leads.manage");
+  const canDelete = isPrivileged || adminUser?.permissions?.includes("leads.delete") || adminUser?.permissions?.includes("leads.manage");
 
   // State
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -67,6 +72,10 @@ export default function AdminLeadsPage() {
   const [inspectingLead, setInspectingLead] = useState<Lead | null>(null);
   const [inspectingNoteLead, setInspectingNoteLead] = useState<Lead | null>(null);
   const [convertingLead, setConvertingLead] = useState<Lead | null>(null);
+  const [cancellingLead, setCancellingLead] = useState<Lead | null>(null);
+  const [cancelReason, setCancelReason] = useState("Customer changed mind / not interested");
+  const [cancelCustomNote, setCancelCustomNote] = useState("");
+  const [savingCancel, setSavingCancel] = useState(false);
   const [leadNotes, setLeadNotes] = useState("");
   const [updatingNotes, setUpdatingNotes] = useState(false);
   const [converting, setConverting] = useState(false);
@@ -83,6 +92,53 @@ export default function AdminLeadsPage() {
   const [convertPaymentStatus, setConvertPaymentStatus] = useState("pending");
   const [convertOrderStatus, setConvertOrderStatus] = useState("processing");
   const [convertNotes, setConvertNotes] = useState("");
+
+  // 1-Click WhatsApp Cart Recovery State
+  const [whatsAppLead, setWhatsAppLead] = useState<Lead | null>(null);
+  const [whatsAppDiscountCode, setWhatsAppDiscountCode] = useState("");
+  const [whatsAppCustomMessage, setWhatsAppCustomMessage] = useState("");
+  const [sendingWhatsApp, setSendingWhatsApp] = useState(false);
+
+  const handleOpenWhatsAppModal = (lead: Lead) => {
+    setWhatsAppLead(lead);
+    setWhatsAppDiscountCode("");
+    const itemsText = (lead.cart_items || [])
+      .map((i) => `${i.title || "Product"} (x${i.quantity || 1})`)
+      .join(", ");
+    const storeOrigin = typeof window !== "undefined" ? window.location.origin : "";
+    const initialMsg = `Hi ${lead.name || "there"}!\n\nWe noticed you left some great items in your shopping cart at INHALIQ:\n📦 ${itemsText || "Selected cart items"}\nTotal: ৳${Number(lead.total_amount || 0).toLocaleString()}\n\nItems in your cart are in high demand and might sell out soon. Complete your order here:\n${storeOrigin}/cart\n\nNeed help? Simply reply to this message!`;
+    setWhatsAppCustomMessage(initialMsg);
+  };
+
+  const handleSendWhatsAppRecovery = async () => {
+    if (!whatsAppLead) return;
+    setSendingWhatsApp(true);
+    try {
+      const res = await adminApi.sendLeadWhatsAppRecovery(whatsAppLead.id, {
+        discount_code: whatsAppDiscountCode.trim() || undefined,
+        custom_message: whatsAppCustomMessage.trim() || undefined,
+      });
+      if (res.success) {
+        toast.success(res.message || "WhatsApp recovery sent successfully!");
+        setWhatsAppLead(null);
+        loadLeads();
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || err.message || "Failed to send WhatsApp message.");
+    } finally {
+      setSendingWhatsApp(false);
+    }
+  };
+
+  const handleOpenWhatsAppWeb = () => {
+    if (!whatsAppLead?.phone) return;
+    const clean = whatsAppLead.phone.replace(/[^0-9]/g, "");
+    const intlPhone = clean.startsWith("01") ? "88" + clean : clean;
+    const url = `https://wa.me/${intlPhone}?text=${encodeURIComponent(whatsAppCustomMessage)}`;
+    window.open(url, "_blank");
+  };
 
   const loadLeads = async () => {
     if (!canView) {
@@ -183,6 +239,65 @@ export default function AdminLeadsPage() {
       toast.error(err.response?.data?.message || "Failed to save note.");
     } finally {
       setUpdatingNotes(false);
+    }
+  };
+
+  // Convert via POS Terminal with Preloaded Cart
+  const handleConvertToPos = (lead: Lead) => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(
+        "pos_lead_conversion",
+        JSON.stringify({
+          leadId: lead.id,
+          name: lead.name,
+          phone: lead.phone,
+          email: lead.email,
+          address: lead.address,
+          city: lead.city,
+          postal_code: lead.postal_code,
+          total_amount: lead.total_amount,
+          cart_items: lead.cart_items || [],
+          notes: lead.notes || "",
+        })
+      );
+    }
+    toast.info(`Opening POS Terminal with Lead #${lead.id} cart items preloaded...`);
+    router.push(`/admin/pos?lead_id=${lead.id}`);
+  };
+
+  // Confirm Cancellation with Structured Reason & Notes
+  const handleConfirmCancellation = async () => {
+    if (!cancellingLead || !canManage) return;
+    setSavingCancel(true);
+    try {
+      const reasonTag = `[Cancelled/Lost Reason: ${cancelReason}]`;
+      const combinedNote = cancelCustomNote.trim()
+        ? `${reasonTag} ${cancelCustomNote.trim()}`
+        : reasonTag;
+      const existingNotes = cancellingLead.notes ? `${cancellingLead.notes}\n---\n` : "";
+      const finalNotes = `${existingNotes}${combinedNote}`;
+
+      await adminApi.updateLead(cancellingLead.id, {
+        status: "lost",
+        notes: finalNotes,
+      });
+
+      setLeads((prev) =>
+        prev.map((l) =>
+          l.id === cancellingLead.id ? { ...l, status: "lost", notes: finalNotes } : l
+        )
+      );
+
+      if (inspectingLead?.id === cancellingLead.id) {
+        setInspectingLead({ ...inspectingLead, status: "lost", notes: finalNotes });
+      }
+
+      toast.success(`Lead #${cancellingLead.id} marked as Lost (${cancelReason}).`);
+      setCancellingLead(null);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to update lead status.");
+    } finally {
+      setSavingCancel(false);
     }
   };
 
@@ -515,17 +630,27 @@ export default function AdminLeadsPage() {
                               {lead.phone}
                             </a>
 
-                            {/* WhatsApp Fast Link */}
-                            <a
-                              href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 text-[10px]"
-                              title="Chat on WhatsApp"
-                            >
-                              <MessageCircle className="w-3 h-3" />
-                              WhatsApp
-                            </a>
+                            {/* WhatsApp Fast Link with Pre-filled Cart Context */}
+                            {(() => {
+                              const clean = lead.phone.replace(/[^0-9]/g, "");
+                              const intlPhone = clean.startsWith("01") ? "88" + clean : clean;
+                              const storeOrigin = typeof window !== "undefined" ? window.location.origin : "";
+                              const fastText = encodeURIComponent(
+                                `Hi ${lead.name || "there"}! We noticed you left some items in your cart. Complete your order here: ${storeOrigin}/cart`
+                              );
+                              return (
+                                <a
+                                  href={`https://wa.me/${intlPhone}?text=${fastText}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 text-[10px]"
+                                  title="Chat on WhatsApp"
+                                >
+                                  <MessageCircle className="w-3 h-3" />
+                                  WhatsApp
+                                </a>
+                              );
+                            })()}
 
                             {lead.email && (
                               <span className="text-slate-400 flex items-center gap-1">
@@ -535,21 +660,49 @@ export default function AdminLeadsPage() {
                             )}
                           </div>
 
-                          {/* Clean Note Preview Chip (1-Line Truncated with Zero Peek & Click-to-Open Popup) */}
-                          {lead.notes && (
+                          {/* Note Preview / Cancellation Reason Chip */}
+                          {lead.status === "lost" ? (
                             <button
                               type="button"
                               onClick={() => {
                                 setInspectingNoteLead(lead);
                                 setLeadNotes(lead.notes || "");
                               }}
-                              className="text-[10px] text-slate-300 bg-white/[0.04] hover:bg-white/10 hover:border-[#A78BFA]/40 px-2.5 py-1 rounded border border-white/10 flex items-center gap-1.5 max-w-[280px] transition-all cursor-pointer group text-left"
+                              className="text-[10px] text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-md flex items-center gap-1.5 max-w-[280px] transition-all cursor-pointer group text-left shadow-xs"
+                              title="Click to view & edit cancellation reason"
+                            >
+                              <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                              <span className="truncate whitespace-nowrap overflow-hidden block flex-1 font-medium">
+                                {lead.notes || "Cancelled / Lost (Click to add reason)"}
+                              </span>
+                            </button>
+                          ) : lead.notes ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInspectingNoteLead(lead);
+                                setLeadNotes(lead.notes || "");
+                              }}
+                              className="text-[10px] text-slate-300 bg-white/[0.04] hover:bg-white/10 hover:border-[#A78BFA]/40 px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5 max-w-[280px] transition-all cursor-pointer group text-left shadow-xs"
                               title="Click to view & edit full note"
                             >
                               <span className="shrink-0 text-[#A78BFA] text-xs">💬</span>
                               <span className="truncate whitespace-nowrap overflow-hidden block flex-1 text-slate-300 group-hover:text-[#B9A3FF]">
                                 {lead.notes}
                               </span>
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInspectingNoteLead(lead);
+                                setLeadNotes("");
+                              }}
+                              className="text-[10px] text-slate-500 hover:text-[#A78BFA] bg-transparent hover:bg-white/[0.04] px-2 py-0.5 rounded border border-dashed border-white/10 hover:border-[#A78BFA]/30 flex items-center gap-1 transition-all cursor-pointer"
+                              title="Add a note to this lead"
+                            >
+                              <Plus className="w-2.5 h-2.5" />
+                              <span>Note</span>
                             </button>
                           )}
                         </div>
@@ -639,7 +792,13 @@ export default function AdminLeadsPage() {
                                       key={st.id}
                                       type="button"
                                       onClick={() => {
-                                        handleStatusChange(lead.id, st.id as any);
+                                        if (st.id === "lost") {
+                                          setCancellingLead(lead);
+                                          setCancelReason("Customer changed mind / not interested");
+                                          setCancelCustomNote("");
+                                        } else {
+                                          handleStatusChange(lead.id, st.id as any);
+                                        }
                                         setOpenStatusDropdownId(null);
                                       }}
                                       className={`w-full text-left px-3 py-2 rounded-md text-xs font-bold flex items-center justify-between transition cursor-pointer ${
@@ -666,51 +825,126 @@ export default function AdminLeadsPage() {
                         )}
                       </td>
 
-                      {/* Date */}
-                      <td className="py-4 px-4 text-slate-300 text-xs whitespace-nowrap min-w-[140px] font-mono">
-                        {formatDate(lead.created_at)}
+                      {/* Captured At Timestamp (Accurate Date + Time) */}
+                      <td className="py-4 px-4 text-slate-300 text-xs whitespace-nowrap min-w-[150px] font-mono">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-white text-xs font-semibold">
+                            {new Date(lead.created_at).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </span>
+                          <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-[#A78BFA] shrink-0" />
+                            {new Date(lead.created_at).toLocaleTimeString("en-US", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              hour12: true,
+                            })}
+                          </span>
+                        </div>
                       </td>
 
-                      {/* Actions */}
-                      <td className="py-4 px-4 text-right whitespace-nowrap min-w-[140px]">
+                      {/* Actions: Strictly Icon Buttons with Floating Tooltips */}
+                      <td className="py-4 px-4 text-right whitespace-nowrap min-w-[180px]">
                         <div className="flex items-center justify-end gap-1.5">
                           
-                          {/* Convert to Order Button */}
-                          {canConvert && lead.status !== "converted" && (
-                            <button
-                              onClick={() => {
-                                setConvertingLead(lead);
-                                setConvertNotes(lead.notes || "");
-                              }}
-                              className="px-2.5 py-1.5 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-                              title="Convert this lead into a confirmed Order"
-                            >
-                              <Sparkles className="w-3.5 h-3.5" />
-                              <span className="hidden sm:inline">Convert</span>
-                            </button>
+                          {/* 1. WhatsApp Recovery */}
+                          {canManage && lead.status !== "converted" && (
+                            <div className="relative group/action">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenWhatsAppModal(lead)}
+                                className="w-8 h-8 rounded-lg bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/30 text-[#25D366] flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                                title="1-Click WhatsApp Cart Recovery"
+                              >
+                                <MessageCircle className="w-4 h-4" />
+                              </button>
+                              <div className="pointer-events-none absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 opacity-0 group-hover/action:opacity-100 transition-opacity duration-150 z-50 bg-[#161a26] text-white text-[10px] font-semibold px-2 py-1 rounded shadow-xl border border-white/10 whitespace-nowrap">
+                                1-Click WhatsApp Recovery
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#161a26]" />
+                              </div>
+                            </div>
                           )}
 
-                          {/* Inspect Details */}
-                          <button
-                            onClick={() => {
-                              setInspectingLead(lead);
-                              setLeadNotes(lead.notes || "");
-                            }}
-                            className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all cursor-pointer"
-                            title="View Cart & Notes"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                          </button>
+                          {/* 2. Convert to Order via POS */}
+                          {canConvert && lead.status !== "converted" && (
+                            <div className="relative group/action">
+                              <button
+                                type="button"
+                                onClick={() => handleConvertToPos(lead)}
+                                className="w-8 h-8 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                                title="Convert to Order via POS Terminal"
+                              >
+                                <Sparkles className="w-4 h-4" />
+                              </button>
+                              <div className="pointer-events-none absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 opacity-0 group-hover/action:opacity-100 transition-opacity duration-150 z-50 bg-[#161a26] text-white text-[10px] font-semibold px-2 py-1 rounded shadow-xl border border-white/10 whitespace-nowrap">
+                                Convert via POS Terminal
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#161a26]" />
+                              </div>
+                            </div>
+                          )}
 
-                          {/* Delete */}
-                          {canDelete && (
+                          {/* 3. Note / Cancellation Reason View & Edit */}
+                          <div className="relative group/action">
                             <button
-                              onClick={() => handleDeleteLead(lead.id)}
-                              className="p-1.5 rounded-md bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition-all cursor-pointer"
-                              title="Delete Lead"
+                              type="button"
+                              onClick={() => {
+                                setInspectingNoteLead(lead);
+                                setLeadNotes(lead.notes || "");
+                              }}
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-xs border ${
+                                lead.notes
+                                  ? "bg-[#A78BFA]/15 hover:bg-[#A78BFA]/25 border-[#A78BFA]/30 text-[#A78BFA]"
+                                  : "bg-white/5 hover:bg-white/10 border-white/10 text-slate-400 hover:text-white"
+                              }`}
+                              title={lead.notes ? "View & Edit Lead Notes" : "Add Note"}
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <FileText className="w-4 h-4" />
                             </button>
+                            <div className="pointer-events-none absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 opacity-0 group-hover/action:opacity-100 transition-opacity duration-150 z-50 bg-[#161a26] text-white text-[10px] font-semibold px-2 py-1 rounded shadow-xl border border-white/10 whitespace-nowrap">
+                              {lead.notes ? "View & Edit Notes" : "Add Note"}
+                              <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#161a26]" />
+                            </div>
+                          </div>
+
+                          {/* 4. Inspect Details */}
+                          <div className="relative group/action">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInspectingLead(lead);
+                                setLeadNotes(lead.notes || "");
+                              }}
+                              className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                              title="View Prospect & Cart Details"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <div className="pointer-events-none absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 opacity-0 group-hover/action:opacity-100 transition-opacity duration-150 z-50 bg-[#161a26] text-white text-[10px] font-semibold px-2 py-1 rounded shadow-xl border border-white/10 whitespace-nowrap">
+                              View Cart & Details
+                              <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#161a26]" />
+                            </div>
+                          </div>
+
+                          {/* 5. Delete Lead */}
+                          {canDelete && (
+                            <div className="relative group/action">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteLead(lead.id)}
+                                className="w-8 h-8 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                                title="Delete Lead"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                              <div className="pointer-events-none absolute bottom-full mb-1.5 right-0 opacity-0 group-hover/action:opacity-100 transition-opacity duration-150 z-50 bg-[#161a26] text-white text-[10px] font-semibold px-2 py-1 rounded shadow-xl border border-white/10 whitespace-nowrap">
+                                Delete Lead
+                                <span className="absolute top-full right-3 border-4 border-transparent border-t-[#161a26]" />
+                              </div>
+                            </div>
                           )}
                         </div>
                       </td>
@@ -1083,6 +1317,301 @@ export default function AdminLeadsPage() {
                   <>
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Confirm & Generate Order</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 3: 1-Click WhatsApp Cart Recovery */}
+      {whatsAppLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg rounded-lg bg-[#0e121e] border border-[#25D366]/30 p-6 sm:p-8 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-[#25D366]/20 border border-[#25D366]/40 flex items-center justify-center text-[#25D366]">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">1-Click WhatsApp Recovery</h3>
+                  <p className="text-xs text-slate-400">
+                    Recover cart for <span className="text-white font-semibold">{whatsAppLead.name}</span> ({whatsAppLead.phone})
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setWhatsAppLead(null)}
+                className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-3 rounded-md bg-white/[0.02] border border-white/10 flex justify-between items-center text-xs">
+                <div>
+                  <span className="text-slate-400 block">Abandoned Cart Value</span>
+                  <span className="text-emerald-400 text-sm font-bold">
+                    {formatPrice(whatsAppLead.total_amount)} ({whatsAppLead.cart_items?.length || 0} items)
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-slate-400 block">Lead Status</span>
+                  <span className="font-semibold text-white capitalize">{whatsAppLead.status}</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-300 block mb-1">
+                  Optional Discount Promo Voucher
+                </label>
+                <input
+                  type="text"
+                  value={whatsAppDiscountCode}
+                  onChange={(e) => setWhatsAppDiscountCode(e.target.value.toUpperCase())}
+                  placeholder="e.g. COMEBACK10 or SAVE5"
+                  className="w-full bg-[#090b12] border border-white/10 focus:border-[#25D366]/50 rounded-md px-3.5 py-2 text-xs text-white uppercase font-mono placeholder:text-slate-600 focus:outline-none"
+                />
+                <span className="text-[10px] text-slate-500 mt-1 block">
+                  If entered, discount voucher code will be highlighted in the message template.
+                </span>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-300 block mb-1">
+                  WhatsApp Message Content
+                </label>
+                <textarea
+                  rows={6}
+                  value={whatsAppCustomMessage}
+                  onChange={(e) => setWhatsAppCustomMessage(e.target.value)}
+                  className="w-full bg-[#090b12] border border-white/10 focus:border-[#25D366]/50 rounded-md p-3 text-xs text-white placeholder:text-slate-600 focus:outline-none leading-relaxed font-mono"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={handleOpenWhatsAppWeb}
+                className="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition cursor-pointer"
+                title="Open WhatsApp Web or desktop application"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                <span>Open in WhatsApp Web</span>
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setWhatsAppLead(null)}
+                  className="px-3 py-2 rounded-md bg-transparent hover:bg-white/5 text-xs text-slate-400 hover:text-white transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSendWhatsAppRecovery}
+                  disabled={sendingWhatsApp}
+                  className="flex-1 sm:flex-none px-5 py-2 rounded-md bg-[#25D366] hover:bg-[#20bd5a] text-[#090B10] text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-md shadow-[#25D366]/20"
+                >
+                  {sendingWhatsApp ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Send via Cloud API</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 4: Structured Cancellation / Lost Reason Modal */}
+      {cancellingLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg rounded-xl bg-[#0e121e] border border-amber-500/30 p-6 sm:p-7 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Record Cancellation Reason</h3>
+                  <p className="text-xs text-slate-400">
+                    Lead #{cancellingLead.id} &bull; <span className="text-white font-medium">{cancellingLead.name}</span> ({cancellingLead.phone})
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCancellingLead(null)}
+                className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Quick Preset Reasons */}
+              <div>
+                <label className="text-xs font-semibold text-slate-300 block mb-2">
+                  Select Primary Reason for Cancellation
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    "Customer changed mind / not interested",
+                    "Price or shipping cost too high",
+                    "Bought from competitor",
+                    "Unreachable / invalid phone number",
+                    "Duplicate or test checkout",
+                    "Out of stock / requested variant unavailable",
+                  ].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setCancelReason(preset)}
+                      className={`text-left p-2.5 rounded-lg border text-xs font-medium transition cursor-pointer flex items-center justify-between ${
+                        cancelReason === preset
+                          ? "bg-amber-500/15 border-amber-500/60 text-amber-200 shadow-sm"
+                          : "bg-white/[0.03] border-white/10 text-slate-300 hover:bg-white/[0.07] hover:text-white"
+                      }`}
+                    >
+                      <span>{preset}</span>
+                      {cancelReason === preset && (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0 ml-1.5" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Additional Specific Notes */}
+              <div>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                  Additional Context / Tele-sales Notes <span className="text-slate-500 font-normal">(optional)</span>
+                </label>
+                <textarea
+                  rows={3}
+                  value={cancelCustomNote}
+                  onChange={(e) => setCancelCustomNote(e.target.value)}
+                  placeholder="e.g. Customer stated they already purchased elsewhere. Reason shared during call."
+                  className="w-full bg-[#090b12] border border-white/10 focus:border-amber-500/50 rounded-lg p-3 text-xs text-white placeholder:text-slate-600 focus:outline-none transition leading-relaxed"
+                />
+              </div>
+
+              {/* Cart Summary Snippet */}
+              <div className="p-3 rounded-lg bg-white/[0.02] border border-white/10 flex justify-between items-center text-xs">
+                <span className="text-slate-400">Cart Total Being Cancelled</span>
+                <span className="text-amber-400 font-bold font-mono">
+                  {formatPrice(cancellingLead.total_amount)} ({cancellingLead.cart_items?.length || 0} items)
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setCancellingLead(null)}
+                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer"
+              >
+                Go Back
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCancellation}
+                disabled={savingCancel}
+                className="px-5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-md shadow-amber-500/20"
+              >
+                {savingCancel ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    <span>Confirm & Mark as Lost</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 5: Dedicated Lead Note Quick Editor */}
+      {inspectingNoteLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg rounded-xl bg-[#0e121e] border border-[#A78BFA]/30 p-6 sm:p-7 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-[#A78BFA]/15 border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA]">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Lead Internal Notes</h3>
+                  <p className="text-xs text-slate-400">
+                    Lead #{inspectingNoteLead.id} &bull; <span className="text-white font-medium">{inspectingNoteLead.name}</span> ({inspectingNoteLead.phone})
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setInspectingNoteLead(null)}
+                className="p-1.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+                Internal Outreach Log, Call Feedback & Follow-up Notes
+              </label>
+              <textarea
+                rows={6}
+                value={leadNotes}
+                onChange={(e) => setLeadNotes(e.target.value)}
+                placeholder="Log outreach attempts, special requests, reason for abandonment, discounts discussed..."
+                className="w-full bg-[#090b12] border border-white/10 focus:border-[#A78BFA]/50 rounded-lg p-3 text-xs text-white placeholder:text-slate-600 focus:outline-none transition leading-relaxed font-mono"
+              />
+              <span className="text-[10px] text-slate-500 mt-1 block">
+                Visible to all admins and sales agents working on lead recovery.
+              </span>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setInspectingNoteLead(null)}
+                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSaveNoteForLead(inspectingNoteLead.id, leadNotes)}
+                disabled={updatingNotes}
+                className="px-5 py-2 rounded-lg bg-[#A78BFA] hover:bg-[#906ef5] text-slate-950 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-md shadow-[#A78BFA]/20"
+              >
+                {updatingNotes ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Save Note</span>
                   </>
                 )}
               </button>

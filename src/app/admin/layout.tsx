@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, Suspense } from "react";
+import { useEffect, useState, useMemo, useCallback, Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { 
@@ -61,6 +61,7 @@ import {
   Smartphone,
   Briefcase,
   Lock,
+  Barcode,
 } from "lucide-react";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
 import { useThemeStore, resolveLogo } from "@/store/useThemeStore";
@@ -127,6 +128,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [loading, setLoading] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Single-open accordion state: only one sidebar group can be open at a time
+  const [openNavGroup, setOpenNavGroup] = useState<string | null>(null);
+
+  const handleToggleNavGroup = useCallback((label: string) => {
+    setOpenNavGroup((prev) => (prev === label ? null : label));
+  }, []);
+
+  const handleActiveChildFound = useCallback((activeLabel: string) => {
+    setOpenNavGroup(activeLabel);
+  }, []);
 
   // Command Palette State (Ctrl + K)
   const [commandOpen, setCommandOpen] = useState(false);
@@ -215,7 +227,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const hasItemAccess = (permission?: string) => {
     if (!permission) return true;
-    if (adminUser?.role === "super_admin") return true;
+    if (adminUser?.role === "super_admin" || adminUser?.role === "admin") return true;
     return Boolean(adminUser?.permissions?.includes(permission));
   };
 
@@ -272,6 +284,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           icon: ShoppingBag,
           items: [
             { label: "Orders", href: "/admin/orders", icon: ShoppingBag, permission: "orders.view" },
+            { label: "Scan-to-Pack", href: "/admin/orders/scan-to-pack", icon: Barcode, permission: "orders.manage" },
             { label: "Order Status", href: "/admin/orders/statuses", icon: SlidersHorizontal, permission: "settings.manage" },
             { label: "Shipping", href: "/admin/orders/shipping", icon: Truck, permission: "settings.manage" },
             { label: "Returns & RTO", href: "/admin/orders/returns", icon: RotateCcw, permission: "orders.view" },
@@ -311,6 +324,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           icon: Megaphone,
           items: [
             { label: "Campaigns", href: "/admin/marketing/campaigns", icon: Megaphone, permission: "coupons.view" },
+            { label: "Promotions & Discounts", href: "/admin/promotions", icon: Percent, permission: "coupons.view" },
+            { label: "Bundles & Deals", href: "/admin/promotions/bundles", icon: Sparkles, permission: "coupons.view" },
             { label: "Coupons", href: "/admin/marketing/coupons", icon: Ticket, permission: "coupons.view" },
             { label: "Customer Rewards", href: "/admin/marketing/rewards", icon: CreditCard, permission: "coupons.view" },
           ],
@@ -321,6 +336,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           icon: Puzzle,
           items: [
             { label: "All Integrations", href: "/admin/integrations", icon: Puzzle, permission: "settings.manage" },
+            { label: "WhatsApp & SMS", href: "/admin/integrations?category=whatsapp", icon: MessageCircle, permission: "settings.manage" },
             { label: "Tracking & Pixels", href: "/admin/integrations?category=analytics", icon: BarChart3, permission: "settings.manage" },
             { label: "Fraud Protection", href: "/admin/integrations?category=fraud", icon: ShieldCheck, permission: "settings.manage" },
             { label: "Headless API & CORS", href: "/admin/integrations?category=api", icon: Lock, permission: "settings.manage" },
@@ -329,11 +345,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ],
         },
         {
-          kind: "single",
+          kind: "group",
           label: "Reports",
-          href: "/admin/reports",
           icon: BarChart3,
-          permission: "analytics.view",
+          items: [
+            { label: "Order Report", href: "/admin/reports", icon: ShoppingBag, permission: "analytics.view" },
+            { label: "Acquisition & Channels", href: "/admin/acquisition-report", icon: TrendingUp, permission: "analytics.view" },
+          ],
         },
         {
           kind: "group",
@@ -435,6 +453,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: "Mail / SMTP Settings", href: "/admin/settings/mail", icon: Mail, section: "Settings", permission: "settings.manage" },
     { label: "Settings Integrations", href: "/admin/settings/integrations", icon: Puzzle, section: "Settings", permission: "settings.manage" },
     { label: "My Profile", href: "/admin/profile", icon: ShieldCheck, section: "Settings" },
+
+    // Reports sub-pages
+    { label: "Acquisition & Channels Report", href: "/admin/acquisition-report", icon: TrendingUp, section: "Reports", permission: "analytics.view" },
   ];
 
   // Breadcrumb current item detection
@@ -561,6 +582,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             sidebarCollapsed={sidebarCollapsed}
                             pathname={pathname}
                             hasItemAccess={hasItemAccess}
+                            isOpen={openNavGroup === item.label}
+                            onToggle={() => handleToggleNavGroup(item.label)}
+                            onActiveChildFound={handleActiveChildFound}
                           />
                         </Suspense>
                       );
@@ -769,6 +793,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             sidebarCollapsed={false}
                             pathname={pathname}
                             hasItemAccess={hasItemAccess}
+                            isOpen={openNavGroup === item.label}
+                            onToggle={() => handleToggleNavGroup(item.label)}
+                            onActiveChildFound={handleActiveChildFound}
                             onNavigate={() => setMobileNavOpen(false)}
                           />
                         </Suspense>

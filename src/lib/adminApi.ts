@@ -67,6 +67,7 @@ import {
   IntegrationStats,
   ExtendedSettingsResponse,
   ReportData,
+  DetailedAcquisitionReportData,
   Promotion,
   PromotionCode,
   PromotionClaim,
@@ -763,6 +764,29 @@ export const adminApi = {
     return res.data;
   },
 
+  async bulkBookCourier(orderIds: number[], provider?: string): Promise<{
+    message: string;
+    success_count: number;
+    failed_count: number;
+    details: string[];
+  }> {
+    const res = await adminClient.post("/admin/orders/bulk-book-courier", {
+      order_ids: orderIds,
+      provider: provider || "steadfast",
+    });
+    return res.data;
+  },
+
+  async getBulkShippingLabels(orderIds: number[]): Promise<{
+    labels: any[];
+    count: number;
+  }> {
+    const res = await adminClient.post("/admin/orders/bulk-labels", {
+      order_ids: orderIds,
+    });
+    return res.data;
+  },
+
   // ==========================================
   // RETURNS & RTO MANAGEMENT
   // ==========================================
@@ -908,6 +932,11 @@ export const adminApi = {
     notes?: string;
   }): Promise<{ message: string; order: Order; lead: Lead }> {
     const res = await adminClient.post(`/admin/leads/${id}/convert-to-order`, data || {});
+    return res.data;
+  },
+
+  async sendLeadWhatsAppRecovery(id: number, data?: { discount_code?: string; custom_message?: string }): Promise<{ success: boolean; message: string; message_id?: string }> {
+    const res = await adminClient.post(`/admin/leads/${id}/send-whatsapp-recovery`, data || {});
     return res.data;
   },
 
@@ -1145,6 +1174,7 @@ export const adminApi = {
     discount_amount?: number;
     tax_amount?: number;
     notes?: string;
+    lead_id?: number | null;
     items: {
       product_id: number;
       variant_id?: number | null;
@@ -1429,6 +1459,7 @@ export const adminApi = {
     status?: string;
     customer_type?: string;
     risk_level?: string;
+    rfm_segment?: string;
     page?: number;
     per_page?: number;
   }): Promise<{ data: User[]; total: number; current_page: number; last_page: number }> {
@@ -2590,6 +2621,16 @@ export const adminApi = {
     return res.data;
   },
 
+  async sendTestWhatsApp(param: string | { phone?: string; phone_number?: string; message?: string }, message?: string): Promise<{ success: boolean; message: string; message_id?: string }> {
+    const phoneNumber = typeof param === "string" ? param : (param.phone_number || param.phone || "");
+    const msg = typeof param === "string" ? message : (param.message || message);
+    const res = await adminClient.post("/admin/integrations/whatsapp/send-test", {
+      phone_number: phoneNumber,
+      message: msg,
+    });
+    return res.data;
+  },
+
   async getExtendedSettings(): Promise<ExtendedSettingsResponse> {
     const res = await adminClient.get("/admin/settings/extended");
     return res.data;
@@ -2610,6 +2651,49 @@ export const adminApi = {
     return res.data;
   },
 
+  async listBackups(): Promise<{
+    backups: Array<{
+      filename: string;
+      size_bytes: number;
+      size_human: string;
+      created_at: string;
+      download_url: string;
+    }>;
+    stats: {
+      database: string;
+      total_users: number;
+      total_orders: number;
+      total_products: number;
+      total_invoices: number;
+      backup_count: number;
+      last_backup: string;
+    };
+  }> {
+    const res = await adminClient.get("/admin/system/backups");
+    return res.data;
+  },
+
+  async createBackup(): Promise<{
+    success: boolean;
+    message: string;
+    backup: {
+      filename: string;
+      size_bytes: number;
+      size_human: string;
+      tables_count: number;
+      created_at: string;
+      download_url: string;
+    };
+  }> {
+    const res = await adminClient.post("/admin/system/backups/create");
+    return res.data;
+  },
+
+  async deleteBackup(filename: string): Promise<{ success: boolean; message: string }> {
+    const res = await adminClient.delete(`/admin/system/backups/${filename}`);
+    return res.data;
+  },
+
   // ==========================================
   // Phase 4: 14-Report Analytics & Intelligence
   // ==========================================
@@ -2624,6 +2708,39 @@ export const adminApi = {
     if (params?.start_date) query.set("start_date", params.start_date);
     if (params?.end_date) query.set("end_date", params.end_date);
     return `${API_BASE_URL}/admin/reports/${type}/export?${query.toString()}`;
+  },
+
+  async getDetailedAcquisitionReport(params?: {
+    start_date?: string;
+    end_date?: string;
+    order_status?: string;
+  }): Promise<DetailedAcquisitionReportData> {
+    const res = await adminClient.get("/admin/reports/acquisition/detailed", { params });
+    return res.data;
+  },
+
+  getExportAcquisitionChannelsUrl(params?: {
+    start_date?: string;
+    end_date?: string;
+    order_status?: string;
+  }): string {
+    const query = new URLSearchParams();
+    if (params?.start_date) query.set("start_date", params.start_date);
+    if (params?.end_date) query.set("end_date", params.end_date);
+    if (params?.order_status) query.set("order_status", params.order_status);
+    return `${API_BASE_URL}/admin/reports/acquisition/export-channels?${query.toString()}`;
+  },
+
+  getExportAcquisitionPageViewsUrl(params?: {
+    start_date?: string;
+    end_date?: string;
+    order_status?: string;
+  }): string {
+    const query = new URLSearchParams();
+    if (params?.start_date) query.set("start_date", params.start_date);
+    if (params?.end_date) query.set("end_date", params.end_date);
+    if (params?.order_status) query.set("order_status", params.order_status);
+    return `${API_BASE_URL}/admin/reports/acquisition/export-pageviews?${query.toString()}`;
   },
 
   // ==========================================

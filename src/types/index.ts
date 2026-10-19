@@ -419,6 +419,10 @@ export interface Order {
   carrier?: string | null;
   coupon_code?: string | null;
   ip_address?: string | null;
+  fraud_score?: number;
+  risk_level?: 'low' | 'moderate' | 'high';
+  customer_order_count?: number;
+  customer_return_count?: number;
   notes?: string | null;
   order_source?: 'online' | 'pos' | 'admin';
   pos_register_session_id?: number | null;
@@ -601,6 +605,23 @@ export interface User {
   };
   ip_history?: CustomerIpHistoryItem[];
   activity_timeline?: CustomerActivityTimelineItem[];
+  rfm_segment?: string;
+  rfm_label?: string;
+  rfm_badge?: string;
+  rfm_recency_days?: number | null;
+  rfm_advice?: string;
+  last_order_at?: string | null;
+  rfm?: {
+    segment: string;
+    label: string;
+    badge: string;
+    recency_days?: number | null;
+    advice: string;
+    orders_count: number;
+    total_spent: number;
+    aov: number;
+    last_order_at?: string | null;
+  };
   created_at?: string;
 }
 
@@ -1945,6 +1966,107 @@ export interface ReportData {
   columns: string[];
   rows: Array<Record<string, any>>;
   status_breakdown?: Array<Record<string, any>>;
+}
+
+export interface AcquisitionSummaryKpis {
+  unique_visitors: number;
+  sessions_clicks: number;
+  leads_created: number;
+  orders_placed: number;
+  total_revenue: number;
+  conversion_rate: number;
+}
+
+export interface AcquisitionReferralRow {
+  id: number;
+  source: string;
+  badge_color: string;
+  total: number;
+  quantity: number;
+  total_value: number;
+}
+
+export interface AcquisitionChannelRow {
+  channel: string;
+  badge_color: string;
+  unique_visitors: number;
+  sessions: number;
+  leads_created: number;
+  orders_placed: number;
+  total_revenue: number;
+  session_to_order_cr: number;
+  lead_to_order_cr: number;
+}
+
+export interface DeviceSessionsData {
+  desktop: { count: number; percentage: number };
+  mobile: { count: number; percentage: number };
+  tablet: { count: number; percentage: number };
+  total: number;
+}
+
+export interface StorefrontDomainItem {
+  domain: string;
+  count: number;
+  percentage: number;
+  badge: string;
+}
+
+export interface PlatformSalesItem {
+  platform: string;
+  orders: number;
+  revenue: number;
+}
+
+export interface DailyPerformanceTrendPoint {
+  date: string;
+  raw_date: string;
+  clicks: number;
+  leads: number;
+  orders: number;
+  revenue: number;
+}
+
+export interface DayByDayDetailRow {
+  date: string;
+  raw_date: string;
+  channel: string;
+  badge_color: string;
+  unique_visitors: number;
+  sessions: number;
+  leads_created: number;
+  orders_placed: number;
+  total_revenue: number;
+  session_to_order_cr: number;
+}
+
+export interface PageViewPerformanceRow {
+  page_title: string;
+  url_path: string;
+  page_type: string;
+  unique_visitors: number;
+  total_page_views: number;
+}
+
+export interface DetailedAcquisitionReportData {
+  title: string;
+  date_range: {
+    start_date: string;
+    end_date: string;
+    order_status: string;
+    formatted: string;
+  };
+  summary_kpis: AcquisitionSummaryKpis;
+  referral_breakdown: AcquisitionReferralRow[];
+  channel_breakdown: AcquisitionChannelRow[];
+  channel_total: AcquisitionChannelRow;
+  device_sessions: DeviceSessionsData;
+  storefront_domains: StorefrontDomainItem[];
+  platform_sales: PlatformSalesItem[];
+  daily_performance_trends: DailyPerformanceTrendPoint[];
+  day_by_day_details: DayByDayDetailRow[];
+  page_views_performance: PageViewPerformanceRow[];
+  generated_at: string;
 }
 
 // ==========================================

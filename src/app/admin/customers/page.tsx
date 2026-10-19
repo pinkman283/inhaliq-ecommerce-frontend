@@ -34,7 +34,11 @@ import {
   FileText,
   Save,
   RefreshCw,
-  Info
+  Info,
+  Crown,
+  MessageCircle,
+  TrendingUp,
+  Gift
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { User, Order, CustomerIpHistoryItem, CustomerActivityTimelineItem } from "@/types";
@@ -71,11 +75,12 @@ function AdminCustomersContent() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const [riskFilter, setRiskFilter] = useState("all");
+  const [rfmFilter, setRfmFilter] = useState("all");
 
   // Customer Intelligence Drawer State
   const [selectedCustomer, setSelectedCustomer] = useState<User | null>(null);
   const [loadingCustomerDetails, setLoadingCustomerDetails] = useState(false);
-  const [activeDrawerTab, setActiveDrawerTab] = useState<"overview" | "ips" | "timeline" | "orders">("overview");
+  const [activeDrawerTab, setActiveDrawerTab] = useState<"overview" | "rfm" | "ips" | "timeline" | "orders">("overview");
 
   // Notes state in drawer
   const [customerNotes, setCustomerNotes] = useState("");
@@ -133,6 +138,7 @@ function AdminCustomersContent() {
         status: statusFilter !== "all" ? statusFilter : undefined,
         customer_type: typeFilter !== "all" ? typeFilter : undefined,
         risk_level: riskFilter !== "all" ? riskFilter : undefined,
+        rfm_segment: rfmFilter !== "all" ? rfmFilter : undefined,
         per_page: 50,
       });
       setCustomers(res.data || []);
@@ -207,7 +213,7 @@ function AdminCustomersContent() {
 
   useEffect(() => {
     loadCustomers();
-  }, [statusFilter, typeFilter, riskFilter]);
+  }, [statusFilter, typeFilter, riskFilter, rfmFilter]);
 
   // Auto-open profile drawer if redirected from Orders page
   useEffect(() => {
@@ -410,6 +416,36 @@ function AdminCustomersContent() {
         }
       />
 
+      {/* RFM Segment Quick Filters Strip */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        {[
+          { id: "all", label: "All Customers" },
+          { id: "champions", label: "VIP Champions", icon: Crown, color: "text-purple-400" },
+          { id: "loyal", label: "Loyal Buyers", icon: Users, color: "text-blue-400" },
+          { id: "promising", label: "Promising", icon: TrendingUp, color: "text-cyan-400" },
+          { id: "at_risk", label: "At-Risk (Churn)", icon: AlertTriangle, color: "text-amber-400" },
+          { id: "new", label: "New Leads", icon: Clock, color: "text-emerald-400" },
+          { id: "inactive", label: "Inactive", icon: Ban, color: "text-slate-400" },
+        ].map((tab) => {
+          const isActive = rfmFilter === tab.id;
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setRfmFilter(tab.id)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer ${
+                isActive
+                  ? "bg-[#211B32] border-[#A78BFA] text-[#A78BFA] shadow-xs"
+                  : "bg-[#0f121b] border-white/[0.08] text-slate-400 hover:text-white hover:border-white/20"
+              }`}
+            >
+              {Icon && <Icon className={`w-3.5 h-3.5 ${tab.color || ""}`} />}
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Search and Filters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#0f121b] p-3.5 rounded-md border border-white/[0.08]">
         <div className="relative lg:col-span-1">
@@ -490,6 +526,7 @@ function AdminCustomersContent() {
                 <th className="py-2.5 px-3.5">Customer</th>
                 <th className="py-2.5 px-3.5">Type</th>
                 <th className="py-2.5 px-3.5">Status</th>
+                <th className="py-2.5 px-3.5">RFM Segment</th>
                 <th className="py-2.5 px-3.5">Risk Profile</th>
                 <th className="py-2.5 px-3.5">Orders</th>
                 <th className="py-2.5 px-3.5">Total Spent</th>
@@ -499,7 +536,7 @@ function AdminCustomersContent() {
             <tbody className="divide-y divide-white/[0.04] text-slate-300">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-500">
+                  <td colSpan={9} className="py-12 text-center text-slate-500">
                     <div className="inline-flex items-center gap-2">
                       <RefreshCw className="w-4 h-4 animate-spin text-[#A78BFA]" />
                       <span>Loading customer intelligence...</span>
@@ -508,7 +545,7 @@ function AdminCustomersContent() {
                 </tr>
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-0">
+                  <td colSpan={9} className="p-0">
                     <AdminEmptyState
                       icon={Users}
                       title="No Customers Found"
@@ -572,6 +609,36 @@ function AdminCustomersContent() {
 
                       <td className="py-3 px-3.5">
                         <AdminStatusBadge status={c.status || "active"} size="sm" />
+                      </td>
+
+                      <td className="py-3 px-3.5">
+                        <div className="flex flex-col gap-0.5 items-start">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                            c.rfm_segment === "champions" 
+                              ? "bg-purple-500/15 text-purple-300 border border-purple-500/30"
+                              : c.rfm_segment === "loyal"
+                              ? "bg-blue-500/15 text-blue-300 border border-blue-500/30"
+                              : c.rfm_segment === "promising"
+                              ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                              : c.rfm_segment === "at_risk"
+                              ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                              : c.rfm_segment === "new"
+                              ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
+                              : "bg-slate-500/15 text-slate-300 border border-slate-500/30"
+                          }`}>
+                            {c.rfm_segment === "champions" && <Crown className="w-2.5 h-2.5 text-purple-400" />}
+                            {c.rfm_segment === "at_risk" && <AlertTriangle className="w-2.5 h-2.5 text-amber-400" />}
+                            {c.rfm_segment === "new" && <Clock className="w-2.5 h-2.5 text-emerald-400" />}
+                            {c.rfm_label || "Standard"}
+                          </span>
+                          {c.rfm_recency_days !== undefined && c.rfm_recency_days !== null ? (
+                            <span className="text-[10px] text-slate-400">
+                              Active {c.rfm_recency_days === 0 ? "today" : `${c.rfm_recency_days}d ago`}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-500">No purchase</span>
+                          )}
+                        </div>
                       </td>
 
                       <td className="py-3.5 px-4">
@@ -707,6 +774,7 @@ function AdminCustomersContent() {
             <div className="flex items-center gap-1 px-5 pt-3 border-b border-white/[0.08] bg-white/[0.01] shrink-0 text-xs font-medium">
               {[
                 { id: "overview", label: "Risk & KPIs", icon: Activity },
+                { id: "rfm", label: "Customer 360 (RFM)", icon: Sparkles },
                 { id: "ips", label: `IP History (${selectedCustomer.ip_history?.length || 0})`, icon: Network },
                 { id: "timeline", label: `Timeline (${selectedCustomer.activity_timeline?.length || 0})`, icon: History },
                 { id: "orders", label: `Orders (${selectedCustomer.orders?.length || selectedCustomer.orders_count || 0})`, icon: ShoppingBag },
@@ -714,7 +782,7 @@ function AdminCustomersContent() {
                 <button
                   key={t.id}
                   onClick={() => setActiveDrawerTab(t.id as any)}
-                  className={`flex items-center gap-2 py-2 px-3.5 border-b-2 transition-all ${
+                  className={`flex items-center gap-2 py-2 px-3.5 border-b-2 transition-all cursor-pointer ${
                     activeDrawerTab === t.id
                       ? "border-[#A78BFA] text-[#A78BFA] bg-[#211B32] rounded-t-md font-semibold"
                       : "border-transparent text-slate-400 hover:text-slate-200"
@@ -828,6 +896,170 @@ function AdminCustomersContent() {
                           onChange={(e) => setCustomerNotes(e.target.value)}
                           className="w-full bg-[#07080c] border border-white/10 rounded-md p-3 text-white text-xs focus:outline-none focus:border-purple-500/50 resize-none"
                         />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 2: CUSTOMER 360 & RFM SEGMENTATION */}
+                  {activeDrawerTab === "rfm" && (
+                    <div className="space-y-5">
+                      {/* Segment Banner */}
+                      <div className="p-4 rounded-lg bg-gradient-to-r from-purple-900/30 via-[#161a26] to-[#0f121b] border border-[#A78BFA]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-xl bg-[#211B32] border border-[#A78BFA]/40 flex items-center justify-center text-[#A78BFA] shrink-0 shadow-lg">
+                            {selectedCustomer.rfm?.segment === "champions" ? (
+                              <Crown className="w-6 h-6 text-purple-400" />
+                            ) : selectedCustomer.rfm?.segment === "at_risk" ? (
+                              <AlertTriangle className="w-6 h-6 text-amber-400" />
+                            ) : (
+                              <Sparkles className="w-6 h-6 text-[#A78BFA]" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-sm font-bold text-white">
+                                {selectedCustomer.rfm?.label || selectedCustomer.rfm_label || "Customer RFM Profile"}
+                              </h4>
+                              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#A78BFA]/20 text-[#A78BFA] border border-[#A78BFA]/30 font-bold uppercase">
+                                {selectedCustomer.rfm?.segment || "STANDARD"}
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-300 mt-0.5">
+                              {selectedCustomer.rfm?.advice || "Standard customer lifecycle marketing and order fulfillment."}
+                            </p>
+                          </div>
+                        </div>
+
+                        {selectedCustomer.phone && (
+                          <a
+                            href={`https://wa.me/${selectedCustomer.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                              `Hello ${selectedCustomer.name}! Thank you for being a valued customer at our store. Here is a special voucher code for you: VIP10. Let us know if we can assist you with your next purchase!`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-2 rounded-md bg-[#25D366] hover:bg-[#20bd5a] text-[#090B10] font-bold text-xs flex items-center gap-2 transition-all shrink-0 cursor-pointer shadow-md"
+                          >
+                            <MessageCircle className="w-4 h-4 fill-current" />
+                            <span>1-Click WhatsApp VIP Offer</span>
+                          </a>
+                        )}
+                      </div>
+
+                      {/* RFM 3-Pillar Deep Dive Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Recency Pillar */}
+                        <div className="p-4 rounded-lg bg-white/[0.02] border border-white/5 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-blue-400" />
+                              Recency (R)
+                            </span>
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">
+                              Days Ago
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold font-mono text-white">
+                              {selectedCustomer.rfm?.recency_days != null
+                                ? `${selectedCustomer.rfm.recency_days}d`
+                                : "No Orders"}
+                            </p>
+                            <p className="text-xs text-slate-400 mt-1">
+                              {selectedCustomer.rfm?.last_order_at
+                                ? `Last purchase: ${formatDate(selectedCustomer.rfm.last_order_at)}`
+                                : "Account has not placed any orders yet"}
+                            </p>
+                          </div>
+                          <div className="text-[11px] text-slate-300 bg-white/[0.02] p-2.5 rounded border border-white/5">
+                            {selectedCustomer.rfm?.recency_days != null && selectedCustomer.rfm.recency_days <= 30
+                              ? "Active & Engaged (< 30 days)"
+                              : selectedCustomer.rfm?.recency_days != null && selectedCustomer.rfm.recency_days <= 60
+                              ? "Nearing Inactivity (30-60 days)"
+                              : selectedCustomer.rfm?.recency_days != null
+                              ? "Slipping / Dormant (> 60 days)"
+                              : "New lead - no checkout history"}
+                          </div>
+                        </div>
+
+                        {/* Frequency Pillar */}
+                        <div className="p-4 rounded-lg bg-white/[0.02] border border-white/5 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                              <ShoppingBag className="w-3.5 h-3.5 text-emerald-400" />
+                              Frequency (F)
+                            </span>
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                              Repeat Cadence
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold font-mono text-white">
+                              {selectedCustomer.orders_count ?? 0} Orders
+                            </p>
+                            <p className="text-xs text-slate-400 mt-1">
+                              {selectedCustomer.risk_metrics?.completed_orders ?? 0} completed successfully
+                            </p>
+                          </div>
+                          <div className="text-[11px] text-slate-300 bg-white/[0.02] p-2.5 rounded border border-white/5">
+                            {(selectedCustomer.orders_count ?? 0) >= 4
+                              ? "Power Buyer (4+ lifetime orders)"
+                              : (selectedCustomer.orders_count ?? 0) >= 2
+                              ? "Repeat Customer (2-3 orders)"
+                              : (selectedCustomer.orders_count ?? 0) === 1
+                              ? "First-Time Buyer (1 order)"
+                              : "Lead (0 orders placed)"}
+                          </div>
+                        </div>
+
+                        {/* Monetary Pillar */}
+                        <div className="p-4 rounded-lg bg-white/[0.02] border border-white/5 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                              <DollarSign className="w-3.5 h-3.5 text-purple-400" />
+                              Monetary (M)
+                            </span>
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-mono">
+                              LTV
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold font-mono text-emerald-400">
+                              {formatPrice(selectedCustomer.total_spent || 0)}
+                            </p>
+                            <p className="text-xs text-slate-400 mt-1">
+                              Average Order Value: {formatPrice(selectedCustomer.rfm?.aov || 0)}
+                            </p>
+                          </div>
+                          <div className="text-[11px] text-slate-300 bg-white/[0.02] p-2.5 rounded border border-white/5">
+                            {(selectedCustomer.total_spent || 0) >= 8000
+                              ? "High LTV Tier (Top 5% customer)"
+                              : (selectedCustomer.total_spent || 0) >= 2000
+                              ? "Mid-Tier Contributor"
+                              : "Standard Tier Spend"}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Retention Playbook & Quick Direct Actions */}
+                      <div className="p-4 rounded-lg bg-[#161a26] border border-white/10 space-y-3">
+                        <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-[#A78BFA]" />
+                          Retention Playbook & Recommended Marketing Actions
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                          <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
+                            <span className="font-semibold text-slate-200 block">Recommended Outreach</span>
+                            <p className="text-slate-400 text-[11px]">
+                              {selectedCustomer.rfm?.advice || "No automated rule triggered."}
+                            </p>
+                          </div>
+                          <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 space-y-1">
+                            <span className="font-semibold text-slate-200 block">Account Status & Risk Alignment</span>
+                            <p className="text-slate-400 text-[11px]">
+                              Status is <strong className="text-white uppercase">{selectedCustomer.status || "active"}</strong> with risk score of <strong className="text-white">{selectedCustomer.risk_score || 0}/100</strong>.
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
