@@ -266,6 +266,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           icon: LayoutDashboard,
         },
         {
+          kind: "single",
+          label: "POS System",
+          href: "/admin/pos",
+          icon: Calculator,
+          permission: "orders.create",
+        },
+        {
           kind: "group",
           label: "Products",
           icon: Boxes,

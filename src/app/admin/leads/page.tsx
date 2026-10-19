@@ -1185,14 +1185,13 @@ export default function AdminLeadsPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    setConvertingLead(inspectingLead);
-                    setConvertNotes(inspectingLead.notes || "");
+                    handleConvertToPos(inspectingLead);
                     setInspectingLead(null);
                   }}
-                  className="px-5 py-2 rounded-md bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-90 text-slate-950 font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20"
+                  className="px-5 py-2 rounded-md bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-purple-500/20"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  Convert to Order
+                  Convert to Sales (POS)
                 </button>
               )}
             </div>

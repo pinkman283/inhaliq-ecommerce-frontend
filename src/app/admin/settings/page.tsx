@@ -32,6 +32,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
+import { setAppCurrencySymbol } from "@/lib/utils";
 import { SettingsNavTabs } from "@/components/admin/settings/SettingsNavTabs";
 import { AdminSaveBar } from "@/components/admin/ui";
 import { Switch } from "@/components/ui/switch";
@@ -46,7 +47,8 @@ export default function AdminSettingsPage() {
   const [supportEmail, setSupportEmail] = useState("ops@aether-audio.test");
   const [supportPhone, setSupportPhone] = useState("+1 (555) 019-2834");
   const [storeAddress, setStoreAddress] = useState("San Francisco, CA, USA");
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState("BDT");
+  const [currencySymbol, setCurrencySymbol] = useState("৳");
   const [vatEnabled, setVatEnabled] = useState(true);
   const [vatRate, setVatRate] = useState("8.0");
   const [freeShippingThreshold, setFreeShippingThreshold] = useState("100.0");
@@ -79,17 +81,21 @@ export default function AdminSettingsPage() {
           ? (data.guest_checkout_enabled?.value === "true" || data.guest_checkout_enabled?.value === "1" || data.guest_checkout_enabled?.value === true)
           : true;
 
+        const loadedCurrency = data.currency?.value || "BDT";
+        const loadedSymbol = data.currency_symbol?.value || (loadedCurrency === "BDT" ? "৳" : (loadedCurrency === "USD" ? "$" : (loadedCurrency === "EUR" ? "€" : (loadedCurrency === "GBP" ? "£" : "$"))));
+
         const init = {
-          store_name: data.store_name?.value || "AETHER Sound Systems",
-          support_email: data.support_email?.value || "support@aether-audio.test",
-          support_phone: data.support_phone?.value || "+1 (555) 019-2834",
-          store_address: data.store_address?.value || "San Francisco, CA, USA",
-          currency: data.currency?.value || "USD",
+          store_name: data.store_name?.value || "INHALIQ",
+          support_email: data.support_email?.value || "support@inhaliq.com",
+          support_phone: data.support_phone?.value || "+880 1711-521098",
+          store_address: data.store_address?.value || "Dhaka, Bangladesh",
+          currency: loadedCurrency,
+          currency_symbol: loadedSymbol,
           vat_enabled: isVatOn,
           vat_rate: loadedVatRate,
           free_shipping_threshold: data.free_shipping_threshold?.value || "150",
-          standard_shipping_rate: data.standard_shipping_rate?.value || "15",
-          priority_shipping_rate: data.priority_shipping_rate?.value || "35",
+          standard_shipping_rate: data.standard_shipping_rate?.value || "60",
+          priority_shipping_rate: data.priority_shipping_rate?.value || "120",
           low_stock_threshold: data.low_stock_threshold?.value || "5",
           reviews_auto_approve: isReviewsAutoOn,
           guest_checkout_enabled: isGuestCheckoutOn,
@@ -100,7 +106,9 @@ export default function AdminSettingsPage() {
         if (data.support_email?.value) setSupportEmail(data.support_email.value);
         if (data.support_phone?.value) setSupportPhone(data.support_phone.value);
         if (data.store_address?.value) setStoreAddress(data.store_address.value);
-        if (data.currency?.value) setCurrency(data.currency.value);
+        setCurrency(loadedCurrency);
+        setCurrencySymbol(loadedSymbol);
+        setAppCurrencySymbol(loadedSymbol);
         setVatEnabled(isVatOn);
         setVatRate(loadedVatRate);
         if (data.free_shipping_threshold?.value) setFreeShippingThreshold(data.free_shipping_threshold.value);
@@ -128,6 +136,7 @@ export default function AdminSettingsPage() {
       supportPhone !== initialSettings.support_phone ||
       storeAddress !== initialSettings.store_address ||
       currency !== initialSettings.currency ||
+      currencySymbol !== initialSettings.currency_symbol ||
       vatEnabled !== initialSettings.vat_enabled ||
       vatRate !== initialSettings.vat_rate ||
       freeShippingThreshold !== initialSettings.free_shipping_threshold ||
@@ -147,6 +156,8 @@ export default function AdminSettingsPage() {
     setSupportPhone(initialSettings.support_phone);
     setStoreAddress(initialSettings.store_address);
     setCurrency(initialSettings.currency);
+    setCurrencySymbol(initialSettings.currency_symbol);
+    setAppCurrencySymbol(initialSettings.currency_symbol);
     setVatEnabled(initialSettings.vat_enabled);
     setVatRate(initialSettings.vat_rate);
     setFreeShippingThreshold(initialSettings.free_shipping_threshold);
@@ -173,6 +184,7 @@ export default function AdminSettingsPage() {
       support_phone: supportPhone,
       store_address: storeAddress,
       currency,
+      currency_symbol: currencySymbol,
       vat_enabled: vatEnabled ? "true" : "false",
       vat_rate: vatRate,
       tax_rate: vatRate,
@@ -188,6 +200,7 @@ export default function AdminSettingsPage() {
 
     try {
       await adminApi.updateSettings(payload);
+      setAppCurrencySymbol(currencySymbol);
       setInitialSettings({
         ...payload,
         vat_enabled: vatEnabled,
@@ -367,20 +380,46 @@ export default function AdminSettingsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1">
               <label className="text-[11px] font-bold text-slate-300 block">Operational Currency</label>
               <select
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                onChange={(e) => {
+                  const newCurr = e.target.value;
+                  setCurrency(newCurr);
+                  if (newCurr === "BDT") setCurrencySymbol("৳");
+                  else if (newCurr === "USD") setCurrencySymbol("$");
+                  else if (newCurr === "EUR") setCurrencySymbol("€");
+                  else if (newCurr === "GBP") setCurrencySymbol("£");
+                }}
                 className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white focus:outline-none focus:border-[#A78BFA]/50"
               >
-                <option value="USD" className="bg-[#0e121e]">USD ($) - US Dollar</option>
                 <option value="BDT" className="bg-[#0e121e]">BDT (৳) - Bangladeshi Taka</option>
+                <option value="USD" className="bg-[#0e121e]">USD ($) - US Dollar</option>
                 <option value="EUR" className="bg-[#0e121e]">EUR (€) - Euro</option>
                 <option value="GBP" className="bg-[#0e121e]">GBP (£) - British Pound</option>
+                <option value="CUSTOM" className="bg-[#0e121e]">Custom Currency Sign</option>
               </select>
-              <p className="text-[11px] text-slate-500">Primary currency for product pricing and transactions</p>
+              <p className="text-[11px] text-slate-500">Preset currency configuration</p>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-bold text-slate-300 block">Currency Sign / Symbol</label>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#A78BFA]/10 text-[#A78BFA] border border-[#A78BFA]/30">
+                  Preview: {currencySymbol} 1,250
+                </span>
+              </div>
+              <input
+                type="text"
+                value={currencySymbol}
+                onChange={(e) => setCurrencySymbol(e.target.value)}
+                placeholder="e.g. ৳, $, Tk, BDT, AED"
+                maxLength={8}
+                className="w-full bg-white/5 border border-white/10 rounded-md px-3.5 py-2 text-white font-bold font-mono focus:outline-none focus:border-[#A78BFA]/50 transition-all"
+              />
+              <p className="text-[11px] text-slate-500">Change dollar ($) to taka (৳) or any custom symbol</p>
             </div>
 
             <div className="space-y-1">

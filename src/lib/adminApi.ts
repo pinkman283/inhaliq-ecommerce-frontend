@@ -1164,16 +1164,24 @@ export const adminApi = {
   },
 
   async checkoutPosSale(data: {
-    pos_register_session_id: number;
+    pos_register_session_id?: number | null;
     customer_id?: number | null;
     customer_name?: string;
     customer_email?: string;
     customer_phone?: string;
-    payment_method: string;
+    delivery_address?: string;
+    delivery_zone?: string;
+    shipping_amount?: number;
+    payment_method?: string;
+    payment_status?: string;
+    order_status?: string;
     cash_received?: number;
     discount_amount?: number;
     tax_amount?: number;
     notes?: string;
+    customer_note?: string;
+    admin_note?: string;
+    coupon_code?: string;
     lead_id?: number | null;
     items: {
       product_id: number;
