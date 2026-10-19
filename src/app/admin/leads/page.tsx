@@ -29,7 +29,9 @@ import {
   ShieldAlert,
   ChevronDown,
   Plus,
-  Save
+  Save,
+  Lock,
+  ShieldCheck
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
@@ -44,7 +46,8 @@ export default function AdminLeadsPage() {
   const { adminUser } = useAdminAuthStore();
 
   // Role & Permissions
-  const isPrivileged = adminUser?.role === "super_admin" || adminUser?.role === "admin";
+  const isSuperAdmin = adminUser?.role === "super_admin";
+  const isPrivileged = isSuperAdmin || adminUser?.role === "admin";
   const canView = isPrivileged || adminUser?.permissions?.includes("leads.view");
   const canManage = isPrivileged || adminUser?.permissions?.includes("leads.manage");
   const canConvert = isPrivileged || adminUser?.permissions?.includes("leads.convert") || adminUser?.permissions?.includes("leads.manage");
@@ -119,14 +122,14 @@ export default function AdminLeadsPage() {
         custom_message: whatsAppCustomMessage.trim() || undefined,
       });
       if (res.success) {
-        toast.success(res.message || "WhatsApp recovery sent successfully!");
+        toast.success("WhatsApp message sent", { id: "lead-wa" });
         setWhatsAppLead(null);
         loadLeads();
       } else {
-        toast.error(res.message);
+        toast.error(res.message || "Failed to send WhatsApp message", { id: "lead-wa" });
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || err.message || "Failed to send WhatsApp message.");
+      toast.error(err.response?.data?.message || err.message || "Failed to send WhatsApp message", { id: "lead-wa" });
     } finally {
       setSendingWhatsApp(false);
     }
@@ -193,15 +196,29 @@ export default function AdminLeadsPage() {
       return;
     }
 
+    const currentLead = leads.find((l) => l.id === id);
+    if (currentLead?.status === "converted" && newStatus !== "converted" && !isSuperAdmin) {
+      toast.error("Converted leads are locked. Only Super Admin can change status.", { id: "lead-lock" });
+      return;
+    }
+
+    if (currentLead?.status === "converted" && newStatus !== "converted" && isSuperAdmin) {
+      const confirmOverride = confirm(
+        `[Super Admin Override]\nAre you sure you want to change Lead #${id} from CONVERTED to ${newStatus.toUpperCase()}?\n\nThis will un-link its conversion status.`
+      );
+      if (!confirmOverride) return;
+    }
+
     try {
       const res = await adminApi.updateLead(id, { status: newStatus });
-      setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status: newStatus } : l)));
+      setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status: newStatus, converted_order_id: newStatus === "converted" ? l.converted_order_id : null } : l)));
       if (inspectingLead && inspectingLead.id === id) {
-        setInspectingLead({ ...inspectingLead, status: newStatus });
+        setInspectingLead({ ...inspectingLead, status: newStatus, converted_order_id: newStatus === "converted" ? inspectingLead.converted_order_id : null });
       }
-      toast.success(`Lead status updated to ${newStatus.toUpperCase()}`);
+      const label = newStatus === "in_progress" ? "In Progress" : newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+      toast.success(`Status updated: ${label}`, { id: "lead-status" });
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to update status.");
+      toast.error(err.response?.data?.message || "Failed to update status", { id: "lead-status" });
     }
   };
 
@@ -213,9 +230,9 @@ export default function AdminLeadsPage() {
       await adminApi.updateLead(inspectingLead.id, { notes: leadNotes });
       setLeads((prev) => prev.map((l) => (l.id === inspectingLead.id ? { ...l, notes: leadNotes } : l)));
       setInspectingLead({ ...inspectingLead, notes: leadNotes });
-      toast.success("Lead notes updated successfully.");
+      toast.success("Note saved", { id: "lead-note" });
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to save notes.");
+      toast.error(err.response?.data?.message || "Failed to save notes", { id: "lead-note" });
     } finally {
       setUpdatingNotes(false);
     }
@@ -233,10 +250,10 @@ export default function AdminLeadsPage() {
       if (inspectingNoteLead?.id === leadId) {
         setInspectingNoteLead({ ...inspectingNoteLead, notes: notesToSave });
       }
-      toast.success("Lead note saved successfully.");
+      toast.success("Note saved", { id: "lead-note" });
       setInspectingNoteLead(null);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to save note.");
+      toast.error(err.response?.data?.message || "Failed to save note", { id: "lead-note" });
     } finally {
       setUpdatingNotes(false);
     }
@@ -261,7 +278,6 @@ export default function AdminLeadsPage() {
         })
       );
     }
-    toast.info(`Opening POS Terminal with Lead #${lead.id} cart items preloaded...`);
     router.push(`/admin/pos?lead_id=${lead.id}`);
   };
 
@@ -292,10 +308,10 @@ export default function AdminLeadsPage() {
         setInspectingLead({ ...inspectingLead, status: "lost", notes: finalNotes });
       }
 
-      toast.success(`Lead #${cancellingLead.id} marked as Lost (${cancelReason}).`);
+      toast.success("Lead marked as Lost", { id: "lead-lost" });
       setCancellingLead(null);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to update lead status.");
+      toast.error(err.response?.data?.message || "Failed to update lead status", { id: "lead-lost" });
     } finally {
       setSavingCancel(false);
     }
@@ -333,9 +349,9 @@ export default function AdminLeadsPage() {
       setLeads((prev) => prev.filter((l) => l.id !== id));
       setSelectedIds((prev) => prev.filter((i) => i !== id));
       if (inspectingLead?.id === id) setInspectingLead(null);
-      toast.success("Lead record deleted permanently.");
+      toast.success("Lead deleted", { id: "lead-delete" });
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to delete lead.");
+      toast.error(err.response?.data?.message || "Failed to delete lead", { id: "lead-delete" });
     }
   };
 
@@ -351,10 +367,10 @@ export default function AdminLeadsPage() {
     try {
       await adminApi.bulkDeleteLeads(selectedIds);
       setLeads((prev) => prev.filter((l) => !selectedIds.includes(l.id)));
-      toast.success(`Successfully deleted ${selectedIds.length} lead record(s).`);
+      toast.success(`Deleted ${selectedIds.length} lead${selectedIds.length > 1 ? "s" : ""}`, { id: "lead-bulk-delete" });
       setSelectedIds([]);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to delete selected leads.");
+      toast.error(err.response?.data?.message || "Failed to delete selected leads", { id: "lead-bulk-delete" });
     } finally {
       setBulkDeleting(false);
     }
@@ -378,10 +394,10 @@ export default function AdminLeadsPage() {
         setInspectingLead({ ...inspectingLead, status: "converted", converted_order_id: res.order.id });
       }
 
-      toast.success(`Successfully created Order #${res.order.order_number}!`);
+      toast.success(`Order #${res.order.order_number} created`, { id: "lead-convert" });
       setConvertingLead(null);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to convert lead into order.");
+      toast.error(err.response?.data?.message || "Failed to convert lead into order", { id: "lead-convert" });
     } finally {
       setConverting(false);
     }
@@ -410,7 +426,12 @@ export default function AdminLeadsPage() {
       case "in_progress":
         return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">In Progress</span>;
       case "converted":
-        return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Converted</span>;
+        return (
+          <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center gap-1">
+            <span>Converted</span>
+            <Lock className="w-2.5 h-2.5 opacity-80" />
+          </span>
+        );
       case "lost":
         return <span className="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40">Lost</span>;
       default:
@@ -754,20 +775,38 @@ export default function AdminLeadsPage() {
                         </div>
                       </td>
 
-                      {/* Status Dropdown */}
+                      {/* Status Dropdown / Locked Status */}
                       <td className="py-4 px-4 whitespace-nowrap min-w-[160px]">
-                        {canManage ? (
+                        {lead.status === "converted" && !isSuperAdmin ? (
+                          // Locked Converted Badge for non-superadmins
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-xs cursor-default" title="Locked: Converted to official sale. Only Super Admin can adjust.">
+                            <span>🟢 Converted</span>
+                            <Lock className="w-3 h-3 text-emerald-400/80" />
+                          </div>
+                        ) : canManage ? (
                           <div className="relative inline-block text-left">
                             <button
                               type="button"
                               onClick={() => setOpenStatusDropdownId(openStatusDropdownId === lead.id ? null : lead.id)}
-                              className="flex items-center justify-between gap-2.5 bg-[#090b12] hover:bg-white/10 border border-white/10 hover:border-white/25 text-slate-200 rounded-md pl-3 pr-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer shadow-md"
+                              className={`flex items-center justify-between gap-2 bg-[#090b12] hover:bg-white/10 border text-slate-200 rounded-md pl-3 pr-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer shadow-md ${
+                                lead.status === "converted" && isSuperAdmin
+                                  ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10"
+                                  : "border-white/10 hover:border-white/25"
+                              }`}
+                              title={lead.status === "converted" && isSuperAdmin ? "Super Admin Override: Click to adjust status" : undefined}
                             >
                               <span className="flex items-center gap-1.5">
                                 {lead.status === "new" && "🔴 New Lead"}
                                 {lead.status === "contacted" && "🟡 Contacted"}
                                 {lead.status === "in_progress" && "🔵 In Progress"}
-                                {lead.status === "converted" && "🟢 Converted"}
+                                {lead.status === "converted" && (
+                                  <>
+                                    <span>🟢 Converted</span>
+                                    {isSuperAdmin && (
+                                      <ShieldCheck className="w-3 h-3 text-emerald-400 ml-0.5" />
+                                    )}
+                                  </>
+                                )}
                                 {lead.status === "lost" && "⚫ Lost"}
                               </span>
                               <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${openStatusDropdownId === lead.id ? "rotate-180 text-[#A78BFA]" : ""}`} />
@@ -780,7 +819,13 @@ export default function AdminLeadsPage() {
                                   className="fixed inset-0 z-30" 
                                   onClick={() => setOpenStatusDropdownId(null)} 
                                 />
-                                <div className="absolute left-0 top-full mt-1.5 w-44 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95">
+                                <div className="absolute left-0 top-full mt-1.5 w-48 rounded-md bg-[#0e121e]/95 backdrop-blur-xl border border-white/15 shadow-2xl p-1.5 z-40 space-y-1 animate-in fade-in zoom-in-95">
+                                  {lead.status === "converted" && isSuperAdmin && (
+                                    <div className="px-2.5 py-1 text-[10px] font-semibold text-amber-400 bg-amber-500/10 rounded border border-amber-500/20 mb-1 flex items-center gap-1">
+                                      <ShieldCheck className="w-3 h-3 shrink-0" />
+                                      <span>Super Admin Override</span>
+                                    </div>
+                                  )}
                                   {[
                                     { id: "new", label: "New Lead", dot: "🔴" },
                                     { id: "contacted", label: "Contacted", dot: "🟡" },
@@ -822,6 +867,20 @@ export default function AdminLeadsPage() {
                           </div>
                         ) : (
                           getStatusBadge(lead.status)
+                        )}
+
+                        {/* Linked Order shortcut */}
+                        {lead.status === "converted" && (lead.converted_order_id || lead.converted_order) && (
+                          <div className="mt-1">
+                            <Link
+                              href={`/admin/orders?search=${lead.converted_order?.order_number || lead.converted_order_id}`}
+                              className="inline-flex items-center gap-1 text-[10px] font-mono font-medium text-emerald-400 hover:text-emerald-300 hover:underline"
+                              title="View generated order"
+                            >
+                              <span>Order #{lead.converted_order?.order_number || lead.converted_order_id}</span>
+                              <ArrowRight className="w-2.5 h-2.5" />
+                            </Link>
+                          </div>
                         )}
                       </td>
 
@@ -869,8 +928,22 @@ export default function AdminLeadsPage() {
                             </div>
                           )}
 
-                          {/* 2. Convert to Order via POS */}
-                          {canConvert && lead.status !== "converted" && (
+                          {/* 2. Convert to Order via POS OR View Converted Order */}
+                          {lead.status === "converted" && (lead.converted_order_id || lead.converted_order) ? (
+                            <div className="relative group/action">
+                              <Link
+                                href={`/admin/orders?search=${lead.converted_order?.order_number || lead.converted_order_id}`}
+                                className="w-8 h-8 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                                title="View Converted Order in Orders"
+                              >
+                                <ShoppingBag className="w-4 h-4" />
+                              </Link>
+                              <div className="pointer-events-none absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 opacity-0 group-hover/action:opacity-100 transition-opacity duration-150 z-50 bg-[#161a26] text-white text-[10px] font-semibold px-2 py-1 rounded shadow-xl border border-white/10 whitespace-nowrap">
+                                View Converted Order
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#161a26]" />
+                              </div>
+                            </div>
+                          ) : canConvert && lead.status !== "converted" ? (
                             <div className="relative group/action">
                               <button
                                 type="button"
@@ -885,7 +958,7 @@ export default function AdminLeadsPage() {
                                 <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#161a26]" />
                               </div>
                             </div>
-                          )}
+                          ) : null}
 
                           {/* 3. Note / Cancellation Reason View & Edit */}
                           <div className="relative group/action">
@@ -1081,6 +1154,37 @@ export default function AdminLeadsPage() {
                 <X className="w-4 h-4" />
               </button>
             </div>
+
+            {/* Converted Milestone Banner */}
+            {inspectingLead.status === "converted" && (
+              <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>Converted to Official Sale</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold inline-flex items-center gap-1">
+                        <Lock className="w-2.5 h-2.5" /> Locked Milestone
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      This lead was completed and converted into an official order.
+                    </p>
+                  </div>
+                </div>
+                {(inspectingLead.converted_order_id || inspectingLead.converted_order) && (
+                  <Link
+                    href={`/admin/orders?search=${inspectingLead.converted_order?.order_number || inspectingLead.converted_order_id}`}
+                    className="px-3.5 py-1.5 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition whitespace-nowrap shrink-0 self-start sm:self-auto"
+                  >
+                    <span>View Order #{inspectingLead.converted_order?.order_number || inspectingLead.converted_order_id}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                )}
+              </div>
+            )}
 
             {/* Abandoned Cart Items */}
             <div className="space-y-3">

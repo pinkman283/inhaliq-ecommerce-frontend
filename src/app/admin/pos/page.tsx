@@ -22,7 +22,8 @@ import {
   ChevronDown, 
   Check, 
   Layers,
-  ArrowRight
+  ArrowRight,
+  Copy
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { getAppCurrencySymbol } from "@/lib/utils";
@@ -86,6 +87,12 @@ export default function AdminPosPage() {
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
   const [completedReceipt, setCompletedReceipt] = useState<PosReceipt | null>(null);
   const [receiptModal, setReceiptModal] = useState(false);
+  const [receiptTab, setReceiptTab] = useState<"summary" | "thermal">("summary");
+  const [copiedOrderNumber, setCopiedOrderNumber] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const scanBufferRef = useRef<string>("");
+  const lastKeystrokeTimeRef = useRef<number>(0);
+  const leadInitializedRef = useRef<boolean>(false);
   const [, setCurrencyTick] = useState(0);
 
   useEffect(() => {
@@ -146,7 +153,8 @@ export default function AdminPosPage() {
         }
       }
 
-      if (leadIdParam || storedLead) {
+      if (!leadInitializedRef.current && (leadIdParam || storedLead)) {
+        leadInitializedRef.current = true;
         initLeadConversion(leadIdParam ? Number(leadIdParam) : storedLead?.leadId, storedLead);
       }
     }
@@ -209,7 +217,6 @@ export default function AdminPosPage() {
       else if (lower.includes("sub") || lower.includes("savar") || lower.includes("gazipur")) handleZoneChange("Sub-city");
       else handleZoneChange("Inside Dhaka");
     }
-    if (lead.notes) setCustomerNote(lead.notes);
 
     // Map lead cart items into active cart
     const leadCart = lead.cart_items || [];
@@ -250,7 +257,7 @@ export default function AdminPosPage() {
       setCart(preloaded);
     }
 
-    toast.success(`Preloaded Lead #${leadNum} cart items and customer info into POS register.`);
+    toast.success(`Lead #${leadNum} loaded into POS register`, { id: "pos-lead-preload" });
   };
 
   // Add Product to Cart
@@ -292,7 +299,43 @@ export default function AdminPosPage() {
       ];
     });
 
-    toast.info(`Added "${prod.name}" to cart`);
+    toast.success(`Added ${prod.name}`, { id: "pos-cart-action", duration: 1500 });
+  };
+
+  // Barcode / SKU scan matching helper (Supports product & variant barcodes/SKUs)
+  const tryScanMatch = (scannedCode: string) => {
+    const raw = scannedCode.trim();
+    if (!raw) return false;
+    const code = raw.toLowerCase();
+
+    for (const p of products) {
+      // Check variants first
+      if (p.variants && p.variants.length > 0) {
+        for (const v of p.variants) {
+          if (
+            (v.sku && v.sku.toLowerCase() === code) ||
+            ((v as any).barcode && (v as any).barcode.toLowerCase() === code)
+          ) {
+            handleAddToCart(p, v);
+            toast.success(`Scanned: ${p.name} (${v.name})`, { id: "pos-scan" });
+            return true;
+          }
+        }
+      }
+
+      // Check product SKU, barcode, or exact ID
+      if (
+        (p.sku && p.sku.toLowerCase() === code) ||
+        ((p as any).barcode && (p as any).barcode.toLowerCase() === code) ||
+        p.id.toString() === code
+      ) {
+        handleAddToCart(p, null);
+        toast.success(`Scanned: ${p.name}`, { id: "pos-scan" });
+        return true;
+      }
+    }
+
+    return false;
   };
 
   // Update Cart Item Quantity
@@ -331,11 +374,11 @@ export default function AdminPosPage() {
     setCart([]);
     setAppliedPromo(null);
     setManualDiscount(0);
-    toast.info("Cart cleared.");
+    toast.info("Cart cleared", { id: "pos-cart-clear" });
   };
 
   // Reset Customer
-  const handleResetCustomer = () => {
+  const handleResetCustomer = (silent = false) => {
     setCustomerPhone("");
     setCustomerName("");
     setCustomerEmail("");
@@ -343,7 +386,9 @@ export default function AdminPosPage() {
     handleZoneChange("Inside Dhaka");
     setCustomerNote("");
     setAdminNote("");
-    toast.info("Customer details reset.");
+    if (!silent) {
+      toast.info("Customer form cleared", { id: "pos-customer-clear" });
+    }
   };
 
   // Apply Promo
@@ -353,14 +398,14 @@ export default function AdminPosPage() {
     if (code === "WELCOME10" || code === "SAVE10") {
       setAppliedPromo(code);
       setPromoCodeInput("");
-      toast.success(`Promo "${code}" applied (10% off subtotal)`);
+      toast.success(`Promo code applied: ${code}`, { id: "pos-promo" });
     } else if (code === "FREESHIP") {
       setAppliedPromo(code);
       setShippingFee(0);
       setPromoCodeInput("");
-      toast.success(`Promo "${code}" applied (Free Shipping)`);
+      toast.success(`Promo code applied: ${code}`, { id: "pos-promo" });
     } else {
-      toast.error(`Invalid promo code "${code}"`);
+      toast.error(`Invalid promo code: ${code}`, { id: "pos-promo" });
     }
   };
 
@@ -368,12 +413,12 @@ export default function AdminPosPage() {
   const handleApplyManualDiscount = () => {
     const val = parseFloat(manualDiscountInput);
     if (isNaN(val) || val < 0) {
-      toast.error("Enter a valid discount amount");
+      toast.error("Enter a valid discount amount", { id: "pos-discount" });
       return;
     }
     setManualDiscount(val);
     setManualDiscountInput("");
-    toast.success(`Manual discount of ৳${val} applied.`);
+    toast.success(`Discount applied: ৳${val}`, { id: "pos-discount" });
   };
 
   // Calculations
@@ -392,12 +437,12 @@ export default function AdminPosPage() {
   // Complete Order Checkout
   const handleExecuteCheckout = async () => {
     if (cart.length === 0) {
-      toast.error("Please add at least one product to the cart before checking out.");
+      toast.error("Cart is empty. Add products to continue.", { id: "pos-val" });
       return;
     }
 
     if (!customerPhone.trim() && !customerName.trim()) {
-      toast.error("Please enter customer name or phone number.");
+      toast.error("Please enter customer name or phone.", { id: "pos-val" });
       return;
     }
 
@@ -442,29 +487,111 @@ export default function AdminPosPage() {
         if (typeof window !== "undefined") {
           sessionStorage.removeItem("pos_lead_conversion");
         }
-        const convertedLeadId = activeLead.leadId;
         setActiveLead(null);
-        toast.success(`🎉 Lead #${convertedLeadId} converted into Order #${res.order?.order_number || res.order?.id}!`);
-      } else {
-        toast.success(`🎉 Order #${res.order?.order_number || res.order?.id} created successfully!`);
       }
 
       setCompletedOrder(res.order);
       setCompletedReceipt(res.receipt);
       setReceiptModal(true);
 
-      // Reset Cart & Form
+      // Reset Cart & Form silently
       setCart([]);
-      handleResetCustomer();
+      handleResetCustomer(true);
       setAppliedPromo(null);
       setManualDiscount(0);
     } catch (err: any) {
       console.error(err);
-      toast.error(err.response?.data?.message || err.message || "Failed to create order.");
+      toast.error(err.response?.data?.message || err.message || "Failed to process sale.");
     } finally {
       setIsCheckingOut(false);
     }
   };
+
+  // Global Keyboard Shortcuts (F2, F4, Ctrl+Enter, Esc) & Continuous Hardware Barcode Scanner
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 1. Hotkey: F2 (Focus & Select Product Search Box)
+      if (e.key === "F2") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+        return;
+      }
+
+      // 2. Hotkey: F4 (Quick Exact Cash Payment Selection)
+      if (e.key === "F4") {
+        e.preventDefault();
+        setPaymentMethod("cash");
+        toast.info("Cash payment selected (Exact Amount)", { id: "pos-f4" });
+        return;
+      }
+
+      // 3. Hotkey: Escape (Dismiss modals / Clear search)
+      if (e.key === "Escape") {
+        if (variantModalProduct) {
+          e.preventDefault();
+          setVariantModalProduct(null);
+          return;
+        }
+        if (receiptModal) {
+          e.preventDefault();
+          setReceiptModal(false);
+          return;
+        }
+        if (searchQuery) {
+          e.preventDefault();
+          setSearchQuery("");
+          return;
+        }
+      }
+
+      // 4. Hotkey: Ctrl+Enter or F9 (Quick Checkout)
+      if ((e.ctrlKey && e.key === "Enter") || e.key === "F9") {
+        if (!isCheckingOut && cart.length > 0 && !receiptModal) {
+          e.preventDefault();
+          handleExecuteCheckout();
+          return;
+        }
+      }
+
+      // 5. Continuous Hardware Barcode Scanner stream listener
+      // Hardware scanners typically type characters rapidly (< 50ms interval) terminated with "Enter"
+      const now = Date.now();
+      const elapsed = now - lastKeystrokeTimeRef.current;
+      lastKeystrokeTimeRef.current = now;
+
+      // Ignore single modifier keys like Shift, Control, Alt, Meta
+      if (e.key.length > 1 && e.key !== "Enter") {
+        return;
+      }
+
+      if (e.key === "Enter") {
+        if (scanBufferRef.current.length >= 2) {
+          const buffer = scanBufferRef.current;
+          scanBufferRef.current = "";
+          const matched = tryScanMatch(buffer);
+          if (matched) {
+            e.preventDefault();
+            setSearchQuery("");
+            return;
+          }
+        }
+        scanBufferRef.current = "";
+        return;
+      }
+
+      // If characters arrived rapidly (< 50ms) or buffer started, append
+      if (elapsed < 50 || scanBufferRef.current.length === 0) {
+        scanBufferRef.current += e.key;
+      } else {
+        // Reset buffer if standard human typing speed
+        scanBufferRef.current = e.key;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [products, cart, isCheckingOut, variantModalProduct, receiptModal, searchQuery]);
 
   if (loading) {
     return (
@@ -490,16 +617,50 @@ export default function AdminPosPage() {
             <div className="flex items-center gap-2.5">
               <h1 className="text-base font-bold text-white tracking-tight">POS System</h1>
               {activeLead && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#A78BFA]/15 text-[#A78BFA] border border-[#A78BFA]/30">
-                  <Sparkles className="w-3 h-3" />
-                  Converting Lead #{activeLead.leadId}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#A78BFA]/15 text-[#A78BFA] border border-[#A78BFA]/30">
+                    <Sparkles className="w-3 h-3" />
+                    Converting Lead #{activeLead.leadId}
+                  </span>
+                  {activeLead.notes && (
+                    <span
+                      className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] text-slate-300 bg-white/5 border border-white/10 font-medium max-w-[260px] truncate"
+                      title={activeLead.notes}
+                    >
+                      <span className="text-[#A78BFA] font-semibold">CRM Note:</span>
+                      <span className="truncate">{activeLead.notes}</span>
+                    </span>
+                  )}
+                </div>
               )}
             </div>
             <p className="text-[11px] text-slate-400">
               High-speed retail & tele-sales order creation with automated inventory sync.
             </p>
           </div>
+        </div>
+
+        {/* Cashier Keyboard Shortcuts Toolbar */}
+        <div className="hidden xl:flex items-center gap-2.5 text-[10px] font-mono text-slate-400 bg-white/[0.03] border border-white/5 px-3 py-1.5 rounded-lg">
+          <span className="flex items-center gap-1.5">
+            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">F2</kbd>
+            <span>Scan/Search</span>
+          </span>
+          <span className="text-white/20">•</span>
+          <span className="flex items-center gap-1.5">
+            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">F4</kbd>
+            <span>Exact Cash</span>
+          </span>
+          <span className="text-white/20">•</span>
+          <span className="flex items-center gap-1.5">
+            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">Ctrl+Enter</kbd>
+            <span>Checkout</span>
+          </span>
+          <span className="text-white/20">•</span>
+          <span className="flex items-center gap-1.5">
+            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">Esc</kbd>
+            <span>Close</span>
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -538,14 +699,24 @@ export default function AdminPosPage() {
         <div className="lg:col-span-7 2xl:col-span-6 space-y-4">
           <div className="bg-[#0e121e] border border-white/10 rounded-xl p-4 shadow-xl space-y-3.5">
             
-            {/* Search Input */}
+            {/* Search Input with Scanner & F2 support */}
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
+                ref={searchInputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products by Name, SKU, Code or scan barcode..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && searchQuery.trim()) {
+                    const matched = tryScanMatch(searchQuery.trim());
+                    if (matched) {
+                      e.preventDefault();
+                      setSearchQuery("");
+                    }
+                  }
+                }}
+                placeholder="Search products by Name, SKU, Code or scan barcode [F2]..."
                 className="w-full bg-[#080a10] border border-white/10 focus:border-[#A78BFA]/50 rounded-lg pl-10 pr-9 py-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none transition shadow-inner font-medium"
               />
               {searchQuery && (
@@ -690,7 +861,7 @@ export default function AdminPosPage() {
               </div>
               <button
                 type="button"
-                onClick={handleResetCustomer}
+                onClick={() => handleResetCustomer(false)}
                 className="text-[11px] text-slate-400 hover:text-white flex items-center gap-1 transition cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
@@ -1113,82 +1284,329 @@ export default function AdminPosPage() {
         </div>
       )}
 
-      {/* Order Confirmation & Receipt Modal */}
+      {/* Order Confirmation & 80mm Thermal Receipt Modal */}
       {receiptModal && completedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-xl bg-[#0e121e] border border-[#A78BFA]/40 p-6 sm:p-7 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-[#211B32] border border-[#A78BFA]/40 flex items-center justify-center text-[#A78BFA]">
-                  <CheckCircle2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Order Created Successfully!</h3>
-                  <p className="text-xs text-slate-400">
-                    Order Number: <strong className="text-[#A78BFA] font-mono">#{completedOrder.order_number}</strong>
-                  </p>
-                </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          {/* Isolated Clean 80mm Thermal Receipt Print Stylesheet */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media print {
+              @page {
+                size: 80mm auto;
+                margin: 2mm;
+              }
+              html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              body * {
+                visibility: hidden !important;
+              }
+              #pos-thermal-receipt-80mm, #pos-thermal-receipt-80mm * {
+                visibility: visible !important;
+              }
+              #pos-thermal-receipt-80mm {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 80mm !important;
+                max-width: 80mm !important;
+                margin: 0 !important;
+                padding: 3mm 4mm !important;
+                box-sizing: border-box !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-family: 'Courier New', Courier, monospace !important;
+                font-size: 11px !important;
+                line-height: 1.3 !important;
+                border: none !important;
+                box-shadow: none !important;
+              }
+            }
+          `}} />
+
+          <div className="w-full max-w-md max-h-[92vh] flex flex-col rounded-2xl bg-[#0e121e] border border-white/10 p-6 sm:p-7 shadow-2xl relative overflow-hidden">
+            {/* Ambient background glow */}
+            <div className="absolute -top-24 -left-24 w-48 h-48 bg-[#A78BFA]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setReceiptModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition cursor-pointer print:hidden"
+              title="Close modal [Esc]"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header: Success Icon, Title, and Order Number Badge */}
+            <div className="flex flex-col items-center text-center pt-1 print:hidden shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA] shadow-lg shadow-purple-500/15 mb-2.5">
+                <CheckCircle2 className="w-6 h-6 text-[#A78BFA]" />
               </div>
+              <h3 className="text-base font-bold text-white tracking-tight">Order Processed Successfully!</h3>
+              
               <button
                 type="button"
-                onClick={() => setReceiptModal(false)}
-                className="p-1 rounded text-slate-400 hover:text-white"
+                onClick={() => {
+                  if (completedOrder?.order_number) {
+                    navigator.clipboard.writeText(completedOrder.order_number);
+                    setCopiedOrderNumber(true);
+                    toast.success("Order number copied", { id: "pos-copy-order" });
+                    setTimeout(() => setCopiedOrderNumber(false), 2000);
+                  }
+                }}
+                className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 font-mono transition group cursor-pointer"
+                title="Click to copy order number"
               >
-                <X className="w-4 h-4" />
+                <span className="text-slate-400">Order:</span>
+                <span className="text-[#A78BFA] font-bold">#{completedOrder.order_number}</span>
+                {copiedOrderNumber ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400 ml-0.5" />
+                ) : (
+                  <Copy className="w-3 h-3 text-slate-400 group-hover:text-white ml-0.5 transition" />
+                )}
               </button>
             </div>
 
-            <div className="space-y-3 bg-[#080a10] border border-white/10 rounded-xl p-4 text-xs font-mono">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Customer:</span>
-                <span className="text-white font-bold">{completedOrder.customer_name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Phone:</span>
-                <span className="text-white">{completedOrder.customer_phone}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Delivery Address:</span>
-                <span className="text-white text-right max-w-[240px] truncate">
-                  {completedOrder.shipping_address?.address_line1 || "Store Pickup"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Items:</span>
-                <span className="text-white">{completedOrder.items?.length || 0} product(s)</span>
-              </div>
-              <div className="flex justify-between border-t border-dashed border-white/15 pt-2 text-sm font-bold">
-                <span className="text-slate-300">Total Charged:</span>
-                <span className="text-[#A78BFA]">{formatBDT(completedOrder.total_amount)}</span>
+            {/* View Mode Toggle: Summary vs 80mm Thermal */}
+            <div className="flex rounded-lg bg-black/40 p-1 border border-white/5 text-xs font-semibold my-3 print:hidden shrink-0">
+              <button
+                type="button"
+                onClick={() => setReceiptTab("summary")}
+                className={`flex-1 py-1.5 rounded-md transition text-center cursor-pointer ${
+                  receiptTab === "summary"
+                    ? "bg-[#A78BFA] text-[#090B10] font-bold shadow"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                Order Summary
+              </button>
+              <button
+                type="button"
+                onClick={() => setReceiptTab("thermal")}
+                className={`flex-1 py-1.5 rounded-md transition text-center cursor-pointer flex items-center justify-center gap-1.5 ${
+                  receiptTab === "thermal"
+                    ? "bg-[#A78BFA] text-[#090B10] font-bold shadow"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>80mm Thermal Layout</span>
+              </button>
+            </div>
+
+            {/* Scrollable Content Body */}
+            <div className="overflow-y-auto flex-1 custom-scrollbar space-y-3.5 pr-0.5">
+              {receiptTab === "summary" ? (
+                <>
+                  {/* Hero Total Charged Card */}
+                  <div className="rounded-xl bg-[#080a10]/80 border border-white/10 p-3.5 text-center">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Total Amount Charged</span>
+                    <div className="text-2xl font-extrabold text-white mt-0.5 tracking-tight">
+                      {formatBDT(completedOrder.total_amount)}
+                    </div>
+                    <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-medium text-emerald-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {completedOrder.payment_status === "paid" ? "Payment Completed" : "Order Placed (Pending Payment)"}
+                    </div>
+                  </div>
+
+                  {/* Key Order & Customer Details */}
+                  <div className="space-y-2.5 bg-white/[0.02] border border-white/5 rounded-xl p-3.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 flex items-center gap-2">
+                        <User className="w-3.5 h-3.5 text-slate-500" />
+                        Customer
+                      </span>
+                      <span className="text-white font-medium">{completedOrder.customer_name || "Walk-in Customer"}</span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                      <span className="text-slate-400 flex items-center gap-2">
+                        <Phone className="w-3.5 h-3.5 text-slate-500" />
+                        Phone
+                      </span>
+                      <span className="text-white font-medium">{completedOrder.customer_phone || "—"}</span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                      <span className="text-slate-400 flex items-center gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-slate-500" />
+                        Delivery
+                      </span>
+                      <span className="text-white font-medium text-right max-w-[200px] truncate" title={completedOrder.shipping_address?.address_line1 || "Store Pickup"}>
+                        {completedOrder.shipping_address?.address_line1 || "Store Pickup"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                      <span className="text-slate-400 flex items-center gap-2">
+                        <Package className="w-3.5 h-3.5 text-slate-500" />
+                        Items
+                      </span>
+                      <span className="text-white font-medium">{completedOrder.items?.length || 0} product(s)</span>
+                    </div>
+                  </div>
+                </>
+              ) : null}
+
+              {/* 80mm THERMAL RECEIPT (Shown on screen in thermal tab, always available for print) */}
+              <div
+                id="pos-thermal-receipt-80mm"
+                className={`${receiptTab === "thermal" ? "block" : "hidden print:block"} bg-white text-black p-4 rounded-lg font-mono text-[11px] leading-tight max-w-[80mm] mx-auto border border-gray-300 print:border-none print:p-0 print:m-0 shadow-md`}
+              >
+                {/* Store Header */}
+                <div className="text-center pb-2 border-b border-dashed border-black space-y-0.5">
+                  <h2 className="text-sm font-black tracking-tight uppercase">INHALIQ STORE</h2>
+                  <p className="text-[10px] text-gray-700">Official Retail & Tele-Sales</p>
+                  <p className="text-[9px] text-gray-600">Hotline: +880 1700-000000</p>
+                  <p className="text-[9px] text-gray-600">Dhaka, Bangladesh</p>
+                </div>
+
+                {/* Order & Register Metadata */}
+                <div className="py-2 border-b border-dashed border-black text-[10px] space-y-0.5">
+                  <div className="flex justify-between font-bold">
+                    <span>ORDER: #{completedOrder.order_number}</span>
+                    <span>{completedReceipt?.invoice_number || `INV-${completedOrder.id}`}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>DATE: {completedReceipt?.date || new Date().toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>CASHIER: {completedReceipt?.cashier || "Admin Staff"}</span>
+                    <span>{completedReceipt?.register || "POS Terminal"}</span>
+                  </div>
+                  <div className="flex justify-between pt-1 font-semibold">
+                    <span>CUSTOMER: {completedOrder.customer_name || "Walk-in"}</span>
+                    <span>{completedOrder.customer_phone || "—"}</span>
+                  </div>
+                  {completedOrder.shipping_address?.address_line1 && completedOrder.shipping_address?.address_line1 !== "Store Pickup" && (
+                    <div className="text-[9px] text-gray-600 truncate">
+                      ADDR: {completedOrder.shipping_address.address_line1}
+                    </div>
+                  )}
+                </div>
+
+                {/* Items List */}
+                <div className="py-2 border-b border-dashed border-black">
+                  <div className="flex justify-between font-black text-[10px] pb-1 border-b border-black">
+                    <span>QTY ITEM</span>
+                    <span>TOTAL</span>
+                  </div>
+                  <div className="pt-1.5 space-y-1">
+                    {completedOrder.items?.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-start text-[10px]">
+                        <div className="pr-2 max-w-[170px]">
+                          <span className="font-bold">{item.quantity}x </span>
+                          <span>{item.product_name || (item as any).product?.name || "Product"}</span>
+                          {item.variant_name && (
+                            <span className="text-[9px] text-gray-600 block">({item.variant_name})</span>
+                          )}
+                        </div>
+                        <span className="font-bold shrink-0">{formatBDT(Number(item.unit_price) * item.quantity)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Financial Totals */}
+                <div className="py-2 border-b-2 border-black space-y-1 text-[10px]">
+                  <div className="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span>{formatBDT(completedOrder.subtotal ?? completedReceipt?.subtotal ?? 0)}</span>
+                  </div>
+                  {Number(completedOrder.shipping_amount ?? completedReceipt?.shipping_fee ?? 0) > 0 && (
+                    <div className="flex justify-between">
+                      <span>Delivery Fee:</span>
+                      <span>{formatBDT(completedOrder.shipping_amount ?? completedReceipt?.shipping_fee ?? 0)}</span>
+                    </div>
+                  )}
+                  {Number(completedOrder.discount_amount ?? completedReceipt?.discount ?? 0) > 0 && (
+                    <div className="flex justify-between text-gray-800 font-bold">
+                      <span>Discount:</span>
+                      <span>-{formatBDT(completedOrder.discount_amount ?? completedReceipt?.discount ?? 0)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-xs font-black pt-1 border-t border-dashed border-black">
+                    <span className="uppercase">TOTAL CHARGED:</span>
+                    <span>{formatBDT(completedOrder.total_amount)}</span>
+                  </div>
+                </div>
+
+                {/* Payment Tendered & Change */}
+                <div className="py-2 border-b border-dashed border-black text-[10px] space-y-0.5">
+                  <div className="flex justify-between">
+                    <span>PAYMENT METHOD:</span>
+                    <span className="font-bold uppercase">{completedOrder.payment_method?.replace(/_/g, " ")}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>STATUS:</span>
+                    <span className="font-bold uppercase">{completedOrder.payment_status}</span>
+                  </div>
+                  {completedOrder.payment_method === "cash" && (
+                    <>
+                      <div className="flex justify-between">
+                        <span>CASH TENDERED:</span>
+                        <span>{formatBDT(completedOrder.cash_received || completedReceipt?.cash_received || completedOrder.total_amount)}</span>
+                      </div>
+                      <div className="flex justify-between font-bold">
+                        <span>CHANGE RETURNED:</span>
+                        <span>{formatBDT(completedOrder.change_returned || completedReceipt?.change || 0)}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Barcode & Footer */}
+                <div className="pt-2 text-center space-y-1.5">
+                  <div className="flex justify-center py-1">
+                    <div className="inline-block font-mono tracking-[0.25em] text-xs font-black uppercase py-1 px-3 bg-gray-100 border border-gray-300 rounded">
+                      *{completedOrder.order_number}*
+                    </div>
+                  </div>
+                  <p className="text-[9px] font-bold uppercase text-gray-800">
+                    THANK YOU FOR SHOPPING WITH US!
+                  </p>
+                  <p className="text-[8px] text-gray-500">
+                    Exchanges accepted within 7 days with original receipt.
+                  </p>
+                  <p className="text-[8px] text-gray-400 pt-0.5 font-mono">
+                    INHALIQ CLOUD POS • 80MM THERMAL
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-2.5 pt-2">
-              <Link
-                href="/admin/orders"
-                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 hover:text-white transition flex items-center gap-1.5"
+            {/* Action Buttons: Clear Hierarchy */}
+            <div className="space-y-2 pt-3 border-t border-white/10 shrink-0 print:hidden">
+              <button
+                type="button"
+                onClick={() => setReceiptModal(false)}
+                className="w-full py-2.5 rounded-xl bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition duration-150 cursor-pointer shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
               >
-                <span>View in Orders</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+                <Plus className="w-3.5 h-3.5" />
+                <span>Ready for Next Sale</span>
+              </button>
 
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-bold text-white transition flex items-center gap-1.5 cursor-pointer"
+                  className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                 >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Print Receipt</span>
+                  <Printer className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Print 80mm Receipt</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => setReceiptModal(false)}
-                  className="px-5 py-2 rounded-lg bg-[#A78BFA] hover:bg-[#B9A3FF] text-[#090B10] text-xs font-bold transition cursor-pointer shadow-md shadow-purple-500/20"
+                <Link
+                  href="/admin/orders"
+                  className="py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5"
                 >
-                  Ready for Next Sale
-                </button>
+                  <span>View in Orders</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                </Link>
               </div>
             </div>
           </div>

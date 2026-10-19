@@ -2750,6 +2750,43 @@ function OrdersContent() {
       {/* THERMAL 4X6 SHIPPING LABEL MODAL */}
       {isLabelModalOpen && shippingLabelData && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm">
+          {/* Isolated Clean 4" x 6" Thermal Label Print Stylesheet */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media print {
+              @page {
+                size: 4in 6in;
+                margin: 0;
+              }
+              html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              body * {
+                visibility: hidden !important;
+              }
+              #thermal-label-single, #thermal-label-single * {
+                visibility: visible !important;
+              }
+              #thermal-label-single {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 4in !important;
+                max-width: 4in !important;
+                margin: 0 !important;
+                padding: 0.2in !important;
+                box-sizing: border-box !important;
+                border: none !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+              }
+            }
+          `}} />
+
           <div className="relative w-full max-w-md max-h-[90vh] bg-[#0e121e] border border-white/20 rounded-lg shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between p-4 sm:p-5 pb-3.5 border-b border-white/10 shrink-0 bg-[#0e121e] print:hidden">
               <div className="flex items-center gap-2">
@@ -2766,7 +2803,7 @@ function OrdersContent() {
 
             {/* Label Printable Container (White background, black text high-contrast thermal aesthetic) */}
             <div className="p-4 sm:p-5 overflow-y-auto flex-1 custom-scrollbar">
-              <div id="thermal-label" className="bg-white text-black p-5 rounded-md border-2 border-black font-sans space-y-3 print:border-none print:m-0 print:p-2">
+              <div id="thermal-label-single" className="bg-white text-black p-5 rounded-md border-2 border-black font-sans space-y-3 print:border-none print:m-0 print:p-2">
               {/* Header */}
               <div className="flex justify-between items-start border-b-2 border-black pb-2">
                 <div>
@@ -2847,6 +2884,51 @@ function OrdersContent() {
       {/* BATCH BULK 4X6 THERMAL LABELS MODAL */}
       {isBulkLabelsModalOpen && bulkLabelsData && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md">
+          {/* Isolated Clean Batch Bulk 4" x 6" Thermal Labels Print Stylesheet */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media print {
+              @page {
+                size: 4in 6in;
+                margin: 0;
+              }
+              html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              body * {
+                visibility: hidden !important;
+              }
+              #thermal-labels-bulk-printable, #thermal-labels-bulk-printable * {
+                visibility: visible !important;
+              }
+              #thermal-labels-bulk-printable {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 4in !important;
+                max-width: 4in !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
+              }
+              .bulk-thermal-label-page {
+                page-break-after: always !important;
+                break-after: page !important;
+                width: 4in !important;
+                max-width: 4in !important;
+                min-height: 5.9in !important;
+                padding: 0.2in !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+                border: none !important;
+              }
+            }
+          `}} />
+
           <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#0e121e] border border-white/20 rounded-lg shadow-2xl flex flex-col overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0 bg-[#0e121e] print:hidden">
               <div className="flex items-center gap-2">
@@ -2866,11 +2948,11 @@ function OrdersContent() {
               </button>
             </div>
 
-            <div className="p-5 overflow-y-auto flex-1 space-y-6 custom-scrollbar print:p-0 print:space-y-0">
+            <div id="thermal-labels-bulk-printable" className="p-5 overflow-y-auto flex-1 space-y-6 custom-scrollbar print:p-0 print:space-y-0">
               {bulkLabelsData.map((lbl, idx) => (
                 <div
                   key={idx}
-                  className="bg-white text-black p-5 rounded-md border-2 border-black font-sans space-y-3 print:border-none print:m-0 print:p-4 print:page-break-after-always shadow-md"
+                  className="bulk-thermal-label-page bg-white text-black p-5 rounded-md border-2 border-black font-sans space-y-3 shadow-md"
                   style={{ pageBreakAfter: "always" }}
                 >
                   <div className="flex justify-between items-start border-b-2 border-black pb-2">
@@ -2989,24 +3071,66 @@ function OrdersContent() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-center">
-                <div className="p-3 rounded-md bg-[#131722] border border-white/5">
-                  <span className="text-[10px] text-slate-400 block uppercase">Total Past Orders</span>
-                  <span className="text-base font-black text-white">
-                    {selectedRiskOrder.customer_order_count || 1}
-                  </span>
-                </div>
-                <div className={`p-3 rounded-md border ${
-                  (selectedRiskOrder.customer_return_count || 0) > 0
-                    ? "bg-rose-500/10 border-rose-500/20 text-rose-300"
-                    : "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
-                }`}>
-                  <span className="text-[10px] block uppercase opacity-80">RTO / Returns</span>
-                  <span className="text-base font-black">
-                    {selectedRiskOrder.customer_return_count || 0}
-                  </span>
-                </div>
-              </div>
+              {/* COD Return Risk Telemetry */}
+              {(() => {
+                const orderCodRiskScore = selectedRiskOrder.fraud_score ?? (
+                  (selectedRiskOrder.customer_return_count || 0) >= 2 ? 80 :
+                  (selectedRiskOrder.customer_return_count || 0) === 1 ? 45 : 10
+                );
+                return (
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-[#121624] to-transparent border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">COD Return Risk Score</span>
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <span className={`text-xs font-black ${
+                          orderCodRiskScore >= 60 ? "text-rose-400" :
+                          orderCodRiskScore >= 30 ? "text-amber-400" :
+                          "text-emerald-400"
+                        }`}>
+                          {orderCodRiskScore} / 100
+                        </span>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                          orderCodRiskScore >= 60 ? "bg-rose-500/20 text-rose-300" :
+                          orderCodRiskScore >= 30 ? "bg-amber-500/20 text-amber-300" :
+                          "bg-emerald-500/20 text-emerald-300"
+                        }`}>
+                          {orderCodRiskScore >= 60 ? "High RTO Risk" : orderCodRiskScore >= 30 ? "Moderate" : "Low Risk"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <div
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          orderCodRiskScore >= 60 ? "bg-rose-500" :
+                          orderCodRiskScore >= 30 ? "bg-amber-400" :
+                          "bg-emerald-500"
+                        }`}
+                        style={{ width: `${Math.min(100, Math.max(8, orderCodRiskScore))}%` }}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-center pt-1">
+                      <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                        <span className="text-[9px] text-slate-400 block uppercase">Total Past Orders</span>
+                        <span className="text-sm font-bold text-white">
+                          {selectedRiskOrder.customer_order_count || 1}
+                        </span>
+                      </div>
+                      <div className={`p-2 rounded-lg border ${
+                        (selectedRiskOrder.customer_return_count || 0) > 0
+                          ? "bg-rose-500/10 border-rose-500/20 text-rose-300"
+                          : "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
+                      }`}>
+                        <span className="text-[9px] block uppercase opacity-80">RTO / Returns</span>
+                        <span className="text-sm font-bold">
+                          {selectedRiskOrder.customer_return_count || 0}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               <div className="p-3 rounded-md bg-white/[0.02] border border-white/5 text-[11px] text-slate-300 leading-relaxed space-y-1">
                 <span className="font-bold text-white block">Recommendation:</span>

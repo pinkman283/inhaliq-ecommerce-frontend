@@ -603,6 +603,22 @@ export interface User {
     cancellations_7d: number;
     cancellations_30d: number;
   };
+  cod_risk?: {
+    score: number;
+    level: 'low' | 'moderate' | 'high';
+    orders_count: number;
+    delivered_count: number;
+    returned_count: number;
+    in_transit_count: number;
+    return_rate: number;
+    delivery_rate: number;
+    recommendation: string;
+  };
+  cod_risk_level?: 'low' | 'moderate' | 'high';
+  cod_risk_score?: number;
+  cod_return_rate?: number;
+  cod_orders_count?: number;
+  cod_returned_count?: number;
   ip_history?: CustomerIpHistoryItem[];
   activity_timeline?: CustomerActivityTimelineItem[];
   rfm_segment?: string;
@@ -1001,6 +1017,7 @@ export interface PosReceipt {
   customer_phone: string;
   items: OrderItem[];
   subtotal: number;
+  shipping_fee?: number;
   discount: number;
   tax: number;
   total: number;

@@ -642,16 +642,30 @@ function AdminCustomersContent() {
                       </td>
 
                       <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                            riskLevel === "critical" ? "bg-red-500/20 text-red-400 border border-red-500/40" :
-                            riskLevel === "high" ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
-                            riskLevel === "medium" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" :
-                            "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                          }`}>
-                            {riskLevel}
-                          </span>
-                          <span className="text-slate-500 font-mono text-[11px]">({riskScore} pts)</span>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                              riskLevel === "critical" ? "bg-red-500/20 text-red-400 border border-red-500/40" :
+                              riskLevel === "high" ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
+                              riskLevel === "medium" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" :
+                              "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                            }`}>
+                              {riskLevel}
+                            </span>
+                            <span className="text-slate-500 font-mono text-[11px]">({riskScore} pts)</span>
+                          </div>
+                          {(c.cod_orders_count ?? 0) > 0 ? (
+                            <div className="text-[10px] font-mono flex items-center gap-1.5">
+                              <span className="text-slate-500">COD:</span>
+                              {(c.cod_returned_count ?? 0) > 0 ? (
+                                <span className="text-red-400 font-semibold">{c.cod_returned_count} RTO ({c.cod_return_rate}%)</span>
+                              ) : (
+                                <span className="text-emerald-400 font-semibold">{c.cod_orders_count} ord (0 RTO)</span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-[10px] text-slate-500 font-mono">No COD orders</span>
+                          )}
                         </div>
                       </td>
 
@@ -830,6 +844,89 @@ function AdminCustomersContent() {
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Recent Velocity</span>
                           <p className="text-lg font-mono font-bold text-amber-400">{selectedCustomer.risk_metrics?.cancellations_24h ?? 0}</p>
                           <span className="text-[10px] text-slate-400">Cancels in 24h</span>
+                        </div>
+                      </div>
+
+                      {/* DEDICATED COD RETURN RISK SCORE (COURIER TELEMETRY) */}
+                      <div className="p-4 rounded-xl bg-gradient-to-br from-[#121624] via-white/[0.02] to-transparent border border-white/10 space-y-3.5 shadow-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-[#A78BFA]/10 border border-[#A78BFA]/20 flex items-center justify-center text-[#A78BFA]">
+                              <RotateCcw className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-white text-xs tracking-tight">COD Return Risk Score</h4>
+                              <p className="text-[10px] text-slate-400">Cash-on-Delivery fulfillment reliability & RTO prediction</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                              selectedCustomer.cod_risk?.level === "high" ? "bg-red-500/20 text-red-400 border border-red-500/30" :
+                              selectedCustomer.cod_risk?.level === "moderate" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" :
+                              "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
+                            }`}>
+                              {selectedCustomer.cod_risk?.level === "high" ? "High Return Risk" :
+                               selectedCustomer.cod_risk?.level === "moderate" ? "Moderate Risk" :
+                               "Low COD Risk"}
+                            </span>
+                            <div className="flex items-baseline gap-1 font-mono bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
+                              <span className="text-xs font-extrabold text-white">{selectedCustomer.cod_risk?.score ?? 15}</span>
+                              <span className="text-[9px] text-slate-400">/ 100</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Visual Risk Gauge Progress Bar */}
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between items-center text-[10px] text-slate-400">
+                            <span>Return Probability Index</span>
+                            <span className="font-mono font-medium text-slate-300">
+                              Delivery Success: <strong className="text-emerald-400">{selectedCustomer.cod_risk?.delivery_rate ?? 100}%</strong>
+                            </span>
+                          </div>
+                          <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/10">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${
+                                (selectedCustomer.cod_risk?.score ?? 15) > 60 ? "bg-gradient-to-r from-orange-500 to-red-500" :
+                                (selectedCustomer.cod_risk?.score ?? 15) > 30 ? "bg-gradient-to-r from-amber-400 to-orange-400" :
+                                "bg-gradient-to-r from-emerald-500 to-teal-400"
+                              }`}
+                              style={{ width: `${Math.min(100, Math.max(5, selectedCustomer.cod_risk?.score ?? 15))}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* COD Telemetry Grid */}
+                        <div className="grid grid-cols-4 gap-2 pt-0.5 text-center">
+                          <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                            <span className="text-[9px] text-slate-400 uppercase font-semibold block">COD Orders</span>
+                            <span className="text-sm font-mono font-bold text-white">{selectedCustomer.cod_risk?.orders_count ?? selectedCustomer.cod_orders_count ?? 0}</span>
+                          </div>
+                          <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                            <span className="text-[9px] text-emerald-400 uppercase font-semibold block">Delivered</span>
+                            <span className="text-sm font-mono font-bold text-emerald-400">{selectedCustomer.cod_risk?.delivered_count ?? 0}</span>
+                          </div>
+                          <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                            <span className="text-[9px] text-red-400 uppercase font-semibold block">Returned/RTO</span>
+                            <span className="text-sm font-mono font-bold text-red-400">{selectedCustomer.cod_risk?.returned_count ?? selectedCustomer.cod_returned_count ?? 0}</span>
+                          </div>
+                          <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                            <span className="text-[9px] text-slate-400 uppercase font-semibold block">Return Rate</span>
+                            <span className="text-sm font-mono font-bold text-white">{selectedCustomer.cod_risk?.return_rate ?? selectedCustomer.cod_return_rate ?? 0}%</span>
+                          </div>
+                        </div>
+
+                        {/* Staff Action Guidance */}
+                        <div className={`p-2.5 rounded-lg border text-xs flex items-start gap-2.5 ${
+                          selectedCustomer.cod_risk?.level === "high" ? "bg-red-500/10 border-red-500/20 text-red-200" :
+                          selectedCustomer.cod_risk?.level === "moderate" ? "bg-amber-500/10 border-amber-500/20 text-amber-200" :
+                          "bg-emerald-500/10 border-emerald-500/20 text-emerald-200"
+                        }`}>
+                          <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
+                          <div className="text-[11px] leading-relaxed">
+                            <strong className="font-semibold block mb-0.5">Courier Dispatch Recommendation:</strong>
+                            {selectedCustomer.cod_risk?.recommendation || "Safe for 100% Cash on Delivery fulfillment."}
+                          </div>
                         </div>
                       </div>
 
