@@ -815,10 +815,17 @@ select option {
   padding: 8px 12px;
 }
 
-/* Thin Scrollbar (4px) */
+/* ==========================================================================
+   Storefront Dynamic Theme Scrollbars
+   ========================================================================== */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -826,21 +833,21 @@ select option {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: transparent;
+  background: rgba(100, 116, 139, 0.25);
   border-radius: 9999px;
   transition: background-color 0.2s ease;
 }
 
 *:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(100, 116, 139, 0.35);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 139, 250, 0.8) !important;
+  background: var(--theme-primary, #0F172A) !important;
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: rgba(185, 163, 255, 1) !important;
+  background: var(--theme-primary-hover, #1E293B) !important;
 }
 
 ::-webkit-scrollbar-corner {
@@ -850,17 +857,17 @@ select option {
 /* Thin Hover Scrollbar Utility */
 .hover-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
+  scrollbar-color: rgba(100, 116, 139, 0.25) transparent;
   transition: scrollbar-color 0.2s ease;
 }
 
 .hover-scrollbar:hover {
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  scrollbar-color: var(--theme-primary, #0F172A) transparent;
 }
 
 .hover-scrollbar::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 
 .hover-scrollbar::-webkit-scrollbar-track {
@@ -868,21 +875,21 @@ select option {
 }
 
 .hover-scrollbar::-webkit-scrollbar-thumb {
-  background: transparent;
+  background: rgba(100, 116, 139, 0.25);
   border-radius: 9999px;
   transition: background-color 0.2s ease;
 }
 
 .hover-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(100, 116, 139, 0.4);
 }
 
 .hover-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 139, 250, 0.85) !important;
+  background: var(--theme-primary, #0F172A) !important;
 }
 
 .hover-scrollbar::-webkit-scrollbar-thumb:active {
-  background: rgba(185, 163, 255, 1) !important;
+  background: var(--theme-primary-hover, #1E293B) !important;
 }
 
 /* Complete Scrollbar Hide Utility */
@@ -897,28 +904,29 @@ select option {
   height: 0 !important;
 }
 
-/* Dedicated Visible Horizontal Scrollbar for Table Cards */
+/* Dedicated Visible Horizontal Scrollbar for Table / Product Cards */
 .custom-horizontal-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(167, 139, 250, 0.4) rgba(255, 255, 255, 0.04);
+  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar {
-  height: 8px !important;
+  height: 6px !important;
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.03);
   border-radius: 8px;
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(167, 139, 250, 0.4);
+  background: rgba(100, 116, 139, 0.3);
   border-radius: 8px;
+  transition: background 0.2s ease;
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(185, 163, 255, 0.75);
+  background: var(--theme-primary, #0F172A);
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-button {
@@ -981,7 +989,7 @@ select option {
 }
 
 /* ==========================================================================
-   Sleek Admin Scrollbars & Cursor-Grab Affordances
+   Storefront Horizontal Carousels & Tables
    ========================================================================== */
 .custom-horizontal-scrollbar::-webkit-scrollbar,
 [data-scrollable-card]::-webkit-scrollbar,
@@ -993,14 +1001,14 @@ select option {
 .custom-horizontal-scrollbar::-webkit-scrollbar-track,
 [data-scrollable-card]::-webkit-scrollbar-track,
 .overflow-x-auto::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
   border-radius: 9999px;
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb,
 [data-scrollable-card]::-webkit-scrollbar-thumb,
 .overflow-x-auto::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(100, 116, 139, 0.25);
   border-radius: 9999px;
   transition: background 0.2s ease;
 }
@@ -1008,13 +1016,64 @@ select option {
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover,
 [data-scrollable-card]::-webkit-scrollbar-thumb:hover,
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 139, 250, 0.6);
+  background: var(--theme-primary, #0F172A);
 }
 
 .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:active,
 [data-scrollable-card]::-webkit-scrollbar-thumb:active,
 .overflow-x-auto::-webkit-scrollbar-thumb:active {
-  background: rgba(185, 163, 255, 0.9);
+  background: var(--theme-primary-hover, #1E293B);
+}
+
+/* ==========================================================================
+   Sleek Admin Console Purple Scrollbars (Strictly Scoped to Admin)
+   ========================================================================== */
+.admin-console ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.admin-console *:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.admin-console ::-webkit-scrollbar-thumb:hover,
+.admin-console .hover-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.8) !important;
+}
+
+.admin-console ::-webkit-scrollbar-thumb:active,
+.admin-console .hover-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(185, 163, 255, 1) !important;
+}
+
+.admin-console .custom-horizontal-scrollbar,
+.admin-console [data-scrollable-card],
+.admin-console .overflow-x-auto {
+  scrollbar-color: rgba(167, 139, 250, 0.4) rgba(255, 255, 255, 0.04);
+}
+
+.admin-console .custom-horizontal-scrollbar::-webkit-scrollbar-track,
+.admin-console [data-scrollable-card]::-webkit-scrollbar-track,
+.admin-console .overflow-x-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-console .custom-horizontal-scrollbar::-webkit-scrollbar-thumb,
+.admin-console [data-scrollable-card]::-webkit-scrollbar-thumb,
+.admin-console .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.4);
+}
+
+.admin-console .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover,
+.admin-console [data-scrollable-card]::-webkit-scrollbar-thumb:hover,
+.admin-console .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.75);
+}
+
+.admin-console .custom-horizontal-scrollbar::-webkit-scrollbar-thumb:active,
+.admin-console [data-scrollable-card]::-webkit-scrollbar-thumb:active,
+.admin-console .overflow-x-auto::-webkit-scrollbar-thumb:active {
+  background: rgba(185, 163, 255, 1);
 }
 
 /* ==========================================================================

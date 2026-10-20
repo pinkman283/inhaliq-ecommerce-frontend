@@ -497,7 +497,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
-    <div className="h-screen w-full bg-[#090B10] text-[#E5E7EB] flex overflow-hidden fixed inset-0">
+    <div className="admin-console h-screen w-full bg-[#090B10] text-[#E5E7EB] flex overflow-hidden fixed inset-0">
       {/* Sidebar Desktop */}
       <aside 
         className={`hidden lg:flex flex-col justify-between bg-[#11141D] border-r border-[#272B35] shrink-0 h-full transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[width] overflow-hidden z-20 ${
