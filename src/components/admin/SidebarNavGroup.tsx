@@ -75,9 +75,30 @@ export const SidebarNavGroup: React.FC<SidebarNavGroupProps> = ({
         return !siblingMatches;
       }
 
-      // 3. For nested sub-routes (e.g. /admin/products/new matching /admin/products)
-      if (itemHref !== "/admin" && pathname.startsWith(itemHref) && !itemHref.includes("?")) {
-        return true;
+      // 3. For nested sub-routes (e.g. /admin/orders/[id] or /admin/products/create)
+      // Industry-standard Specificity-First / Longest-Prefix Rule:
+      // Only match if pathname starts with itemHref + "/" AND no visible sibling has a more specific match
+      if (itemHref !== "/admin" && !itemHref.includes("?")) {
+        const itemBasePath = itemHref.endsWith("/") ? itemHref.slice(0, -1) : itemHref;
+        const isPathPrefix = pathname === itemBasePath || pathname.startsWith(itemBasePath + "/");
+
+        if (isPathPrefix) {
+          // If any other visible sibling has a longer matching prefix for current pathname,
+          // then this broader parent item is NOT active.
+          const hasMoreSpecificSibling = visibleItems.some((sib) => {
+            if (sib.href === itemHref) return false;
+            const sibBasePath = sib.href.split("?")[0].replace(/\/$/, "");
+            if (
+              sibBasePath.length > itemBasePath.length &&
+              (pathname === sibBasePath || pathname.startsWith(sibBasePath + "/"))
+            ) {
+              return true;
+            }
+            return false;
+          });
+
+          return !hasMoreSpecificSibling;
+        }
       }
 
       return false;

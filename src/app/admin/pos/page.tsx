@@ -23,7 +23,8 @@ import {
   Check, 
   Layers,
   ArrowRight,
-  Copy
+  Copy,
+  Store
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { getAppCurrencySymbol } from "@/lib/utils";
@@ -608,87 +609,84 @@ export default function AdminPosPage() {
     <div className="space-y-4 max-w-[1700px] mx-auto pb-12">
       
       {/* 1. Header Toolbar */}
-      <div className="flex items-center justify-between bg-[#0e121e] border border-white/10 rounded-xl px-5 py-3.5 shadow-xl">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-[#211B32] border border-[#A78BFA]/30 flex items-center justify-center text-[#A78BFA]">
-            <Package className="w-5 h-5" />
+      <div className="flex items-center justify-between bg-[#11141D] border border-[#272B35] rounded-xl px-4 py-2.5 shadow-sm gap-4">
+        {/* Left: Branding & Status */}
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-[#A78BFA]/10 border border-[#A78BFA]/20 flex items-center justify-center text-[#A78BFA] shrink-0">
+            <Store className="w-4 h-4" />
           </div>
-          <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-base font-bold text-white tracking-tight">POS System</h1>
-              {activeLead && (
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#A78BFA]/15 text-[#A78BFA] border border-[#A78BFA]/30">
-                    <Sparkles className="w-3 h-3" />
-                    Converting Lead #{activeLead.leadId}
-                  </span>
-                  {activeLead.notes && (
-                    <span
-                      className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] text-slate-300 bg-white/5 border border-white/10 font-medium max-w-[260px] truncate"
-                      title={activeLead.notes}
-                    >
-                      <span className="text-[#A78BFA] font-semibold">CRM Note:</span>
-                      <span className="truncate">{activeLead.notes}</span>
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-            <p className="text-[11px] text-slate-400">
-              High-speed retail & tele-sales order creation with automated inventory sync.
-            </p>
+
+          <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
+            <span className="text-sm font-semibold text-white tracking-tight whitespace-nowrap">
+              POS Terminal
+            </span>
+
+            {activeLead ? (
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#A78BFA]/15 text-[#C4B5FD] border border-[#A78BFA]/30 whitespace-nowrap shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#A78BFA] animate-pulse shrink-0" />
+                <span className="truncate max-w-[220px]">
+                  Lead #{activeLead.leadId}{activeLead.name && activeLead.name !== "Customer" ? ` · ${activeLead.name}` : ""}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveLead(null);
+                    if (typeof window !== "undefined") {
+                      sessionStorage.removeItem("pos_lead_conversion");
+                    }
+                    toast.info("Lead detached. Continuing as regular POS order.");
+                  }}
+                  className="hover:bg-white/20 p-0.5 rounded-full transition text-[#C4B5FD] hover:text-white cursor-pointer ml-0.5"
+                  title="Detach lead"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <div className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Ready</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Cashier Keyboard Shortcuts Toolbar */}
-        <div className="hidden xl:flex items-center gap-2.5 text-[10px] font-mono text-slate-400 bg-white/[0.03] border border-white/5 px-3 py-1.5 rounded-lg">
-          <span className="flex items-center gap-1.5">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">F2</kbd>
-            <span>Scan/Search</span>
-          </span>
-          <span className="text-white/20">•</span>
-          <span className="flex items-center gap-1.5">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">F4</kbd>
-            <span>Exact Cash</span>
-          </span>
-          <span className="text-white/20">•</span>
-          <span className="flex items-center gap-1.5">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">Ctrl+Enter</kbd>
-            <span>Checkout</span>
-          </span>
-          <span className="text-white/20">•</span>
-          <span className="flex items-center gap-1.5">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-bold border border-white/10 shadow-xs">Esc</kbd>
-            <span>Close</span>
-          </span>
-        </div>
+        {/* Right: Hardware Shortcuts & Cart Actions */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          {/* Hardware hotkey cheat-sheet */}
+          <div className="hidden md:flex items-center gap-2 text-[11px] font-mono text-slate-400 bg-[#090B10]/60 border border-white/5 px-2.5 py-1 rounded-lg select-none">
+            <span className="inline-flex items-center gap-1.5">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#1C202F] text-slate-300 font-bold text-[9px] border border-white/10 shadow-xs">F2</kbd>
+              <span className="text-[11px] font-sans text-slate-400">Search</span>
+            </span>
+            <span className="text-white/10">|</span>
+            <span className="inline-flex items-center gap-1.5">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#1C202F] text-slate-300 font-bold text-[9px] border border-white/10 shadow-xs">F4</kbd>
+              <span className="text-[11px] font-sans text-slate-400">Cash</span>
+            </span>
+            <span className="text-white/10">|</span>
+            <span className="inline-flex items-center gap-1.5">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#1C202F] text-slate-300 font-bold text-[9px] border border-white/10 shadow-xs">Ctrl+↵</kbd>
+              <span className="text-[11px] font-sans text-slate-400">Pay</span>
+            </span>
+            <span className="text-white/10">|</span>
+            <span className="inline-flex items-center gap-1.5">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#1C202F] text-slate-300 font-bold text-[9px] border border-white/10 shadow-xs">Esc</kbd>
+            </span>
+          </div>
 
-        <div className="flex items-center gap-3">
-          {activeLead && (
+          {/* Clear Cart Button */}
+          {cart.length > 0 && (
             <button
               type="button"
-              onClick={() => {
-                setActiveLead(null);
-                if (typeof window !== "undefined") {
-                  sessionStorage.removeItem("pos_lead_conversion");
-                }
-                toast.info("Lead detached. Continuing as general POS order.");
-              }}
-              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white text-xs font-semibold border border-white/10 transition cursor-pointer"
+              onClick={handleClearCart}
+              className="px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 text-xs font-medium transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              title="Clear all cart items"
             >
-              Detach Lead
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Clear Cart</span>
             </button>
           )}
-
-          <button
-            type="button"
-            onClick={handleClearCart}
-            disabled={cart.length === 0}
-            className="px-3.5 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            <span>Clear Cart</span>
-          </button>
         </div>
       </div>
 

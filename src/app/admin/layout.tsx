@@ -101,11 +101,22 @@ function AdminDynamicBreadcrumb({ allItems, pathname }: { allItems: any[]; pathn
     );
     if (exactPathMatch) return exactPathMatch;
 
-    // Fallback to startsWith match
-    return (
-      allItems.find((item) => item.href === pathname) ||
-      allItems.find((item) => item.href !== "/admin" && pathname.startsWith(item.href.split("?")[0]))
-    );
+    // Fallback to longest matching prefix (specificity-first)
+    const matchingPrefixItems = allItems.filter((item) => {
+      const basePath = item.href.split("?")[0].replace(/\/$/, "");
+      if (basePath === "/admin") return false;
+      return pathname === basePath || pathname.startsWith(basePath + "/");
+    });
+
+    if (matchingPrefixItems.length > 0) {
+      return matchingPrefixItems.reduce((best, curr) => {
+        const bestLen = best.href.split("?")[0].length;
+        const currLen = curr.href.split("?")[0].length;
+        return currLen > bestLen ? curr : best;
+      });
+    }
+
+    return allItems.find((item) => item.href === pathname);
   }, [allItems, pathname, searchParams]);
 
   if (!currentNavItem) return null;
