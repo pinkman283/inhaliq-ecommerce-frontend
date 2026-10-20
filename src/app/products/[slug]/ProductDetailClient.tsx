@@ -35,12 +35,30 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
   const router = useRouter();
   const { theme } = useThemeStore();
 
+  // Pre-compute initial variant from server-rendered initialProduct to prevent layout pop-in
+  const initialVariant = (() => {
+    if (!initialProduct?.variants || initialProduct.variants.length === 0) return null;
+    const activeVariants = initialProduct.variants.filter((v) => v.is_active !== false);
+    return activeVariants.find((v) => Number(v.stock_quantity) > 0) || activeVariants[0] || initialProduct.variants[0];
+  })();
+
+  const initialOptions = (() => {
+    if (!initialVariant) return {};
+    if (initialVariant.attributes && Object.keys(initialVariant.attributes).length > 0) {
+      return { ...initialVariant.attributes };
+    }
+    const opts: Record<string, string> = {};
+    if (initialVariant.color_name) opts["Color"] = initialVariant.color_name;
+    if (initialVariant.size) opts["Size"] = initialVariant.size;
+    return opts;
+  })();
+
   const [product, setProduct] = useState<Product | null>(initialProduct || null);
   const [related, setRelated] = useState<Product[]>([]);
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(initialVariant);
+  const [selectedColor, setSelectedColor] = useState<string | null>(initialVariant?.color_name || null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(initialVariant?.size || null);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(initialOptions);
   const [hasVariantError, setHasVariantError] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");

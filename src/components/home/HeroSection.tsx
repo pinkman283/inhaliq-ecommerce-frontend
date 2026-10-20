@@ -7,14 +7,15 @@ import { HeroBannerCarousel } from "./HeroBannerCarousel";
 import { SecondaryPromoBanner } from "./SecondaryPromoBanner";
 import { HeroPromotionStrip } from "./HeroPromotionStrip";
 
-export function HeroSection() {
-  const [data, setData] = useState<HomepageBannersResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+export function HeroSection({ initialData }: { initialData?: HomepageBannersResponse | null }) {
+  const [data, setData] = useState<HomepageBannersResponse | null>(initialData || null);
+  const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadBanners() {
+      if (initialData) return;
       try {
         const res = await api.getHomepageBanners();
         if (isMounted && res) {

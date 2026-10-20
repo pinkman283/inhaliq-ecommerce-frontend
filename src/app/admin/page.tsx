@@ -10,21 +10,44 @@ import {
   Order, 
   Product 
 } from "@/types";
+import dynamic from "next/dynamic";
 import { 
   DashboardHeader,
   ExecutiveKpiStrip,
   OrderStatusPipeline,
-  RevenuePerformanceChart,
   RecentOrdersWidget,
   ProductAndInventoryGrid,
   FinancialBreakdownCard,
-  MarketingAndAttributionCard,
   SystemHealthAndActivity,
   DateRangeState,
   getPresetDateRange,
   calculateDelta,
   ComparisonDelta
 } from "@/components/admin/dashboard";
+
+const RevenuePerformanceChart = dynamic(
+  () => import("@/components/admin/dashboard/RevenuePerformanceChart").then((m) => m.RevenuePerformanceChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[360px] w-full rounded-xl bg-[#11141D] border border-[#272B35] animate-pulse flex items-center justify-center text-xs text-[#929BAD]">
+        Loading Chart Visualizer...
+      </div>
+    ),
+  }
+);
+
+const MarketingAndAttributionCard = dynamic(
+  () => import("@/components/admin/dashboard/MarketingAndAttributionCard").then((m) => m.MarketingAndAttributionCard),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[280px] w-full rounded-xl bg-[#11141D] border border-[#272B35] animate-pulse flex items-center justify-center text-xs text-[#929BAD]">
+        Loading Marketing Visualizer...
+      </div>
+    ),
+  }
+);
 import { AlertCircle, RefreshCw } from "lucide-react";
 
 export default function AdminDashboardOverview() {

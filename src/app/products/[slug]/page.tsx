@@ -6,17 +6,15 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aether.studio";
+async function fetchProductData(slug: string) {
   const apiUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
-
   try {
     const data = await cachedFetch<{ product?: any }>(
       `aether:meta:product:${slug}`,
       async () => {
         const res = await fetch(`${apiUrl}/products/${slug}`, {
           signal: AbortSignal.timeout(4000),
+          next: { revalidate: 300, tags: [`product:${slug}`, "products"] },
         });
         if (!res.ok) return {};
         return await res.json();
@@ -26,42 +24,53 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         tags: ["products"],
       }
     );
+    return data?.product || null;
+  } catch (err) {
+    console.warn("Product data fetch notice:", err);
+    return null;
+  }
+}
 
-    const product = data?.product;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
 
-      if (product) {
-        const title = product.meta_title || product.name;
-        const rawDesc = product.meta_description || product.short_description || product.description || `Explore ${product.name} specifications, finish variants, and customer reviews.`;
-        const description = rawDesc.replace(/<[^>]*>?/gm, "").trim().slice(0, 160);
-        const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || `${siteUrl}/favicon.ico`;
-        const productUrl = `${siteUrl}/products/${slug}`;
-        const imageAlt = product.primary_image?.alt_text || title;
+  try {
+    const product = await fetchProductData(slug);
 
-        return {
+    if (product) {
+      const title = product.meta_title || product.name;
+      const rawDesc = product.meta_description || product.short_description || product.description || `Explore ${product.name} specifications, finish variants, and customer reviews.`;
+      const description = rawDesc.replace(/<[^>]*>?/gm, "").trim().slice(0, 160);
+      const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || `${siteUrl}/favicon.ico`;
+      const productUrl = `${siteUrl}/products/${slug}`;
+      const imageAlt = product.primary_image?.alt_text || title;
+
+      return {
+        title,
+        description,
+        openGraph: {
+          type: "website",
+          url: productUrl,
           title,
           description,
-          openGraph: {
-            type: "website",
-            url: productUrl,
-            title,
-            description,
-            images: [
-              {
-                url: imageUrl,
-                width: 800,
-                height: 800,
-                alt: imageAlt,
-              },
-            ],
-          },
-          twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [imageUrl],
-          },
-        };
-      }
+          images: [
+            {
+              url: imageUrl,
+              width: 800,
+              height: 800,
+              alt: imageAlt,
+            },
+          ],
+        },
+        twitter: {
+          card: "summary_large_image",
+          title,
+          description,
+          images: [imageUrl],
+        },
+      };
+    }
   } catch (err) {
     console.warn("Product metadata dynamic fetch notice:", err);
   }
@@ -74,5 +83,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  return <ProductDetailClient slug={slug} />;
+  const product = await fetchProductData(slug);
+  return <ProductDetailClient slug={slug} initialProduct={product} />;
 }
