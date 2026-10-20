@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { Product, PurchaseOrder, Vendor } from "@/types";
+import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 
 interface PoLineInput {
   product_id: string;
@@ -353,12 +354,7 @@ export default function AdminPurchaseOrdersPage() {
             </thead>
             <tbody className="divide-y divide-white/5">
               {loading ? (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                    Loading purchase orders...
-                  </td>
-                </tr>
+                <TableSkeletonRows rows={6} colSpan={7} hasCheckbox={false} />
               ) : purchaseOrders.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-500">

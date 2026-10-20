@@ -57,6 +57,7 @@ import {
   AdminStatusBadge, 
   AdminEmptyState 
 } from "@/components/admin/ui";
+import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 
 function AdminCustomersContent() {
   const { adminUser } = useAdminAuthStore();
@@ -535,14 +536,7 @@ function AdminCustomersContent() {
             </thead>
             <tbody className="divide-y divide-white/[0.04] text-slate-300">
               {loading ? (
-                <tr>
-                  <td colSpan={9} className="py-12 text-center text-slate-500">
-                    <div className="inline-flex items-center gap-2">
-                      <RefreshCw className="w-4 h-4 animate-spin text-[#A78BFA]" />
-                      <span>Loading customer intelligence...</span>
-                    </div>
-                  </td>
-                </tr>
+                <TableSkeletonRows rows={8} colSpan={9} hasCheckbox={true} hasThumbnail={false} />
               ) : customers.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="p-0">

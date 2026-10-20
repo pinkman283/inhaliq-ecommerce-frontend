@@ -21,6 +21,7 @@ import {
 import { api } from "@/lib/api";
 import { Promotion } from "@/types";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PublicPromotionsPage() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -174,9 +175,29 @@ export default function PublicPromotionsPage() {
 
         {/* Promotions Grid */}
         {loading ? (
-          <div className="py-20 text-center space-y-3">
-            <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-slate-400">Loading active campaigns...</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden flex flex-col space-y-4"
+              >
+                <Skeleton className="w-full h-44 bg-white/10" />
+                <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-5 w-20 rounded-full bg-white/10" />
+                      <Skeleton className="h-4 w-16 rounded bg-white/5" />
+                    </div>
+                    <Skeleton className="h-6 w-4/5 rounded bg-white/10" />
+                    <Skeleton className="h-4 w-full rounded bg-white/5" />
+                  </div>
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <Skeleton className="h-8 w-28 rounded-lg bg-white/10" />
+                    <Skeleton className="h-8 w-20 rounded-lg bg-white/10" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredPromotions.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-12 text-center space-y-3">

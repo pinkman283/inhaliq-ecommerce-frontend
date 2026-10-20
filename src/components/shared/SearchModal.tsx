@@ -9,6 +9,7 @@ import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useThemeStore } from "@/store/useThemeStore";
 import { trackSearch } from "@/lib/metaPixel";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -148,9 +149,20 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             {/* Results / Suggestions Container */}
             <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
               {loading ? (
-                <div className="py-12 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-                  Searching laboratory catalog...
+                <div className="space-y-2 py-1">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-3 p-2.5 rounded-md border border-white/5 bg-white/[0.02]">
+                      <Skeleton className="w-12 h-12 rounded-md shrink-0 bg-white/10" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-4 w-3/5 rounded bg-white/10" />
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-3 w-16 rounded bg-white/10" />
+                          <Skeleton className="h-3 w-12 rounded bg-white/10" />
+                        </div>
+                      </div>
+                      <Skeleton className="h-4 w-12 rounded bg-white/10" />
+                    </div>
+                  ))}
                 </div>
               ) : results.length > 0 ? (
                 <div className="space-y-2">

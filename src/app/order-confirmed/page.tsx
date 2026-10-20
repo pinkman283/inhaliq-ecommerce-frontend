@@ -18,6 +18,7 @@ import { Order } from "@/types";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { trackPurchase } from "@/lib/metaPixel";
 import { toast } from "sonner";
+import OrderConfirmedLoading from "./loading";
 
 function OrderConfirmedContent() {
   const searchParams = useSearchParams();
@@ -108,12 +109,7 @@ function OrderConfirmedContent() {
   };
 
   if (loading) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-28 text-center space-y-3">
-        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto" />
-        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Loading your order confirmation...</p>
-      </div>
-    );
+    return <OrderConfirmedLoading />;
   }
 
   const customerName = order?.customer_name || order?.user?.name || "Customer";
@@ -404,7 +400,7 @@ function OrderConfirmedContent() {
 
 export default function OrderConfirmedPage() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-xs text-slate-400">Loading Order Confirmation...</div>}>
+    <Suspense fallback={<OrderConfirmedLoading />}>
       <OrderConfirmedContent />
     </Suspense>
   );

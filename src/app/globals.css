@@ -27,12 +27,21 @@
   --radius-admin-sm: 4px;
   --radius-admin-md: 6px;
   --radius-admin-lg: 8px;
+
+  /* shadcn neutral theme colors */
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
 }
 
 
 :root {
   --theme-btn-radius: 6px;
   --theme-input-radius: 6px;
+}
+
+.dark {
+  --color-muted: #27272a;
+  --color-muted-foreground: #a1a1aa;
 }
 
 body {

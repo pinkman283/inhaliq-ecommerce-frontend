@@ -36,6 +36,7 @@ import { ImageUploadAvatar } from "@/components/ui/ImageUploadAvatar";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { toast } from "sonner";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
+import DashboardLoading from "./loading";
 
 export default function CustomerDashboardPage() {
   const { theme } = useAppTheme();
@@ -322,6 +323,10 @@ export default function CustomerDashboardPage() {
         </button>
       </div>
     );
+  }
+
+  if (loading) {
+    return <DashboardLoading />;
   }
 
   return (

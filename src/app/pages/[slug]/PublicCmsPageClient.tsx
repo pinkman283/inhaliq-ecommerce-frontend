@@ -6,6 +6,8 @@ import { api } from "@/lib/api";
 import { CmsPage } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { FileText, ArrowLeft, Loader2, ShieldCheck } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 
 interface PublicCmsPageClientProps {
   slug: string;
@@ -39,9 +41,26 @@ export default function PublicCmsPageClient({ slug }: PublicCmsPageClientProps) 
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-24 flex flex-col items-center justify-center gap-3 text-slate-500 min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-[#005826] dark:text-amber-400 animate-spin" />
-        <span className="text-xs uppercase tracking-wider font-semibold">Loading content...</span>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Card className="p-8 sm:p-10 space-y-8">
+          <div className="space-y-3 pb-6 border-b border-neutral-200/80 dark:border-white/10">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-9 sm:h-11 w-3/4" />
+            <Skeleton className="h-4 w-44" />
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/5" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+          <div className="space-y-4 pt-4">
+            <Skeleton className="h-6 w-48" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+        </Card>
       </div>
     );
   }

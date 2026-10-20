@@ -48,6 +48,7 @@ import { AdminDropdown } from "@/components/admin/AdminDropdown";
 import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { AdminPageHeader, AdminStatusBadge, AdminEmptyState, FilterDrawer, AdminStatStrip } from "@/components/admin/ui";
 import { OrderInvoiceModal } from "@/components/admin/orders/OrderInvoiceModal";
+import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 
 import { toast } from "sonner";
 
@@ -1312,12 +1313,7 @@ function OrdersContent() {
           </thead>
           <tbody className="divide-y divide-white/[0.04]">
             {loading ? (
-              <tr>
-                <td colSpan={10} className="p-12 text-center text-slate-500">
-                  <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-amber-400" />
-                  <span>Loading orders...</span>
-                </td>
-              </tr>
+              <TableSkeletonRows rows={8} colSpan={10} hasCheckbox={true} />
             ) : filteredOrders.length === 0 ? (
               <tr>
                 <td colSpan={10} className="p-0">

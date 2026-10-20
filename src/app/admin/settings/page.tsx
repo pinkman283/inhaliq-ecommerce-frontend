@@ -36,6 +36,7 @@ import { setAppCurrencySymbol } from "@/lib/utils";
 import { SettingsNavTabs } from "@/components/admin/settings/SettingsNavTabs";
 import { AdminSaveBar } from "@/components/admin/ui";
 import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 export default function AdminSettingsPage() {
@@ -217,11 +218,28 @@ export default function AdminSettingsPage() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-[#A78BFA]" />
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-          Loading Store Configurations...
-        </span>
+      <div className="space-y-6 w-full">
+        <SettingsNavTabs />
+        <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="space-y-1.5">
+            <Skeleton className="h-7 w-48 rounded bg-white/10" />
+            <Skeleton className="h-4 w-72 rounded bg-white/5" />
+          </div>
+          <Skeleton className="h-9 w-32 rounded-lg bg-white/10" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="rounded-xl border border-white/10 bg-[#0c0e17] p-6 space-y-4">
+            <Skeleton className="h-5 w-36 rounded bg-white/10" />
+            <Skeleton className="h-10 w-full rounded-lg bg-white/5" />
+            <Skeleton className="h-10 w-full rounded-lg bg-white/5" />
+            <Skeleton className="h-10 w-full rounded-lg bg-white/5" />
+          </div>
+          <div className="rounded-xl border border-white/10 bg-[#0c0e17] p-6 space-y-4">
+            <Skeleton className="h-5 w-40 rounded bg-white/10" />
+            <Skeleton className="h-10 w-full rounded-lg bg-white/5" />
+            <Skeleton className="h-10 w-full rounded-lg bg-white/5" />
+          </div>
+        </div>
       </div>
     );
   }

@@ -25,6 +25,7 @@ import { useWishlistStore } from "@/store/useWishlistStore";
 import { useThemeStore } from "@/store/useThemeStore";
 import { trackViewContent } from "@/lib/metaPixel";
 import { toast } from "sonner";
+import ProductDetailLoading from "./loading";
 
 interface ProductDetailClientProps {
   slug: string;
@@ -153,20 +154,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
   }, [product, loading]);
 
   if (loading) {
-    return (
-      <div className="py-32 text-center text-slate-400 flex flex-col items-center justify-center gap-3">
-        <div 
-          className="w-10 h-10 border-2 border-t-transparent rounded-full animate-spin"
-          style={{ borderColor: "var(--theme-primary, #005826)", borderTopColor: "transparent" }}
-        />
-        <span 
-          className="text-xs font-bold uppercase tracking-widest"
-          style={{ color: "var(--theme-text-body, #64748b)" }}
-        >
-          Loading Product Details...
-        </span>
-      </div>
-    );
+    return <ProductDetailLoading />;
   }
 
   if (!product) {

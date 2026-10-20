@@ -5,6 +5,7 @@ import { ScrollableTableCard } from "@/components/admin/ScrollableTableCard";
 import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
 import { AdminEmptyState } from "@/components/admin/ui";
 import { ProductTableRow } from "./ProductTableRow";
+import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 
 interface ProductsTableProps {
   products: Product[];
@@ -57,12 +58,7 @@ export function ProductsTable({
         </thead>
         <tbody className="divide-y divide-white/[0.04]">
           {loading ? (
-            <tr>
-              <td colSpan={7} className="p-12 text-center text-slate-500">
-                <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-[#A78BFA]" />
-                <span>Loading products catalog...</span>
-              </td>
-            </tr>
+            <TableSkeletonRows rows={8} colSpan={7} hasCheckbox={true} hasThumbnail={true} />
           ) : products.length === 0 ? (
             <tr>
               <td colSpan={7} className="p-0">

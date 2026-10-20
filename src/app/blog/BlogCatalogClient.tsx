@@ -17,6 +17,7 @@ import {
   Sparkles,
   Tag 
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BlogCatalogClient() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -63,9 +64,22 @@ export default function BlogCatalogClient() {
 
       {/* Post Grid */}
       {loading ? (
-        <div className="py-24 text-center text-slate-500 flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-8 h-8 text-[#005826] dark:text-amber-400 animate-spin" />
-          <span className="text-xs uppercase tracking-wider font-semibold">Loading editorial posts...</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-[#0f131f] p-4 space-y-3 shadow-2xs"
+            >
+              <Skeleton className="w-full aspect-video rounded-xl" />
+              <Skeleton className="h-3 w-24 rounded-md" />
+              <Skeleton className="h-5 w-4/5 rounded-md" />
+              <Skeleton className="h-4 w-full rounded-md" />
+              <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-white/5">
+                <Skeleton className="h-3 w-20 rounded-md" />
+                <Skeleton className="h-3 w-16 rounded-md" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : posts.length === 0 ? (
         <div className="py-20 text-center space-y-3">

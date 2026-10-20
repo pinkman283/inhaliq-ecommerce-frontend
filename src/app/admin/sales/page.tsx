@@ -43,6 +43,7 @@ import {
   AdminEmptyState,
 } from "@/components/admin/ui";
 import { OrderInvoiceModal } from "@/components/admin/orders/OrderInvoiceModal";
+import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 
 export default function AdminSalesPage() {
   const [sales, setSales] = useState<Order[]>([]);
@@ -449,12 +450,7 @@ export default function AdminSalesPage() {
 
             <tbody className="divide-y divide-white/[0.04]">
               {loading ? (
-                <tr>
-                  <td colSpan={8} className="py-16 text-center text-slate-500">
-                    <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                    Loading sales records...
-                  </td>
-                </tr>
+                <TableSkeletonRows rows={8} colSpan={8} hasCheckbox={false} />
               ) : sales.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="p-0">

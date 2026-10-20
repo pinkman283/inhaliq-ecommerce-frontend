@@ -23,6 +23,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { formatPrice } from "@/lib/utils";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
 import { trackSearch } from "@/lib/metaPixel";
+import ProductsLoading from "@/app/products/loading";
 
 function ProductCatalogContent({
   overrideCategory,
@@ -1361,7 +1362,7 @@ export default function ProductCatalogClient({
   overrideBrand?: string;
 } = {}) {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-slate-400 text-sm">Loading Catalog...</div>}>
+    <Suspense fallback={<ProductsLoading />}>
       <ProductCatalogContent overrideCategory={overrideCategory} overrideBrand={overrideBrand} />
     </Suspense>
   );

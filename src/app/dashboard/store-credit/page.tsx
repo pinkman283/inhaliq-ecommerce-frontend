@@ -16,6 +16,7 @@ import { api } from "@/lib/api";
 import { StoreCreditAccount, StoreCreditTransaction } from "@/types";
 import { useAuthStore } from "@/store/useAuthStore";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CustomerStoreCreditPage() {
   const { isAuthenticated, logout, openAuthModal } = useAuthStore();
@@ -175,12 +176,15 @@ export default function CustomerStoreCreditPage() {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                 {loading ? (
-                  <tr>
-                    <td colSpan={5} className="p-10 text-center text-slate-400">
-                      <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                      Loading transactions...
-                    </td>
-                  </tr>
+                  Array.from({ length: 5 }).map((_, rIdx) => (
+                    <tr key={rIdx} className="border-b border-gray-100 dark:border-white/5">
+                      <td className="p-3.5"><Skeleton className="h-4 w-20 rounded bg-muted" /></td>
+                      <td className="p-3.5"><Skeleton className="h-5 w-16 rounded-full bg-muted" /></td>
+                      <td className="p-3.5"><Skeleton className="h-4 w-16 rounded bg-muted" /></td>
+                      <td className="p-3.5"><Skeleton className="h-4 w-20 rounded bg-muted" /></td>
+                      <td className="p-3.5"><Skeleton className="h-4 w-40 rounded bg-muted" /></td>
+                    </tr>
+                  ))
                 ) : transactions.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="p-10 text-center text-slate-400">

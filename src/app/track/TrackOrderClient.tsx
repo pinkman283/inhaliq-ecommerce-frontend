@@ -12,9 +12,11 @@ import {
   MapPin, 
   ShieldCheck, 
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from "lucide-react";
 import { api } from "@/lib/api";
+import TrackLoading from "./loading";
 import { formatPrice, formatDate } from "@/lib/utils";
 
 function TrackOrderContent() {
@@ -118,9 +120,16 @@ function TrackOrderContent() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold uppercase tracking-wide transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50 cursor-pointer"
+            className="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold uppercase tracking-wide transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-1.5"
           >
-            {loading ? "..." : "Track"}
+            {loading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Tracking...</span>
+              </>
+            ) : (
+              "Track"
+            )}
           </button>
         </form>
       </div>
@@ -269,7 +278,7 @@ function TrackOrderContent() {
 
 export default function TrackOrderClient() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-slate-400">Loading Tracking...</div>}>
+    <Suspense fallback={<TrackLoading />}>
       <TrackOrderContent />
     </Suspense>
   );

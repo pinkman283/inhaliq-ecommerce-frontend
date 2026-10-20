@@ -29,6 +29,7 @@ import { adminApi } from "@/lib/adminApi";
 import { Review, ReviewSummary, Product } from "@/types";
 import { AdminPageHeader, AdminStatStrip, AdminStatusBadge, AdminEmptyState, AdminPagination } from "@/components/admin/ui";
 import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { useThemeStore } from "@/store/useThemeStore";
@@ -532,12 +533,7 @@ export default function AdminReviewsPage() {
 
       {/* Reviews Table Card */}
       <div className="rounded-md bg-[#0f121b] border border-white/[0.08] overflow-hidden">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-3 text-slate-400">
-            <Loader2 className="w-7 h-7 text-[#A78BFA] animate-spin" />
-            <span className="text-xs uppercase tracking-wider font-semibold">Loading reviews...</span>
-          </div>
-        ) : reviews.length === 0 ? (
+        {!loading && reviews.length === 0 ? (
           <div className="p-8">
             <AdminEmptyState
               title="No Reviews Found"
@@ -574,7 +570,9 @@ export default function AdminReviewsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">
-                {reviews.map((rev) => (
+                {loading ? (
+                  <TableSkeletonRows rows={8} colSpan={7} hasCheckbox={true} />
+                ) : reviews.map((rev) => (
                   <tr key={rev.id} className="hover:bg-white/[0.015] transition-colors">
                     <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
                       <AdminCheckbox

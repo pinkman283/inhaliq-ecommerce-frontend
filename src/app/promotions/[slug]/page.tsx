@@ -22,6 +22,7 @@ import { api } from "@/lib/api";
 import { Promotion, Product } from "@/types";
 import { ProductCard } from "@/components/product/ProductCard";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CampaignDetailPage() {
   const params = useParams();
@@ -117,9 +118,26 @@ export default function CampaignDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col items-center justify-center py-24">
-        <div className="w-10 h-10 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-xs text-slate-400 font-mono">Loading campaign details...</p>
+      <div className="min-h-screen bg-[#07090e] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-4 w-20 rounded bg-white/10" />
+            <Skeleton className="h-4 w-4 rounded bg-white/10" />
+            <Skeleton className="h-4 w-32 rounded bg-white/10" />
+          </div>
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] overflow-hidden space-y-6">
+            <Skeleton className="w-full h-64 sm:h-80 bg-white/10" />
+            <div className="p-6 sm:p-10 space-y-4">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-6 w-24 rounded-full bg-white/10" />
+                <Skeleton className="h-6 w-32 rounded-full bg-white/10" />
+              </div>
+              <Skeleton className="h-8 sm:h-10 w-3/4 rounded-lg bg-white/10" />
+              <Skeleton className="h-4 w-full rounded bg-white/5" />
+              <Skeleton className="h-4 w-4/5 rounded bg-white/5" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

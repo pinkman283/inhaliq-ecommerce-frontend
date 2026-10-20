@@ -30,6 +30,7 @@ import { adminApi } from "@/lib/adminApi";
 import { getAppCurrencySymbol } from "@/lib/utils";
 import { Product, ProductVariant, Order, PosReceipt } from "@/types";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CartItem {
   product: Product;
@@ -596,10 +597,96 @@ export default function AdminPosPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-9 h-9 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin" />
-          <span className="text-xs font-semibold text-slate-400">Loading POS System...</span>
+      <div className="space-y-4 max-w-[1700px] mx-auto pb-12">
+        {/* Top Header Toolbar Skeleton */}
+        <div className="flex items-center justify-between bg-[#11141D] border border-[#272B35] rounded-xl px-4 py-2.5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <Skeleton className="w-8 h-8 rounded-lg bg-white/10" />
+            <Skeleton className="h-5 w-32 rounded-md bg-white/10" />
+            <Skeleton className="h-5 w-20 rounded-full bg-white/5" />
+          </div>
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-8 w-48 rounded-lg bg-white/5 hidden md:block" />
+            <Skeleton className="h-8 w-24 rounded-lg bg-white/10" />
+          </div>
+        </div>
+
+        {/* 2-Column POS Layout Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          {/* Left Column: Product Catalog & Search (7 cols) */}
+          <div className="lg:col-span-7 2xl:col-span-6 space-y-4">
+            <div className="bg-[#0e121e] border border-white/10 rounded-xl p-4 shadow-xl space-y-3.5">
+              {/* Search input placeholder */}
+              <Skeleton className="h-10 w-full rounded-lg bg-white/10" />
+
+              {/* Category pills placeholder */}
+              <div className="flex items-center gap-2 overflow-hidden py-1">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-7 w-20 shrink-0 rounded-lg bg-white/5" />
+                ))}
+              </div>
+            </div>
+
+            {/* Product Grid Skeleton (8 items) */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-[#080a10] border border-white/10 rounded-xl p-2.5 space-y-2.5 shadow-sm"
+                >
+                  <Skeleton className="h-4 w-16 rounded bg-white/10" />
+                  <Skeleton className="w-full aspect-square rounded-lg bg-white/5" />
+                  <Skeleton className="h-4 w-4/5 rounded bg-white/10" />
+                  <div className="flex items-center justify-between pt-1">
+                    <Skeleton className="h-4 w-14 rounded bg-white/10" />
+                    <Skeleton className="w-7 h-7 rounded-lg bg-white/10" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Register Cart & Details (5 cols) */}
+          <div className="lg:col-span-5 2xl:col-span-6 space-y-4">
+            <div className="bg-[#0e121e] border border-white/10 rounded-xl p-4 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <Skeleton className="h-5 w-28 rounded bg-white/10" />
+                <Skeleton className="h-4 w-16 rounded bg-white/5" />
+              </div>
+
+              {/* Cart item skeletons */}
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                    <Skeleton className="w-10 h-10 rounded-lg bg-white/10 shrink-0" />
+                    <div className="flex-1 space-y-1.5">
+                      <Skeleton className="h-4 w-3/4 rounded bg-white/10" />
+                      <Skeleton className="h-3 w-16 rounded bg-white/5" />
+                    </div>
+                    <Skeleton className="h-4 w-14 rounded bg-white/10" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Totals & Checkout Skeleton */}
+              <div className="space-y-2 pt-3 border-t border-white/10">
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-16 rounded bg-white/5" />
+                  <Skeleton className="h-4 w-16 rounded bg-white/10" />
+                </div>
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-12 rounded bg-white/5" />
+                  <Skeleton className="h-4 w-14 rounded bg-white/10" />
+                </div>
+                <div className="flex justify-between pt-2 border-t border-white/10">
+                  <Skeleton className="h-6 w-20 rounded bg-white/10" />
+                  <Skeleton className="h-6 w-24 rounded bg-white/10" />
+                </div>
+              </div>
+
+              <Skeleton className="h-12 w-full rounded-xl bg-purple-500/20" />
+            </div>
+          </div>
         </div>
       </div>
     );
