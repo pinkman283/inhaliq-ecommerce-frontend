@@ -2411,4 +2411,25 @@ export interface HomepageSection {
   updated_at?: string;
 }
 
+export interface AdminNotification {
+  id: number;
+  user_id: number;
+  category: 'leads' | 'orders' | 'inventory' | 'security' | 'system' | string;
+  severity: 'info' | 'success' | 'warning' | 'critical';
+  title: string;
+  message: string;
+  action_url?: string | null;
+  required_permission?: string | null;
+  metadata?: Record<string, any> | null;
+  read_at?: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
+export interface AdminNotificationsResponse {
+  data: AdminNotification[];
+  current_page: number;
+  last_page: number;
+  total: number;
+  unread_count: number;
+}

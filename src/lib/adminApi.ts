@@ -75,6 +75,8 @@ import {
   StoreCreditAccount,
   StoreCreditTransaction,
   PromotionAnalyticsData,
+  AdminNotification,
+  AdminNotificationsResponse,
 } from "@/types";
 
 const API_BASE_URL = typeof window !== "undefined"
@@ -226,6 +228,39 @@ export const adminApi = {
   // ==========================================
   async getAnalytics(): Promise<AdminAnalytics> {
     const res = await adminClient.get("/admin/analytics");
+    return res.data;
+  },
+
+  // ==========================================
+  // OPERATIONAL NOTIFICATIONS
+  // ==========================================
+  async getNotifications(params?: {
+    category?: string;
+    unread_only?: boolean;
+    page?: number;
+    per_page?: number;
+  }): Promise<AdminNotificationsResponse> {
+    const res = await adminClient.get("/admin/notifications", { params });
+    return res.data;
+  },
+
+  async getNotificationUnreadCount(): Promise<{ unread_count: number }> {
+    const res = await adminClient.get("/admin/notifications/unread-count");
+    return res.data;
+  },
+
+  async markNotificationRead(id: number): Promise<{ message: string; unread_count: number }> {
+    const res = await adminClient.post(`/admin/notifications/${id}/read`);
+    return res.data;
+  },
+
+  async markAllNotificationsRead(): Promise<{ message: string; unread_count: number }> {
+    const res = await adminClient.post("/admin/notifications/mark-all-read");
+    return res.data;
+  },
+
+  async deleteNotification(id: number): Promise<{ message: string; unread_count: number }> {
+    const res = await adminClient.delete(`/admin/notifications/${id}`);
     return res.data;
   },
 

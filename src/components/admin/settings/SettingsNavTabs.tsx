@@ -50,7 +50,7 @@ export function SettingsNavTabs() {
     { label: "General Settings", href: "/admin/settings", icon: Settings },
     { label: "Shipping & Delivery", href: "/admin/orders/shipping", icon: Truck },
     { label: "Order Status Pipeline", href: "/admin/orders/statuses", icon: SlidersHorizontal },
-    { label: "Notifications", href: "/admin/settings/notifications", icon: Bell },
+    { label: "Customer Notifications", href: "/admin/settings/notifications", icon: Bell },
     { label: "SEO & Search", href: "/admin/settings/seo", icon: Search },
     { label: "Mobile & PWA", href: "/admin/settings/pwa", icon: Smartphone },
     { label: "System & Backups", href: "/admin/settings/system", icon: Cpu },

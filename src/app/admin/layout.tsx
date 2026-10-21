@@ -70,6 +70,7 @@ import { SidebarNavGroup, SidebarNavLink, NavChildItem } from "@/components/admi
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { CursorScrollProvider } from "@/components/admin/CursorScrollProvider";
 import { AdminAccountDropdown } from "@/components/admin/AdminAccountDropdown";
+import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
 
 
 function AdminDynamicBreadcrumb({ allItems, pathname }: { allItems: any[]; pathname: string }) {
@@ -710,6 +711,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span>Live Store</span>
               <ExternalLink className="w-3 h-3 text-cyan-400" />
             </Link>
+
+            <AdminNotificationBell />
 
             <AdminAccountDropdown />
           </div>
