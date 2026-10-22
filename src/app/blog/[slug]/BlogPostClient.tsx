@@ -102,15 +102,15 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
         <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
           <BookOpen className="w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-black text-gray-900 dark:text-white">Article Not Found</h1>
-        <p className="text-sm text-gray-500 dark:text-slate-400 max-w-md">
+        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Article Not Found</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
           The requested article <span className="font-mono text-xs">"{slug}"</span> does not exist or has been unpublished.
         </p>
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#005826] dark:bg-amber-400 text-white dark:text-slate-950 font-bold text-xs transition hover:opacity-90 mt-2"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-950 font-semibold text-xs transition hover:bg-gray-800 dark:hover:bg-gray-100 shadow-xs mt-2"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Articles
+          <ArrowLeft className="w-4 h-4" /> Back to All Articles
         </Link>
       </div>
     );
@@ -122,43 +122,43 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
       <div className="flex items-center justify-between gap-4 text-xs">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1.5 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white font-medium transition"
+          className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to Newsroom
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Blog
         </Link>
 
         <button
           onClick={handleShare}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition cursor-pointer"
         >
           <Share2 className="w-3.5 h-3.5" />
-          <span>Share</span>
+          <span>Share Article</span>
         </button>
       </div>
 
       {/* Article Header */}
       <header className="space-y-4">
         {post.category && (
-          <span className="inline-block px-3 py-1 rounded-full bg-[#005826]/10 dark:bg-amber-500/15 border border-[#005826]/20 dark:border-amber-500/30 text-[#005826] dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
+          <span className="inline-block px-3 py-1 rounded-full bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 text-xs font-semibold uppercase tracking-wider">
             {post.category.name}
           </span>
         )}
 
-        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
+        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">
           {post.title}
         </h1>
 
         {post.excerpt && (
-          <p className="text-base sm:text-lg text-gray-600 dark:text-slate-300 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-normal">
             {post.excerpt}
           </p>
         )}
 
         {/* Metadata Strip */}
-        <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-100 dark:border-white/10 text-xs text-gray-500 dark:text-slate-400">
-          <div className="flex items-center gap-2 text-gray-800 dark:text-slate-200 font-semibold">
+        <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-100 dark:border-white/10 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-semibold">
             <User className="w-4 h-4 text-gray-400" />
-            <span>{post.author?.name || "AETHER Editorial Staff"}</span>
+            <span>{post.author?.name || "Editorial Staff"}</span>
           </div>
           <span>•</span>
           <div className="flex items-center gap-1.5">
@@ -290,7 +290,7 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
               <button
                 type="submit"
                 disabled={submittingComment}
-                className="px-5 py-2.5 rounded-xl bg-[#005826] dark:bg-amber-500 hover:bg-[#004a20] dark:hover:bg-amber-400 text-white dark:text-slate-950 font-bold transition flex items-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-950 hover:bg-gray-800 dark:hover:bg-gray-100 font-semibold transition flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{submittingComment ? "Posting..." : "Post Comment"}</span>

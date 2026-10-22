@@ -338,6 +338,54 @@ export async function GET(
     }
   }
 
+  // Blog endpoints: route to local database when Senior API is empty or during local dev
+  if (pathStr.startsWith("blog")) {
+    const localBaseUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
+    const localTargetUrl = `${localBaseUrl}/${pathStr}${searchStr}`;
+
+    try {
+      if (isSenior) {
+        try {
+          const upstreamRes = await fetch(targetUrl, {
+            headers: buildForwardHeaders(request, apiKey),
+            signal: AbortSignal.timeout(4000),
+          });
+          if (upstreamRes.ok) {
+            const upstreamData = await upstreamRes.json();
+            const list = upstreamData?.data?.data || upstreamData?.data;
+            if (Array.isArray(list) && list.length > 0) {
+              return NextResponse.json(upstreamData);
+            }
+            if (pathStr.includes("post/") && upstreamData?.data) {
+              return NextResponse.json(upstreamData);
+            }
+          }
+        } catch {
+          // fall through to local
+        }
+      }
+
+      const localRes = await fetch(localTargetUrl, {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(6000),
+      });
+
+      if (localRes.ok) {
+        const localData = await localRes.json();
+        // If it's a paginated post list, wrap in { success: true, data: localData } for Senior adapter compatibility
+        if (localData && typeof localData === "object" && "data" in localData && Array.isArray(localData.data)) {
+          return NextResponse.json({
+            success: true,
+            data: localData,
+          });
+        }
+        return NextResponse.json(localData);
+      }
+    } catch (err) {
+      console.warn(`[Proxy] Blog route fetch error for ${localTargetUrl}:`, err);
+    }
+  }
+
   const rule = matchCacheRule(path, searchParams);
 
   // If endpoint is not configured for caching or user is authenticated, pass through

@@ -939,7 +939,7 @@ export default function ProductDetailClient({ slug, initialProduct }: ProductDet
             },
             offers: {
               "@type": "Offer",
-              priceCurrency: "USD",
+              priceCurrency: (product as any)?.currency || "BDT",
               price: product.price,
               availability: isOutOfStock
                 ? "https://schema.org/OutOfStock"

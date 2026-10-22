@@ -60,9 +60,18 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Lockout State
+  // Lockout & Cooldown State
   const [lockedUntil, setLockedUntil] = useState<string | null>(null);
   const [lockedCountdown, setLockedCountdown] = useState<string>("");
+  const [resendCooldown, setResendCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [resendCooldown]);
 
   useEffect(() => {
     if (!lockedUntil) return;
@@ -145,6 +154,30 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
     }
   };
 
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0 || loading) return;
+    setLoading(true);
+    setError(null);
+    try {
+      if (activeTab === "register") {
+        const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+        const res = await api.registerRequest({ name: fullName, email: email.trim(), password, phone: phone.trim() });
+        setSuccessMessage(res.message);
+        setResendCooldown(60);
+        toast.success("A new verification code has been sent.");
+      } else if (activeTab === "forgot_password") {
+        const res = await api.forgotPassword({ email: email.trim() });
+        setSuccessMessage(res.message);
+        setResendCooldown(60);
+        toast.success("A new password reset code has been sent.");
+      }
+    } catch (err: any) {
+      setError(err?.response?.data?.message || err?.message || "Failed to resend code.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -202,8 +235,19 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
           }
 
           const res = await api.registerRequest({ name: fullName, email: email.trim(), password, phone: phone.trim() });
+          
+          // If OTP shield is disabled, account is created immediately
+          if ((res as any).otp_required === false) {
+            toast.success("Account created successfully! Please sign in with your credentials.");
+            switchTab("login");
+            router.push("/login");
+            setLoading(false);
+            return;
+          }
+
           setSuccessMessage(res.message);
           setRegisterStep(2);
+          setResendCooldown(60);
         } else if (registerStep === 2) {
           if (otp.length !== 6) {
             setError("OTP must be exactly 6 digits.");
@@ -239,6 +283,7 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
           const res = await api.forgotPassword({ email: email.trim() });
           setSuccessMessage(res.message);
           setForgotStep(2);
+          setResendCooldown(60);
         } else if (forgotStep === 2) {
           if (otp.length !== 6) {
             setError("OTP must be exactly 6 digits.");
@@ -485,6 +530,22 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
                     <KeyRound className="w-4 h-4 text-slate-400 dark:text-slate-500 mr-2.5 shrink-0" />
                     <input type="text" required value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="123456" maxLength={6} className="auth-seamless-input w-full text-xs sm:text-sm tracking-widest font-mono font-bold text-slate-900 dark:text-white placeholder:text-slate-400 bg-transparent border-0 outline-none shadow-none focus:ring-0 text-center" />
                   </div>
+                  <div className="flex items-center justify-between text-xs mt-2 px-0.5">
+                    <span className="text-slate-500 dark:text-slate-400">Didn't receive the code?</span>
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={resendCooldown > 0 || loading}
+                      style={{ color: resendCooldown > 0 ? undefined : (theme.theme_primary_color || "#059669") }}
+                      className={`font-semibold cursor-pointer ${
+                        resendCooldown > 0
+                          ? "text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                          : "hover:underline"
+                      }`}
+                    >
+                      {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend Code"}
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -505,6 +566,22 @@ export function CustomerAuthView({ defaultTab = "login" }: CustomerAuthViewProps
                   <div style={{ borderRadius: `${getThemeInputRadiusPx(theme.theme_radius)}px` }} className="theme-auth-input-box relative flex items-center px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700/80 shadow-xs">
                     <KeyRound className="w-4 h-4 text-slate-400 dark:text-slate-500 mr-2.5 shrink-0" />
                     <input type="text" required value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="123456" maxLength={6} className="auth-seamless-input w-full text-xs sm:text-sm tracking-widest font-mono font-bold text-slate-900 dark:text-white placeholder:text-slate-400 bg-transparent border-0 outline-none shadow-none focus:ring-0 text-center" />
+                  </div>
+                  <div className="flex items-center justify-between text-xs mt-2 px-0.5">
+                    <span className="text-slate-500 dark:text-slate-400">Didn't receive the code?</span>
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={resendCooldown > 0 || loading}
+                      style={{ color: resendCooldown > 0 ? undefined : (theme.theme_primary_color || "#059669") }}
+                      className={`font-semibold cursor-pointer ${
+                        resendCooldown > 0
+                          ? "text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                          : "hover:underline"
+                      }`}
+                    >
+                      {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend Code"}
+                    </button>
                   </div>
                 </div>
               )}

@@ -1105,13 +1105,16 @@ export class SeniorApiAdapter implements IStorefrontApi {
       id: Number(p.id),
       title: String(p.title),
       slug: String(p.slug),
+      excerpt: p.excerpt || null,
       content: String(p.content || ""),
       featured_image: p.featured_image || p.image || null,
+      featured_image_alt: p.featured_image_alt || null,
       views_count: Number(p.views || p.views_count || 0),
       status: "published" as const,
-      published_at: p.created_at || new Date().toISOString(),
+      published_at: p.published_at || p.created_at || new Date().toISOString(),
       category: p.category ? { id: p.category.id, name: p.category.name, slug: p.category.slug } : undefined,
       tags: Array.isArray(p.tags) ? p.tags.map((t: any) => ({ id: t.id, name: t.name, slug: t.slug })) : [],
+      author: p.author ? { id: p.author.id, name: p.author.name } : undefined,
       comments_count: Array.isArray(p.comments) ? p.comments.length : 0,
     }));
 

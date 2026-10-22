@@ -1,9 +1,14 @@
 import { ContentPageLayout } from "@/components/shared/ContentPageLayout";
 import { RotateCcw, ShieldCheck, AlertCircle, CheckCircle2, MessageCircle } from "lucide-react";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
 export const metadata = {
   title: "Return & Refund Policy | Inheliq",
   description: "7-day replacement guarantee for defective hardware and clear guidelines on unopened e-liquid returns.",
+  alternates: {
+    canonical: `${siteUrl}/refund-policy`,
+  },
 };
 
 export default function RefundPolicyPage() {

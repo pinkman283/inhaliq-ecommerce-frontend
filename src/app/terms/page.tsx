@@ -1,9 +1,14 @@
 import { ContentPageLayout } from "@/components/shared/ContentPageLayout";
 import { BookOpen, ShieldAlert, CreditCard, BatteryCharging, Scale } from "lucide-react";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
 export const metadata = {
   title: "Terms of Service | Inheliq",
   description: "Terms and conditions governing the purchase of authentic vape hardware and e-liquids on Inheliq.",
+  alternates: {
+    canonical: `${siteUrl}/terms`,
+  },
 };
 
 export default function TermsOfServicePage() {

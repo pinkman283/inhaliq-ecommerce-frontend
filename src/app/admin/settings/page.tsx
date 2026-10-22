@@ -60,6 +60,7 @@ export default function AdminSettingsPage() {
   const [lowStockThreshold, setLowStockThreshold] = useState("5");
   const [reviewsAutoApprove, setReviewsAutoApprove] = useState(false);
   const [guestCheckoutEnabled, setGuestCheckoutEnabled] = useState(true);
+  const [otpShieldEnabled, setOtpShieldEnabled] = useState(true);
   const [orderInvoicePrefix, setOrderInvoicePrefix] = useState("INV-");
 
   const [initialSettings, setInitialSettings] = useState<any>(null);
@@ -81,44 +82,60 @@ export default function AdminSettingsPage() {
         const isGuestCheckoutOn = data.guest_checkout_enabled !== undefined 
           ? (data.guest_checkout_enabled?.value === "true" || data.guest_checkout_enabled?.value === "1" || data.guest_checkout_enabled?.value === true)
           : true;
+        const isOtpShieldOn = data.otp_shield_enabled !== undefined
+          ? (data.otp_shield_enabled?.value === "true" || data.otp_shield_enabled?.value === "1" || data.otp_shield_enabled?.value === true)
+          : true;
 
         const loadedCurrency = data.currency?.value || "BDT";
         const loadedSymbol = data.currency_symbol?.value || (loadedCurrency === "BDT" ? "৳" : (loadedCurrency === "USD" ? "$" : (loadedCurrency === "EUR" ? "€" : (loadedCurrency === "GBP" ? "£" : "$"))));
 
+        const loadedStoreName = data.store_name?.value || "INHALIQ";
+        const loadedSupportEmail = data.support_email?.value || "support@inhaliq.com";
+        const loadedSupportPhone = data.support_phone?.value || "+880 1711-521098";
+        const loadedStoreAddress = data.store_address?.value || "Dhaka, Bangladesh";
+        const loadedFreeShipping = data.free_shipping_threshold?.value || "150";
+        const loadedStandardShipping = data.standard_shipping_rate?.value || "60";
+        const loadedPriorityShipping = data.priority_shipping_rate?.value || "120";
+        const loadedLowStock = data.low_stock_threshold?.value || "5";
+        const loadedInvoicePrefix = data.order_invoice_prefix?.value || "INV-";
+
         const init = {
-          store_name: data.store_name?.value || "INHALIQ",
-          support_email: data.support_email?.value || "support@inhaliq.com",
-          support_phone: data.support_phone?.value || "+880 1711-521098",
-          store_address: data.store_address?.value || "Dhaka, Bangladesh",
+          store_name: loadedStoreName,
+          support_email: loadedSupportEmail,
+          support_phone: loadedSupportPhone,
+          store_address: loadedStoreAddress,
           currency: loadedCurrency,
           currency_symbol: loadedSymbol,
           vat_enabled: isVatOn,
           vat_rate: loadedVatRate,
-          free_shipping_threshold: data.free_shipping_threshold?.value || "150",
-          standard_shipping_rate: data.standard_shipping_rate?.value || "60",
-          priority_shipping_rate: data.priority_shipping_rate?.value || "120",
-          low_stock_threshold: data.low_stock_threshold?.value || "5",
+          free_shipping_threshold: loadedFreeShipping,
+          standard_shipping_rate: loadedStandardShipping,
+          priority_shipping_rate: loadedPriorityShipping,
+          low_stock_threshold: loadedLowStock,
           reviews_auto_approve: isReviewsAutoOn,
           guest_checkout_enabled: isGuestCheckoutOn,
-          order_invoice_prefix: data.order_invoice_prefix?.value || "INV-",
+          otp_shield_enabled: isOtpShieldOn,
+          order_invoice_prefix: loadedInvoicePrefix,
         };
-        setInitialSettings(init);
-        if (data.store_name?.value) setStoreName(data.store_name.value);
-        if (data.support_email?.value) setSupportEmail(data.support_email.value);
-        if (data.support_phone?.value) setSupportPhone(data.support_phone.value);
-        if (data.store_address?.value) setStoreAddress(data.store_address.value);
+
+        setStoreName(loadedStoreName);
+        setSupportEmail(loadedSupportEmail);
+        setSupportPhone(loadedSupportPhone);
+        setStoreAddress(loadedStoreAddress);
         setCurrency(loadedCurrency);
         setCurrencySymbol(loadedSymbol);
         setAppCurrencySymbol(loadedSymbol);
         setVatEnabled(isVatOn);
         setVatRate(loadedVatRate);
-        if (data.free_shipping_threshold?.value) setFreeShippingThreshold(data.free_shipping_threshold.value);
-        if (data.standard_shipping_rate?.value) setStandardShippingRate(data.standard_shipping_rate.value);
-        if (data.priority_shipping_rate?.value) setPriorityShippingRate(data.priority_shipping_rate.value);
-        if (data.low_stock_threshold?.value) setLowStockThreshold(data.low_stock_threshold.value);
+        setFreeShippingThreshold(loadedFreeShipping);
+        setStandardShippingRate(loadedStandardShipping);
+        setPriorityShippingRate(loadedPriorityShipping);
+        setLowStockThreshold(loadedLowStock);
         setReviewsAutoApprove(isReviewsAutoOn);
         setGuestCheckoutEnabled(isGuestCheckoutOn);
-        if (data.order_invoice_prefix?.value) setOrderInvoicePrefix(data.order_invoice_prefix.value);
+        setOtpShieldEnabled(isOtpShieldOn);
+        setOrderInvoicePrefix(loadedInvoicePrefix);
+        setInitialSettings(init);
       } catch (err: any) {
         if (err?.response?.status !== 401 && err?.response?.status !== 403) {
           console.error("Failed to load settings:", err);
@@ -146,6 +163,7 @@ export default function AdminSettingsPage() {
       lowStockThreshold !== initialSettings.low_stock_threshold ||
       reviewsAutoApprove !== initialSettings.reviews_auto_approve ||
       guestCheckoutEnabled !== initialSettings.guest_checkout_enabled ||
+      otpShieldEnabled !== initialSettings.otp_shield_enabled ||
       orderInvoicePrefix !== initialSettings.order_invoice_prefix
     )
   );
@@ -167,6 +185,7 @@ export default function AdminSettingsPage() {
     setLowStockThreshold(initialSettings.low_stock_threshold);
     setReviewsAutoApprove(initialSettings.reviews_auto_approve);
     setGuestCheckoutEnabled(initialSettings.guest_checkout_enabled);
+    setOtpShieldEnabled(initialSettings.otp_shield_enabled);
     setOrderInvoicePrefix(initialSettings.order_invoice_prefix);
     toast.info("Settings reverted.");
   };
@@ -196,6 +215,7 @@ export default function AdminSettingsPage() {
       low_stock_threshold: lowStockThreshold,
       reviews_auto_approve: reviewsAutoApprove ? "true" : "false",
       guest_checkout_enabled: guestCheckoutEnabled ? "true" : "false",
+      otp_shield_enabled: otpShieldEnabled ? "true" : "false",
       order_invoice_prefix: orderInvoicePrefix,
     };
 
@@ -207,6 +227,7 @@ export default function AdminSettingsPage() {
         vat_enabled: vatEnabled,
         reviews_auto_approve: reviewsAutoApprove,
         guest_checkout_enabled: guestCheckoutEnabled,
+        otp_shield_enabled: otpShieldEnabled,
       });
       toast.success("Store configurations updated successfully.");
     } catch (err: any) {
@@ -256,13 +277,79 @@ export default function AdminSettingsPage() {
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">General Store Settings</h1>
           <p className="text-xs text-slate-400 mt-0.5">Configure official store identity, currency, VAT policies, and default shipping rates</p>
         </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/settings/seo#sitemap"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 transition-all shadow-xs"
+            title="View & Re-sync Dynamic Sitemap"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Dynamic Sitemap (Live)</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Quick Jump Bar - Direct access to all settings sections */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-white/5 no-scrollbar">
+        <a
+          href="#store-identity"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/5 text-[11px] font-medium transition-colors shrink-0"
+        >
+          <Store className="w-3.5 h-3.5 text-[#A78BFA]" />
+          <span>Store Identity</span>
+        </a>
+        <a
+          href="#product-rules"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/5 text-[11px] font-medium transition-colors shrink-0"
+        >
+          <Boxes className="w-3.5 h-3.5 text-purple-400" />
+          <span>Products & Reviews</span>
+        </a>
+        <a
+          href="#order-rules"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 text-[#A78BFA] hover:text-[#C4B5FD] border border-[#A78BFA]/30 text-[11px] font-bold transition-colors shrink-0 shadow-sm"
+        >
+          <ShoppingBag className="w-3.5 h-3.5 text-[#A78BFA]" />
+          <span>Order Rules & OTP Shield</span>
+        </a>
+        <a
+          href="#currency-vat"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/5 text-[11px] font-medium transition-colors shrink-0"
+        >
+          <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Currency & VAT</span>
+        </a>
+        <a
+          href="#shipping-rates"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/5 text-[11px] font-medium transition-colors shrink-0"
+        >
+          <Truck className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Shipping Rates</span>
+        </a>
+        <Link
+          href="/admin/settings/seo#sitemap"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 border border-emerald-500/20 text-[11px] font-semibold transition-colors shrink-0"
+        >
+          <Search className="w-3.5 h-3.5 text-emerald-400" />
+          <span>SEO &amp; Sitemap</span>
+        </Link>
+        <a
+          href="#workspaces"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/5 text-[11px] font-medium transition-colors shrink-0"
+        >
+          <Puzzle className="w-3.5 h-3.5 text-amber-400" />
+          <span>Workspaces Directory</span>
+        </a>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSaveSettings} className="space-y-5 text-xs">
         
         {/* 1. Store Identity */}
-        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
+        <div id="store-identity" className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4 scroll-mt-6">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
             <Store className="w-4 h-4 text-[#A78BFA]" />
             <h3 className="text-sm font-bold text-white">General Store Identity</h3>
@@ -313,7 +400,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* 2. Product & Inventory Rules */}
-        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
+        <div id="product-rules" className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4 scroll-mt-6">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
             <Boxes className="w-4 h-4 text-[#A78BFA]" />
             <h3 className="text-sm font-bold text-white">Product & Review Settings</h3>
@@ -348,7 +435,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* 3. Order & Checkout Rules */}
-        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
+        <div id="order-rules" className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4 scroll-mt-6">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
             <ShoppingBag className="w-4 h-4 text-cyan-400" />
             <h3 className="text-sm font-bold text-white">Order & Checkout Rules</h3>
@@ -379,28 +466,37 @@ export default function AdminSettingsPage() {
                 />
               </div>
             </div>
+
+            <div className="space-y-1 flex flex-col justify-center sm:col-span-2">
+              <div className="flex items-center justify-between gap-3 p-3 rounded-md bg-white/[0.02] border border-white/5">
+                <div>
+                  <span className="text-[11px] font-bold text-slate-200 block">Require Email OTP for Customer Registration (OTP Shield)</span>
+                  <span className="text-[10px] text-slate-400">When enabled, customers must verify a 6-digit email OTP before account activation. Disable to allow instant 1-step signup without email verification.</span>
+                </div>
+                <Switch
+                  checked={otpShieldEnabled}
+                  onCheckedChange={(checked) => setOtpShieldEnabled(checked)}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* 2. Financial & Currency */}
-        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
-          <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/5">
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-400" />
-              <div>
-                <h3 className="text-sm font-bold text-white">Currency & VAT Policies</h3>
-                <p className="text-[11px] text-slate-400">Configure store operating currency and VAT calculations</p>
-              </div>
+        {/* 4. Financial & Currency */}
+        <div id="currency-vat" className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4 scroll-mt-6">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
+            <DollarSign className="w-4 h-4 text-emerald-400" />
+            <div>
+              <h3 className="text-sm font-bold text-white">Currency & VAT Policies</h3>
+              <p className="text-[11px] text-slate-400">Configure store operating currency and VAT calculations</p>
             </div>
-            <Switch
-              checked={vatEnabled}
-              onCheckedChange={(checked) => setVatEnabled(checked)}
-            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-300 block">Operational Currency</label>
+              <div className="flex items-center justify-between min-h-[22px]">
+                <label className="text-[11px] font-bold text-slate-300 block">Operational Currency</label>
+              </div>
               <select
                 value={currency}
                 onChange={(e) => {
@@ -423,7 +519,7 @@ export default function AdminSettingsPage() {
             </div>
 
             <div className="space-y-1">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between min-h-[22px]">
                 <label className="text-[11px] font-bold text-slate-300 block">Currency Sign / Symbol</label>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#A78BFA]/10 text-[#A78BFA] border border-[#A78BFA]/30">
                   Preview: {currencySymbol} 1,250
@@ -441,15 +537,21 @@ export default function AdminSettingsPage() {
             </div>
 
             <div className="space-y-1">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between min-h-[22px]">
                 <label className="text-[11px] font-bold text-slate-300 block">Default VAT Rate (%)</label>
-                <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${
-                  vatEnabled 
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
-                    : "bg-slate-500/10 text-slate-400 border-slate-500/20"
-                }`}>
-                  {vatEnabled ? `Charging ${vatRate || 0}%` : "Turned Off (0% applied)"}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded border transition-colors ${
+                    vatEnabled 
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
+                      : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                  }`}>
+                    {vatEnabled ? `Charging ${vatRate || 0}%` : "Turned Off"}
+                  </span>
+                  <Switch
+                    checked={vatEnabled}
+                    onCheckedChange={(checked) => setVatEnabled(checked)}
+                  />
+                </div>
               </div>
               <input
                 type="number"
@@ -467,15 +569,15 @@ export default function AdminSettingsPage() {
               />
               <p className="text-[11px] text-slate-400">
                 {vatEnabled
-                  ? "Automatically calculated and added to customer orders during checkout."
+                  ? `Automatically calculated (${vatRate || 0}%) and added to customer orders during checkout.`
                   : "VAT is turned off. Orders will NOT add any VAT to the order price."}
               </p>
             </div>
           </div>
         </div>
 
-        {/* 3. Logistics & Shipping */}
-        <div className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4">
+        {/* 5. Logistics & Shipping */}
+        <div id="shipping-rates" className="p-5 rounded-md bg-[#0b0e17] border border-white/10 space-y-4 scroll-mt-6">
           <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
             <Truck className="w-4 h-4 text-cyan-400" />
             <h3 className="text-sm font-bold text-white">Logistics & Default Shipping Rates</h3>
@@ -520,7 +622,7 @@ export default function AdminSettingsPage() {
       </form>
 
       {/* Settings Hub Directory Grid */}
-      <div className="pt-6 border-t border-white/[0.08] space-y-4">
+      <div id="workspaces" className="pt-6 border-t border-white/[0.08] space-y-4 scroll-mt-6">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight">Configuration Workspaces</h3>
           <p className="text-xs text-slate-400">Direct access to specialized store settings modules</p>

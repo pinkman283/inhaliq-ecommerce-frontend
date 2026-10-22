@@ -33,6 +33,8 @@ import { Banner } from "@/types";
 import { bannerService, BannerFilters } from "@/services/bannerService";
 import { BannerFormDrawer, BANNER_PLACEMENTS } from "@/components/admin/banners/BannerFormDrawer";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
+import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { toast } from "sonner";
 
 // Filter pill definitions as explicitly specified in Phase 2A UX requirements
@@ -110,6 +112,10 @@ export default function AdminContentBannersPage() {
   // Drag-and-drop & Action loading states
   const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
   const [draggedBannerId, setDraggedBannerId] = useState<number | null>(null);
+
+  // Bulk Selection State
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   // Fetch banners from real backend API
   const fetchBanners = async () => {
@@ -275,6 +281,39 @@ export default function AdminContentBannersPage() {
       toast.error(err?.response?.data?.message || "Failed to delete banner.");
     } finally {
       setActionLoadingId(null);
+    }
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(filteredBanners.map((b) => b.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!canManage) {
+      toast.error("You do not have permission to delete banners.");
+      return;
+    }
+    setIsBulkDeleting(true);
+    try {
+      await bannerService.bulkDeleteBanners(selectedIds);
+      toast.success(`Deleted ${selectedIds.length} banner(s).`);
+      setSelectedIds([]);
+      fetchBanners();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to delete selected banners.");
+    } finally {
+      setIsBulkDeleting(false);
     }
   };
 
@@ -586,6 +625,14 @@ export default function AdminContentBannersPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/[0.06] bg-white/[0.02] text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <th className="py-3 px-3 w-10 text-center">
+                    <AdminCheckbox
+                      checked={filteredBanners.length > 0 && selectedIds.length === filteredBanners.length}
+                      indeterminate={selectedIds.length > 0 && selectedIds.length < filteredBanners.length}
+                      onChange={handleSelectAll}
+                      title="Select all banners"
+                    />
+                  </th>
                   <th className="py-3.5 px-4 w-14 text-center">Order</th>
                   <th className="py-3.5 px-4">Banner Creative</th>
                   <th className="py-3.5 px-4">Placement / Zone</th>
@@ -616,8 +663,15 @@ export default function AdminContentBannersPage() {
                       onDrop={() => handleDrop(banner.id)}
                       className={`hover:bg-white/[0.02] transition-colors group ${
                         isDragging ? "opacity-30 bg-[#211B32]" : ""
-                      }`}
+                      } ${selectedIds.includes(banner.id) ? "bg-[#A78BFA]/[0.05]" : ""}`}
                     >
+                      <td className="py-3 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                        <AdminCheckbox
+                          checked={selectedIds.includes(banner.id)}
+                          onChange={() => handleToggleSelect(banner.id)}
+                          title={`Select ${banner.title}`}
+                        />
+                      </td>
                       {/* Order Controls */}
                       <td className="py-3 px-4 text-center">
                         <div className="flex flex-col items-center gap-0.5">
@@ -803,10 +857,21 @@ export default function AdminContentBannersPage() {
             return (
               <div
                 key={banner.id}
-                className="rounded-md border border-white/[0.08] bg-slate-950/60 overflow-hidden flex flex-col justify-between group hover:border-[#A78BFA]/30 transition-all shadow-lg"
+                className={`rounded-md border bg-slate-950/60 overflow-hidden flex flex-col justify-between group transition-all shadow-lg ${
+                  selectedIds.includes(banner.id)
+                    ? "border-[#A78BFA] ring-1 ring-[#A78BFA]/30 bg-[#A78BFA]/[0.03]"
+                    : "border-white/[0.08] hover:border-[#A78BFA]/30"
+                }`}
               >
                 {/* Visual Creative Thumbnail */}
                 <div className="relative aspect-[16/9] bg-slate-900 overflow-hidden">
+                  <div className="absolute top-2.5 right-2.5 z-10" onClick={(e) => e.stopPropagation()}>
+                    <AdminCheckbox
+                      checked={selectedIds.includes(banner.id)}
+                      onChange={() => handleToggleSelect(banner.id)}
+                      title={`Select ${banner.title}`}
+                    />
+                  </div>
                   {banner.image_url ? (
                     <img
                       src={banner.image_url}
@@ -915,6 +980,17 @@ export default function AdminContentBannersPage() {
         }}
         banner={editingBanner}
         initialPlacement={preselectedPlacement}
+      />
+
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={filteredBanners.length}
+        itemName="banner"
+        isDeleting={isBulkDeleting}
+        onClearSelection={() => setSelectedIds([])}
+        onSelectAll={() => setSelectedIds(filteredBanners.map((b) => b.id))}
+        onConfirmDelete={handleBulkDelete}
       />
     </div>
   );

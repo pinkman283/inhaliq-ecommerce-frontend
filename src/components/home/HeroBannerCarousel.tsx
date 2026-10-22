@@ -114,6 +114,8 @@ export function HeroBannerCarousel({ banners }: HeroBannerCarouselProps) {
                       src={banner.image_url}
                       alt={banner.alt_text || banner.title || "Promotional Banner"}
                       loading={isPriority ? "eager" : "lazy"}
+                      fetchPriority={isPriority ? "high" : "auto"}
+                      decoding="async"
                       className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover/card:scale-[1.01]"
                     />
                   </picture>

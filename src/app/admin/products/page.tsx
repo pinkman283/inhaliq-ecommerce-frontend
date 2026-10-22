@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, AlertTriangle, Download, Upload } from "lucide-react";
+import { Plus, AlertTriangle, Download, Upload, FileSpreadsheet } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { Brand, Category, Product, ProductCatalogStats } from "@/types";
 import { AdminPageHeader } from "@/components/admin/ui";
@@ -264,6 +264,15 @@ export default function AdminProductsPage() {
         ]}
         actions={
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => router.push("/admin/products/bulk-edit")}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-md bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-xs font-semibold text-purple-300 transition-colors cursor-pointer"
+              title="Spreadsheet-style Bulk Edit"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-purple-400" />
+              <span>Bulk Edit</span>
+            </button>
             <button
               type="button"
               onClick={handleExportCSV}

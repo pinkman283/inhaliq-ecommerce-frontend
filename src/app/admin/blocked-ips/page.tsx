@@ -25,6 +25,8 @@ import { BlockedIp, Order, User } from "@/types";
 import { formatDate, formatTime } from "@/lib/utils";
 import { ScrollableTableCard } from "@/components/admin/ScrollableTableCard";
 import { AdminDropdown } from "@/components/admin/AdminDropdown";
+import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { toast } from "sonner";
 
 export default function AdminBlockedIpsPage() {
@@ -35,6 +37,10 @@ export default function AdminBlockedIpsPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  // Bulk Selection State
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   // Modal State: Block New IP
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
@@ -139,6 +145,35 @@ export default function AdminBlockedIpsPage() {
     }
   };
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(blockedIps.map((b) => b.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkUnblock = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      const res = await adminApi.bulkUnblockIps(selectedIds);
+      toast.success(res.message || `Unblocked ${selectedIds.length} IP(s).`);
+      setSelectedIds([]);
+      fetchBlockedIps();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to unblock selected IPs.");
+    } finally {
+      setIsBulkDeleting(false);
+    }
+  };
+
   return (
     <div className="p-6 md:p-8 space-y-6 max-w-7xl mx-auto">
       {/* Header */}
@@ -213,9 +248,17 @@ export default function AdminBlockedIpsPage() {
           <h2 className="text-sm font-bold text-white">Blocked IP Addresses ({totalCount})</h2>
         </div>
         <ScrollableTableCard className="border-white/5">
-          <table className="w-full min-w-[950px] text-left text-xs border-collapse">
+          <table className="w-full min-w-[980px] text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-white/5 bg-white/[0.01] text-slate-400 font-semibold uppercase tracking-wider text-[11px]">
+                <th className="py-3 px-3 w-10 text-center">
+                  <AdminCheckbox
+                    checked={blockedIps.length > 0 && selectedIds.length === blockedIps.length}
+                    indeterminate={selectedIds.length > 0 && selectedIds.length < blockedIps.length}
+                    onChange={handleSelectAll}
+                    title="Select all blocked IPs"
+                  />
+                </th>
                 <th className="py-3 px-4">IP Address</th>
                 <th className="py-3 px-4">Status</th>
                 <th className="py-3 px-4">Reason & Notes</th>
@@ -229,7 +272,7 @@ export default function AdminBlockedIpsPage() {
             <tbody className="divide-y divide-white/5 text-slate-300">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-500">
+                  <td colSpan={9} className="py-12 text-center text-slate-500">
                     <div className="inline-flex items-center gap-2">
                       <RefreshCw className="w-4 h-4 animate-spin text-red-400" />
                       <span>Loading blocked IP security telemetry...</span>
@@ -238,7 +281,7 @@ export default function AdminBlockedIpsPage() {
                 </tr>
               ) : blockedIps.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-500">
+                  <td colSpan={9} className="py-12 text-center text-slate-500">
                     <ShieldCheck className="w-8 h-8 mx-auto mb-2 text-emerald-400/60" />
                     <p className="font-semibold text-slate-400">No Blocked IPs Found</p>
                     <p className="text-[11px]">No active network block rules match your search criteria.</p>
@@ -248,7 +291,19 @@ export default function AdminBlockedIpsPage() {
                 blockedIps.map((item) => {
                   const isActive = item.is_active ?? item.status === "active";
                   return (
-                    <tr key={item.id} className="hover:bg-white/[0.02] transition-colors group">
+                    <tr
+                      key={item.id}
+                      className={`hover:bg-white/[0.02] transition-colors group ${
+                        selectedIds.includes(item.id) ? "bg-[#A78BFA]/[0.05]" : ""
+                      }`}
+                    >
+                      <td className="py-3.5 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                        <AdminCheckbox
+                          checked={selectedIds.includes(item.id)}
+                          onChange={() => handleToggleSelect(item.id)}
+                          title={`Select ${item.ip_address}`}
+                        />
+                      </td>
                       <td className="py-3.5 px-4 font-mono font-bold text-white flex items-center gap-2">
                         <span className="p-1 rounded bg-red-500/10 text-red-400 border border-red-500/20 text-[10px]">
                           IP
@@ -624,6 +679,17 @@ export default function AdminBlockedIpsPage() {
           </div>
         </div>
       )}
+
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={blockedIps.length}
+        itemName="blocked IP"
+        isDeleting={isBulkDeleting}
+        onClearSelection={() => setSelectedIds([])}
+        onSelectAll={() => setSelectedIds(blockedIps.map((b) => b.id))}
+        onConfirmDelete={handleBulkUnblock}
+      />
     </div>
   );
 }

@@ -270,11 +270,14 @@ export const adminApi = {
   async getProducts(params?: {
     search?: string;
     category_id?: number | string;
+    subcategory_id?: number | string;
+    child_category_id?: number | string;
     brand_id?: number | string;
     stock_status?: string;
     media_filter?: "all" | "has_images" | "no_images";
     sort?: string;
     is_active?: boolean;
+    has_variants?: boolean;
     page?: number;
     per_page?: number;
   }): Promise<{
@@ -422,12 +425,14 @@ export const adminApi = {
 
   async bulkUpdateProducts(payload: {
     product_ids: number[];
-    operation: "activate" | "deactivate" | "category" | "brand" | "price";
+    operation: "activate" | "deactivate" | "category" | "brand" | "price" | "stock";
     category_id?: number;
     brand_id?: number;
     adjustment_type?: "percentage" | "fixed";
     value?: number;
     rounding?: "none" | "round" | "ceil" | "floor" | "round_99";
+    stock_mode?: "set" | "increase" | "decrease";
+    stock_quantity?: number;
   }): Promise<{
     message: string;
     operation: string;
@@ -435,6 +440,34 @@ export const adminApi = {
     product_ids: number[];
   }> {
     const res = await adminClient.post("/admin/products/bulk-update", payload);
+    return res.data;
+  },
+
+  async bulkQuickSaveProducts(payload: {
+    products?: Array<{
+      id: number;
+      cost_price?: number | null;
+      compare_at_price?: number | null;
+      price?: number;
+      stock_quantity?: number;
+      is_featured?: boolean;
+      is_best_seller?: boolean;
+      is_active?: boolean;
+    }>;
+    variants?: Array<{
+      id: number;
+      cost_price?: number | null;
+      price?: number;
+      stock_quantity?: number;
+      is_active?: boolean;
+    }>;
+  }): Promise<{
+    success: boolean;
+    message: string;
+    products_updated: number;
+    variants_updated: number;
+  }> {
+    const res = await adminClient.post("/admin/products/bulk-quick-save", payload);
     return res.data;
   },
 
@@ -480,6 +513,16 @@ export const adminApi = {
       }
       throw error;
     }
+  },
+
+  async downloadProductImportTemplate(): Promise<{ blob: Blob; filename: string }> {
+    const res = await adminClient.get("/admin/products/import/template", {
+      responseType: "blob",
+    });
+    return {
+      blob: res.data,
+      filename: "product_bulk_import_template.csv",
+    };
   },
 
   async validateProductImport(file: File): Promise<ImportValidationReport> {
@@ -799,16 +842,48 @@ export const adminApi = {
     return res.data;
   },
 
-  async bulkBookCourier(orderIds: number[], provider?: string): Promise<{
+  async bulkBookCourier(
+    target: number[] | {
+      order_ids?: number[];
+      provider?: string;
+      pickup_store_id?: string;
+      orders?: Array<{
+        id: number;
+        recipient_city_id?: number | null;
+        recipient_zone_id?: number | null;
+        recipient_area_id?: number | null;
+        recipient_address?: string;
+        recipient_phone?: string;
+        cod_amount?: number;
+        weight?: number;
+        notes?: string;
+      }>;
+    },
+    providerFallback = "steadfast"
+  ): Promise<{
+    success: boolean;
     message: string;
     success_count: number;
     failed_count: number;
     details: string[];
+    results: Array<{
+      order_id: number;
+      order_number: string;
+      success: boolean;
+      consignment_id?: string;
+      tracking_code?: string;
+      tracking_url?: string;
+      provider?: string;
+      status?: string;
+      cod_amount?: number;
+      message?: string;
+    }>;
   }> {
-    const res = await adminClient.post("/admin/orders/bulk-book-courier", {
-      order_ids: orderIds,
-      provider: provider || "steadfast",
-    });
+    const payload = Array.isArray(target)
+      ? { order_ids: target, provider: providerFallback }
+      : target;
+
+    const res = await adminClient.post("/admin/orders/bulk-book-courier", payload);
     return res.data;
   },
 
@@ -1007,6 +1082,12 @@ export const adminApi = {
     const res = await adminClient.delete(`/admin/vendors/${id}`);
     return res.data;
   },
+
+  async bulkDeleteVendors(ids: number[]): Promise<{ message: string; deleted_count: number }> {
+    const res = await adminClient.post("/admin/vendors/bulk-delete", { ids });
+    return res.data;
+  },
+
 
   async getVendorProducts(params?: { vendor_id?: number; product_id?: number; page?: number }): Promise<{ data: VendorProduct[]; total: number }> {
     const res = await adminClient.get("/admin/vendor-products", { params });
@@ -1259,6 +1340,12 @@ export const adminApi = {
     const res = await adminClient.delete(`/admin/expenses/${id}`);
     return res.data;
   },
+
+  async bulkDeleteExpenses(ids: number[]): Promise<{ message: string; deleted_count: number }> {
+    const res = await adminClient.post("/admin/expenses/bulk-delete", { ids });
+    return res.data;
+  },
+
 
   async getExpenseCategories(): Promise<ExpenseCategory[]> {
     const res = await adminClient.get("/admin/expense-categories");
@@ -1618,6 +1705,12 @@ export const adminApi = {
     const res = await adminClient.delete(`/admin/blocked-ips/${id}`, { data: { reason } });
     return res.data;
   },
+
+  async bulkUnblockIps(ids: number[], reason?: string): Promise<{ message: string; unblocked_count: number }> {
+    const res = await adminClient.post("/admin/blocked-ips/bulk-delete", { ids, reason });
+    return res.data;
+  },
+
 
   // ==========================================
   // SETTINGS

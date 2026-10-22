@@ -1,9 +1,14 @@
 import { ContentPageLayout } from "@/components/shared/ContentPageLayout";
 import { Shield, Lock, Eye, Server, UserCheck } from "lucide-react";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
 export const metadata = {
   title: "Privacy Policy | Inheliq",
   description: "How Inheliq protects your personal information, delivery data, and order history.",
+  alternates: {
+    canonical: `${siteUrl}/privacy`,
+  },
 };
 
 export default function PrivacyPolicyPage() {

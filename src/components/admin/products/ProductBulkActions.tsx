@@ -14,16 +14,19 @@ import {
   AlertTriangle,
   Loader2,
   Percent,
+  Package,
 } from "lucide-react";
 import { Category, Brand } from "@/types";
 
 export interface BulkUpdatePayload {
-  operation: "activate" | "deactivate" | "category" | "brand" | "price";
+  operation: "activate" | "deactivate" | "category" | "brand" | "price" | "stock";
   category_id?: number;
   brand_id?: number;
   adjustment_type?: "percentage" | "fixed";
   value?: number;
   rounding?: "none" | "round" | "ceil" | "floor" | "round_99";
+  stock_mode?: "set" | "increase" | "decrease";
+  stock_quantity?: number;
 }
 
 interface ProductBulkActionsProps {
@@ -39,7 +42,7 @@ interface ProductBulkActionsProps {
   isUpdating?: boolean;
 }
 
-type ActiveModal = "none" | "activate" | "deactivate" | "category" | "brand" | "price" | "delete";
+type ActiveModal = "none" | "activate" | "deactivate" | "category" | "brand" | "price" | "stock" | "delete";
 
 export function ProductBulkActions({
   selectedCount,
@@ -65,6 +68,10 @@ export function ProductBulkActions({
   const [priceAdjustmentType, setPriceAdjustmentType] = useState<"percentage" | "fixed">("percentage");
   const [priceValueInput, setPriceValueInput] = useState<string>("10");
   const [priceRounding, setPriceRounding] = useState<"none" | "round" | "ceil" | "floor" | "round_99">("none");
+
+  // Stock adjustment state
+  const [stockMode, setStockMode] = useState<"set" | "increase" | "decrease">("set");
+  const [stockQuantityInput, setStockQuantityInput] = useState<string>("10");
 
   const isBusy = isDeleting || isUpdating;
 
@@ -101,6 +108,17 @@ export function ProductBulkActions({
       adjustment_type: priceAdjustmentType,
       value: val,
       rounding: priceRounding,
+    });
+    setActiveModal("none");
+  };
+
+  const handleExecuteStock = async () => {
+    const qty = parseInt(stockQuantityInput, 10);
+    if (isNaN(qty)) return;
+    await onBulkUpdate({
+      operation: "stock",
+      stock_mode: stockMode,
+      stock_quantity: qty,
     });
     setActiveModal("none");
   };
@@ -214,7 +232,23 @@ export function ProductBulkActions({
                   title="Adjust Prices"
                 >
                   <DollarSign className="w-3.5 h-3.5" />
-                  <span>Adjust Price</span>
+                  <span>Price</span>
+                </button>
+
+                {/* Stock */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStockMode("set");
+                    setStockQuantityInput("20");
+                    setActiveModal("stock");
+                  }}
+                  disabled={isBusy}
+                  className="px-2.5 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  title="Adjust Stock & Inventory"
+                >
+                  <Package className="w-3.5 h-3.5" />
+                  <span>Stock</span>
                 </button>
 
                 {/* Delete */}
@@ -523,6 +557,113 @@ export function ProductBulkActions({
                 >
                   {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-950" />}
                   <span>Apply Price Adjustment</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL 5B: STOCK ADJUSTMENT */}
+      <AnimatePresence>
+        {activeModal === "stock" && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <div className="w-full max-w-md bg-[#0c101d] border border-emerald-500/20 rounded-lg p-5 space-y-4 shadow-2xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-emerald-400">
+                  <Package className="w-4 h-4" />
+                  <h3 className="text-sm font-semibold text-white">Adjust Inventory Stock ({selectedCount} items)</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal("none")}
+                  className="p-1 text-slate-400 hover:text-white rounded-md hover:bg-white/5 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="text-slate-300 font-medium block mb-1">Adjustment Mode</label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setStockMode("set")}
+                      className={`py-2 px-2.5 rounded-md border text-center font-bold text-xs transition cursor-pointer ${
+                        stockMode === "set"
+                          ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300"
+                          : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      Set Exact
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStockMode("increase")}
+                      className={`py-2 px-2.5 rounded-md border text-center font-bold text-xs transition cursor-pointer ${
+                        stockMode === "increase"
+                          ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300"
+                          : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      Increase (+)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStockMode("decrease")}
+                      className={`py-2 px-2.5 rounded-md border text-center font-bold text-xs transition cursor-pointer ${
+                        stockMode === "decrease"
+                          ? "bg-rose-500/20 border-rose-500/50 text-rose-300"
+                          : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      Decrease (-)
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-slate-300 font-medium block mb-1">
+                    {stockMode === "set" ? "New Stock Level (Units)" : "Adjustment Amount (Units)"}
+                  </label>
+                  <input
+                    type="number"
+                    min={stockMode === "set" ? "0" : "1"}
+                    step="1"
+                    value={stockQuantityInput}
+                    onChange={(e) => setStockQuantityInput(e.target.value)}
+                    className="w-full bg-[#121624] border border-white/10 rounded-md px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+                    placeholder="Enter quantity"
+                  />
+                </div>
+              </div>
+
+              <div className="p-3 bg-white/[0.02] border border-white/[0.08] rounded-md text-xs space-y-1">
+                <div className="text-slate-400 text-[11px] font-semibold uppercase tracking-wider">Effect Summary</div>
+                <div className="text-white font-medium">
+                  {stockMode === "set" && `Set stock to ${stockQuantityInput || 0} units across ${selectedCount} product(s)`}
+                  {stockMode === "increase" && `Add +${stockQuantityInput || 0} units to each of ${selectedCount} product(s)`}
+                  {stockMode === "decrease" && `Subtract -${stockQuantityInput || 0} units from each of ${selectedCount} product(s) (floor at 0)`}
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => setActiveModal("none")}
+                  className="px-3.5 py-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5 font-medium text-xs transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExecuteStock}
+                  disabled={isBusy || isNaN(parseInt(stockQuantityInput, 10))}
+                  className="px-4 py-1.5 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-lg shadow-emerald-500/20"
+                >
+                  {isBusy && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-950" />}
+                  <span>Apply Stock Adjustment</span>
                 </button>
               </div>
             </div>

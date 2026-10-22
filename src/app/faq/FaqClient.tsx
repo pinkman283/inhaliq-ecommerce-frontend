@@ -10,7 +10,7 @@ interface FAQItem {
   category: "Orders & Payments" | "Shipping & Delivery" | "Authenticity & Products" | "Safety & Age Policy";
 }
 
-const FAQS: FAQItem[] = [
+export const FAQS: FAQItem[] = [
   {
     category: "Shipping & Delivery",
     question: "What are your delivery charges and timelines in Bangladesh?",

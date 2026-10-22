@@ -48,6 +48,7 @@ import { AdminDropdown } from "@/components/admin/AdminDropdown";
 import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { AdminPageHeader, AdminStatusBadge, AdminEmptyState, FilterDrawer, AdminStatStrip } from "@/components/admin/ui";
 import { OrderInvoiceModal } from "@/components/admin/orders/OrderInvoiceModal";
+import { BulkCourierDispatchModal } from "@/components/admin/orders/BulkCourierDispatchModal";
 import { TableSkeletonRows } from "@/components/admin/ui/TableSkeletonRows";
 
 import { toast } from "sonner";
@@ -237,6 +238,9 @@ function OrdersContent() {
   // Thermal Shipping Label Modal
   const [shippingLabelData, setShippingLabelData] = useState<any | null>(null);
   const [isLabelModalOpen, setIsLabelModalOpen] = useState(false);
+
+  // Bulk Courier Direct Dispatch Modal
+  const [isBulkCourierModalOpen, setIsBulkCourierModalOpen] = useState(false);
 
   // Load Order Lifecycle Timeline on Inspect Modal Open
   useEffect(() => {
@@ -1260,24 +1264,16 @@ function OrdersContent() {
         itemName="order"
         extraActions={[
           {
+            label: "Bulk Courier Dispatch",
+            icon: Truck,
+            variant: "primary",
+            onClick: () => setIsBulkCourierModalOpen(true),
+          },
+          {
             label: "Print 4×6 Labels",
             icon: Printer,
-            variant: "primary",
-            onClick: handleBulkPrintLabels,
-          },
-          {
-            label: bulkBookingLoading ? "Booking Steadfast..." : "Book Steadfast",
-            icon: Truck,
-            variant: "emerald",
-            onClick: () => handleBulkBookCourier("steadfast"),
-            disabled: bulkBookingLoading,
-          },
-          {
-            label: bulkBookingLoading ? "Booking Pathao..." : "Book Pathao",
-            icon: Truck,
             variant: "secondary",
-            onClick: () => handleBulkBookCourier("pathao"),
-            disabled: bulkBookingLoading,
+            onClick: handleBulkPrintLabels,
           },
         ]}
       />
@@ -3176,6 +3172,28 @@ function OrdersContent() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Bulk Courier Direct Dispatch Modal */}
+      {isBulkCourierModalOpen && (
+        <BulkCourierDispatchModal
+          isOpen={isBulkCourierModalOpen}
+          orders={filteredOrders.filter((o) => selectedIds.includes(o.id))}
+          onClose={() => setIsBulkCourierModalOpen(false)}
+          onSuccess={() => {
+            loadOrders();
+            setSelectedIds([]);
+          }}
+          onPrintLabels={(successfulIds) => {
+            setIsBulkCourierModalOpen(false);
+            adminApi.getBulkShippingLabels(successfulIds).then((res) => {
+              setBulkLabelsData(res.labels || []);
+              setIsBulkLabelsModalOpen(true);
+            }).catch((err) => {
+              toast.error(err?.response?.data?.message || "Failed to load labels.");
+            });
+          }}
+        />
       )}
 
     </div>

@@ -49,6 +49,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       return {
         title,
         description,
+        alternates: {
+          canonical: productUrl,
+        },
         openGraph: {
           type: "website",
           url: productUrl,
@@ -84,5 +87,131 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const product = await fetchProductData(slug);
-  return <ProductDetailClient slug={slug} initialProduct={product} />;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
+  let productSchema: any = null;
+  let breadcrumbSchema: any = null;
+
+  if (product) {
+    const title = product.meta_title || product.name;
+    const rawDesc = product.meta_description || product.short_description || product.description || `Explore ${product.name} specifications, finish variants, and customer reviews.`;
+    const cleanDescription = rawDesc.replace(/<[^>]*>?/gm, "").trim();
+    const productUrl = `${siteUrl}/products/${slug}`;
+    const images: string[] = [];
+    if (product.primary_image?.image_url) images.push(product.primary_image.image_url);
+    if (Array.isArray(product.images)) {
+      product.images.forEach((img: any) => {
+        if (img?.image_url && !images.includes(img.image_url)) {
+          images.push(img.image_url);
+        }
+      });
+    }
+    if (images.length === 0) images.push(`${siteUrl}/favicon.ico`);
+
+    const isOutOfStock = product.stock_quantity === 0 || product.in_stock === false;
+    const currency = product.currency || "BDT";
+    const brandName = typeof product.brand === "string" ? product.brand : product.brand?.name || "INHALIQ";
+
+    productSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.name,
+      image: images,
+      description: cleanDescription,
+      sku: product.sku || `PRD-${product.id || slug}`,
+      mpn: product.sku || `MPN-${product.id || slug}`,
+      brand: {
+        "@type": "Brand",
+        name: brandName,
+      },
+      offers: {
+        "@type": "Offer",
+        url: productUrl,
+        priceCurrency: currency,
+        price: Number(product.price) || 0,
+        priceValidUntil: new Date(Date.now() + 90 * 86400000).toISOString().split("T")[0],
+        itemCondition: "https://schema.org/NewCondition",
+        availability: isOutOfStock
+          ? "https://schema.org/OutOfStock"
+          : "https://schema.org/InStock",
+        seller: {
+          "@type": "Organization",
+          name: brandName,
+        },
+      },
+      ...(product.rating_average && product.review_count
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: Number(product.rating_average),
+              reviewCount: Number(product.review_count),
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }
+        : {}),
+    };
+
+    const categoryItem = product.category || (Array.isArray(product.categories) ? product.categories[0] : null);
+    const breadcrumbItems = [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${siteUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Products",
+        item: `${siteUrl}/products`,
+      },
+    ];
+
+    if (categoryItem && categoryItem.slug) {
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        position: 3,
+        name: categoryItem.name || categoryItem.slug,
+        item: `${siteUrl}/category/${categoryItem.slug}`,
+      });
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        position: 4,
+        name: product.name,
+        item: productUrl,
+      });
+    } else {
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: productUrl,
+      });
+    }
+
+    breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: breadcrumbItems,
+    };
+  }
+
+  return (
+    <>
+      {productSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
+      <ProductDetailClient slug={slug} initialProduct={product} />
+    </>
+  );
 }

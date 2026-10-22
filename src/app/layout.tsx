@@ -18,19 +18,39 @@ export async function generateMetadata(): Promise<Metadata> {
   const serverTheme = await getServerTheme();
   const brand = serverTheme.store_brand_name || "INHALIQ";
   const tagline = serverTheme.store_brand_tagline || "ELEVATE EVERY INHALE";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+  const seo = serverTheme.seo_meta || {};
+  const siteUrl = seo.canonical_base_url || process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
   const hasCustomFavicon = Boolean(serverTheme.store_favicon && serverTheme.store_favicon.trim() !== "" && serverTheme.store_favicon !== "/favicon.png" && serverTheme.store_favicon !== "/favicon.ico");
   const faviconUrl = hasCustomFavicon ? serverTheme.store_favicon! : "/favicon.png";
   const logoUrl = serverTheme.store_brand_logo || `${siteUrl}/branding/logo.png`;
-  const defaultDesc = `Official ${brand} online store. Premium lifestyle, accessories, and essentials.`;
+  const metaTitle = seo.meta_title || `${brand} | ${tagline}`;
+  const defaultDesc = seo.meta_description || `Official ${brand} online store. Premium lifestyle, accessories, and essentials.`;
+  const keywords = seo.meta_keywords ? seo.meta_keywords.split(",").map((k) => k.trim()) : undefined;
+  const ogImage = seo.og_image || logoUrl;
+
+  const verification: Metadata["verification"] = {};
+  if (seo.google_site_verification) {
+    verification.google = seo.google_site_verification;
+  }
+  if (seo.bing_site_verification) {
+    verification.other = {
+      ...(verification.other || {}),
+      "msvalidate.01": seo.bing_site_verification,
+    };
+  }
 
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: `${brand} | ${tagline}`,
+      default: metaTitle,
       template: `%s | ${brand}`,
     },
     description: defaultDesc,
+    keywords,
+    verification: Object.keys(verification).length > 0 ? verification : undefined,
+    alternates: {
+      canonical: "/",
+    },
     icons: hasCustomFavicon
       ? {
           icon: [
@@ -59,11 +79,11 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "en_US",
       url: siteUrl,
       siteName: brand,
-      title: `${brand} | ${tagline}`,
+      title: metaTitle,
       description: defaultDesc,
       images: [
         {
-          url: logoUrl,
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: brand,
@@ -72,9 +92,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${brand} | ${tagline}`,
+      title: metaTitle,
       description: defaultDesc,
-      images: [logoUrl],
+      images: [ogImage],
     },
   };
 }
@@ -83,58 +103,72 @@ async function getServerTheme(): Promise<ThemeSettings> {
   return cachedFetch<ThemeSettings>(
     "aether:theme:settings:premium:v1",
     async () => {
+      let localSettings: Partial<ThemeSettings> = {};
+      const apiUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
+      try {
+        const localRes = await fetch(`${apiUrl}/theme-settings`, {
+          signal: AbortSignal.timeout(3000),
+          next: { revalidate: 60, tags: ["theme"] },
+        });
+        if (localRes.ok) {
+          localSettings = await localRes.json();
+        }
+      } catch (e) {
+        // Fallback to defaults
+      }
+
       try {
         const provider = process.env.NEXT_PUBLIC_BACKEND_PROVIDER || "senior";
         if (provider === "senior") {
-          const api = getStorefrontApi("senior");
-          const init = await api.getInitSettings();
-          const rawPrimary = init.main_settings?.primary_color;
-          const rawSecondary = init.main_settings?.secondary_color;
-          const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
-            ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
-            : (rawPrimary || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
-          const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
-            ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
-            : (rawSecondary || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
+          try {
+            const api = getStorefrontApi("senior");
+            const init = await api.getInitSettings();
+            const rawPrimary = init.main_settings?.primary_color;
+            const rawSecondary = init.main_settings?.secondary_color;
+            const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+              ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
+              : (rawPrimary || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
+            const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
+              ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
+              : (rawSecondary || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
 
-          return {
-            ...DEFAULT_THEME_SETTINGS,
-            store_brand_name: init.general_settings?.name || DEFAULT_THEME_SETTINGS.store_brand_name,
-            store_brand_logo: init.general_settings?.white_logo || init.general_settings?.logo || DEFAULT_THEME_SETTINGS.store_brand_logo,
-            store_favicon: init.general_settings?.favicon || DEFAULT_THEME_SETTINGS.store_favicon,
-            theme_primary_color: primaryColor,
-            theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
-            theme_secondary_color: secondaryColor,
-            theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
-            theme_btn_primary_bg: primaryColor,
-            theme_tab_active_bg: primaryColor,
-            theme_view_all_color: primaryColor,
-            theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
-            theme_footer_bg_color: init.main_settings?.footer_color || "#0F172A",
-            theme_bg_color: "#F8FAFC",
-            theme_card_bg_color: "#FFFFFF",
-            theme_card_border_color: "#E2E8F0",
-            theme_text_heading_color: "#0F172A",
-            theme_text_body_color: "#475569",
-          };
+            return {
+              ...DEFAULT_THEME_SETTINGS,
+              ...localSettings,
+              store_brand_name: localSettings.store_brand_name || init.general_settings?.name || DEFAULT_THEME_SETTINGS.store_brand_name,
+              store_brand_logo: localSettings.store_brand_logo || init.general_settings?.white_logo || init.general_settings?.logo || DEFAULT_THEME_SETTINGS.store_brand_logo,
+              store_favicon: localSettings.store_favicon || init.general_settings?.favicon || DEFAULT_THEME_SETTINGS.store_favicon,
+              theme_primary_color: primaryColor,
+              theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+              theme_secondary_color: secondaryColor,
+              theme_secondary_hover: STOREFRONT_CONFIG.THEME_COLORS.SECONDARY_HOVER,
+              theme_btn_primary_bg: primaryColor,
+              theme_tab_active_bg: primaryColor,
+              theme_view_all_color: primaryColor,
+              theme_hover_text: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
+              theme_footer_bg_color: init.main_settings?.footer_color || localSettings.theme_footer_bg_color || "#0F172A",
+              theme_bg_color: localSettings.theme_bg_color || "#F8FAFC",
+              theme_card_bg_color: localSettings.theme_card_bg_color || "#FFFFFF",
+              theme_card_border_color: localSettings.theme_card_border_color || "#E2E8F0",
+              theme_text_heading_color: localSettings.theme_text_heading_color || "#0F172A",
+              theme_text_body_color: localSettings.theme_text_body_color || "#475569",
+            };
+          } catch (seniorErr) {
+            console.warn("Senior API fallback to local settings:", seniorErr);
+          }
         }
 
-        const apiUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
-        const res = await fetch(`${apiUrl}/theme-settings`, {
-          signal: AbortSignal.timeout(3000),
-        });
-        if (res.ok) {
-          const data = await res.json();
+        if (Object.keys(localSettings).length > 0) {
           const primaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
             ? STOREFRONT_CONFIG.THEME_COLORS.PRIMARY
-            : (data.theme_primary_color || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
+            : (localSettings.theme_primary_color || STOREFRONT_CONFIG.THEME_COLORS.PRIMARY);
           const secondaryColor = STOREFRONT_CONFIG.OVERRIDE_BACKEND_THEME_COLORS
             ? STOREFRONT_CONFIG.THEME_COLORS.SECONDARY
-            : (data.theme_secondary_color || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
+            : (localSettings.theme_secondary_color || STOREFRONT_CONFIG.THEME_COLORS.SECONDARY);
 
           return {
             ...DEFAULT_THEME_SETTINGS,
-            ...data,
+            ...localSettings,
             theme_primary_color: primaryColor,
             theme_primary_hover: STOREFRONT_CONFIG.THEME_COLORS.PRIMARY_HOVER,
             theme_secondary_color: secondaryColor,
@@ -147,7 +181,7 @@ async function getServerTheme(): Promise<ThemeSettings> {
       } catch (err) {
         console.warn("SSR theme fetch fallback triggered:", err);
       }
-      return DEFAULT_THEME_SETTINGS;
+      return { ...DEFAULT_THEME_SETTINGS, ...localSettings };
     },
     {
       ttlSeconds: 21600, // 6 hours
@@ -186,6 +220,48 @@ export default async function RootLayout({
   const footerSocialBg = isFooterLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.08)";
   const footerSocialBorder = isFooterLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.1)";
   const footerLogoBg = isFooterLight ? "#FFFFFF" : "#1E293B";
+
+  const brand = serverTheme.store_brand_name || "INHALIQ";
+  const siteUrl = serverTheme.seo_meta?.canonical_base_url || process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+  const logoUrl = serverTheme.store_brand_logo || `${siteUrl}/branding/logo.png`;
+  const business = serverTheme.business_contact || {};
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: brand,
+    legalName: business.legal_name || brand,
+    url: siteUrl,
+    logo: logoUrl,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: business.hotline || "+880 1800-AETHER",
+        contactType: "customer service",
+        email: business.support_email || "support@inhaliq.com",
+        availableLanguage: ["English", "Bengali"],
+      },
+    ],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: business.warehouse_address || "Dhaka, Bangladesh",
+    },
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: brand,
+    url: siteUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteUrl}/products?search={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
 
   return (
     <html
@@ -251,6 +327,15 @@ export default async function RootLayout({
         style={{ backgroundColor: serverTheme.theme_bg_color }}
         suppressHydrationWarning
       >
+        {/* Global Organization & WebSite JSON-LD Schemas */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <DynamicFavicon />
         <TrackingScripts />
         <AppProviders initialTheme={initialTheme}>

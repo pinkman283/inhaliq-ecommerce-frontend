@@ -131,6 +131,12 @@ export const blogService = {
     return res.data;
   },
 
+  async bulkDeletePosts(ids: number[]): Promise<{ message: string }> {
+    const res = await adminClient.post("/admin/blog/posts/bulk-delete", { ids });
+    triggerStorefrontRevalidation();
+    return res.data;
+  },
+
   // ==========================================
   // CATEGORIES
   // ==========================================
@@ -153,6 +159,12 @@ export const blogService = {
 
   async deleteCategory(id: number): Promise<{ message: string }> {
     const res = await adminClient.delete(`/admin/blog/categories/${id}`);
+    triggerStorefrontRevalidation();
+    return res.data;
+  },
+
+  async bulkDeleteCategories(ids: number[]): Promise<{ message: string }> {
+    const res = await adminClient.post("/admin/blog/categories/bulk-delete", { ids });
     triggerStorefrontRevalidation();
     return res.data;
   },
@@ -183,6 +195,12 @@ export const blogService = {
     return res.data;
   },
 
+  async bulkDeleteTags(ids: number[]): Promise<{ message: string }> {
+    const res = await adminClient.post("/admin/blog/tags/bulk-delete", { ids });
+    triggerStorefrontRevalidation();
+    return res.data;
+  },
+
   // ==========================================
   // COMMENTS / MODERATION
   // ==========================================
@@ -209,6 +227,18 @@ export const blogService = {
 
   async deleteComment(id: number): Promise<{ message: string }> {
     const res = await adminClient.delete(`/admin/blog/comments/${id}`);
+    triggerStorefrontRevalidation();
+    return res.data;
+  },
+
+  async bulkDeleteComments(ids: number[]): Promise<{ message: string }> {
+    const res = await adminClient.post("/admin/blog/comments/bulk-delete", { ids });
+    triggerStorefrontRevalidation();
+    return res.data;
+  },
+
+  async bulkApproveComments(ids: number[]): Promise<{ message: string }> {
+    const res = await adminClient.post("/admin/blog/comments/bulk-approve", { ids });
     triggerStorefrontRevalidation();
     return res.data;
   },

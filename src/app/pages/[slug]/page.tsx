@@ -7,7 +7,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aether.studio";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
   const apiUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
 
   try {
@@ -21,13 +21,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       if (page) {
         const title = page.title;
         const description = (page.content ? page.content.replace(/<[^>]*>?/gm, "") : `Read ${page.title} information.`).trim().slice(0, 160);
+        const pageUrl = `${siteUrl}/pages/${slug}`;
 
         return {
           title,
           description,
+          alternates: {
+            canonical: pageUrl,
+          },
           openGraph: {
             type: "website",
-            url: `${siteUrl}/pages/${slug}`,
+            url: pageUrl,
             title,
             description,
           },

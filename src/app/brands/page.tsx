@@ -4,9 +4,14 @@ import { api } from "@/lib/api";
 import { Brand } from "@/types";
 import { Building2, ArrowRight, Sparkles } from "lucide-react";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
 export const metadata: Metadata = {
   title: "Featured Brands & Manufacturers | Authorized Directory",
   description: "Explore our verified partner brands and curated manufacturers with official warranties.",
+  alternates: {
+    canonical: `${siteUrl}/brands`,
+  },
 };
 
 export default async function BrandsDirectoryPage() {

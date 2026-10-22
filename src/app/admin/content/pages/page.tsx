@@ -45,6 +45,7 @@ import {
 } from "@/components/admin/ui";
 import { SettingsNavTabs } from "@/components/admin/settings/SettingsNavTabs";
 import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { toast } from "sonner";
 
@@ -91,6 +92,10 @@ function AdminContentPagesContent() {
   // Delete State
   const [deletingPage, setDeletingPage] = useState<CmsPage | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  // Bulk Selection State
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   const fetchPages = useCallback(async () => {
     setLoading(true);
@@ -248,6 +253,35 @@ function AdminContentPagesContent() {
     }
   };
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(pages.map((p) => p.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      await pagesService.bulkDeletePages(selectedIds);
+      toast.success(`Deleted ${selectedIds.length} page(s).`);
+      setSelectedIds([]);
+      fetchPages();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to delete selected pages.");
+    } finally {
+      setIsBulkDeleting(false);
+    }
+  };
+
   const activeCount = useMemo(() => pages.filter((p) => p.is_active).length, [pages]);
   const draftCount = pages.length - activeCount;
 
@@ -385,6 +419,14 @@ function AdminContentPagesContent() {
             <table className="w-full text-left text-xs text-slate-300">
               <thead className="bg-[#161a26] text-[11px] font-semibold text-slate-400 uppercase tracking-wider border-b border-white/[0.08]">
                 <tr>
+                  <th className="py-3 px-3 w-10 text-center">
+                    <AdminCheckbox
+                      checked={pages.length > 0 && selectedIds.length === pages.length}
+                      indeterminate={selectedIds.length > 0 && selectedIds.length < pages.length}
+                      onChange={handleSelectAll}
+                      title="Select all pages"
+                    />
+                  </th>
                   <th className="py-3 px-4">Page Title</th>
                   <th className="py-3 px-4">Topic</th>
                   <th className="py-3 px-4">Public URL</th>
@@ -400,7 +442,19 @@ function AdminContentPagesContent() {
                   const BadgeIcon = badge.icon;
 
                   return (
-                    <tr key={page.id} className="hover:bg-white/[0.02] transition-colors">
+                    <tr
+                      key={page.id}
+                      className={`hover:bg-white/[0.02] transition-colors ${
+                        selectedIds.includes(page.id) ? "bg-[#A78BFA]/[0.05]" : ""
+                      }`}
+                    >
+                      <td className="py-3.5 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                        <AdminCheckbox
+                          checked={selectedIds.includes(page.id)}
+                          onChange={() => handleToggleSelect(page.id)}
+                          title={`Select ${page.title}`}
+                        />
+                      </td>
                       {/* Title */}
                       <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
                         <div className="flex items-center gap-2.5">
@@ -842,6 +896,17 @@ function AdminContentPagesContent() {
           </div>
         </div>
       )}
+
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={pages.length}
+        itemName="page"
+        isDeleting={isBulkDeleting}
+        onClearSelection={() => setSelectedIds([])}
+        onSelectAll={() => setSelectedIds(pages.map((p) => p.id))}
+        onConfirmDelete={handleBulkDelete}
+      />
     </div>
   );
 }

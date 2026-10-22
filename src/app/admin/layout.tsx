@@ -290,6 +290,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           icon: Boxes,
           items: [
             { label: "Products", href: "/admin/products", icon: Boxes, permission: "products.view" },
+            { label: "Bulk Edit", href: "/admin/products/bulk-edit", icon: FileSpreadsheet, permission: "products.manage" },
             { label: "Categories", href: "/admin/categories", icon: FolderTree, permission: "categories.view" },
             { label: "Brands", href: "/admin/brands", icon: Building2, permission: "products.view" },
             { label: "Colors", href: "/admin/products/colors", icon: Palette, permission: "products.view" },
@@ -378,9 +379,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           icon: Settings,
           items: [
             { label: "General Settings", href: "/admin/settings", icon: Settings, permission: "settings.manage" },
+            { label: "Shipping & Delivery", href: "/admin/orders/shipping", icon: Truck, permission: "settings.manage" },
+            { label: "Order Status Pipeline", href: "/admin/orders/statuses", icon: SlidersHorizontal, permission: "settings.manage" },
+            { label: "Mail & SMTP", href: "/admin/settings/mail", icon: Mail, permission: "settings.manage" },
+            { label: "Notifications", href: "/admin/settings/notifications", icon: Bell, permission: "settings.manage" },
+            { label: "Integrations & API", href: "/admin/integrations", icon: Puzzle, permission: "settings.manage" },
             { label: "SEO Settings", href: "/admin/settings/seo", icon: Search, permission: "settings.manage" },
             { label: "PWA Settings", href: "/admin/settings/pwa", icon: Smartphone, permission: "settings.manage" },
-            { label: "Notifications", href: "/admin/settings/notifications", icon: Bell, permission: "settings.manage" },
             { label: "System & Cache", href: "/admin/settings/system", icon: Zap, permission: "settings.manage" },
             { label: "Audit Trail", href: "/admin/audit-logs", icon: ScrollText, permission: "audit_logs.view" },
           ],

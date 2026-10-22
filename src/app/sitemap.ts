@@ -1,8 +1,23 @@
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aether.studio";
   const apiUrl = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
+  let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
+  try {
+    const themeRes = await fetch(`${apiUrl}/theme-settings`, {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (themeRes.ok) {
+      const themeData = await themeRes.json();
+      if (themeData?.seo_meta?.canonical_base_url) {
+        baseUrl = themeData.seo_meta.canonical_base_url.replace(/\/+$/, "");
+      }
+    }
+  } catch (e) {
+    // Fallback to default baseUrl
+  }
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -18,13 +33,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/brands`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/promotions`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/track`,
+      url: `${baseUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
@@ -59,18 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.4,
     },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
   ];
 
   // Dynamically fetch products
@@ -89,7 +110,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           url: `${baseUrl}/products/${p.slug}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
           changeFrequency: "daily" as const,
-          priority: 0.8,
+          priority: 0.9,
         }));
     }
   } catch (err) {
@@ -122,14 +143,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       const allCats = flattenCategories(categories);
       categoryRoutes = allCats.map((c: any) => ({
-        url: `${baseUrl}/products?category=${c.slug}`,
+        url: `${baseUrl}/category/${c.slug}`,
         lastModified: c.updated_at ? new Date(c.updated_at) : new Date(),
         changeFrequency: "weekly" as const,
-        priority: 0.7,
+        priority: 0.8,
       }));
     }
   } catch (err) {
     console.warn("Sitemap categories fetch notice:", err);
+  }
+
+  // Dynamically fetch brands
+  let brandRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const res = await fetch(`${apiUrl}/brands`, {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const brands = Array.isArray(data) ? data : (data?.data || []);
+      brandRoutes = brands
+        .filter((b: any) => b && b.slug)
+        .map((b: any) => ({
+          url: `${baseUrl}/brand/${b.slug}`,
+          lastModified: b.updated_at ? new Date(b.updated_at) : new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        }));
+    }
+  } catch (err) {
+    console.warn("Sitemap brands fetch notice:", err);
   }
 
   // Dynamically fetch blog posts
@@ -155,5 +199,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.warn("Sitemap blog fetch notice:", err);
   }
 
-  return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...blogRoutes];
+  return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...brandRoutes, ...blogRoutes];
 }

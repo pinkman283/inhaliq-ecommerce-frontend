@@ -69,6 +69,15 @@ export const bannerService = {
   },
 
   /**
+   * Bulk delete banners.
+   */
+  async bulkDeleteBanners(ids: number[]): Promise<{ message: string; deleted_count: number }> {
+    const res = await adminClient.post("/admin/banners/bulk-delete", { ids });
+    return res.data;
+  },
+
+
+  /**
    * Upload desktop or mobile creative image file (JPEG, PNG, WebP, GIF up to 10MB).
    */
   async uploadImage(file: File): Promise<BannerImageUploadResponse> {

@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { Product, Vendor, VendorProduct } from "@/types";
+import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 
 export default function AdminVendorsPage() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
@@ -32,6 +34,10 @@ export default function AdminVendorsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  // Bulk Selection State
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   // Modals
   const [createModal, setCreateModal] = useState(false);
@@ -190,6 +196,35 @@ export default function AdminVendorsPage() {
     }
   };
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(vendors.map((v) => v.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      await adminApi.bulkDeleteVendors(selectedIds);
+      showToast("success", `Deleted ${selectedIds.length} vendor(s).`);
+      setSelectedIds([]);
+      fetchVendors();
+    } catch (err: any) {
+      showToast("error", err.response?.data?.message || "Failed to delete selected vendors.");
+    } finally {
+      setIsBulkDeleting(false);
+    }
+  };
+
   const openLinkProductModal = async (vendor: Vendor) => {
     setSelectedVendor(vendor);
     setLinkForm({
@@ -331,6 +366,14 @@ export default function AdminVendorsPage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
               <tr>
+                <th className="py-3 px-3 w-10 text-center">
+                  <AdminCheckbox
+                    checked={vendors.length > 0 && selectedIds.length === vendors.length}
+                    indeterminate={selectedIds.length > 0 && selectedIds.length < vendors.length}
+                    onChange={handleSelectAll}
+                    title="Select all suppliers"
+                  />
+                </th>
                 <th className="py-3.5 px-4">Supplier Code & Name</th>
                 <th className="py-3.5 px-4">Contact Info</th>
                 <th className="py-3.5 px-4">Location</th>
@@ -343,20 +386,32 @@ export default function AdminVendorsPage() {
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                  <td colSpan={8} className="py-12 text-center text-slate-400">
                     <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading supplier matrix...
                   </td>
                 </tr>
               ) : vendors.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-500">
+                  <td colSpan={8} className="py-12 text-center text-slate-500">
                     No vendor profiles found matching criteria.
                   </td>
                 </tr>
               ) : (
                 vendors.map(v => (
-                  <tr key={v.id} className="hover:bg-white/[0.02] transition">
+                  <tr
+                    key={v.id}
+                    className={`hover:bg-white/[0.02] transition ${
+                      selectedIds.includes(v.id) ? "bg-[#A78BFA]/[0.05]" : ""
+                    }`}
+                  >
+                    <td className="py-3.5 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                      <AdminCheckbox
+                        checked={selectedIds.includes(v.id)}
+                        onChange={() => handleToggleSelect(v.id)}
+                        title={`Select ${v.company_name}`}
+                      />
+                    </td>
                     <td className="py-3.5 px-4">
                       <div>
                         <span className="font-bold text-white block">{v.company_name}</span>
@@ -797,6 +852,17 @@ export default function AdminVendorsPage() {
           </div>
         </div>
       )}
+
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={vendors.length}
+        itemName="supplier"
+        isDeleting={isBulkDeleting}
+        onClearSelection={() => setSelectedIds([])}
+        onSelectAll={() => setSelectedIds(vendors.map((v) => v.id))}
+        onConfirmDelete={handleBulkDelete}
+      />
     </div>
   );
 }

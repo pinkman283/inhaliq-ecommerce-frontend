@@ -1,9 +1,14 @@
 import { ContentPageLayout } from "@/components/shared/ContentPageLayout";
 import { Truck, MapPin, Clock, Box, ShieldCheck } from "lucide-react";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inhaliq.com";
+
 export const metadata = {
   title: "Shipping & Delivery Policy | Inheliq",
   description: "Fast express courier delivery across Dhaka and all 64 districts of Bangladesh.",
+  alternates: {
+    canonical: `${siteUrl}/shipping-policy`,
+  },
 };
 
 export default function ShippingPolicyPage() {

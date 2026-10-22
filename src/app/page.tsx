@@ -38,14 +38,19 @@ export default async function HomePage() {
   }
 
   return (
-    <HomePageClient
-      initialFeaturedProducts={featuredProducts}
-      initialNewArrivals={newArrivals}
-      initialBestSellers={bestSellers}
-      initialCategories={categories}
-      initialBottomBanners={bottomBanners}
-      initialBannersData={bannerData}
-    />
+    <>
+      <h1 className="sr-only">
+        Inhaliq - Premium Electronics, Gadgets &amp; Smart Living Online Store
+      </h1>
+      <HomePageClient
+        initialFeaturedProducts={featuredProducts}
+        initialNewArrivals={newArrivals}
+        initialBestSellers={bestSellers}
+        initialCategories={categories}
+        initialBottomBanners={bottomBanners}
+        initialBannersData={bannerData}
+      />
+    </>
   );
 }
 

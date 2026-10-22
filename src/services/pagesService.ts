@@ -71,4 +71,11 @@ export const pagesService = {
     triggerStorefrontRevalidation();
     return res.data;
   },
+
+  async bulkDeletePages(ids: number[]): Promise<{ message: string; deleted_count: number }> {
+    const res = await adminClient.post("/admin/online-store/pages/bulk-delete", { ids });
+    triggerStorefrontRevalidation();
+    return res.data;
+  },
 };
+

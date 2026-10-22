@@ -11,7 +11,8 @@ import {
   RefreshCw, 
   ArrowRight, 
   FileCheck,
-  ShieldAlert
+  ShieldAlert,
+  Download
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { ImportValidationReport, ImportCommitResult, ImportRowPreview, ImportRowDiff } from "@/types";
@@ -32,6 +33,7 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
   const [commitResult, setCommitResult] = useState<ImportCommitResult | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | "creates" | "updates" | "unchanged" | "errors">("all");
   const [rowSearch, setRowSearch] = useState("");
+  const [downloadingTemplate, setDownloadingTemplate] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
@@ -48,6 +50,26 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
   const handleClose = () => {
     resetState();
     onClose();
+  };
+
+  const handleDownloadTemplate = async () => {
+    setDownloadingTemplate(true);
+    try {
+      const { blob, filename } = await adminApi.downloadProductImportTemplate();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("Product bulk import template downloaded.");
+    } catch (err: unknown) {
+      toast.error("Failed to download CSV template.");
+    } finally {
+      setDownloadingTemplate(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,6 +184,38 @@ export function ProductImportModal({ isOpen, onClose, onSuccess }: ProductImport
           {/* STAGE 1: SELECT FILE */}
           {stage === "select" && (
             <div className="space-y-6">
+              {/* Template Download Card */}
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[#A78BFA]" />
+                    <span className="text-xs font-bold text-white">Need a pre-formatted template?</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    Download our ready-to-fill CSV template with sample products, categories, prices, and valid column headers.
+                  </p>
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                    <span className="text-[10px] uppercase font-bold text-slate-500">Required headers:</span>
+                    {["sku", "name", "price", "category"].map((col) => (
+                      <span key={col} className="px-1.5 py-0.5 rounded bg-[#211B32] border border-[#A78BFA]/30 text-[10px] font-mono text-[#A78BFA] font-bold">
+                        {col}*
+                      </span>
+                    ))}
+                    <span className="text-[10px] text-slate-500 ml-1">Optional: description, brand, compare_at_price, images</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadTemplate}
+                  disabled={downloadingTemplate}
+                  className="shrink-0 flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border border-[#A78BFA]/30 text-[#A78BFA] text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <Download className={`w-3.5 h-3.5 ${downloadingTemplate ? "animate-pulse" : ""}`} />
+                  <span>{downloadingTemplate ? "Downloading..." : "Download Sample CSV"}</span>
+                </button>
+              </div>
+
               {/* Dropzone */}
               <div 
                 onClick={() => fileInputRef.current?.click()}

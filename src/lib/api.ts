@@ -939,6 +939,11 @@ export const api = {
     return res.post;
   },
 
+  async getBlogCategories(): Promise<import("@/types").BlogCategory[]> {
+    const res = await storefrontApi.getBlogCategories();
+    return (res as any)?.categories || (Array.isArray(res) ? res : []);
+  },
+
   async submitBlogComment(postId: number, data: { author_name: string; author_email: string; comment: string }): Promise<{ message: string }> {
     return storefrontApi.submitBlogComment(postId, {
       comment: data.comment,

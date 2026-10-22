@@ -104,6 +104,23 @@ export interface ThemeSettings {
   customer_auth_bg_image?: string;
   customer_auth_bg_color?: string;
   customer_auth_card_position?: "left" | "center" | "right";
+  // SEO & Knowledge Graph Settings
+  seo_meta?: {
+    meta_title?: string;
+    meta_description?: string;
+    meta_keywords?: string;
+    google_site_verification?: string;
+    bing_site_verification?: string;
+    canonical_base_url?: string;
+    og_image?: string;
+  };
+  business_contact?: {
+    legal_name?: string;
+    hotline?: string;
+    support_email?: string;
+    whatsapp_number?: string;
+    warehouse_address?: string;
+  };
 }
 
 export const DEFAULT_THEME_SETTINGS: ThemeSettings = {

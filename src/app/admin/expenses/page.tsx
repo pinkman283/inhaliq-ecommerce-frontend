@@ -23,6 +23,8 @@ import {
 import { adminApi } from "@/lib/adminApi";
 import { Expense, ExpenseCategory, Vendor } from "@/types";
 import { ExpenseBreakdownChart } from "@/components/admin/accounting";
+import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 
 export default function AdminExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -38,6 +40,10 @@ export default function AdminExpensesPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showSpendAnalytics, setShowSpendAnalytics] = useState(false);
+
+  // Bulk Selection State
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   // Modals
   const [createModal, setCreateModal] = useState(false);
@@ -204,6 +210,35 @@ export default function AdminExpensesPage() {
       fetchExpenses();
     } catch (err: any) {
       showToast("error", err.response?.data?.message || "Failed to delete expense.");
+    }
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(expenses.map((exp) => exp.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      await adminApi.bulkDeleteExpenses(selectedIds);
+      showToast("success", `Deleted ${selectedIds.length} expense record(s).`);
+      setSelectedIds([]);
+      fetchExpenses();
+    } catch (err: any) {
+      showToast("error", err.response?.data?.message || "Failed to delete selected expenses.");
+    } finally {
+      setIsBulkDeleting(false);
     }
   };
 
@@ -397,6 +432,14 @@ export default function AdminExpensesPage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#151824] text-slate-400 border-b border-white/10 uppercase tracking-wider font-bold">
               <tr>
+                <th className="py-3 px-3 w-10 text-center">
+                  <AdminCheckbox
+                    checked={expenses.length > 0 && selectedIds.length === expenses.length}
+                    indeterminate={selectedIds.length > 0 && selectedIds.length < expenses.length}
+                    onChange={handleSelectAll}
+                    title="Select all expenses"
+                  />
+                </th>
                 <th className="py-3.5 px-4">Voucher #</th>
                 <th className="py-3.5 px-4">Title & Description</th>
                 <th className="py-3.5 px-4">Category</th>
@@ -410,20 +453,32 @@ export default function AdminExpensesPage() {
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400">
+                  <td colSpan={9} className="py-12 text-center text-slate-400">
                     <div className="w-6 h-6 border-2 border-[#A78BFA] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Loading operating expense ledger...
                   </td>
                 </tr>
               ) : expenses.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-500">
+                  <td colSpan={9} className="py-12 text-center text-slate-500">
                     No operating expenses recorded matching filters.
                   </td>
                 </tr>
               ) : (
                 expenses.map(exp => (
-                  <tr key={exp.id} className="hover:bg-white/[0.02] transition">
+                  <tr
+                    key={exp.id}
+                    className={`hover:bg-white/[0.02] transition ${
+                      selectedIds.includes(exp.id) ? "bg-[#A78BFA]/[0.05]" : ""
+                    }`}
+                  >
+                    <td className="py-3.5 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                      <AdminCheckbox
+                        checked={selectedIds.includes(exp.id)}
+                        onChange={() => handleToggleSelect(exp.id)}
+                        title={`Select ${exp.expense_number}`}
+                      />
+                    </td>
                     <td className="py-3.5 px-4 font-mono font-bold text-white">
                       {exp.expense_number}
                     </td>
@@ -700,6 +755,17 @@ export default function AdminExpensesPage() {
           </div>
         </div>
       )}
+
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={expenses.length}
+        itemName="expense"
+        isDeleting={isBulkDeleting}
+        onClearSelection={() => setSelectedIds([])}
+        onSelectAll={() => setSelectedIds(expenses.map((e) => e.id))}
+        onConfirmDelete={handleBulkDelete}
+      />
     </div>
   );
 }
