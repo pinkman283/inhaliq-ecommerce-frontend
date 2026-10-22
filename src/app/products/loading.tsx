@@ -1,31 +1,37 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { SkeletonCard } from "@/components/ui/skeleton-card";
 
+/**
+ * Product Catalog Loading Skeleton.
+ * Matches exact grid columns (2 / 3 / 4 / 5 / 6), gap (3 / 4 / 4.5),
+ * and filter toolbar layout of ProductCatalogClient.tsx.
+ */
 export default function ProductsLoading() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
-      {/* Header & Title Skeleton */}
-      <div className="space-y-2">
-        <Skeleton className="h-7 w-48" />
-        <Skeleton className="h-4 w-72 max-w-full" />
+      {/* 1. Filter Toolbar Skeleton */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pb-2 border-b border-gray-100 dark:border-white/5">
+        {/* Left: Filter Trigger Button + Search Input */}
+        <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto flex-1 max-w-xl">
+          <Skeleton className="h-9 w-24 rounded-md shrink-0" />
+          <Skeleton className="h-9 flex-1 rounded-md" />
+        </div>
+
+        {/* Right: Sort Dropdown Skeleton */}
+        <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end shrink-0">
+          <Skeleton className="h-9 w-36 rounded-md" />
+        </div>
       </div>
 
-      {/* Filter / Category Pills Skeleton */}
-      <div className="flex items-center gap-2 overflow-hidden py-1">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-8 w-24 shrink-0 rounded-full" />
-        ))}
+      {/* 2. Results Count Summary Bar Skeleton */}
+      <div className="flex items-center justify-between py-1 text-xs">
+        <Skeleton className="h-4 w-44 rounded" />
+        <Skeleton className="h-4 w-24 rounded" />
       </div>
 
-      {/* Results & Sort Bar Skeleton */}
-      <div className="flex items-center justify-between py-2 border-b border-neutral-200/80 dark:border-white/10">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-8 w-36 rounded-lg" />
-      </div>
-
-      {/* Product Catalog Grid Skeleton using shadcn SkeletonCard */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {Array.from({ length: 12 }).map((_, i) => (
+      {/* 3. Product Catalog Grid Skeleton (Exact 2 / 3 / 4 / 5 / 6 columns) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-4.5">
+        {Array.from({ length: 15 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
       </div>

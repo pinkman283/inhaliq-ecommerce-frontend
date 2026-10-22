@@ -1191,4 +1191,35 @@ body.theme-light-mode:not(.admin-body) .safe-area-inset-bottom.bg-\[\#090b14\]\/
 
 .safe-area-margin-bottom {
   margin-bottom: max(0.5rem, env(safe-area-inset-bottom));
-}
+}
+
+/* Skeleton Shimmer Wave for Zero Layout-Shift Previews */
+@keyframes skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 2s infinite ease-in-out;
+  pointer-events: none;
+}
+

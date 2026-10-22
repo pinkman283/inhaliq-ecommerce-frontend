@@ -1,5 +1,4 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { SkeletonCard } from "@/components/ui/skeleton-card";
 
 export default function BrandsLoading() {
   return (
@@ -11,10 +10,25 @@ export default function BrandsLoading() {
         <Skeleton className="h-4 w-64 sm:w-80" />
       </div>
 
-      {/* Brands Grid Skeleton using shadcn SkeletonCard */}
+      {/* Brands Grid Skeleton (Matches actual brand cards layout) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.from({ length: 12 }).map((_, i) => (
-          <SkeletonCard key={i} />
+          <div 
+            key={i} 
+            className="p-5 rounded-2xl bg-[#0e121e]/80 border border-white/[0.06] flex flex-col justify-between min-h-[160px] space-y-4 animate-shimmer"
+          >
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10" />
+              <div className="space-y-1.5">
+                <Skeleton className="h-5 w-32 rounded" />
+                <Skeleton className="h-3 w-48 rounded" />
+              </div>
+            </div>
+            <div className="pt-2 flex items-center justify-between border-t border-white/[0.04]">
+              <Skeleton className="h-3.5 w-20 rounded" />
+              <Skeleton className="h-4 w-4 rounded-full" />
+            </div>
+          </div>
         ))}
       </div>
     </div>

@@ -6,6 +6,7 @@ import { Banner, HomepageBannersResponse } from "@/types";
 import { HeroBannerCarousel } from "./HeroBannerCarousel";
 import { SecondaryPromoBanner } from "./SecondaryPromoBanner";
 import { HeroPromotionStrip } from "./HeroPromotionStrip";
+import { HeroSectionSkeleton } from "@/components/ui/skeleton-card";
 
 export function HeroSection({ initialData }: { initialData?: HomepageBannersResponse | null }) {
   const [data, setData] = useState<HomepageBannersResponse | null>(initialData || null);
@@ -40,14 +41,7 @@ export function HeroSection({ initialData }: { initialData?: HomepageBannersResp
   const topStrip = data?.top_strip || null;
 
   if (loading) {
-    return (
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
-          <div className="lg:col-span-8 aspect-[16/9] min-h-[200px] rounded-lg sm:rounded-xl bg-white/[0.04] animate-pulse" />
-          <div className="hidden lg:block lg:col-span-4 rounded-lg sm:rounded-xl bg-white/[0.04] animate-pulse" />
-        </div>
-      </section>
-    );
+    return <HeroSectionSkeleton />;
   }
 
   if (primaryBanners.length === 0 && secondaryBanners.length === 0) {
