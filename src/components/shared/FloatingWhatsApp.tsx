@@ -23,7 +23,7 @@ export function FloatingWhatsApp() {
   };
 
   return (
-    <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-2">
+    <div className="pointer-events-auto flex items-center gap-2">
       {/* Tooltip speech bubble */}
       <AnimatePresence>
         {isHovered && (
@@ -31,7 +31,7 @@ export function FloatingWhatsApp() {
             initial={{ opacity: 0, x: 10, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10, scale: 0.9 }}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0c101d] border border-emerald-500/30 text-white text-xs font-bold shadow-xl backdrop-blur-md"
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0c101d] border border-emerald-500/30 text-white text-xs font-bold shadow-xl backdrop-blur-md whitespace-nowrap"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span>Need Help? Chat on WhatsApp</span>
@@ -46,8 +46,9 @@ export function FloatingWhatsApp() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleOpenWhatsApp}
-        className="relative p-3.5 rounded-full bg-gradient-to-tr from-emerald-600 to-green-500 text-white shadow-xl shadow-emerald-600/30 cursor-pointer flex items-center justify-center border border-white/20 group"
+        className="relative w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-green-500 text-white shadow-xl shadow-emerald-600/30 cursor-pointer flex items-center justify-center border border-white/20 group shrink-0"
         title="Chat on WhatsApp with Support"
+        aria-label="Chat on WhatsApp with Support"
       >
         {/* Radar Pulse Effect */}
         <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-25 pointer-events-none" />

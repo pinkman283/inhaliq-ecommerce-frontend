@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -15,8 +15,12 @@ import {
   RotateCcw,
   Tag,
   ChevronRight,
-  ChevronDown
+  ChevronDown,
+  Heart,
+  Bell,
+  PackageOpen
 } from "lucide-react";
+import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Brand, Category, Product } from "@/types";
 import { ProductCard } from "@/components/product/ProductCard";
@@ -212,7 +216,11 @@ function ProductCatalogContent({
   };
 
   const clearAllFilters = () => {
-    setSelectedCategories([]);
+    if (overrideCategory) {
+      setSelectedCategories([overrideCategory]);
+    } else {
+      setSelectedCategories([]);
+    }
     setSelectedBrands([]);
     setSearch("");
     setMinPrice("");
@@ -220,7 +228,21 @@ function ProductCatalogContent({
     setMinRating("");
     setDiscountedOnly(false);
     setInStockOnly(false);
-    router.push("/products");
+    if (overrideCategory) {
+      router.push(`/category/${overrideCategory}`);
+    } else {
+      router.push("/products");
+    }
+  };
+
+  const resetFiltersPreservingCategory = () => {
+    clearAllFilters();
+  };
+
+  const handleNotifyMe = (itemTitle: string) => {
+    toast.success(`You'll be notified when "${itemTitle}" arrives in stock!`, {
+      description: "We'll send an update as soon as fresh inventory is checked in.",
+    });
   };
 
   const activeFilterCount =
@@ -303,6 +325,241 @@ function ProductCatalogContent({
   };
 
   const selectedCategoryObj = selectedCategories.length === 1 ? findCategoryBySlug(categories, selectedCategories[0]) : null;
+
+  const currentCategorySlug = overrideCategory || selectedCategories[0] || "";
+  const displayCategoryName = selectedCategoryObj?.name || (
+    currentCategorySlug
+      ? currentCategorySlug
+          .split("-")
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(" ")
+      : "Catalog"
+  );
+
+  const hasNonCategoryFilters = Boolean(
+    search.trim() || 
+    minPrice !== "" || 
+    maxPrice !== "" || 
+    minRating !== "" || 
+    discountedOnly || 
+    inStockOnly || 
+    selectedBrands.length > 0 ||
+    (overrideCategory ? selectedCategories.some((c) => c !== overrideCategory) : selectedCategories.length > 1)
+  );
+
+  const emptyPlaceholders = useMemo(() => {
+    const isJuice = /juice|salt|liquid|flavor|e-liquid/i.test(displayCategoryName);
+    const isDevice = /device|pod|kit|mod|hardware|pen/i.test(displayCategoryName);
+    const isDisposable = /dispos/i.test(displayCategoryName);
+
+    if (hasNonCategoryFilters) {
+      return [
+        {
+          title: search ? `No results for "${search}"` : "No matching items found",
+          badge: "No Match",
+          subtext: "Filter Mismatch",
+          priceLabel: "0 Results",
+        },
+        {
+          title: "Devices & Pod Systems",
+          badge: "Popular",
+          subtext: "Explore Category",
+          priceLabel: "In Stock",
+          linkUrl: "/category/devices-1",
+        },
+        {
+          title: "Signature Disposables",
+          badge: "Trending",
+          subtext: "Explore Category",
+          priceLabel: "In Stock",
+          linkUrl: "/category/disposable-1",
+        },
+        {
+          title: "Premium E-Liquids",
+          badge: "Collection",
+          subtext: "Explore Category",
+          priceLabel: "In Stock",
+          linkUrl: "/products",
+        },
+        {
+          title: "Replacement Coils & Pods",
+          badge: "Hardware",
+          subtext: "Explore Category",
+          priceLabel: "In Stock",
+          linkUrl: "/products",
+        },
+        {
+          title: "All Brand Hardware",
+          badge: "Full Catalog",
+          subtext: "Explore Category",
+          priceLabel: "In Stock",
+          linkUrl: "/products",
+        },
+      ];
+    }
+
+    if (isJuice) {
+      return [
+        {
+          title: "Premium Salt Nicotine Reserve (30ml)",
+          badge: "Restocking",
+          subtext: "Incoming Batch",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Signature Artisan Flavor Blend",
+          badge: "Arriving Soon",
+          subtext: "Batch Inbound",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Smooth Virginia Tobacco Salt",
+          badge: "Restocking",
+          subtext: "In Replenishment",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Iced Arctic Mint Salt Series",
+          badge: "New Release",
+          subtext: "Incoming Stock",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Ultra Pod-Optimized Salt Formulation",
+          badge: "Restocking",
+          subtext: "Batch Inbound",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Authorized Brand Special Reserve",
+          badge: "Arriving Soon",
+          subtext: "Authorized Release",
+          priceLabel: "Coming Soon",
+        },
+      ];
+    }
+
+    if (isDevice) {
+      return [
+        {
+          title: `${displayCategoryName} - Next-Gen Pod Kit`,
+          badge: "Restocking",
+          subtext: "Incoming Batch",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: `${displayCategoryName} - Ultra Portable Device`,
+          badge: "Arriving Soon",
+          subtext: "Batch Inbound",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: `${displayCategoryName} - Pro Battery Edition`,
+          badge: "Restocking",
+          subtext: "In Replenishment",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: `${displayCategoryName} - Airflow Control Pod`,
+          badge: "New Release",
+          subtext: "Incoming Stock",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: `${displayCategoryName} - Smart Mesh Coil System`,
+          badge: "Restocking",
+          subtext: "Batch Inbound",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: `${displayCategoryName} - Authorized Flagship`,
+          badge: "Arriving Soon",
+          subtext: "Authorized Release",
+          priceLabel: "Coming Soon",
+        },
+      ];
+    }
+
+    if (isDisposable) {
+      return [
+        {
+          title: "Smart Display 15K Puffs Bar",
+          badge: "Restocking",
+          subtext: "Incoming Batch",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Dual Mesh Rechargeable Vape",
+          badge: "Arriving Soon",
+          subtext: "Batch Inbound",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Ultra Compact Disposable Edition",
+          badge: "Restocking",
+          subtext: "In Replenishment",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Turbo Boost Flavor Disposable",
+          badge: "New Release",
+          subtext: "Incoming Stock",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Pro Battery & Juice Gauge Bar",
+          badge: "Restocking",
+          subtext: "Batch Inbound",
+          priceLabel: "Coming Soon",
+        },
+        {
+          title: "Authorized Brand Special Series",
+          badge: "Arriving Soon",
+          subtext: "Authorized Release",
+          priceLabel: "Coming Soon",
+        },
+      ];
+    }
+
+    return [
+      {
+        title: `${displayCategoryName} - Series 01`,
+        badge: "Restocking",
+        subtext: "Incoming Batch",
+        priceLabel: "Coming Soon",
+      },
+      {
+        title: `${displayCategoryName} - Signature Blend`,
+        badge: "Arriving Soon",
+        subtext: "Batch Inbound",
+        priceLabel: "Coming Soon",
+      },
+      {
+        title: `${displayCategoryName} - Premium Selection`,
+        badge: "Restocking",
+        subtext: "In Replenishment",
+        priceLabel: "Coming Soon",
+      },
+      {
+        title: `${displayCategoryName} - Special Edition`,
+        badge: "New Release",
+        subtext: "Incoming Stock",
+        priceLabel: "Coming Soon",
+      },
+      {
+        title: `${displayCategoryName} - Verified Release`,
+        badge: "Restocking",
+        subtext: "Batch Inbound",
+        priceLabel: "Coming Soon",
+      },
+      {
+        title: `${displayCategoryName} - Authorized Batch`,
+        badge: "Arriving Soon",
+        subtext: "Authorized Release",
+        priceLabel: "Coming Soon",
+      },
+    ];
+  }, [displayCategoryName, hasNonCategoryFilters, search]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
@@ -610,8 +867,8 @@ function ProductCatalogContent({
         </div>
       )}
 
-      {/* Results Summary Bar */}
-      {!loading && products.length > 0 && (
+      {/* Results Summary Bar - ALWAYS ON FOR LAYOUT IDENTITY */}
+      {!loading && (
         <div 
           className="flex items-center justify-between pb-4 mb-2 text-xs"
           style={{ color: "var(--theme-text-body, #64748b)" }}
@@ -647,43 +904,21 @@ function ProductCatalogContent({
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div 
-          className="p-12 rounded-3xl border text-center space-y-4 shadow-2xs"
-          style={{
-            backgroundColor: "var(--theme-card-bg, #ffffff)",
-            borderColor: "var(--theme-card-border, #e5e7eb)"
-          }}
-        >
-          <div 
-            className="w-16 h-16 rounded-2xl border flex items-center justify-center mx-auto"
-            style={{
-              backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
-              borderColor: "var(--theme-card-border, #e5e7eb)"
-            }}
-          >
-            <Search 
-              className="w-8 h-8" 
-              style={{ color: "var(--theme-primary, #006B45)" }}
-            />
+        /* Empty State with PRESERVED exact grid and layout matching populated pages */
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-4.5">
+            {emptyPlaceholders.map((item, idx) => (
+              <EmptyProductPlaceholderCard
+                key={idx}
+                item={item}
+                index={idx}
+                categoryName={displayCategoryName}
+                onNotify={() => handleNotifyMe(item.title)}
+                isResetCard={hasNonCategoryFilters && idx === 0}
+                onReset={resetFiltersPreservingCategory}
+              />
+            ))}
           </div>
-          <h3 
-            className="text-lg font-bold"
-            style={{ color: "var(--theme-text-heading, #0f172a)" }}
-          >
-            No products match your filters
-          </h3>
-          <p 
-            className="text-xs max-w-sm mx-auto leading-relaxed"
-            style={{ color: "var(--theme-text-body, #64748b)" }}
-          >
-            Try widening your price range or clearing selected categories or brands to see all available hardware.
-          </p>
-          <button
-            onClick={clearAllFilters}
-            className="px-6 py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer shadow-xs theme-btn-primary hover:opacity-90"
-          >
-            Clear All Filters
-          </button>
         </div>
       ) : (
         <div className="space-y-8">
@@ -1365,6 +1600,202 @@ export default function ProductCatalogClient({
     <Suspense fallback={<ProductsLoading />}>
       <ProductCatalogContent overrideCategory={overrideCategory} overrideBrand={overrideBrand} />
     </Suspense>
+  );
+}
+
+interface EmptyProductPlaceholderCardProps {
+  item: {
+    title: string;
+    badge: string;
+    subtext: string;
+    priceLabel: string;
+    linkUrl?: string;
+  };
+  index: number;
+  categoryName: string;
+  onNotify: () => void;
+  isResetCard?: boolean;
+  onReset?: () => void;
+}
+
+function EmptyProductPlaceholderCard({
+  item,
+  index,
+  categoryName,
+  onNotify,
+  isResetCard,
+  onReset,
+}: EmptyProductPlaceholderCardProps) {
+  const [wishlistActive, setWishlistActive] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.04, 0.3) }}
+      className="group relative w-full rounded-[var(--theme-card-radius,10px)] theme-card p-2 sm:p-2.5 lg:p-3 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-white/20"
+      style={{
+        backgroundColor: "var(--theme-card-bg, #ffffff)",
+        borderColor: "var(--theme-card-border, #e5e7eb)",
+      }}
+    >
+      <div>
+        {/* Image Container with Badges */}
+        <div 
+          className="relative aspect-square w-full rounded-[calc(var(--theme-card-radius,10px)-2px)] overflow-hidden theme-img-bg bg-gray-50 dark:bg-slate-950 mb-2 sm:mb-2.5 border border-gray-100 dark:border-white/5 flex flex-col items-center justify-center p-3 text-center"
+        >
+          {/* Top Left Badge */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1 z-10 pointer-events-none">
+            <span
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-xs"
+              style={{
+                backgroundColor: isResetCard
+                  ? "#e11d48"
+                  : "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
+              }}
+            >
+              {isResetCard ? <RotateCcw className="w-2 h-2" /> : <Sparkles className="w-2 h-2" />}
+              {item.badge}
+            </span>
+          </div>
+
+          {/* Wishlist Heart Top Right */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setWishlistActive(!wishlistActive);
+              if (!wishlistActive) {
+                toast.success("Saved to restocking notifications!");
+              } else {
+                toast.info("Removed from restocking wishlist");
+              }
+            }}
+            className={`absolute top-2 right-2 p-1.5 rounded-lg backdrop-blur-md border transition-all z-10 cursor-pointer ${
+              wishlistActive
+                ? "text-white bg-[#fb2c5c] border-[#fb2c5c] shadow-xs"
+                : "bg-white/85 dark:bg-black/50 border-gray-200 dark:border-white/10 text-slate-400 hover:text-[#fb2c5c] hover:border-[#fb2c5c] shadow-xs"
+            }`}
+            title="Wishlist"
+          >
+            <Heart className={`w-3 h-3 ${wishlistActive ? "fill-white text-white" : ""}`} />
+          </button>
+
+          {/* Center Graphic */}
+          <div className="flex flex-col items-center justify-center space-y-2 opacity-85 group-hover:scale-105 transition-transform duration-300">
+            <div
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center border shadow-2xs"
+              style={{
+                backgroundColor: isResetCard
+                  ? "rgba(225, 29, 72, 0.08)"
+                  : "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
+                borderColor: isResetCard
+                  ? "rgba(225, 29, 72, 0.2)"
+                  : "var(--theme-card-border, #e5e7eb)",
+                color: isResetCard
+                  ? "#e11d48"
+                  : "var(--theme-primary, #006B45)",
+              }}
+            >
+              {isResetCard ? (
+                <Search className="w-5 h-5 sm:w-6 sm:h-6" />
+              ) : (
+                <PackageOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+              )}
+            </div>
+            <span
+              className="text-[9.5px] sm:text-[10px] font-bold tracking-tight px-2 py-0.5 rounded-full"
+              style={{
+                backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.06))",
+                color: "var(--theme-text-heading, #0f172a)",
+              }}
+            >
+              {item.subtext}
+            </span>
+          </div>
+        </div>
+
+        {/* Product Details */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between gap-1">
+            <span
+              className="text-[9.5px] font-bold uppercase tracking-wider block truncate max-w-[120px]"
+              style={{ color: "var(--theme-text-body, #64748b)" }}
+            >
+              {categoryName}
+            </span>
+            <span className="text-[8.5px] font-semibold text-emerald-600 dark:text-emerald-400">
+              {isResetCard ? "Active Filter" : "Restocking"}
+            </span>
+          </div>
+
+          <h3
+            className="font-bold text-xs line-clamp-1 leading-snug"
+            style={{ color: "var(--theme-text-heading, #0f172a)" }}
+            title={item.title}
+          >
+            {item.title}
+          </h3>
+        </div>
+      </div>
+
+      {/* Pricing and Action */}
+      <div className="pt-2 mt-2 border-t border-white/5 space-y-2">
+        <div className="flex items-baseline justify-between gap-1">
+          <span
+            className="font-black text-sm"
+            style={{ color: "var(--theme-text-heading, #0f172a)" }}
+          >
+            {item.priceLabel}
+          </span>
+          <span className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400">
+            {isResetCard ? "Filter" : "Inbound"}
+          </span>
+        </div>
+
+        {isResetCard ? (
+          <button
+            type="button"
+            onClick={onReset}
+            className="w-full py-1.5 px-2 rounded-md text-[11px] font-bold text-center border transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs hover:opacity-90 text-white"
+            style={{
+              backgroundColor: "#e11d48",
+              borderColor: "#e11d48",
+            }}
+          >
+            <RotateCcw className="w-3 h-3" />
+            Reset Filters
+          </button>
+        ) : item.linkUrl ? (
+          <a
+            href={item.linkUrl}
+            className="w-full py-1.5 px-2 rounded-md text-[11px] font-bold text-center border transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs hover:opacity-90"
+            style={{
+              backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
+              borderColor: "var(--theme-card-border, #e5e7eb)",
+              color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
+            }}
+          >
+            Explore Category
+          </a>
+        ) : (
+          <button
+            type="button"
+            onClick={onNotify}
+            className="w-full py-1.5 px-2 rounded-md text-[11px] font-bold text-center border transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs hover:opacity-90"
+            style={{
+              backgroundColor: "var(--theme-hover-bg, rgba(0, 88, 38, 0.08))",
+              borderColor: "var(--theme-card-border, #e5e7eb)",
+              color: "var(--theme-view-all-color, var(--theme-tab-active-bg, var(--theme-primary, #006B45)))",
+            }}
+          >
+            <Bell className="w-3 h-3" />
+            Notify Me
+          </button>
+        )}
+      </div>
+    </motion.div>
   );
 }
 
