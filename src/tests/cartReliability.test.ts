@@ -34,7 +34,9 @@ const mockStorageObj: Storage = {
     mockStore.clear();
   },
 };
-(globalThis as unknown as { localStorage: Storage }).localStorage = mockStorageObj;
+if (typeof window === "undefined" || !window.localStorage) {
+  (globalThis as unknown as { localStorage: Storage }).localStorage = mockStorageObj;
+}
 
 import { useCartStore, getAvailableStock } from "../store/useCartStore";
 import { CartItem, Product, ProductVariant } from "../types";
