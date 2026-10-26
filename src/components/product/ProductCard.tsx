@@ -4,14 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Star, ShoppingBag, Heart, Check, Sparkles, Zap, AlertCircle } from "lucide-react";
+import { Star, ShoppingBag, Heart, Check, Sparkles, Zap, AlertCircle, Layers, ArrowRight } from "lucide-react";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
+import { ProductVariantDrawer } from "./ProductVariantDrawer";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useThemeStore } from "@/store/useThemeStore";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -24,6 +25,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { theme } = useThemeStore();
   const [addedAnim, setAddedAnim] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const img =
     product.primary_image?.image_url ||
@@ -53,6 +56,16 @@ export function ProductCard({ product }: ProductCardProps) {
   const maxPrice = variantPrices.length > 0 ? Math.max(...variantPrices) : product.price;
   const hasPriceRange = variantPrices.length > 0 && minPrice !== maxPrice;
 
+  const handleOpenDrawer = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isOutOfStock) {
+      toast.error("This product is currently out of stock.");
+      return;
+    }
+    setIsDrawerOpen(true);
+  };
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -61,7 +74,7 @@ export function ProductCard({ product }: ProductCardProps) {
       return;
     }
     if (hasOptionsOrVariants) {
-      router.push(`/products/${product.slug}`);
+      setIsDrawerOpen(true);
       return;
     }
     const result = addItem(product, product.variants?.[0] || null, 1);
@@ -84,7 +97,7 @@ export function ProductCard({ product }: ProductCardProps) {
       return;
     }
     if (hasOptionsOrVariants) {
-      router.push(`/products/${product.slug}`);
+      setIsDrawerOpen(true);
       return;
     }
     const result = addItem(product, product.variants?.[0] || null, 1);
@@ -177,6 +190,18 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
+          {/* Options Badge Bottom Left */}
+          {hasOptionsOrVariants && !isOutOfStock && (
+            <div className="absolute bottom-2 left-2 z-10 pointer-events-none">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold bg-black/70 backdrop-blur-md text-white border border-white/10 shadow-xs">
+                <Layers className="w-2.5 h-2.5 text-cyan-400" />
+                {product.variants && product.variants.length > 1
+                  ? `${product.variants.length} Options`
+                  : "Options"}
+              </span>
+            </div>
+          )}
+
           {/* Wishlist Heart Top Right */}
           <button
             onClick={handleToggleWishlist}
@@ -235,71 +260,101 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="pt-2 mt-2 border-t border-white/5 space-y-2">
-        {/* Pricing and Savings */}
-        <div className="flex items-baseline justify-between gap-1">
-          <div className="flex items-baseline gap-1.5 flex-wrap">
+        {/* Pricing and Savings - Consistent 2-row layout ensuring flawless card height and button alignment */}
+        <div className="flex flex-col justify-center min-h-[38px]">
+          <div className="flex items-baseline justify-between gap-1">
             <span
-              className="font-black text-sm"
+              className="font-black text-sm tracking-tight"
               style={{ color: "var(--theme-text-heading, #0f172a)" }}
             >
               {hasPriceRange ? `From ${formatPrice(minPrice)}` : formatPrice(product.price)}
             </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 min-h-[16px] mt-0.5">
             {hasDiscount && (
-              <span className="text-[10px] text-slate-400 line-through">
+              <span className="text-[10px] text-slate-400 line-through shrink-0">
                 {formatPrice(product.compare_at_price as number)}
               </span>
             )}
+            {discountAmount > 0 && (
+              <span className="text-[8.5px] font-bold text-rose-500 dark:text-rose-400 shrink-0">
+                Save {formatPrice(discountAmount)}
+              </span>
+            )}
           </div>
-
-          {discountAmount > 0 && (
-            <span className="text-[8px] font-bold text-rose-400 shrink-0">
-              Save {formatPrice(discountAmount)}
-            </span>
-          )}
         </div>
 
-        {/* Action Buttons: Add to Cart & Buy Now */}
-        <div className="grid grid-cols-2 gap-1.5">
+        {/* Action Buttons: Choose Options (for products with variants) OR Add to Cart & Buy Now (for simple products) */}
+        {hasOptionsOrVariants ? (
           <button
-            onClick={handleAddToCart}
+            ref={triggerRef}
+            onClick={handleOpenDrawer}
             disabled={isOutOfStock}
-            className={`py-1.5 px-1.5 rounded-md text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+            className={`w-full py-2 px-2.5 rounded-md text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
               isOutOfStock
                 ? "opacity-50 cursor-not-allowed bg-slate-800 text-slate-500 border border-white/5"
-                : addedAnim
-                ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-300"
-                : "theme-btn-secondary hover:scale-[1.02]"
+                : "theme-btn-primary hover:scale-[1.01]"
             }`}
+            aria-haspopup="dialog"
+            aria-expanded={isDrawerOpen}
           >
-            {addedAnim ? (
-              <>
-                <Check className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
-                <span className="truncate">Added!</span>
-              </>
-            ) : (
-              <>
-                <ShoppingBag
-                  className="w-2.5 h-2.5 shrink-0 text-slate-800 dark:text-slate-200"
-                />
-                <span className="truncate">{hasOptionsOrVariants ? "Options" : "Add to Cart"}</span>
-              </>
-            )}
+            <span className="truncate">{isOutOfStock ? "Out of Stock" : "Choose options"}</span>
+            {!isOutOfStock && <ArrowRight className="w-3 h-3 shrink-0" />}
           </button>
+        ) : (
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className={`py-1.5 px-1.5 rounded-md text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                isOutOfStock
+                  ? "opacity-50 cursor-not-allowed bg-slate-800 text-slate-500 border border-white/5"
+                  : addedAnim
+                  ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-300"
+                  : "theme-btn-secondary hover:scale-[1.02]"
+              }`}
+            >
+              {addedAnim ? (
+                <>
+                  <Check className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                  <span className="truncate">Added!</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag
+                    className="w-2.5 h-2.5 shrink-0 text-slate-800 dark:text-slate-200"
+                  />
+                  <span className="truncate">Add to Cart</span>
+                </>
+              )}
+            </button>
 
-          <button
-            onClick={handleBuyNow}
-            disabled={isOutOfStock}
-            className={`py-1.5 px-1.5 rounded-md font-black text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer ${
-              isOutOfStock
-                ? "opacity-50 cursor-not-allowed bg-slate-800 text-slate-500"
-                : "theme-btn-primary hover:scale-[1.02]"
-            }`}
-          >
-            <Zap className="w-2.5 h-2.5 shrink-0" />
-            <span className="truncate">{hasOptionsOrVariants ? "View" : "Buy Now"}</span>
-          </button>
-        </div>
+            <button
+              onClick={handleBuyNow}
+              disabled={isOutOfStock}
+              className={`py-1.5 px-1.5 rounded-md font-black text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer ${
+                isOutOfStock
+                  ? "opacity-50 cursor-not-allowed bg-slate-800 text-slate-500"
+                  : "theme-btn-primary hover:scale-[1.02]"
+              }`}
+            >
+              <Zap className="w-2.5 h-2.5 shrink-0" />
+              <span className="truncate">Buy Now</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Product Variant Quick-View Drawer */}
+      {hasOptionsOrVariants && (
+        <ProductVariantDrawer
+          product={product}
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          triggerRef={triggerRef}
+        />
+      )}
     </motion.div>
   );
 }

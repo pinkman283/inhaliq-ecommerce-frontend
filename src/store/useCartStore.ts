@@ -37,6 +37,29 @@ export interface UpdateQuantityResult {
   quantity: number;
 }
 
+export interface AddMultipleItemsEntry {
+  product: Product;
+  variant?: ProductVariant | null;
+  quantity: number;
+}
+
+export interface AddMultipleItemsResult {
+  success: boolean;
+  totalAdded: number;
+  totalRequested: number;
+  partial: boolean;
+  results: Array<{
+    product: Product;
+    variant?: ProductVariant | null;
+    requestedQuantity: number;
+    addedQuantity: number;
+    success: boolean;
+    reason?: "out_of_stock" | "stock_exceeded" | "invalid_product";
+    message: string;
+  }>;
+  message: string;
+}
+
 interface CartState {
   items: CartItem[];
   isCartOpen: boolean;
@@ -51,6 +74,7 @@ interface CartState {
   closeCart: () => void;
   toggleCart: () => void;
   addItem: (product: Product, variant?: ProductVariant | null, quantity?: number) => AddItemResult;
+  addMultipleItems: (entries: AddMultipleItemsEntry[]) => AddMultipleItemsResult;
   removeItem: (productId: number, variantId?: number | null) => void;
   updateQuantity: (productId: number, variantId: number | null | undefined, quantity: number) => UpdateQuantityResult;
   clearCart: () => void;
@@ -209,6 +233,151 @@ export const useCartStore = create<CartState>()(
           availableStock,
           addedQuantity: actualToAdd,
           currentQuantity: newTotalQty,
+        };
+      },
+
+      addMultipleItems: (entries: AddMultipleItemsEntry[]): AddMultipleItemsResult => {
+        if (!entries || entries.length === 0) {
+          return {
+            success: false,
+            totalAdded: 0,
+            totalRequested: 0,
+            partial: false,
+            results: [],
+            message: "No items provided to add.",
+          };
+        }
+
+        let currentItems = [...get().items];
+        const results: AddMultipleItemsResult["results"] = [];
+        let totalAdded = 0;
+        let totalRequested = 0;
+
+        for (const entry of entries) {
+          const { product, variant, quantity } = entry;
+          const requestedQty = Math.max(1, Math.floor(quantity || 0));
+          totalRequested += requestedQty;
+
+          if (!product || typeof product.id !== "number") {
+            results.push({
+              product,
+              variant,
+              requestedQuantity: requestedQty,
+              addedQuantity: 0,
+              success: false,
+              reason: "invalid_product",
+              message: "Invalid product information.",
+            });
+            continue;
+          }
+
+          const availableStock = getAvailableStock(product, variant);
+          if (availableStock <= 0) {
+            results.push({
+              product,
+              variant,
+              requestedQuantity: requestedQty,
+              addedQuantity: 0,
+              success: false,
+              reason: "out_of_stock",
+              message: `${variant?.name || product.name} is out of stock.`,
+            });
+            continue;
+          }
+
+          const existingIndex = currentItems.findIndex(
+            (item) => item.product?.id === product.id && (item.variant?.id ?? null) === (variant?.id ?? null)
+          );
+          const currentQtyInCart = existingIndex > -1 ? currentItems[existingIndex].quantity : 0;
+
+          if (currentQtyInCart >= availableStock) {
+            results.push({
+              product,
+              variant,
+              requestedQuantity: requestedQty,
+              addedQuantity: 0,
+              success: false,
+              reason: "stock_exceeded",
+              message: `Maximum stock (${availableStock}) already in cart.`,
+            });
+            continue;
+          }
+
+          const maxCanAdd = availableStock - currentQtyInCart;
+          const actualToAdd = Math.min(requestedQty, maxCanAdd);
+          const newTotalQty = currentQtyInCart + actualToAdd;
+          totalAdded += actualToAdd;
+
+          if (existingIndex > -1) {
+            currentItems[existingIndex] = {
+              ...currentItems[existingIndex],
+              product,
+              variant: variant ?? null,
+              quantity: newTotalQty,
+              availableStock,
+              validationStatus: "valid",
+              validationMessage: null,
+            };
+          } else {
+            currentItems.push({
+              product,
+              variant: variant ?? null,
+              quantity: actualToAdd,
+              selectedColor: variant?.color_name,
+              selectedSize: variant?.size,
+              selectedAttributes: variant?.attributes || (variant?.color_name || variant?.size ? { ...(variant?.color_name ? { Color: variant.color_name } : {}), ...(variant?.size ? { Size: variant.size } : {}) } : null),
+              availableStock,
+              validationStatus: "valid",
+              validationMessage: null,
+            });
+          }
+
+          const itemPrice = getVariantEffectivePrice(product, variant);
+          trackAddToCart({
+            id: product.id,
+            name: product.name,
+            category: product.category?.name,
+            price: itemPrice,
+            quantity: actualToAdd,
+            currency: "USD",
+          });
+
+          results.push({
+            product,
+            variant,
+            requestedQuantity: requestedQty,
+            addedQuantity: actualToAdd,
+            success: true,
+            message: actualToAdd < requestedQty
+              ? `Added ${actualToAdd} of ${requestedQty} (${variant?.name || product.name}) due to stock limit (${availableStock}).`
+              : `Added ${actualToAdd}x ${variant?.name || product.name}.`,
+          });
+        }
+
+        if (totalAdded > 0) {
+          set({ items: currentItems, isCartOpen: true });
+          syncServerCart(currentItems);
+        }
+
+        const allSucceeded = results.every((r) => r.success);
+        const partial = !allSucceeded && totalAdded > 0;
+
+        let message = "";
+        if (allSucceeded) {
+          message = `Added ${totalAdded} item${totalAdded > 1 ? "s" : ""} across ${entries.length} variant${entries.length > 1 ? "s" : ""} to cart.`;
+        } else if (partial) {
+          message = `Added ${totalAdded} item${totalAdded > 1 ? "s" : ""}. Some selections were limited or unavailable.`;
+        } else {
+          message = "Could not add selected variants to cart.";
+        }
+
+        return {
+          success: totalAdded > 0,
+          totalAdded,
+          totalRequested,
+          partial,
+          results,
+          message,
         };
       },
 

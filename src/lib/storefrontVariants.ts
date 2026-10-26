@@ -37,6 +37,58 @@ export function getVariantEffectivePrice(
 }
 
 /**
+ * Helper to extract a normalized key-value attribute map from any variant structure:
+ * - Direct `attributes` Record<string, string>
+ * - Backend Eloquent `option_values` array ([{ option_name, value }])
+ * - Backend `options` array
+ * - Legacy `color_name` and `size` fields
+ */
+export function extractVariantAttributes(v: ProductVariant): Record<string, string> {
+  const vAttrs: Record<string, string> = {};
+
+  // 1. Direct attributes map
+  if (v.attributes && typeof v.attributes === "object") {
+    for (const [k, val] of Object.entries(v.attributes)) {
+      if (val !== undefined && val !== null) {
+        vAttrs[k.trim().toLowerCase()] = String(val).trim().toLowerCase();
+      }
+    }
+  }
+
+  // 2. option_values array (e.g. from backend relation)
+  if (Array.isArray((v as any).option_values)) {
+    for (const ov of (v as any).option_values) {
+      const optName = ov.option_name || ov.name || ov.option?.name;
+      const optVal = ov.value || ov.option_value?.value;
+      if (optName && optVal) {
+        vAttrs[String(optName).trim().toLowerCase()] = String(optVal).trim().toLowerCase();
+      }
+    }
+  }
+
+  // 3. options array
+  if (Array.isArray((v as any).options)) {
+    for (const opt of (v as any).options) {
+      const optName = opt.name || opt.option_name;
+      const optVal = opt.value;
+      if (optName && optVal) {
+        vAttrs[String(optName).trim().toLowerCase()] = String(optVal).trim().toLowerCase();
+      }
+    }
+  }
+
+  // 4. Legacy color_name & size
+  if (v.color_name && !vAttrs["color"] && !vAttrs["colour"]) {
+    vAttrs["color"] = v.color_name.trim().toLowerCase();
+  }
+  if (v.size && !vAttrs["size"]) {
+    vAttrs["size"] = v.size.trim().toLowerCase();
+  }
+
+  return vAttrs;
+}
+
+/**
  * Resolves an active variant strictly matching the user's selected attributes.
  *
  * Rules:
@@ -91,49 +143,21 @@ export function resolveMatchingVariant(
     // Exclude inactive variants
     if (v.is_active === false) continue;
 
-    // Check 1: Match dynamic attributes
-    if (v.attributes && typeof v.attributes === "object" && Object.keys(v.attributes).length > 0) {
-      const vAttrs: Record<string, string> = {};
-      for (const [attrKey, attrVal] of Object.entries(v.attributes)) {
-        if (attrVal) {
-          vAttrs[attrKey.trim().toLowerCase()] = String(attrVal).trim().toLowerCase();
-        }
-      }
+    const vAttrs = extractVariantAttributes(v);
 
-      let allMatch = true;
-      for (const opt of optionsToMatch) {
-        const lowerGroup = opt.name.trim().toLowerCase();
-        const userVal = normalizedSelections[lowerGroup];
-        const variantVal = vAttrs[lowerGroup];
-        if (!variantVal || variantVal !== userVal) {
-          allMatch = false;
-          break;
-        }
-      }
-
-      if (allMatch) {
-        return v;
+    let allMatch = true;
+    for (const opt of optionsToMatch) {
+      const lowerGroup = opt.name.trim().toLowerCase();
+      const userVal = normalizedSelections[lowerGroup];
+      const variantVal = vAttrs[lowerGroup];
+      if (!variantVal || variantVal !== userVal) {
+        allMatch = false;
+        break;
       }
     }
 
-    // Check 2: Match legacy color_name and size
-    const vColor = (v.color_name || "").trim().toLowerCase();
-    const vSize = (v.size || "").trim().toLowerCase();
-    const userColor = normalizedSelections["color"] || normalizedSelections["colour"] || null;
-    const userSize = normalizedSelections["size"] || null;
-
-    if (userColor !== null && userSize !== null) {
-      if (vColor === userColor && vSize === userSize) {
-        return v;
-      }
-    } else if (userColor !== null && !userSize) {
-      if (vColor === userColor) {
-        return v;
-      }
-    } else if (userSize !== null && !userColor) {
-      if (vSize === userSize) {
-        return v;
-      }
+    if (allMatch) {
+      return v;
     }
   }
 
@@ -170,45 +194,26 @@ export function isOptionValueAvailable(
   for (const v of variants) {
     if (v.is_active === false) continue;
 
-    // Check matching against dynamic attributes or legacy fields
-    let matchesTarget = false;
+    const vAttrs = extractVariantAttributes(v);
+
+    // Does this variant match the target option value?
+    const variantTargetVal = vAttrs[normalizedGroup];
+    if (variantTargetVal !== normalizedVal) {
+      continue;
+    }
+
+    // Does this variant also match user's selections in other groups?
     let matchesOtherSelections = true;
-
-    if (v.attributes && typeof v.attributes === "object" && Object.keys(v.attributes).length > 0) {
-      for (const [attrKey, attrVal] of Object.entries(v.attributes)) {
-        const lowerKey = attrKey.trim().toLowerCase();
-        const lowerVal = String(attrVal).trim().toLowerCase();
-
-        if (lowerKey === normalizedGroup) {
-          if (lowerVal === normalizedVal) {
-            matchesTarget = true;
-          }
-        } else if (testSelection[lowerKey]) {
-          if (lowerVal !== testSelection[lowerKey]) {
-            matchesOtherSelections = false;
-          }
-        }
-      }
-    } else {
-      // Legacy color/size fallback
-      const vColor = (v.color_name || "").trim().toLowerCase();
-      const vSize = (v.size || "").trim().toLowerCase();
-
-      if (normalizedGroup === "color" || normalizedGroup === "colour") {
-        if (vColor === normalizedVal) matchesTarget = true;
-        if (testSelection["size"] && vSize !== testSelection["size"]) {
-          matchesOtherSelections = false;
-        }
-      } else if (normalizedGroup === "size") {
-        if (vSize === normalizedVal) matchesTarget = true;
-        const colorKey = testSelection["color"] || testSelection["colour"];
-        if (colorKey && vColor !== colorKey) {
-          matchesOtherSelections = false;
-        }
+    for (const [otherKey, otherUserVal] of Object.entries(testSelection)) {
+      if (otherKey === normalizedGroup) continue;
+      const variantVal = vAttrs[otherKey];
+      if (variantVal && variantVal !== otherUserVal) {
+        matchesOtherSelections = false;
+        break;
       }
     }
 
-    if (matchesTarget && matchesOtherSelections) {
+    if (matchesOtherSelections) {
       matchingVariantCount++;
       totalMatchingStock += Number(v.stock_quantity || 0);
     }

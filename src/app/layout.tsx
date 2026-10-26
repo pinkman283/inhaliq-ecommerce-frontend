@@ -23,7 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const hasCustomFavicon = Boolean(serverTheme.store_favicon && serverTheme.store_favicon.trim() !== "" && serverTheme.store_favicon !== "/favicon.png" && serverTheme.store_favicon !== "/favicon.ico");
   const faviconUrl = hasCustomFavicon ? serverTheme.store_favicon! : "/favicon.png";
   const logoUrl = serverTheme.store_brand_logo || `${siteUrl}/branding/logo.png`;
-  const metaTitle = seo.meta_title || `${brand} | ${tagline}`;
+  const isAudioLeak = seo.meta_title && (seo.meta_title.includes("Audio") || seo.meta_title.includes("AETHER"));
+  const metaTitle = (seo.meta_title && !isAudioLeak) ? seo.meta_title : `${brand} | ${tagline}`;
   const defaultDesc = seo.meta_description || `Official ${brand} online store. Premium lifestyle, accessories, and essentials.`;
   const keywords = seo.meta_keywords ? seo.meta_keywords.split(",").map((k) => k.trim()) : undefined;
   const ogImage = seo.og_image || logoUrl;

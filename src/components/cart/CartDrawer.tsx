@@ -173,11 +173,13 @@ export function CartDrawer() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 260 }}
-              className="w-full sm:w-[420px] max-w-full sm:max-w-md border-l shadow-2xl flex flex-col justify-between transition-colors"
+              className="w-full sm:w-[420px] max-w-full sm:max-w-md border-l shadow-2xl flex flex-col justify-between transition-colors h-full h-screen h-[100dvh] max-h-screen max-h-[100dvh]"
               style={{
                 backgroundColor: "var(--theme-card-bg, #ffffff)",
                 borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))",
-                color: "var(--theme-text-body, #64748b)"
+                color: "var(--theme-text-body, #64748b)",
+                height: "100dvh",
+                maxHeight: "100dvh"
               }}
             >
               {/* Drawer Header */}
