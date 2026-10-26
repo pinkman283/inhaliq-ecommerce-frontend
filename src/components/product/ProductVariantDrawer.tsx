@@ -272,13 +272,15 @@ export function ProductVariantDrawer({
   // Switch between Single and Multi-variant modes
   const handleEnableMultiVariantMode = () => {
     setIsMultiVariantMode(true);
-    // If a variant was already selected in single mode, carry it over with its quantity
+    // If a variant was already selected in single mode and is in stock, carry it over with its quantity
     if (selectedVariant && quantity > 0) {
       const stock = getAvailableStock(product, selectedVariant);
-      setVariantQuantities((prev) => ({
-        ...prev,
-        [selectedVariant.id]: Math.min(quantity, stock > 0 ? stock : 1),
-      }));
+      if (stock > 0) {
+        setVariantQuantities((prev) => ({
+          ...prev,
+          [selectedVariant.id]: Math.min(quantity, stock),
+        }));
+      }
     }
   };
 

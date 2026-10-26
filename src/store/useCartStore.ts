@@ -11,8 +11,16 @@ export { getVariantEffectivePrice };
  * Authoritatively resolve available stock for a product or variant from available data.
  */
 export function getAvailableStock(product: Product, variant?: ProductVariant | null): number {
-  if (variant && variant.stock_quantity !== undefined && variant.stock_quantity !== null) {
-    return Math.max(0, Number(variant.stock_quantity));
+  if (product && product.is_active === false) {
+    return 0;
+  }
+  if (variant) {
+    if (variant.is_active === false) {
+      return 0;
+    }
+    if (variant.stock_quantity !== undefined && variant.stock_quantity !== null) {
+      return Math.max(0, Number(variant.stock_quantity));
+    }
   }
   if (product && product.stock_quantity !== undefined && product.stock_quantity !== null) {
     return Math.max(0, Number(product.stock_quantity));
@@ -255,7 +263,11 @@ export const useCartStore = create<CartState>()(
 
         for (const entry of entries) {
           const { product, variant, quantity } = entry;
-          const requestedQty = Math.max(1, Math.floor(quantity || 0));
+          const rawQty = Math.floor(quantity || 0);
+          if (rawQty <= 0) {
+            continue;
+          }
+          const requestedQty = rawQty;
           totalRequested += requestedQty;
 
           if (!product || typeof product.id !== "number") {
@@ -352,6 +364,17 @@ export const useCartStore = create<CartState>()(
               ? `Added ${actualToAdd} of ${requestedQty} (${variant?.name || product.name}) due to stock limit (${availableStock}).`
               : `Added ${actualToAdd}x ${variant?.name || product.name}.`,
           });
+        }
+
+        if (results.length === 0) {
+          return {
+            success: false,
+            totalAdded: 0,
+            totalRequested: 0,
+            partial: false,
+            results: [],
+            message: "No items provided to add.",
+          };
         }
 
         if (totalAdded > 0) {
