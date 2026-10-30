@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 import { Category } from "@/types";
 import { useThemeStore } from "@/store/useThemeStore";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface ExploreCategoriesSectionProps {
   categories?: Category[];
@@ -42,6 +44,7 @@ const ICON_MAP: Record<string, any> = {
 
 export function ExploreCategoriesSection({ categories = [] }: ExploreCategoriesSectionProps) {
   const { theme } = useThemeStore();
+  const { t, isBangla } = useLanguage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -82,7 +85,7 @@ export function ExploreCategoriesSection({ categories = [] }: ExploreCategoriesS
       <div className="flex items-end justify-between gap-4 mb-4 sm:mb-5">
         <div>
           <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-            Explore Categories
+            {isBangla ? "ক্যাটাগরি সমূহ" : "Explore Categories"}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
             Curated collections for your daily hardware & workspace needs
@@ -94,7 +97,7 @@ export function ExploreCategoriesSection({ categories = [] }: ExploreCategoriesS
             href="/products"
             className="theme-view-all-btn text-xs font-black uppercase tracking-wider hover:underline flex items-center gap-1 transition-colors"
           >
-            <span>View All</span>
+            <span>{t("common.viewAll")}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
 
@@ -166,11 +169,13 @@ export function ExploreCategoriesSection({ categories = [] }: ExploreCategoriesS
               {/* Content-Driven Card: Takes exact shape and size of image without border padding frame */}
               {cat.image ? (
                 <div className="h-[64px] sm:h-[72px] w-auto max-w-[140px] sm:max-w-[160px] rounded-2xl overflow-hidden shadow-xs border border-gray-100/80 dark:border-white/10 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
-                  <img
+                  <Image
                     src={cat.image}
                     alt={cat.name}
+                    width={160}
+                    height={72}
+                    sizes="(max-width: 640px) 140px, 160px"
                     className="h-full w-auto max-w-[140px] sm:max-w-[160px] object-contain rounded-2xl block"
-                    loading="lazy"
                   />
                 </div>
               ) : (

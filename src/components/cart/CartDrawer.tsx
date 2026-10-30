@@ -20,6 +20,7 @@ import { useCartStore, getAvailableStock } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { getVariantEffectivePrice } from "@/lib/storefrontVariants";
 
 export function CartDrawer() {
@@ -45,6 +46,7 @@ export function CartDrawer() {
     hasInvalidItems,
     isValidating,
   } = useCartStore();
+  const { t, toLocalDigits } = useLanguage();
 
   // Validate cart against server on drawer open
   useEffect(() => {
@@ -205,7 +207,7 @@ export function CartDrawer() {
                       className="text-sm font-bold leading-none mb-1 flex items-center gap-1.5"
                       style={{ color: "var(--theme-text-heading, #0f172a)" }}
                     >
-                      Your Studio Cart
+                      {t("cart.title")}
                       {isValidating && (
                         <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
                       )}
@@ -214,7 +216,7 @@ export function CartDrawer() {
                       className="text-[11px]"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      {itemCount} item{itemCount !== 1 ? "s" : ""}
+                      {t("common.itemsCount", { count: itemCount })}
                     </span>
                   </div>
                 </div>
@@ -226,7 +228,7 @@ export function CartDrawer() {
                       className="text-[11px] hover:text-rose-500 transition-colors mr-2 cursor-pointer font-medium"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      Clear
+                      {t("cart.clearCart")}
                     </button>
                   )}
                   <button
@@ -281,13 +283,13 @@ export function CartDrawer() {
                       className="text-base font-bold mb-1"
                       style={{ color: "var(--theme-text-heading, #0f172a)" }}
                     >
-                      Your cart is empty
+                      {t("cart.emptyTitle")}
                     </h4>
                     <p 
                       className="text-xs max-w-xs mb-6"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      Explore our collection of authentic disposable vapes, premium devices, and signature e-liquids.
+                      {t("cart.emptySubtitle")}
                     </p>
                     <button
                       onClick={closeCart}
@@ -298,7 +300,7 @@ export function CartDrawer() {
                         boxShadow: "0 8px 24px -4px color-mix(in srgb, var(--theme-primary, #006B45) 35%, transparent)"
                       }}
                     >
-                      Start Exploring
+                      {t("cart.continueShopping")}
                     </button>
                   </div>
                 ) : (
@@ -630,7 +632,7 @@ export function CartDrawer() {
                           </div>
                         ) : (
                           <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-medium">
-                            <span>Discount</span>
+                            <span>{t("cart.discount")}</span>
                             <span>-{formatPrice(discount)}</span>
                           </div>
                         )}
@@ -639,7 +641,7 @@ export function CartDrawer() {
                           className="flex justify-between text-sm font-black pt-2 border-t"
                           style={{ borderColor: "var(--theme-card-border, rgba(255, 255, 255, 0.1))" }}
                         >
-                          <span style={{ color: "var(--theme-text-heading, #0f172a)" }}>Total</span>
+                          <span style={{ color: "var(--theme-text-heading, #0f172a)" }}>{t("orders.totalAmount")}</span>
                           <span className="text-base font-black" style={{ color: "var(--theme-primary, #006B45)" }}>
                             {formatPrice(Math.max(0, subtotal - discount))}
                           </span>
@@ -649,7 +651,7 @@ export function CartDrawer() {
                       <div 
                         className="flex justify-between text-sm font-black py-1"
                       >
-                        <span style={{ color: "var(--theme-text-heading, #0f172a)" }}>Subtotal</span>
+                        <span style={{ color: "var(--theme-text-heading, #0f172a)" }}>{t("cart.subtotal")}</span>
                         <span className="text-base font-black" style={{ color: "var(--theme-primary, #006B45)" }}>
                           {formatPrice(subtotal)}
                         </span>
@@ -683,7 +685,7 @@ export function CartDrawer() {
                       </>
                     ) : (
                       <>
-                        Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                        {t("cart.checkout")} <ArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </button>
@@ -700,7 +702,7 @@ export function CartDrawer() {
                       <span 
                         className="w-1.5 h-1.5 rounded-full inline-block" 
                         style={{ backgroundColor: "var(--theme-primary, #006B45)" }}
-                      /> Cash on Delivery
+                      /> {t("footer.cashOnDelivery")}
                     </span>
                     <span className="flex items-center gap-1">
                       <span 
@@ -712,7 +714,7 @@ export function CartDrawer() {
                       <span 
                         className="w-1.5 h-1.5 rounded-full inline-block" 
                         style={{ backgroundColor: "color-mix(in srgb, var(--theme-primary, #006B45) 65%, #10b981)" }}
-                      /> 100% Authentic
+                      /> {t("footer.authenticGuarantee")}
                     </span>
                   </div>
                 </div>

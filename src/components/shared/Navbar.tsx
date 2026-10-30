@@ -30,6 +30,8 @@ import { useThemeStore } from "@/store/useThemeStore";
 import { BrandLogoImage } from "@/components/shared/BrandLogoImage";
 import { CustomerAccountDropdown } from "@/components/shared/CustomerAccountDropdown";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { LanguageToggle } from "@/components/shared/LanguageToggle";
 import { api } from "@/lib/api";
 import { NavbarItem } from "@/types";
 import { CascadingNavDropdown } from "@/components/shared/navigation/CascadingNavDropdown";
@@ -63,6 +65,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
   const { openCart, getItemCount } = useCartStore();
   const { user, isAuthenticated } = useAuthStore();
   const { theme } = useAppTheme();
+  const { t, toLocalDigits } = useLanguage();
 
   const cartCount = getItemCount();
   const wishlistCount = wishlistItems.length;
@@ -130,18 +133,18 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
         <div className="bg-gradient-to-r from-indigo-950 via-[#0a0d18] to-cyan-950 border-b border-white/5 text-[11px] py-1 px-4 text-center text-slate-300 flex items-center justify-between max-w-full">
           <div className="hidden md:flex items-center gap-3 text-slate-400">
             <span className="flex items-center gap-1 text-cyan-400 font-medium">
-              <Radio className="w-3 h-3 animate-pulse" /> {theme.announcement_badge || "Dispatch: Fast Courier Delivery"}
+              <Radio className="w-3 h-3 animate-pulse" /> {theme.announcement_badge || t("nav.announcementBadge")}
             </span>
           </div>
           <div className="mx-auto md:mx-0 flex items-center justify-center gap-2">
             <span className="inline-flex items-center gap-1 text-cyan-400 font-semibold">
               <Sparkles className="w-3 h-3 text-cyan-400" />
             </span>
-            <span className="text-slate-300 font-medium">{theme.announcement_text}</span>
+            <span className="text-slate-300 font-medium">{theme.announcement_text || t("nav.announcementText")}</span>
           </div>
           <div className="hidden lg:flex items-center gap-4 text-slate-400 text-[10px]">
             <Link href="/track" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
-              <Package className="w-3 h-3" /> Track Order
+              <Package className="w-3 h-3" /> {t("nav.trackOrder")}
             </Link>
             <span className="text-slate-700">|</span>
             <span className="text-slate-400 font-mono">USD ($)</span>
@@ -162,12 +165,12 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             <button
               onClick={onOpenSearch}
               className="w-full flex items-center justify-between px-4 py-2 rounded-md bg-gray-100 dark:bg-white/[0.08] hover:bg-gray-200/80 dark:hover:bg-white/[0.12] border border-gray-200 dark:border-white/20 text-slate-800 dark:text-white text-xs transition-all group cursor-pointer shadow-xs"
-              title="Search products, brands, categories... (Cmd+K)"
+              title={t("nav.searchPlaceholder")}
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <Search className="w-4 h-4 text-gray-500 dark:text-slate-300 group-hover:text-[#0f172a] dark:group-hover:text-cyan-400 transition-colors shrink-0" />
                 <span className="text-xs text-gray-600 dark:text-slate-200 group-hover:text-gray-900 dark:group-hover:text-white font-medium truncate">
-                  Search catalog, categories, authorized brands...
+                  {t("nav.searchPlaceholder")}
                 </span>
               </div>
               <div className="flex items-center gap-1 shrink-0 ml-2">
@@ -178,22 +181,26 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             </button>
           </div>
 
-          {/* Right: Mobile Search + Wishlist + Cart + Account Profile */}
+          {/* Right: Mobile Search + Language + Wishlist + Cart + Account Profile */}
           <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
             {/* Mobile Search Trigger */}
             <button
               onClick={onOpenSearch}
               className="md:hidden p-1.5 sm:p-2 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs transition-all cursor-pointer"
-              title="Search catalog (Cmd+K)"
+              title={t("nav.searchShort")}
             >
               <Search className="w-4 h-4" />
             </button>
+
+            {/* Language Switcher Toggle */}
+            <LanguageToggle variant="desktop" className="hidden sm:inline-flex" />
+            <LanguageToggle variant="compact" className="sm:hidden" />
 
             {/* Wishlist Icon */}
             <button
               onClick={openWishlist}
               className="relative p-1.5 sm:p-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-[#fb2c5c] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 border border-transparent transition-all cursor-pointer group"
-              title="Saved Wishlist"
+              title={t("nav.savedWishlist")}
             >
               <Heart
                 className="w-4 h-4 transition-all duration-200"
@@ -208,7 +215,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                   animate={{ scale: 1 }}
                   className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] px-1 font-black text-[10px] rounded-full flex items-center justify-center shadow-md bg-[#fb2c5c] text-white ring-2 ring-white dark:ring-[#090b14] z-10"
                 >
-                  {wishlistCount}
+                  {toLocalDigits(wishlistCount)}
                 </motion.span>
               )}
             </button>
@@ -217,7 +224,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
             <button
               onClick={openCart}
               className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-md border text-slate-800 dark:text-white bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-[#0f172a] dark:hover:border-cyan-400 transition-all shadow-xs group cursor-pointer"
-              title="Shopping Cart"
+              title={t("nav.cart")}
             >
               {mounted && cartCount > 0 && (
                 <motion.span
@@ -226,12 +233,12 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                   className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] px-1 font-black text-[10px] rounded-full flex items-center justify-center shadow-md text-white ring-2 ring-white dark:ring-[#090b14] z-10"
                   style={{ backgroundColor: "var(--theme-btn-primary-bg, var(--theme-primary, #0f172a))" }}
                 >
-                  {cartCount}
+                  {toLocalDigits(cartCount)}
                 </motion.span>
               )}
               <ShoppingBag className="w-4 h-4 text-[#0f172a] dark:text-indigo-400 transition-colors" />
               <span className="text-xs font-bold hidden sm:inline">
-                Cart
+                {t("nav.cart")}
               </span>
             </button>
 
@@ -245,7 +252,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                   className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-[11px] sm:text-xs font-bold text-slate-800 dark:text-white hover:border-[#0f172a] transition-all cursor-pointer"
                 >
                   <UserIcon className="w-3.5 h-3.5 text-[#0f172a] dark:text-indigo-400" />
-                  <span className="hidden min-[360px]:inline">Sign In</span>
+                  <span className="hidden min-[360px]:inline">{t("nav.signIn")}</span>
                 </Link>
               )}
             </div>
@@ -291,7 +298,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                 }}
               >
                 <Menu className="w-3.5 h-3.5 text-white shrink-0" style={{ color: "#ffffff" }} />
-                <span className="text-white font-bold" style={{ color: "#ffffff" }}>All Products</span>
+                <span className="text-white font-bold" style={{ color: "#ffffff" }}>{t("nav.allProducts")}</span>
               </Link>
             </div>
 
@@ -537,6 +544,11 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                   />
                 </div>
 
+                {/* Mobile Language Switcher */}
+                <div className="px-4 py-2 border-t border-gray-200 dark:border-white/10">
+                  <LanguageToggle variant="mobile" />
+                </div>
+
                 {/* Footer Portal Links */}
                 <div className="p-4 border-t border-gray-200 dark:border-white/10 bg-gray-50/70 dark:bg-white/[0.02] flex gap-2">
                   <Link
@@ -551,7 +563,7 @@ export function Navbar({ onOpenSearch }: NavbarProps) {
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex-1 text-center py-2.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 text-xs font-bold transition-colors"
                   >
-                    Track Order
+                    {t("nav.trackOrder")}
                   </Link>
                 </div>
               </motion.div>

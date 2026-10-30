@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { preload } from "react-dom";
 import Script from "next/script";
 import "./globals.css";
 import { AppProviders } from "@/components/providers/AppProviders";
@@ -8,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { cachedFetch } from "@/lib/redis";
 import { cookies } from "next/headers";
 import { DEFAULT_THEME_SETTINGS, ThemeSettings, getHexLuminance, useThemeStore } from "@/store/useThemeStore";
+import { Locale } from "@/types/i18n";
 import { getStorefrontApi } from "@/lib/api";
 import { STOREFRONT_CONFIG } from "@/config/storefrontConfig";
 import { TrackingScripts } from "@/components/analytics/TrackingScripts";
@@ -264,24 +266,32 @@ export default async function RootLayout({
     },
   };
 
+  if (serverTheme.store_brand_logo) {
+    preload(serverTheme.store_brand_logo, { as: "image", fetchPriority: "high" });
+  }
+  if (initialTheme.split_reveal_enabled && serverTheme.split_reveal_image) {
+    preload(serverTheme.split_reveal_image, { as: "image", fetchPriority: "high" });
+  }
+
+  const cookieStore = await cookies();
+  const rawLocale = cookieStore.get("app_language")?.value;
+  const initialLocale: Locale = rawLocale === "bn" ? "bn" : "en";
+
   return (
     <html
-      lang="en"
+      lang={initialLocale}
       className={cn(isLight ? "theme-light-mode" : "dark", "scroll-smooth font-sans", geist.variable)}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <head>
-        {serverTheme.store_favicon && serverTheme.store_favicon !== "/favicon.png" && (
-          <link rel="icon" href={serverTheme.store_favicon} sizes="any" />
-        )}
-        {serverTheme.store_brand_logo && (
-          <link rel="preload" as="image" href={serverTheme.store_brand_logo} fetchPriority="high" />
-        )}
-        {serverTheme.split_reveal_image && (
-          <link rel="preload" as="image" href={serverTheme.split_reveal_image} fetchPriority="high" />
-        )}
+      <body
+        className={`${geist.variable} font-sans antialiased min-h-screen flex flex-col overflow-x-clip`}
+        style={{ backgroundColor: serverTheme.theme_bg_color }}
+        suppressHydrationWarning
+      >
         <style
           id="theme-server-vars"
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `
               :root {
@@ -322,24 +332,20 @@ export default async function RootLayout({
             `,
           }}
         />
-      </head>
-      <body
-        className={`${geist.variable} font-sans antialiased min-h-screen flex flex-col overflow-x-clip`}
-        style={{ backgroundColor: serverTheme.theme_bg_color }}
-        suppressHydrationWarning
-      >
         {/* Global Organization & WebSite JSON-LD Schemas */}
         <script
           type="application/ld+json"
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <script
           type="application/ld+json"
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <DynamicFavicon />
         <TrackingScripts />
-        <AppProviders initialTheme={initialTheme}>
+        <AppProviders initialTheme={initialTheme} initialLocale={initialLocale}>
           {children}
         </AppProviders>
       </body>

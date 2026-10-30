@@ -1,14 +1,30 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { HeroSection } from "@/components/home/HeroSection";
 import { ExploreCategoriesSection } from "@/components/home/ExploreCategoriesSection";
 import { TrustRibbon } from "@/components/home/TrustRibbon";
 import { FlashSaleSection } from "@/components/home/FlashSaleSection";
 import { FeaturedGrid } from "@/components/home/FeaturedGrid";
-import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { api } from "@/lib/api";
 import { Banner, Category, HomepageBannersResponse, Product } from "@/types";
+
+const CategoryShowcase = dynamic(
+  () => import("@/components/home/CategoryShowcase").then((mod) => mod.CategoryShowcase),
+  {
+    loading: () => (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-pulse space-y-8">
+        <div className="h-8 w-48 bg-white/5 rounded-lg" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-64 rounded-xl bg-white/[0.03] border border-white/5" />
+          ))}
+        </div>
+      </div>
+    ),
+  }
+);
 
 interface HomePageClientProps {
   initialFeaturedProducts?: Product[];

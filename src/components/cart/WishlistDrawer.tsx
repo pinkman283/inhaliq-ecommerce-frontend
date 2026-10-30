@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, ShoppingBag, Trash2, ArrowRight, SlidersHorizontal } from "lucide-react";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCartStore } from "@/store/useCartStore";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { formatPrice } from "@/lib/utils";
 
 export function WishlistDrawer() {
   const { items, isWishlistOpen, closeWishlist, toggleWishlist, clearWishlist } = useWishlistStore();
   const { addItem, openCart } = useCartStore();
+  const { t, toLocalDigits } = useLanguage();
 
   const handleMoveToCart = (product: any) => {
     addItem(product);
@@ -68,13 +70,13 @@ export function WishlistDrawer() {
                       className="text-sm font-bold leading-none mb-1"
                       style={{ color: "var(--theme-text-heading, #0f172a)" }}
                     >
-                      Saved Gear
+                      {t("wishlist.title")}
                     </h3>
                     <span 
                       className="text-[11px]"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      {items.length} item{items.length !== 1 ? "s" : ""}
+                      {t("common.itemsCount", { count: items.length })}
                     </span>
                   </div>
                 </div>
@@ -86,7 +88,7 @@ export function WishlistDrawer() {
                       className="text-[11px] hover:text-rose-500 transition-colors mr-2 font-medium cursor-pointer"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      Clear
+                      {t("wishlist.clearAll")}
                     </button>
                   )}
                   <button
@@ -116,13 +118,13 @@ export function WishlistDrawer() {
                       className="text-base font-bold mb-1"
                       style={{ color: "var(--theme-text-heading, #0f172a)" }}
                     >
-                      Your wishlist is empty
+                      {t("wishlist.emptyTitle")}
                     </h4>
                     <p 
                       className="text-xs max-w-xs mb-6"
                       style={{ color: "var(--theme-text-body, #64748b)" }}
                     >
-                      Save items you are interested in and return anytime to move them directly to your cart.
+                      {t("wishlist.emptySubtitle")}
                     </p>
                   </div>
                 ) : (
@@ -227,7 +229,7 @@ export function WishlistDrawer() {
                                   color: "var(--theme-btn-primary-text, #ffffff)"
                                 }}
                               >
-                                <ShoppingBag className="w-3 h-3" /> Move to Cart
+                                <ShoppingBag className="w-3 h-3" /> {t("wishlist.moveToCart")}
                               </button>
                             )}
                           </div>
@@ -256,7 +258,7 @@ export function WishlistDrawer() {
                       boxShadow: "0 10px 24px -4px rgba(41, 41, 71, 0.25)"
                     }}
                   >
-                    Move All to Cart <ArrowRight className="w-4 h-4" />
+                    {t("wishlist.moveToCart")} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               )}

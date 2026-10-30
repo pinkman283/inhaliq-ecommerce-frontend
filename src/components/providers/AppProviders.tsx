@@ -9,6 +9,8 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { WishlistDrawer } from "@/components/cart/WishlistDrawer";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
+import { Locale } from "@/types/i18n";
 import { SplitReveal } from "@/components/shared/SplitReveal";
 import { Toaster } from "sonner";
 
@@ -23,9 +25,6 @@ import { ThemeSettings } from "@/store/useThemeStore";
 type AgeGateStatus = "waiting" | "gate" | "denied" | "allowed";
 
 function AgeGate({ status, onAccept, onDeny }: { status: AgeGateStatus; onAccept: () => void; onDeny: () => void }) {
-  if (typeof window !== "undefined" && localStorage.getItem("inhaliq_age_verified") === "true") {
-    return null;
-  }
   // Not visible while waiting for split reveal, or after user accepted
   if (status === "waiting" || status === "allowed") return null;
 
@@ -146,9 +145,11 @@ function AgeGate({ status, onAccept, onDeny }: { status: AgeGateStatus; onAccept
 export function AppProviders({
   children,
   initialTheme,
+  initialLocale,
 }: {
   children: React.ReactNode;
   initialTheme?: ThemeSettings;
+  initialLocale?: Locale;
 }) {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -224,72 +225,76 @@ export function AppProviders({
 
   if (isAdminRoute) {
     return (
-      <ThemeProvider initialTheme={initialTheme}>
-        {children}
-        {mounted && (
-          <Toaster
-            theme="dark"
-            position="bottom-right"
-            closeButton
-            toastOptions={{
-              style: {
-                background: "#0c0e15",
-                border: "1px solid rgba(245, 158, 11, 0.3)",
-                color: "#ffffff",
-              },
-            }}
-          />
-        )}
-      </ThemeProvider>
+      <LanguageProvider initialLocale={initialLocale}>
+        <ThemeProvider initialTheme={initialTheme}>
+          {children}
+          {mounted && (
+            <Toaster
+              theme="dark"
+              position="bottom-right"
+              closeButton
+              toastOptions={{
+                style: {
+                  background: "#0c0e15",
+                  border: "1px solid rgba(245, 158, 11, 0.3)",
+                  color: "#ffffff",
+                },
+              }}
+            />
+          )}
+        </ThemeProvider>
+      </LanguageProvider>
     );
   }
 
   return (
-    <ThemeProvider initialTheme={initialTheme}>
-      <div className="min-h-screen flex flex-col">
-        {/* Horizontal Split Reveal Intro Animation */}
-        <SplitReveal initialTheme={initialTheme} onComplete={handleSplitRevealComplete} />
+    <LanguageProvider initialLocale={initialLocale}>
+      <ThemeProvider initialTheme={initialTheme}>
+        <div className="min-h-screen flex flex-col">
+          {/* Horizontal Split Reveal Intro Animation */}
+          <SplitReveal initialTheme={initialTheme} onComplete={handleSplitRevealComplete} />
 
-        <Navbar onOpenSearch={() => setSearchOpen(true)} />
-        
-        <main className="flex-1 flex flex-col pb-14 sm:pb-0">
-          {children}
-        </main>
+          <Navbar onOpenSearch={() => setSearchOpen(true)} />
+          
+          <main className="flex-1 flex flex-col pb-14 sm:pb-0">
+            {children}
+          </main>
 
-        <Footer />
-      </div>
+          <Footer />
+        </div>
 
-      {/* Global Modals, Drawers & Conversion Widgets */}
-      {mounted && (
-        <>
-          <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-          <CartDrawer />
-          <WishlistDrawer />
-          <AuthModal />
-          {/* Floating Actions Stack: Back To Top directly on top of WhatsApp Quick Button */}
-          <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex flex-col items-end gap-2.5 sm:gap-3 pointer-events-none">
-            <BackToTop />
-            <FloatingWhatsApp />
-          </div>
-          <MobileBottomNav onOpenSearch={() => setSearchOpen(true)} />
-          <Toaster
-            theme="dark"
-            position="bottom-right"
-            closeButton
-            toastOptions={{
-              style: {
-                background: "#0e121e",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-                color: "#ffffff",
-              },
-            }}
-          />
-        </>
-      )}
+        {/* Global Modals, Drawers & Conversion Widgets */}
+        {mounted && (
+          <>
+            <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+            <CartDrawer />
+            <WishlistDrawer />
+            <AuthModal />
+            {/* Floating Actions Stack: Back To Top directly on top of WhatsApp Quick Button */}
+            <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex flex-col items-end gap-2.5 sm:gap-3 pointer-events-none">
+              <BackToTop />
+              <FloatingWhatsApp />
+            </div>
+            <MobileBottomNav onOpenSearch={() => setSearchOpen(true)} />
+            <Toaster
+              theme="dark"
+              position="bottom-right"
+              closeButton
+              toastOptions={{
+                style: {
+                  background: "#0e121e",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  color: "#ffffff",
+                },
+              }}
+            />
+          </>
+        )}
 
-      {/* Age Verification Gate — appears after split reveal finishes */}
-      {!isAdminRoute && <AgeGate status={ageGateStatus} onAccept={handleAgeAccept} onDeny={handleAgeDeny} />}
-    </ThemeProvider>
+        {/* Age Verification Gate — appears after split reveal finishes */}
+        {!isAdminRoute && <AgeGate status={ageGateStatus} onAccept={handleAgeAccept} onDeny={handleAgeDeny} />}
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

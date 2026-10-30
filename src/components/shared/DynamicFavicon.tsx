@@ -24,8 +24,9 @@ export function DynamicFavicon() {
 
         if (iconLinks.length > 0) {
           iconLinks.forEach((link) => {
-            link.removeAttribute("sizes");
-            link.href = cacheBuster;
+            if (link.getAttribute("href") !== cacheBuster) {
+              link.href = cacheBuster;
+            }
           });
         } else {
           let dynamicLink = document.getElementById("dynamic-favicon-link") as HTMLLinkElement | null;

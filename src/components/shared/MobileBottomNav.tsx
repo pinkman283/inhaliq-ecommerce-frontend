@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Grid, Search, Package, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { useEffect, useState } from "react";
 
 interface MobileBottomNavProps {
@@ -13,6 +14,7 @@ interface MobileBottomNavProps {
 export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
   const pathname = usePathname();
   const { openCart, getItemCount } = useCartStore();
+  const { t, toLocalDigits } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
           }`}
         >
           <Home className="w-4 h-4" />
-          <span className="text-[9.5px] font-bold mt-0.5">Home</span>
+          <span className="text-[9.5px] font-bold mt-0.5">{t("nav.home")}</span>
         </Link>
 
         {/* 2. Shop / Categories */}
@@ -48,7 +50,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
           }`}
         >
           <Grid className="w-4 h-4" />
-          <span className="text-[9.5px] font-bold mt-0.5">Shop</span>
+          <span className="text-[9.5px] font-bold mt-0.5">{t("nav.shop")}</span>
         </Link>
 
         {/* 3. Search Trigger */}
@@ -57,7 +59,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
           className="flex flex-col items-center justify-center py-1 rounded-lg text-slate-400 hover:text-[var(--theme-primary,#006B45)] transition-colors cursor-pointer"
         >
           <Search className="w-4 h-4" />
-          <span className="text-[9.5px] font-bold mt-0.5">Search</span>
+          <span className="text-[9.5px] font-bold mt-0.5">{t("nav.searchShort")}</span>
         </button>
 
         {/* 4. Track Order */}
@@ -68,7 +70,7 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
           }`}
         >
           <Package className="w-4 h-4" />
-          <span className="text-[9.5px] font-bold mt-0.5">Track</span>
+          <span className="text-[9.5px] font-bold mt-0.5">{t("nav.trackOrder")}</span>
         </Link>
 
         {/* 5. Cart Drawer Trigger */}
@@ -86,11 +88,11 @@ export function MobileBottomNav({ onOpenSearch }: MobileBottomNavProps) {
                   color: "var(--theme-btn-primary-text, #ffffff)",
                 }}
               >
-                {cartCount}
+                {toLocalDigits(cartCount)}
               </span>
             )}
           </div>
-          <span className="text-[9.5px] font-bold mt-0.5">Cart</span>
+          <span className="text-[9.5px] font-bold mt-0.5">{t("nav.cart")}</span>
         </button>
       </div>
     </div>

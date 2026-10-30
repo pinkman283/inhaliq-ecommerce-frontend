@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    pool: "threads",
+    pool: "forks",
     setupFiles: ["./src/tests/setup.ts"],
     include: ["src/__tests__/**/*.{test,spec}.{ts,tsx}"],
   },

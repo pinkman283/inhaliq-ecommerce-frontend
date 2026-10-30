@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useThemeStore } from "@/store/useThemeStore";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { trackSearch } from "@/lib/metaPixel";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -19,6 +20,7 @@ interface SearchModalProps {
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const router = useRouter();
   const { theme } = useThemeStore();
+  const { t, toLocalDigits } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -130,7 +132,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     router.push(`/products?search=${encodeURIComponent(query.trim())}`);
                   }
                 }}
-                placeholder="Search studio headphones, mechanical boards, tech packs..."
+                placeholder={t("search.placeholder")}
                 className="w-full bg-transparent text-sm text-white placeholder:text-slate-300 font-medium focus:outline-none"
               />
               {query && (
@@ -168,7 +170,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between px-2">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                      Matching Gear ({results.length})
+                      {t("search.modalTitle")} ({toLocalDigits(results.length)})
                     </span>
                     <button
                       type="button"
@@ -178,7 +180,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       }}
                       className="text-xs font-bold text-cyan-400 hover:underline cursor-pointer flex items-center gap-1"
                     >
-                      View all results <ArrowRight className="w-3 h-3" />
+                      {t("common.viewAll")} <ArrowRight className="w-3 h-3" />
                     </button>
                   </div>
                   {results.map((product) => {
@@ -224,18 +226,18 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       }}
                       className="w-full py-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white transition-colors cursor-pointer"
                     >
-                      See all products matching &ldquo;{query}&rdquo;
+                      {t("search.viewAllResults", { query })}
                     </button>
                   </div>
                 </div>
               ) : query.trim() ? (
                 <div className="py-12 text-center text-slate-400 text-sm">
-                  No hardware matching <span className="text-white font-semibold">&ldquo;{query}&rdquo;</span> found.
+                  {t("search.noResultsFound")}: <span className="text-white font-semibold">&ldquo;{query}&rdquo;</span>
                 </div>
               ) : (
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2 px-1">
-                    Popular Categories
+                    {t("search.popularSearches")}
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {quickCategories.map((c) => (

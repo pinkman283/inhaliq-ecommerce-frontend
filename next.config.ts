@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       "lucide-react",
       "recharts",
-      "motion",
       "framer-motion",
       "@radix-ui/react-icons",
       "@radix-ui/react-dialog",

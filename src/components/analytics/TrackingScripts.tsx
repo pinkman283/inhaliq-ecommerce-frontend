@@ -117,7 +117,7 @@ export function TrackingScripts() {
         <>
           <Script
             id="meta-pixel-dynamic"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             dangerouslySetInnerHTML={{
               __html: `
                 !function(f,b,e,v,n,t,s)
@@ -150,7 +150,7 @@ export function TrackingScripts() {
         <>
           <Script
             id="gtm-dynamic"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             dangerouslySetInnerHTML={{
               __html: `
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

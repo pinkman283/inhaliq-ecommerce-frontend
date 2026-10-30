@@ -13,12 +13,14 @@ import {
   ExternalLink
 } from "lucide-react";
 import { useAppTheme } from "@/components/providers/ThemeProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { BrandLogoImage } from "@/components/shared/BrandLogoImage";
 import { FooterColumn, SocialLink } from "@/types";
 import { SocialPlatformIcon } from "@/components/shared/SocialPlatformIcon";
 
 export function Footer() {
   const { theme } = useAppTheme();
+  const { t } = useLanguage();
   const [columns, setColumns] = useState<FooterColumn[]>([]);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [openAccordion, setOpenAccordion] = useState<Record<number, boolean>>({});
@@ -105,10 +107,10 @@ export function Footer() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                    {theme.footer_feature_title_1 || "Nationwide Delivery"}
+                    {theme.footer_feature_title_1 || t("footer.nationwideDelivery")}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
-                    {theme.footer_feature_desc_1 || "Fast delivery across Bangladesh"}
+                    {theme.footer_feature_desc_1 || t("footer.nationwideDeliveryDesc")}
                   </p>
                 </div>
               </Link>
@@ -123,10 +125,10 @@ export function Footer() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                    {theme.footer_feature_title_2 || "100% Authentic Guarantee"}
+                    {theme.footer_feature_title_2 || t("footer.authenticGuarantee")}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
-                    {theme.footer_feature_desc_2 || "Verified genuine products"}
+                    {theme.footer_feature_desc_2 || t("footer.authenticGuaranteeDesc")}
                   </p>
                 </div>
               </Link>
@@ -141,10 +143,10 @@ export function Footer() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                    {theme.footer_feature_title_3 || "Cash on Delivery"}
+                    {theme.footer_feature_title_3 || t("footer.cashOnDelivery")}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
-                    {theme.footer_feature_desc_3 || "Pay safely upon arrival"}
+                    {theme.footer_feature_desc_3 || t("footer.cashOnDeliveryDesc")}
                   </p>
                 </div>
               </Link>
@@ -159,10 +161,10 @@ export function Footer() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                    {theme.footer_feature_title_4 || "Dedicated Customer Care"}
+                    {theme.footer_feature_title_4 || t("footer.customerCare")}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-normal">
-                    {theme.footer_feature_desc_4 || "Prompt expert support"}
+                    {theme.footer_feature_desc_4 || t("footer.customerCareDesc")}
                   </p>
                 </div>
               </Link>
@@ -290,7 +292,7 @@ export function Footer() {
         {/* 3. Bottom Copyright & Compliance Bar */}
         <div className="theme-footer-bottom border-t mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <p className="text-slate-400 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} {brandName}. All rights reserved.
+            &copy; {new Date().getFullYear()} {brandName}. {t("footer.rightsReserved")}
           </p>
           <p className="text-[11px] text-slate-500 text-center sm:text-right font-medium">
             Strictly 18+ Only • Age verification required upon entry and delivery

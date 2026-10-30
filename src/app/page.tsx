@@ -1,5 +1,6 @@
 import { HomePageClient } from "@/components/home/HomePageClient";
 import { storefrontApi } from "@/lib/api";
+import { cachedFetch } from "@/lib/redis";
 import { Banner, Category, HomepageBannersResponse, Product } from "@/types";
 
 export const revalidate = 60; // Revalidate every 60 seconds (ISR)
@@ -13,11 +14,23 @@ export default async function HomePage() {
   let bannerData: HomepageBannersResponse | null = null;
 
   try {
-    const [homeData, bData, catData] = await Promise.all([
-      storefrontApi.getHomepageData().catch(() => null),
-      storefrontApi.getHomepageBanners().catch(() => null),
-      storefrontApi.getCategories().catch(() => []),
-    ]);
+    const payload = await cachedFetch(
+      "storefront:home:v1",
+      async () => {
+        const [homeData, bData, catData] = await Promise.all([
+          storefrontApi.getHomepageData().catch(() => null),
+          storefrontApi.getHomepageBanners().catch(() => null),
+          storefrontApi.getCategories().catch(() => []),
+        ]);
+        return { homeData, bData, catData };
+      },
+      {
+        ttlSeconds: 300, // 5 minutes
+        tags: ["homepage", "catalog"],
+      }
+    );
+
+    const { homeData, bData, catData } = payload;
 
     bannerData = bData;
     if (homeData) {
@@ -53,4 +66,3 @@ export default async function HomePage() {
     </>
   );
 }
-

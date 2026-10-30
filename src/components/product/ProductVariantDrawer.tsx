@@ -196,8 +196,9 @@ export function ProductVariantDrawer({
   const hasPriceRange = variantPrices.length > 0 && minPrice !== maxPrice && !selectedVariant;
 
   const compareAtPrice = useMemo(() => {
-    if (selectedVariant?.compare_at_price && selectedVariant.compare_at_price > effectivePrice) {
-      return Number(selectedVariant.compare_at_price);
+    const variantCompareAt = (selectedVariant as any)?.compare_at_price;
+    if (variantCompareAt && variantCompareAt > effectivePrice) {
+      return Number(variantCompareAt);
     }
     if (product.compare_at_price && product.compare_at_price > effectivePrice) {
       return Number(product.compare_at_price);

@@ -12,6 +12,7 @@ import { ProductVariantDrawer } from "./ProductVariantDrawer";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useThemeStore } from "@/store/useThemeStore";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 
@@ -24,6 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addItem, closeCart } = useCartStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { theme } = useThemeStore();
+  const { t, toLocalDigits } = useLanguage();
   const [addedAnim, setAddedAnim] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -155,7 +157,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {isOutOfStock && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-2 z-10 pointer-events-none">
               <span className="px-2.5 py-1 rounded-md bg-rose-600/90 text-white font-black text-[10px] tracking-wider uppercase shadow-md flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" /> Out of Stock
+                <AlertCircle className="w-3 h-3" /> {t("common.outOfStock")}
               </span>
             </div>
           )}
@@ -165,7 +167,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="absolute top-2 left-2 flex flex-col gap-1 z-10 pointer-events-none">
               {discountPercent > 0 && (
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-black bg-rose-600 text-white shadow-xs">
-                  -{discountPercent}%
+                  -{toLocalDigits(discountPercent)}%
                 </span>
               )}
               {product.is_new_arrival && (
@@ -176,7 +178,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     color: "var(--theme-btn-primary-text, #ffffff)",
                   }}
                 >
-                  <Sparkles className="w-2 h-2" /> New
+                  <Sparkles className="w-2 h-2" /> {t("common.new")}
                 </span>
               )}
               {product.is_best_seller && (
@@ -184,7 +186,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-xs"
                   style={{ backgroundColor: "var(--theme-secondary, #d97706)" }}
                 >
-                  Best Seller
+                  {t("common.bestSeller")}
                 </span>
               )}
             </div>
@@ -241,7 +243,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   className="text-[8.5px]"
                   style={{ color: "var(--theme-text-body, #64748b)" }}
                 >
-                  ({product.review_count || 0})
+                  ({toLocalDigits(product.review_count || 0)})
                 </span>
               </div>
             )}
@@ -279,7 +281,7 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
             {discountAmount > 0 && (
               <span className="text-[8.5px] font-bold text-rose-500 dark:text-rose-400 shrink-0">
-                Save {formatPrice(discountAmount)}
+                {t("common.save")} {formatPrice(discountAmount)}
               </span>
             )}
           </div>
@@ -299,7 +301,7 @@ export function ProductCard({ product }: ProductCardProps) {
             aria-haspopup="dialog"
             aria-expanded={isDrawerOpen}
           >
-            <span className="truncate">{isOutOfStock ? "Out of Stock" : "Choose options"}</span>
+            <span className="truncate">{isOutOfStock ? t("common.outOfStock") : t("product.selectVariant")}</span>
             {!isOutOfStock && <ArrowRight className="w-3 h-3 shrink-0" />}
           </button>
         ) : (
@@ -318,14 +320,14 @@ export function ProductCard({ product }: ProductCardProps) {
               {addedAnim ? (
                 <>
                   <Check className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
-                  <span className="truncate">Added!</span>
+                  <span className="truncate">{t("common.addedToCart")}</span>
                 </>
               ) : (
                 <>
                   <ShoppingBag
                     className="w-2.5 h-2.5 shrink-0 text-slate-800 dark:text-slate-200"
                   />
-                  <span className="truncate">Add to Cart</span>
+                  <span className="truncate">{t("common.addToCart")}</span>
                 </>
               )}
             </button>
@@ -340,7 +342,7 @@ export function ProductCard({ product }: ProductCardProps) {
               }`}
             >
               <Zap className="w-2.5 h-2.5 shrink-0" />
-              <span className="truncate">Buy Now</span>
+              <span className="truncate">{t("common.buyNow")}</span>
             </button>
           </div>
         )}

@@ -60,7 +60,7 @@ export class SeniorApiAdapter implements IStorefrontApi {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        timeout: 25000,
+        timeout: isBrowser ? 15000 : 3000,
       });
 
       // Interceptor to attach Sanctum token and Facebook CAPI headers
@@ -110,7 +110,8 @@ export class SeniorApiAdapter implements IStorefrontApi {
   // System & Init Settings
   // ==========================================
   async getInitSettings(): Promise<StorefrontInitSettings> {
-    const res = await this.client.get("/init-settings", { timeout: 12000 });
+    const isBrowser = typeof window !== "undefined";
+    const res = await this.client.get("/init-settings", { timeout: isBrowser ? 10000 : 2500 });
     return res.data?.data || res.data;
   }
 
