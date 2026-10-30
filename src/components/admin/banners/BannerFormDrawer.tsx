@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Banner } from "@/types";
 import { bannerService } from "@/services/bannerService";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { toast } from "sonner";
 
 export interface BannerFormDrawerProps {
@@ -175,8 +176,8 @@ export function BannerFormDrawer({
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("File size cannot exceed 10MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("File size cannot exceed 20MB.");
       return;
     }
 
@@ -184,13 +185,16 @@ export function BannerFormDrawer({
     else setUploadingDesktop(true);
 
     try {
-      const res = await bannerService.uploadImage(file);
+      const bannerLabel = isMobile ? "Mobile banner" : "Desktop banner";
+      const optimizedFile = await optimizeUploadFile(file, { profile: "banner", label: bannerLabel });
+      const res = await bannerService.uploadImage(optimizedFile);
+      const desc = optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined;
       if (isMobile) {
         setMobileImageUrl(res.image_url);
-        toast.success("Mobile banner uploaded successfully.");
+        toast.success("Mobile banner uploaded successfully.", { description: desc });
       } else {
         setImageUrl(res.image_url);
-        toast.success("Desktop banner uploaded successfully.");
+        toast.success("Desktop banner uploaded successfully.", { description: desc });
       }
     } catch (err: any) {
       const errMsg = err?.response?.data?.message || "Failed to upload image.";

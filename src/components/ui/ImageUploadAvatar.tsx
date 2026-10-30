@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { Camera, Trash2, Upload, User as UserIcon, RefreshCw } from "lucide-react";
 import { ImageUploadGuidance } from "@/components/admin/ui/ImageUploadGuidance";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { toast } from "sonner";
 
 interface ImageUploadAvatarProps {
@@ -34,7 +35,7 @@ export function ImageUploadAvatar({
     xl: "w-24 h-24 text-xl",
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -44,19 +45,32 @@ export function ImageUploadAvatar({
       return;
     }
 
-    // Validate size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image must be smaller than 5MB.");
+    // Validate size (max 20MB)
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Image must be smaller than 20MB.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      onChange(dataUrl);
-      toast.info("Profile picture updated in preview. Click Save to apply changes.");
-    };
-    reader.readAsDataURL(file);
+    try {
+      const optimized = await optimizeUploadFile(file, { profile: "thumbnail", maxDimension: 400, label: "Profile picture" });
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        onChange(dataUrl);
+        toast.info("Profile picture updated in preview. Click Save to apply changes.", {
+          description: optimized.reductionText ? `Optimized: ${optimized.reductionText}` : undefined,
+        });
+      };
+      reader.readAsDataURL(optimized);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        onChange(dataUrl);
+        toast.info("Profile picture updated in preview. Click Save to apply changes.");
+      };
+      reader.readAsDataURL(file);
+    }
 
     // Reset input
     if (fileInputRef.current) {
@@ -89,13 +103,11 @@ export function ImageUploadAvatar({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={() => !disabled && fileInputRef.current?.click()}
-          className={`relative rounded-full overflow-hidden cursor-pointer ring-2 transition-all group shrink-0 ${
-            sizeClasses[size]
-          } ${
-            isHovered
+          className={`relative rounded-full overflow-hidden cursor-pointer ring-2 transition-all group shrink-0 ${sizeClasses[size]
+            } ${isHovered
               ? "ring-indigo-500 shadow-lg shadow-indigo-500/10 scale-105"
               : "ring-gray-200 dark:ring-white/10 bg-gray-100 dark:bg-slate-900"
-          } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+            } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
           {value ? (
             <img
@@ -111,9 +123,8 @@ export function ImageUploadAvatar({
 
           {/* Hover Overlay with Camera Icon */}
           <div
-            className={`absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center text-white transition-opacity ${
-              isHovered && !disabled ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
+            className={`absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center text-white transition-opacity ${isHovered && !disabled ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
           >
             <Camera className="w-4 h-4 text-white mb-0.5" />
             <span className="text-[9px] font-semibold text-slate-200">

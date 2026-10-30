@@ -578,6 +578,7 @@ export interface User {
   permissions?: string[];
   phone?: string | null;
   avatar?: string | null;
+  admin_theme?: 'dark' | 'light';
   addresses?: Address[];
   orders?: Order[];
   orders_count?: number;

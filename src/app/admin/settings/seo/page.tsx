@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import { 
-  Search, 
-  Save, 
-  Globe, 
-  ShieldCheck, 
-  Share2, 
-  Check, 
-  RotateCcw, 
-  Loader2, 
+import {
+  Search,
+  Save,
+  Globe,
+  ShieldCheck,
+  Share2,
+  Check,
+  RotateCcw,
+  Loader2,
   ExternalLink,
   UploadCloud,
   ImageIcon,
@@ -25,6 +25,7 @@ import {
   Info
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { SeoSettings } from "@/types";
 import { SettingsNavTabs } from "@/components/admin/settings/SettingsNavTabs";
 import { SitemapManagementCard } from "@/components/admin/settings/SitemapManagementCard";
@@ -172,19 +173,22 @@ export default function AdminSeoSettingsPage() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image file exceeds the 5MB size limit.");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Image file exceeds the 20MB size limit.");
       return;
     }
 
     setUploadingImage(true);
     try {
-      const res = await adminApi.uploadProductImage(file);
+      const optimizedFile = await optimizeUploadFile(file, { profile: "banner", maxDimension: 1200, label: "OpenGraph social image" });
+      const res = await adminApi.uploadProductImage(optimizedFile);
       if (res.image_url) {
         setSeo((prev) => ({ ...prev, og_image: res.image_url }));
         setManualUrl(res.image_url);
         setIsUrlInputMode(false);
-        toast.success("Social OpenGraph image uploaded successfully.");
+        toast.success("Social OpenGraph image uploaded successfully.", {
+          description: optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined,
+        });
       }
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to upload image. You can also paste an image URL.");
@@ -294,10 +298,9 @@ export default function AdminSeoSettingsPage() {
 
                 {/* Progress bar */}
                 <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full transition-all duration-300 ${
-                      titleLen > 60 ? "bg-rose-500" : titleLen >= 30 ? "bg-emerald-500" : "bg-amber-400"
-                    }`}
+                  <div
+                    className={`h-full transition-all duration-300 ${titleLen > 60 ? "bg-rose-500" : titleLen >= 30 ? "bg-emerald-500" : "bg-amber-400"
+                      }`}
                     style={{ width: `${Math.min(100, (titleLen / 60) * 100)}%` }}
                   />
                 </div>
@@ -330,10 +333,9 @@ export default function AdminSeoSettingsPage() {
 
                 {/* Progress bar */}
                 <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full transition-all duration-300 ${
-                      descLen > 160 ? "bg-rose-500" : descLen >= 80 ? "bg-emerald-500" : "bg-amber-400"
-                    }`}
+                  <div
+                    className={`h-full transition-all duration-300 ${descLen > 160 ? "bg-rose-500" : descLen >= 80 ? "bg-emerald-500" : "bg-amber-400"
+                      }`}
                     style={{ width: `${Math.min(100, (descLen / 160) * 100)}%` }}
                   />
                 </div>
@@ -489,7 +491,7 @@ export default function AdminSeoSettingsPage() {
                 </div>
               ) : (
                 /* Empty Dropzone for direct upload */
-                <div 
+                <div
                   onClick={() => fileInputRef.current?.click()}
                   className="border-2 border-dashed border-white/15 hover:border-[#A78BFA]/50 bg-[#121624]/60 hover:bg-[#121624] rounded-xl p-8 text-center transition cursor-pointer group space-y-2.5"
                 >
@@ -638,11 +640,10 @@ export default function AdminSeoSettingsPage() {
                 <button
                   type="button"
                   onClick={() => setPreviewPlatform("google")}
-                  className={`py-1.5 px-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1.5 ${
-                    previewPlatform === "google"
+                  className={`py-1.5 px-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1.5 ${previewPlatform === "google"
                       ? "bg-[#A78BFA] text-[#090B10] shadow-sm font-bold"
                       : "text-slate-400 hover:text-white"
-                  }`}
+                    }`}
                 >
                   <Search className="w-3.5 h-3.5" />
                   <span>Google</span>
@@ -651,11 +652,10 @@ export default function AdminSeoSettingsPage() {
                 <button
                   type="button"
                   onClick={() => setPreviewPlatform("twitter")}
-                  className={`py-1.5 px-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1.5 ${
-                    previewPlatform === "twitter"
+                  className={`py-1.5 px-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1.5 ${previewPlatform === "twitter"
                       ? "bg-[#A78BFA] text-[#090B10] shadow-sm font-bold"
                       : "text-slate-400 hover:text-white"
-                  }`}
+                    }`}
                 >
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Twitter / X</span>
@@ -664,11 +664,10 @@ export default function AdminSeoSettingsPage() {
                 <button
                   type="button"
                   onClick={() => setPreviewPlatform("facebook")}
-                  className={`py-1.5 px-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1.5 ${
-                    previewPlatform === "facebook"
+                  className={`py-1.5 px-2 rounded-md transition cursor-pointer flex items-center justify-center gap-1.5 ${previewPlatform === "facebook"
                       ? "bg-[#A78BFA] text-[#090B10] shadow-sm font-bold"
                       : "text-slate-400 hover:text-white"
-                  }`}
+                    }`}
                 >
                   <Globe className="w-3.5 h-3.5" />
                   <span>Facebook</span>
@@ -685,9 +684,8 @@ export default function AdminSeoSettingsPage() {
                       <button
                         type="button"
                         onClick={() => setGoogleDevice("desktop")}
-                        className={`px-2 py-0.5 rounded text-[10px] flex items-center gap-1 cursor-pointer transition ${
-                          googleDevice === "desktop" ? "bg-white/10 text-white font-bold" : "text-slate-400 hover:text-white"
-                        }`}
+                        className={`px-2 py-0.5 rounded text-[10px] flex items-center gap-1 cursor-pointer transition ${googleDevice === "desktop" ? "bg-white/10 text-white font-bold" : "text-slate-400 hover:text-white"
+                          }`}
                       >
                         <Monitor className="w-3 h-3" />
                         <span>Desktop</span>
@@ -695,9 +693,8 @@ export default function AdminSeoSettingsPage() {
                       <button
                         type="button"
                         onClick={() => setGoogleDevice("mobile")}
-                        className={`px-2 py-0.5 rounded text-[10px] flex items-center gap-1 cursor-pointer transition ${
-                          googleDevice === "mobile" ? "bg-white/10 text-white font-bold" : "text-slate-400 hover:text-white"
-                        }`}
+                        className={`px-2 py-0.5 rounded text-[10px] flex items-center gap-1 cursor-pointer transition ${googleDevice === "mobile" ? "bg-white/10 text-white font-bold" : "text-slate-400 hover:text-white"
+                          }`}
                       >
                         <Smartphone className="w-3 h-3" />
                         <span>Mobile</span>
@@ -706,9 +703,8 @@ export default function AdminSeoSettingsPage() {
                   </div>
 
                   {/* Google SERP Box */}
-                  <div className={`p-4 rounded-xl bg-[#202124] border border-white/10 space-y-2 transition-all ${
-                    googleDevice === "mobile" ? "max-w-[340px] mx-auto shadow-2xl" : ""
-                  }`}>
+                  <div className={`p-4 rounded-xl bg-[#202124] border border-white/10 space-y-2 transition-all ${googleDevice === "mobile" ? "max-w-[340px] mx-auto shadow-2xl" : ""
+                    }`}>
                     {/* SERP Header: Favicon + Brand Title + Breadcrumbs */}
                     <div className="flex items-center gap-2.5">
                       <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-[#202124] font-black text-[11px] shadow-sm shrink-0">

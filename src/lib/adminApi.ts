@@ -89,7 +89,7 @@ export const adminClient = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  timeout: 15000,
+  timeout: 30000,
 });
 
 // Attach isolated admin token to requests
@@ -221,6 +221,11 @@ export const adminApi = {
         localStorage.removeItem("aether_admin_user");
       }
     }
+  },
+
+  async updateAdminTheme(theme: "dark" | "light"): Promise<{ message: string; theme: "dark" | "light" }> {
+    const res = await adminClient.put("/admin/auth/theme", { theme });
+    return res.data;
   },
 
   // ==========================================

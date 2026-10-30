@@ -14,6 +14,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
+import { useAdminThemeStore } from "@/store/useAdminThemeStore";
 import { adminApi } from "@/lib/adminApi";
 
 interface AdminAccountDropdownProps {
@@ -63,6 +64,7 @@ export const AdminAccountDropdown: React.FC<AdminAccountDropdownProps> = ({ clas
     } catch {
       // Ignore network errors on logout
     } finally {
+      useAdminThemeStore.getState().resetTheme();
       logoutAdmin();
       router.push("/admin/login");
     }

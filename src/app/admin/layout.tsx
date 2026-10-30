@@ -64,6 +64,7 @@ import {
   Barcode,
 } from "lucide-react";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
+import { useAdminThemeStore } from "@/store/useAdminThemeStore";
 import { useThemeStore, resolveLogo } from "@/store/useThemeStore";
 import { adminApi } from "@/lib/adminApi";
 import { SidebarNavGroup, SidebarNavLink, NavChildItem } from "@/components/admin/SidebarNavGroup";
@@ -71,6 +72,7 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { CursorScrollProvider } from "@/components/admin/CursorScrollProvider";
 import { AdminAccountDropdown } from "@/components/admin/AdminAccountDropdown";
 import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
+import { AdminThemeToggle } from "@/components/admin/AdminThemeToggle";
 
 
 function AdminDynamicBreadcrumb({ allItems, pathname }: { allItems: any[]; pathname: string }) {
@@ -199,13 +201,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       try {
         const res = await adminApi.getMe();
         if (!["admin", "super_admin", "staff"].includes(res.user.role)) {
+          useAdminThemeStore.getState().resetTheme();
           logoutAdmin();
           router.push("/admin/login?error=forbidden");
           return;
         }
         setAdminAuth(res.user, token);
+        useAdminThemeStore.getState().initUserTheme(res.user?.id, res.user?.admin_theme);
         setLoading(false);
       } catch (err) {
+        useAdminThemeStore.getState().resetTheme();
         logoutAdmin();
         router.push("/admin/login?error=session_expired");
       }
@@ -213,6 +218,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     verifyAuth();
   }, [pathname, isLoginPage]);
+
+  // Synchronize admin theme preference with document and store
+  useEffect(() => {
+    if (adminUser?.id) {
+      useAdminThemeStore.getState().initUserTheme(adminUser.id, adminUser.admin_theme);
+    }
+  }, [adminUser?.id, adminUser?.admin_theme]);
 
   const toggleSidebar = () => {
     const nextState = !sidebarCollapsed;
@@ -416,7 +428,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   const handleLogout = async () => {
-    await adminApi.logout();
+    try {
+      await adminApi.logout();
+    } catch {
+      // Ignore network errors on logout
+    }
+    useAdminThemeStore.getState().resetTheme();
     logoutAdmin();
     router.push("/admin/login");
   };
@@ -716,6 +733,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span>Live Store</span>
               <ExternalLink className="w-3 h-3 text-cyan-400" />
             </Link>
+
+            <AdminThemeToggle />
 
             <AdminNotificationBell />
 

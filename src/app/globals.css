@@ -1270,3 +1270,670 @@ body.theme-light-mode:not(.admin-body) .safe-area-inset-bottom.bg-\[\#090b14\]\/
   animation: skeleton-shimmer 2s infinite ease-in-out;
   pointer-events: none;
 }
+
+
+/* ==========================================================================
+   Admin Panel Light Theme Engine (Strictly Scoped to Admin)
+   ========================================================================== */
+
+/* 1. Theme Token Overrides for Admin Light Mode */
+body.admin-body.admin-theme-light,
+.admin-theme-light {
+  --color-admin-bg: #F8FAFC;
+  --color-admin-surface: #FFFFFF;
+  --color-admin-elevated: #F1F5F9;
+  --color-admin-border: #E2E8F0;
+  --color-admin-accent: #7C3AED;
+  --color-admin-accent-hover: #6D28D9;
+  --color-admin-accent-active: #EDE9FE;
+  --color-admin-success: #10B981;
+  --color-admin-text-primary: #0F172A;
+  --color-admin-text-secondary: #475569;
+  --color-admin-text-disabled: #94A3B8;
+  --color-admin-error: #EF4444;
+  --color-admin-warning: #D97706;
+
+  --admin-bg: #F8FAFC;
+  --admin-surface: #FFFFFF;
+  --admin-elevated: #F1F5F9;
+  --admin-border: #E2E8F0;
+  --admin-accent: #7C3AED;
+  --admin-accent-hover: #6D28D9;
+  --admin-accent-active: #EDE9FE;
+  --admin-success: #10B981;
+  --admin-text-primary: #0F172A;
+  --admin-text-secondary: #475569;
+  --admin-text-disabled: #94A3B8;
+  --admin-error: #EF4444;
+  --admin-warning: #D97706;
+}
+
+/* 2. Admin Shell, Main Canvas, & Base Backgrounds */
+.admin-theme-light .admin-console,
+body.admin-body.admin-theme-light {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+.admin-theme-light .bg-\[\#090B10\],
+.admin-theme-light .bg-\[\#080a10\],
+.admin-theme-light .bg-\[\#0c0e14\],
+.admin-theme-light .bg-\[\#07090e\],
+.admin-theme-light .bg-\[\#0b0e17\],
+.admin-theme-light .bg-\[\#0c101d\],
+.admin-theme-light .bg-\[\#0d0f18\],
+.admin-theme-light .bg-\[\#0d1017\],
+.admin-theme-light main.bg-\[\#090B10\] {
+  background-color: #F8FAFC !important;
+}
+
+.admin-theme-light .bg-\[\#090B10\]\/95,
+.admin-theme-light .bg-\[\#090B10\]\/90,
+.admin-theme-light .bg-\[\#090B10\]\/80,
+.admin-theme-light header.bg-\[\#090B10\]\/95 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+
+.admin-theme-light .bg-\[\#090B10\]\/60,
+.admin-theme-light .bg-\[\#090B10\]\/50,
+.admin-theme-light .bg-\[\#090B10\]\/40 {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+}
+
+/* 3. Surface & Card Backgrounds (Sidebar, Panels, Cards) */
+.admin-theme-light aside,
+.admin-theme-light .bg-\[\#11141D\],
+.admin-theme-light .bg-\[\#0f121a\],
+.admin-theme-light .bg-\[\#0f121b\],
+.admin-theme-light .bg-\[\#0e121e\],
+.admin-theme-light .bg-\[\#0F141E\],
+.admin-theme-light .bg-\[\#12151f\],
+.admin-theme-light .bg-\[\#121624\],
+.admin-theme-light .bg-\[\#131722\] {
+  background-color: #FFFFFF !important;
+}
+
+.admin-theme-light .bg-\[\#11141D\]\/98,
+.admin-theme-light .bg-\[\#11141D\]\/95,
+.admin-theme-light .bg-\[\#11141D\]\/90,
+.admin-theme-light .bg-\[\#11141D\]\/80 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* 4. Elevated Surfaces, Badges, Search Bars, Table Headers, Inputs */
+.admin-theme-light .bg-\[\#171B26\],
+.admin-theme-light .bg-\[\#151824\],
+.admin-theme-light .bg-\[\#161a26\],
+.admin-theme-light .bg-\[\#1a1f2e\],
+.admin-theme-light .bg-\[\#1c2130\] {
+  background-color: #F1F5F9 !important;
+}
+
+.admin-theme-light .bg-\[\#171B26\]\/80,
+.admin-theme-light .bg-\[\#171B26\]\/60,
+.admin-theme-light .bg-\[\#171B26\]\/50 {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+.admin-theme-light .bg-\[\#211B32\] {
+  background-color: #EDE9FE !important;
+}
+
+/* 5. Hover States */
+.admin-theme-light .hover\:bg-\[\#171B26\]\/80:hover,
+.admin-theme-light .hover\:bg-\[\#171B26\]:hover,
+.admin-theme-light .hover\:bg-\[\#1F2433\]:hover,
+.admin-theme-light .hover\:bg-\[\#1a1f2e\]:hover,
+.admin-theme-light .hover\:bg-\[\#161a26\]:hover,
+.admin-theme-light .hover\:bg-white\/5:hover,
+.admin-theme-light .hover\:bg-white\/10:hover {
+  background-color: #E2E8F0 !important;
+}
+
+/* 6. Borders, Dividers & Separators */
+.admin-theme-light .border-\[\#272B35\],
+.admin-theme-light .border-\[\#272B35\]\/60,
+.admin-theme-light .border-white\/10,
+.admin-theme-light .border-white\/5,
+.admin-theme-light .border-white\/15,
+.admin-theme-light .border-white\/20,
+.admin-theme-light .divide-\[\#272B35\] > * + * {
+  border-color: #E2E8F0 !important;
+}
+
+/* 7. Typography Hierarchy */
+.admin-theme-light .text-\[\#E5E7EB\],
+.admin-theme-light .text-slate-100,
+.admin-theme-light .text-slate-200 {
+  color: #0F172A !important;
+}
+
+.admin-theme-light h1.text-white,
+.admin-theme-light h2.text-white,
+.admin-theme-light h3.text-white,
+.admin-theme-light h4.text-white,
+.admin-theme-light p.text-white,
+.admin-theme-light div.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="badge"]),
+.admin-theme-light span.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="badge"]) {
+  color: #0F172A !important;
+}
+
+.admin-theme-light .text-\[\#929BAD\],
+.admin-theme-light .text-slate-400,
+.admin-theme-light .text-slate-300,
+.admin-theme-light .text-gray-400 {
+  color: #475569 !important;
+}
+
+.admin-theme-light .text-\[\#626B7B\],
+.admin-theme-light .text-\[\#6B7280\],
+.admin-theme-light .text-slate-500,
+.admin-theme-light .text-gray-500 {
+  color: #94A3B8 !important;
+}
+
+.admin-theme-light .text-\[\#090B10\]:not([class*="bg-white"]):not([class*="bg-slate"]) {
+  color: #0F172A !important;
+}
+
+/* 8. Accent Color Contrast (Purple #A78BFA -> Dark Violet #7C3AED for AA/AAA Readability) */
+.admin-theme-light .text-\[\#A78BFA\],
+.admin-theme-light .text-\[\#B9A3FF\] {
+  color: #7C3AED !important;
+}
+
+.admin-theme-light .border-\[\#A78BFA\] {
+  border-color: #7C3AED !important;
+}
+
+.admin-theme-light .border-\[\#A78BFA\]\/30,
+.admin-theme-light .border-\[\#A78BFA\]\/40 {
+  border-color: rgba(124, 58, 237, 0.35) !important;
+}
+
+.admin-theme-light .bg-\[\#A78BFA\]\/10,
+.admin-theme-light .bg-\[\#A78BFA\]\/20 {
+  background-color: rgba(124, 58, 237, 0.1) !important;
+}
+
+/* 9. Forms, Inputs, Textareas, Selects */
+.admin-theme-light input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.admin-theme-light textarea,
+.admin-theme-light select {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.admin-theme-light input::placeholder,
+.admin-theme-light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+.admin-theme-light input:focus,
+.admin-theme-light textarea:focus,
+.admin-theme-light select:focus {
+  border-color: #7C3AED !important;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15) !important;
+}
+
+/* 10. Tables, Headers & Rows */
+.admin-theme-light th {
+  background-color: #F8FAFC !important;
+  color: #475569 !important;
+  border-color: #E2E8F0 !important;
+}
+
+.admin-theme-light tr.hover\:bg-\[\#171B26\]\/50:hover,
+.admin-theme-light tr.hover\:bg-white\/5:hover,
+.admin-theme-light tbody tr:hover {
+  background-color: #F8FAFC !important;
+}
+
+.admin-theme-light td {
+  border-color: #E2E8F0 !important;
+}
+
+/* 11. Overlays, Dialogs, Dropdowns & Command Palette */
+.admin-theme-light [role="dialog"],
+.admin-theme-light [data-radix-popper-content-wrapper] > div {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+}
+
+.admin-theme-light kbd {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+/* 12. Theme Toggle Navbar Button & Segmented Pill Group */
+.admin-theme-light .admin-theme-toggle,
+.admin-theme-light .admin-theme-toggle-group {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+.admin-theme-light .admin-theme-toggle-divider {
+  background-color: #E2E8F0 !important;
+}
+
+.admin-theme-light .admin-theme-toggle:hover {
+  background-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+/* 13. Admin Light Scrollbars */
+.admin-theme-light .admin-console ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.15) !important;
+}
+
+.admin-theme-light .admin-console *:hover::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25) !important;
+}
+
+.admin-theme-light .admin-console ::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.6) !important;
+}
+
+.admin-theme-light .admin-console .custom-horizontal-scrollbar,
+.admin-theme-light .admin-console [data-scrollable-card],
+.admin-theme-light .admin-console .overflow-x-auto {
+  scrollbar-color: rgba(124, 58, 237, 0.4) rgba(15, 23, 42, 0.05) !important;
+}
+
+
+/* ==========================================================================
+   Admin Panel Light Theme Engine (Strictly Scoped to Admin)
+   ========================================================================== */
+
+/* 1. Theme Token Overrides for Admin Light Mode */
+body.admin-body.admin-theme-light,
+.admin-theme-light {
+  --color-admin-bg: #F8FAFC;
+  --color-admin-surface: #FFFFFF;
+  --color-admin-elevated: #F1F5F9;
+  --color-admin-border: #E2E8F0;
+  --color-admin-accent: #7C3AED;
+  --color-admin-accent-hover: #6D28D9;
+  --color-admin-accent-active: #EDE9FE;
+  --color-admin-success: #10B981;
+  --color-admin-text-primary: #0F172A;
+  --color-admin-text-secondary: #475569;
+  --color-admin-text-disabled: #94A3B8;
+  --color-admin-error: #EF4444;
+  --color-admin-warning: #D97706;
+
+  --admin-bg: #F8FAFC;
+  --admin-surface: #FFFFFF;
+  --admin-elevated: #F1F5F9;
+  --admin-border: #E2E8F0;
+  --admin-accent: #7C3AED;
+  --admin-accent-hover: #6D28D9;
+  --admin-accent-active: #EDE9FE;
+  --admin-success: #10B981;
+  --admin-text-primary: #0F172A;
+  --admin-text-secondary: #475569;
+  --admin-text-disabled: #94A3B8;
+  --admin-error: #EF4444;
+  --admin-warning: #D97706;
+}
+
+/* 2. Admin Shell, Main Canvas, & Base Backgrounds */
+.admin-theme-light .admin-console,
+body.admin-body.admin-theme-light {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+.admin-theme-light .bg-\[\#090B10\],
+.admin-theme-light .bg-\[\#080a10\],
+.admin-theme-light .bg-\[\#0c0e14\],
+.admin-theme-light .bg-\[\#07090e\],
+.admin-theme-light .bg-\[\#0b0e17\],
+.admin-theme-light .bg-\[\#0c101d\],
+.admin-theme-light .bg-\[\#0d0f18\],
+.admin-theme-light .bg-\[\#0d1017\],
+.admin-theme-light main.bg-\[\#090B10\] {
+  background-color: #F8FAFC !important;
+}
+
+.admin-theme-light .bg-\[\#090B10\]\/95,
+.admin-theme-light .bg-\[\#090B10\]\/90,
+.admin-theme-light .bg-\[\#090B10\]\/80,
+.admin-theme-light header.bg-\[\#090B10\]\/95 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+
+.admin-theme-light .bg-\[\#090B10\]\/60,
+.admin-theme-light .bg-\[\#090B10\]\/50,
+.admin-theme-light .bg-\[\#090B10\]\/40 {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+}
+
+/* 3. Surface & Card Backgrounds (Sidebar, Panels, Cards) */
+.admin-theme-light aside,
+.admin-theme-light .bg-\[\#11141D\],
+.admin-theme-light .bg-\[\#0f121a\],
+.admin-theme-light .bg-\[\#0f121b\],
+.admin-theme-light .bg-\[\#0e121e\],
+.admin-theme-light .bg-\[\#0F141E\],
+.admin-theme-light .bg-\[\#12151f\],
+.admin-theme-light .bg-\[\#121624\],
+.admin-theme-light .bg-\[\#131722\] {
+  background-color: #FFFFFF !important;
+}
+
+.admin-theme-light .bg-\[\#11141D\]\/98,
+.admin-theme-light .bg-\[\#11141D\]\/95,
+.admin-theme-light .bg-\[\#11141D\]\/90,
+.admin-theme-light .bg-\[\#11141D\]\/80 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* 4. Elevated Surfaces, Badges, Search Bars, Table Headers, Inputs */
+.admin-theme-light .bg-\[\#171B26\],
+.admin-theme-light .bg-\[\#151824\],
+.admin-theme-light .bg-\[\#161a26\],
+.admin-theme-light .bg-\[\#1a1f2e\],
+.admin-theme-light .bg-\[\#1c2130\] {
+  background-color: #F1F5F9 !important;
+}
+
+.admin-theme-light .bg-\[\#171B26\]\/80,
+.admin-theme-light .bg-\[\#171B26\]\/60,
+.admin-theme-light .bg-\[\#171B26\]\/50 {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+.admin-theme-light .bg-\[\#211B32\] {
+  background-color: #EDE9FE !important;
+}
+
+/* 5. Hover States */
+.admin-theme-light .hover\:bg-\[\#171B26\]\/80:hover,
+.admin-theme-light .hover\:bg-\[\#171B26\]:hover,
+.admin-theme-light .hover\:bg-\[\#1F2433\]:hover,
+.admin-theme-light .hover\:bg-\[\#1a1f2e\]:hover,
+.admin-theme-light .hover\:bg-\[\#161a26\]:hover,
+.admin-theme-light .hover\:bg-white\/5:hover,
+.admin-theme-light .hover\:bg-white\/10:hover {
+  background-color: #E2E8F0 !important;
+}
+
+/* 6. Borders, Dividers & Separators */
+.admin-theme-light .border-\[\#272B35\],
+.admin-theme-light .border-\[\#272B35\]\/60,
+.admin-theme-light .border-white\/10,
+.admin-theme-light .border-white\/5,
+.admin-theme-light .border-white\/15,
+.admin-theme-light .border-white\/20,
+.admin-theme-light .divide-\[\#272B35\] > * + * {
+  border-color: #E2E8F0 !important;
+}
+
+/* 7. Typography Hierarchy */
+.admin-theme-light .text-\[\#E5E7EB\],
+.admin-theme-light .text-slate-100,
+.admin-theme-light .text-slate-200 {
+  color: #0F172A !important;
+}
+
+.admin-theme-light h1.text-white,
+.admin-theme-light h2.text-white,
+.admin-theme-light h3.text-white,
+.admin-theme-light h4.text-white,
+.admin-theme-light p.text-white,
+.admin-theme-light div.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="badge"]),
+.admin-theme-light span.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="badge"]) {
+  color: #0F172A !important;
+}
+
+.admin-theme-light .text-\[\#929BAD\],
+.admin-theme-light .text-slate-400,
+.admin-theme-light .text-slate-300,
+.admin-theme-light .text-gray-400 {
+  color: #475569 !important;
+}
+
+.admin-theme-light .text-\[\#626B7B\],
+.admin-theme-light .text-\[\#6B7280\],
+.admin-theme-light .text-slate-500,
+.admin-theme-light .text-gray-500 {
+  color: #94A3B8 !important;
+}
+
+.admin-theme-light .text-\[\#090B10\]:not([class*="bg-white"]):not([class*="bg-slate"]) {
+  color: #0F172A !important;
+}
+
+/* 8. Accent Color Contrast (Purple #A78BFA -> Dark Violet #7C3AED for AA/AAA Readability) */
+.admin-theme-light .text-\[\#A78BFA\],
+.admin-theme-light .text-\[\#B9A3FF\] {
+  color: #7C3AED !important;
+}
+
+.admin-theme-light .border-\[\#A78BFA\] {
+  border-color: #7C3AED !important;
+}
+
+.admin-theme-light .border-\[\#A78BFA\]\/30,
+.admin-theme-light .border-\[\#A78BFA\]\/40 {
+  border-color: rgba(124, 58, 237, 0.35) !important;
+}
+
+.admin-theme-light .bg-\[\#A78BFA\]\/10,
+.admin-theme-light .bg-\[\#A78BFA\]\/20 {
+  background-color: rgba(124, 58, 237, 0.1) !important;
+}
+
+/* 9. Forms, Inputs, Textareas, Selects */
+.admin-theme-light input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.admin-theme-light textarea,
+.admin-theme-light select {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.admin-theme-light input::placeholder,
+.admin-theme-light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+.admin-theme-light input:focus,
+.admin-theme-light textarea:focus,
+.admin-theme-light select:focus {
+  border-color: #7C3AED !important;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15) !important;
+}
+
+/* 10. Tables, Headers & Rows */
+.admin-theme-light th {
+  background-color: #F8FAFC !important;
+  color: #475569 !important;
+  border-color: #E2E8F0 !important;
+}
+
+.admin-theme-light tr.hover\:bg-\[\#171B26\]\/50:hover,
+.admin-theme-light tr.hover\:bg-white\/5:hover,
+.admin-theme-light tbody tr:hover {
+  background-color: #F8FAFC !important;
+}
+
+.admin-theme-light td {
+  border-color: #E2E8F0 !important;
+}
+
+/* 11. Overlays, Dialogs, Dropdowns & Command Palette */
+.admin-theme-light [role="dialog"],
+.admin-theme-light [data-radix-popper-content-wrapper] > div {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+}
+
+.admin-theme-light kbd {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+/* 12. Theme Toggle Navbar Button */
+.admin-theme-light .admin-theme-toggle {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+.admin-theme-light .admin-theme-toggle:hover {
+  background-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+/* 13. Admin Light Scrollbars */
+.admin-theme-light .admin-console ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.15) !important;
+}
+
+.admin-theme-light .admin-console *:hover::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25) !important;
+}
+
+.admin-theme-light .admin-console ::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.6) !important;
+}
+
+.admin-theme-light .admin-console .custom-horizontal-scrollbar,
+.admin-theme-light .admin-console [data-scrollable-card],
+.admin-theme-light .admin-console .overflow-x-auto {
+  scrollbar-color: rgba(124, 58, 237, 0.4) rgba(15, 23, 42, 0.05) !important;
+}
+
+
+/* ==========================================================================
+   Inhaliq Admin Panel Production Theme Transition System (Matching Bricky Motion)
+   ========================================================================== */
+
+/* GPU-Accelerated Circular Reveal View Transition (Centered on Toggle Origin) */
+html.admin-theme-clip-active,
+html.admin-theme-clip-active *,
+html.admin-theme-clip-active *::before,
+html.admin-theme-clip-active *::after {
+  transition: none !important;
+}
+
+html.admin-theme-clip-active::view-transition-old(root) {
+  animation: none !important;
+  mix-blend-mode: normal !important;
+  z-index: 1 !important;
+}
+
+html.admin-theme-clip-active::view-transition-new(root) {
+  animation: none !important;
+  mix-blend-mode: normal !important;
+  z-index: 2 !important;
+}
+
+body.admin-theme-light .admin-theme-toggle-group {
+  background-color: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+/* 1. Coordinated Surface Transitions (Fallback & Zero-Stutter) */
+body.admin-theme-transitioning,
+body.admin-theme-transitioning .admin-console,
+body.admin-theme-transitioning .admin-console header,
+body.admin-theme-transitioning .admin-console aside,
+body.admin-theme-transitioning .admin-console main,
+body.admin-theme-transitioning .admin-console nav,
+body.admin-theme-transitioning .admin-console [role="region"],
+body.admin-theme-transitioning .admin-console [role="navigation"],
+body.admin-theme-transitioning .admin-console .bg-\[\#11141D\],
+body.admin-theme-transitioning .admin-console .bg-\[\#171B26\],
+body.admin-theme-transitioning .admin-console .bg-\[\#090B10\],
+body.admin-theme-transitioning .admin-console .bg-\[\#211B32\],
+body.admin-theme-transitioning .admin-console .border-\[\#272B35\],
+body.admin-theme-transitioning .admin-console table,
+body.admin-theme-transitioning .admin-console thead,
+body.admin-theme-transitioning .admin-console tbody,
+body.admin-theme-transitioning .admin-console tr,
+body.admin-theme-transitioning .admin-console th,
+body.admin-theme-transitioning .admin-console td,
+body.admin-theme-transitioning .admin-console input,
+body.admin-theme-transitioning .admin-console select,
+body.admin-theme-transitioning .admin-console textarea,
+body.admin-theme-transitioning .admin-console [role="dialog"],
+body.admin-theme-transitioning [data-radix-popper-content-wrapper] > div {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 280ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. Recharts SVG elements transition during theme switch */
+body.admin-theme-transitioning .admin-console .recharts-cartesian-grid line {
+  transition: stroke 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+body.admin-theme-transitioning .admin-console .recharts-text,
+body.admin-theme-transitioning .admin-console .recharts-legend-item-text {
+  transition: fill 220ms cubic-bezier(0.2, 0, 0, 1), color 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 3. Recharts Cartesian Grid and Axis in Light Mode */
+.admin-theme-light .recharts-cartesian-grid line {
+  stroke: #E2E8F0 !important;
+}
+.admin-theme-light .recharts-text {
+  fill: #64748B !important;
+}
+.admin-theme-light .recharts-legend-item-text {
+  color: #475569 !important;
+}
+.admin-theme-light .recharts-tooltip-wrapper > div {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* 4. Semantic Status Colors in Light Mode for Optimal Contrast */
+.admin-theme-light .text-emerald-400 {
+  color: #059669 !important;
+}
+.admin-theme-light .text-sky-400 {
+  color: #0284C7 !important;
+}
+.admin-theme-light .text-indigo-400 {
+  color: #4F46E5 !important;
+}
+.admin-theme-light .text-amber-400 {
+  color: #D97706 !important;
+}
+.admin-theme-light .text-rose-400 {
+  color: #E11D48 !important;
+}
+
+/* 5. Theme Toggle Switch Micro-Interaction (180ms cubic-bezier(0.2, 0, 0, 1)) */
+.admin-theme-toggle-group button {
+  transition: background-color 180ms cubic-bezier(0.2, 0, 0, 1),
+              border-color 180ms cubic-bezier(0.2, 0, 0, 1),
+              color 180ms cubic-bezier(0.2, 0, 0, 1),
+              box-shadow 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.admin-theme-toggle-group button svg {
+  transition: color 180ms cubic-bezier(0.2, 0, 0, 1),
+              stroke 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 6. Respect User Reduced-Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  body.admin-theme-transitioning,
+  body.admin-theme-transitioning .admin-console,
+  body.admin-theme-transitioning .admin-console *,
+  .admin-theme-toggle-group button,
+  .admin-theme-toggle-group button svg {
+    transition-duration: 0.01ms !important;
+  }
+}

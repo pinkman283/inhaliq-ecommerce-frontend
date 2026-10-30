@@ -32,6 +32,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { Promotion, Category, Brand, Product, User } from "@/types";
 import { AdminPageHeader } from "@/components/admin/ui";
 import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
@@ -317,9 +318,12 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
     if (!file) return;
     setUploadingDesktop(true);
     try {
-      const res = await adminApi.uploadPromotionImage(file);
+      const optimized = await optimizeUploadFile(file, { profile: "banner", label: "Desktop campaign banner" });
+      const res = await adminApi.uploadPromotionImage(optimized);
       handleChange("banner_image", res.image_url);
-      toast.success("Desktop promotional image uploaded successfully!");
+      toast.success("Desktop promotional image uploaded successfully!", {
+        description: optimized.reductionText ? `Optimized: ${optimized.reductionText}` : undefined,
+      });
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to upload image");
     } finally {
@@ -332,9 +336,12 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
     if (!file) return;
     setUploadingMobile(true);
     try {
-      const res = await adminApi.uploadPromotionImage(file);
+      const optimized = await optimizeUploadFile(file, { profile: "banner", label: "Mobile campaign banner" });
+      const res = await adminApi.uploadPromotionImage(optimized);
       handleChange("mobile_banner_image", res.image_url);
-      toast.success("Mobile promotional image uploaded successfully!");
+      toast.success("Mobile promotional image uploaded successfully!", {
+        description: optimized.reductionText ? `Optimized: ${optimized.reductionText}` : undefined,
+      });
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to upload mobile image");
     } finally {

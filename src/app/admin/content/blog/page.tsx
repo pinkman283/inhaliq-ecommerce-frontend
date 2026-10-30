@@ -44,6 +44,7 @@ import {
 } from "lucide-react";
 import { BlogPost, BlogCategory, BlogTag, BlogComment, BlogSummary } from "@/types";
 import { blogService } from "@/services/blogService";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import {
   AdminPageHeader,
   AdminStatStrip,
@@ -449,16 +450,19 @@ function AdminContentBlogPageContent() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image file size must be under 5MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Image file size must be under 20MB.");
       return;
     }
 
     setImageUploading(true);
     try {
-      const res = await blogService.uploadBlogImage(file);
+      const optimizedFile = await optimizeUploadFile(file, { profile: "banner", label: "Featured blog image" });
+      const res = await blogService.uploadBlogImage(optimizedFile);
       setPostImage(res.image_url);
-      toast.success("Featured image uploaded.");
+      toast.success("Featured image uploaded.", {
+        description: optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined,
+      });
     } catch {
       toast.error("Failed to upload image. You can also paste an image URL directly.");
     } finally {

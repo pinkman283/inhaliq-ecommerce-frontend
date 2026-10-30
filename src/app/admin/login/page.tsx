@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { adminApi } from "@/lib/adminApi";
 import { useAdminAuthStore } from "@/store/useAdminAuthStore";
+import { useAdminThemeStore } from "@/store/useAdminThemeStore";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { toast } from "sonner";
 import SplashCursor from "@/components/SplashCursor";
@@ -50,6 +51,7 @@ export default function AdminLoginPage() {
     try {
       const res = await adminApi.login({ email, password });
       setAdminAuth(res.user, res.token);
+      useAdminThemeStore.getState().initUserTheme(res.user?.id, res.user?.admin_theme);
       toast.success(`Authenticated as ${res.user.role.toUpperCase()}: ${res.user.name}`);
       router.push("/admin");
     } catch (err: any) {

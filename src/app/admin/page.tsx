@@ -88,6 +88,12 @@ export default function AdminDashboardOverview() {
 
   // Fetch Dashboard Telemetry with Graceful Partial-Failure Handling
   const fetchDashboardData = useCallback(async (currentRange: DateRangeState, isManualRefresh = false) => {
+    // If unauthenticated, avoid dispatching unauthorized backend telemetry queries
+    if (typeof window !== "undefined" && !localStorage.getItem("aether_admin_token")) {
+      setLoading(false);
+      return;
+    }
+
     if (isManualRefresh) {
       setRefreshing(true);
     } else {
@@ -98,7 +104,7 @@ export default function AdminDashboardOverview() {
     try {
       // 1. Fetch Primary Analytics & Telemetry (stats, recent orders, top products, sales trend)
       const analyticsPromise = adminApi.getAnalytics().catch((err) => {
-        console.error("Failed to fetch admin analytics:", err);
+        console.warn("Failed to fetch admin analytics:", err?.message || err);
         return null;
       });
 
@@ -108,7 +114,7 @@ export default function AdminDashboardOverview() {
         : { period: getPresetDateRange(currentRange.period).backendPeriod || currentRange.period };
 
       const financePromise = adminApi.getFinanceSummary(finParams).catch((err) => {
-        console.error("Failed to fetch current finance summary:", err);
+        console.warn("Failed to fetch current finance summary:", err?.message || err);
         return null;
       });
 
@@ -125,7 +131,7 @@ export default function AdminDashboardOverview() {
       }
 
       const prevFinancePromise = adminApi.getFinanceSummary(prevFinParams).catch((err) => {
-        console.error("Failed to fetch previous finance summary:", err);
+        console.warn("Failed to fetch previous finance summary:", err?.message || err);
         return null;
       });
 
@@ -188,7 +194,7 @@ export default function AdminDashboardOverview() {
 
       setLastUpdated(new Date());
     } catch (err: any) {
-      console.error("Dashboard data load error:", err);
+      console.warn("Dashboard data load warning:", err?.message || err);
       setFetchError("Could not refresh some dashboard telemetry. Check network connectivity.");
     } finally {
       setLoading(false);

@@ -8,7 +8,7 @@ import { optimizeImageForUpload } from "@/lib/imageOptimizer";
 import { adminApi, OptimizationError } from "@/lib/adminApi";
 import {
   formatByteSize,
-  notifyOptimizationSuccess,
+  calculateReduction,
   notifyUploadSuccess,
   notifyOptimizationUnavailable,
   notifyOptimizationFailed,
@@ -124,6 +124,7 @@ export function ProductMediaTab({
         let fileToUpload: File = file;
         let isFallbackOriginal = false;
         let optimizationSucceeded = false;
+        let reductionText: string | undefined;
 
         // 4. Pre-scale large image if > 4.2MB to fit Vercel proxy ceiling
         let candidateForProxy: File = file;
@@ -148,9 +149,7 @@ export function ProductMediaTab({
             fileToUpload = optResult.file;
             optimizationSucceeded = true;
             isFallbackOriginal = false;
-
-            // Phase 3A: Immediate success toast for optimization with size metrics
-            notifyOptimizationSuccess(optResult.originalBytes, optResult.optimizedBytes);
+            reductionText = calculateReduction(optResult.originalBytes, optResult.optimizedBytes).descriptionText;
           } catch (optErr: unknown) {
             console.warn("[ProductMediaTab] Optimization failed, evaluating fallback:", optErr);
 
@@ -212,7 +211,7 @@ export function ProductMediaTab({
           onImageUploaded?.(res.image_url, res.path);
 
           // Phase 3B & 3E: Notify upload success
-          notifyUploadSuccess(isFallbackOriginal);
+          notifyUploadSuccess(isFallbackOriginal, reductionText);
 
           uploadedImages.push({
             image_url: res.image_url,

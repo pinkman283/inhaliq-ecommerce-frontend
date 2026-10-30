@@ -6,7 +6,7 @@ import { X, Upload, Trash2, Loader2 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
 import { ImageUploadGuidance } from "@/components/admin/ui/ImageUploadGuidance";
-import { optimizeImageForUpload } from "@/lib/imageOptimizer";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { adminApi } from "@/lib/adminApi";
 import { Brand } from "@/types";
 import { toast } from "sonner";
@@ -76,15 +76,18 @@ function BrandFormDrawerContent({
 
     setUploadingLogo(true);
     try {
-      const fileToUpload = await optimizeImageForUpload(file, {
+      const fileToUpload = await optimizeUploadFile(file, {
+        profile: "brand",
         maxDimension: 800,
-        maxSizeBytes: 1 * 1024 * 1024,
-        quality: 0.9,
+        quality: 90,
+        label: "Brand logo",
       });
 
       const res = await adminApi.uploadBrandLogo(fileToUpload);
       setLogo(res.logo_url || res.image_url);
-      toast.success("Brand logo uploaded successfully.");
+      toast.success("Brand logo uploaded successfully.", {
+        description: fileToUpload.reductionText ? `Optimized: ${fileToUpload.reductionText}` : undefined,
+      });
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { errors?: { logo?: string[] }; message?: string } } };
       const errMsg =

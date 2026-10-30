@@ -39,6 +39,7 @@ import {
   resolveLogo,
 } from "@/store/useThemeStore";
 import { AdminSaveBar } from "@/components/admin/ui/AdminSaveBar";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { toast } from "sonner";
 
 const DEFAULT_PLACEMENTS: PlacementOption[] = [
@@ -212,14 +213,15 @@ function BrandingStudioContent() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("Favicon must be less than 2MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Favicon must be less than 20MB.");
       return;
     }
 
     setUploadingFavicon(true);
     try {
-      const uploadRes = await brandingService.uploadAsset(file);
+      const optimizedFile = await optimizeUploadFile(file, { profile: "lossless", label: "Favicon" });
+      const uploadRes = await brandingService.uploadAsset(optimizedFile);
       await brandingService.updateFavicon(uploadRes.image_url);
       setFaviconUrl(uploadRes.image_url);
       updateClientTheme({ store_favicon: uploadRes.image_url });
@@ -227,7 +229,9 @@ function BrandingStudioContent() {
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("store_favicon_updated", { detail: uploadRes.image_url }));
       }
-      toast.success("Favicon updated successfully!");
+      toast.success("Favicon updated successfully!", {
+        description: optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined,
+      });
     } catch (err: any) {
       console.error("Favicon upload failed:", err);
       toast.error(err?.response?.data?.message || "Failed to upload favicon.");
@@ -260,13 +264,14 @@ function BrandingStudioContent() {
     const file = e.target.files?.[0];
     if (!file || replacingLogoId === null) return;
 
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("Logo file must be less than 10MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Logo file must be less than 20MB.");
       return;
     }
 
     try {
-      const uploadRes = await brandingService.uploadAsset(file);
+      const optimizedFile = await optimizeUploadFile(file, { profile: "brand", label: "Brand logo" });
+      const uploadRes = await brandingService.uploadAsset(optimizedFile);
       const targetLogo = logos.find((l) => l.id === replacingLogoId);
       if (!targetLogo) return;
 
@@ -288,7 +293,9 @@ function BrandingStudioContent() {
         updateClientTheme({ store_brand_logo: uploadRes.image_url });
       }
 
-      toast.success("Logo image replaced successfully!");
+      toast.success("Logo image replaced successfully!", {
+        description: optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined,
+      });
     } catch (err: any) {
       console.error("Replace logo failed:", err);
       toast.error(err?.response?.data?.message || "Failed to replace logo image.");
@@ -364,16 +371,19 @@ function BrandingStudioContent() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("File size must be under 10MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("File size must be under 20MB.");
       return;
     }
 
     setUploadingNewLogo(true);
     try {
-      const uploadRes = await brandingService.uploadAsset(file);
+      const optimizedFile = await optimizeUploadFile(file, { profile: "brand", label: "New brand logo" });
+      const uploadRes = await brandingService.uploadAsset(optimizedFile);
       setNewLogoUrl(uploadRes.image_url);
-      toast.success("Logo image uploaded successfully!");
+      toast.success("Logo image uploaded successfully!", {
+        description: optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined,
+      });
     } catch (err: any) {
       console.error("Upload new logo failed:", err);
       toast.error(err?.response?.data?.message || "Failed to upload logo.");

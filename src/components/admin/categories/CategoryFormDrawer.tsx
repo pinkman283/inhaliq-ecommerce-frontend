@@ -13,7 +13,7 @@ import {
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { AdminCheckbox } from "@/components/admin/AdminCheckbox";
 import { ImageUploadGuidance } from "@/components/admin/ui/ImageUploadGuidance";
-import { optimizeImageForUpload } from "@/lib/imageOptimizer";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { adminApi } from "@/lib/adminApi";
 import { Category } from "@/types";
 import { toast } from "sonner";
@@ -129,15 +129,18 @@ function CategoryFormDrawerContent({
 
     setUploadingImage(true);
     try {
-      const fileToUpload = await optimizeImageForUpload(file, {
+      const fileToUpload = await optimizeUploadFile(file, {
+        profile: "product",
         maxDimension: 1600,
-        maxSizeBytes: 1.5 * 1024 * 1024,
-        quality: 0.88,
+        quality: 85,
+        label: "Category image",
       });
 
       const res = await adminApi.uploadCategoryImage(fileToUpload);
       setImage(res.image_url);
-      toast.success("Image uploaded from device successfully.");
+      toast.success("Image uploaded from device successfully.", {
+        description: fileToUpload.reductionText ? `Optimized: ${fileToUpload.reductionText}` : undefined,
+      });
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { errors?: { image?: string[] }; message?: string } } };
       const errMsg =

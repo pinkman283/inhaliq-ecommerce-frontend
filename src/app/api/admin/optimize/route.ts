@@ -6,7 +6,7 @@ export const maxDuration = 30; // Max execution timeout for Vercel Serverless
 const ALLOWED_PROFILES = new Set(["product", "thumbnail", "banner", "brand", "lossless"]);
 const ALLOWED_OUTPUT_FORMATS = new Set(["auto", "webp", "jpeg", "png", "preserve"]);
 const ALLOWED_ADMIN_ROLES = new Set(["admin", "super_admin", "staff"]);
-const MAX_PROXY_BYTES = 4.2 * 1024 * 1024; // 4.2MB safe ceiling below Vercel's 4.5MB request limit
+const MAX_PROXY_BYTES = process.env.VERCEL ? 4.2 * 1024 * 1024 : 20 * 1024 * 1024; // 20MB local, 4.2MB Vercel safe ceiling
 
 const FORWARDED_METADATA_HEADERS = [
   "x-image-output-format",
@@ -75,15 +75,8 @@ export async function POST(request: NextRequest) {
   }
 
   // 3. Verify Server-Side Image Service Configuration
-  const imageServiceUrl = process.env.IMAGE_SERVICE_URL;
+  const imageServiceUrl = process.env.IMAGE_SERVICE_URL || "http://127.0.0.1:8100";
   const imageServiceKey = process.env.IMAGE_SERVICE_API_KEY;
-
-  if (!imageServiceUrl) {
-    return NextResponse.json(
-      { error: "Image optimization service is not configured on this environment.", code: "SERVICE_UNCONFIGURED" },
-      { status: 503 }
-    );
-  }
 
   // 4. Parse & Validate Multipart Form Data
   let formData: FormData;
@@ -115,7 +108,7 @@ export async function POST(request: NextRequest) {
   if (file.size > MAX_PROXY_BYTES) {
     return NextResponse.json(
       {
-        error: `File size (${(file.size / (1024 * 1024)).toFixed(2)}MB) exceeds serverless proxy payload limit of 4.2MB.`,
+        error: `File size (${(file.size / (1024 * 1024)).toFixed(2)}MB) exceeds proxy payload limit of ${(MAX_PROXY_BYTES / (1024 * 1024)).toFixed(0)}MB.`,
         code: "PAYLOAD_TOO_LARGE",
       },
       { status: 413 }

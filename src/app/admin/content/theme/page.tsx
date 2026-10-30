@@ -43,6 +43,7 @@ import {
 import { BUILTIN_PRESETS, ThemePreset } from "@/config/themePresets";
 import { LiveStorefrontPreview } from "@/components/admin/settings/LiveStorefrontPreview";
 import { AdminSaveBar } from "@/components/admin/ui/AdminSaveBar";
+import { optimizeUploadFile } from "@/lib/imageOptimizer";
 import { toast } from "sonner";
 
 function ThemeStudioInner() {
@@ -620,7 +621,7 @@ function ThemeStudioInner() {
   };
 
   // Image upload helpers (using FileReader data URL, automatically persisted by Laravel disk storage)
-  const handleImageFileChange = (
+  const handleImageFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     setter: (val: string) => void,
     label: string
@@ -628,18 +629,38 @@ function ThemeStudioInner() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error(`${label} file size must be less than 5MB.`);
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload a valid image file.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
-      setter(dataUrl);
-      toast.success(`${label} uploaded! Remember to save changes.`);
-    };
-    reader.readAsDataURL(file);
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error(`${label} file size must be less than 20MB.`);
+      return;
+    }
+
+    const profile = label.toLowerCase().includes("logo") ? "brand" : "banner";
+
+    try {
+      const optimizedFile = await optimizeUploadFile(file, { profile, label });
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        setter(dataUrl);
+        toast.success(`${label} uploaded and optimized! Remember to save changes.`, {
+          description: optimizedFile.reductionText ? `Optimized: ${optimizedFile.reductionText}` : undefined,
+        });
+      };
+      reader.readAsDataURL(optimizedFile);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        setter(dataUrl);
+        toast.success(`${label} uploaded! Remember to save changes.`);
+      };
+      reader.readAsDataURL(file);
+    }
     e.target.value = "";
   };
 

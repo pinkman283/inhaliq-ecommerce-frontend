@@ -63,27 +63,30 @@ export function calculateReduction(originalBytes: number, optimizedBytes: number
  * Phase 3A: Toast when microservice successfully optimizes image bytes.
  * Never claims the image is uploaded to storage yet.
  */
-export function notifyOptimizationSuccess(originalBytes: number, optimizedBytes: number) {
+export function notifyOptimizationSuccess(originalBytes: number, optimizedBytes: number, label: string = "Image") {
   const reduction = calculateReduction(originalBytes, optimizedBytes);
-  toast.success("Image optimized successfully", {
+  toast.success(`${label} optimized successfully`, {
     description: reduction.descriptionText,
-    duration: 4000,
+    duration: 5000,
   });
 }
 
 /**
  * Phase 3B & 3E: Toast when Laravel confirms successful storage.
  */
-export function notifyUploadSuccess(isFallbackOriginal: boolean = false) {
+export function notifyUploadSuccess(isFallbackOriginal: boolean = false, reductionText?: string) {
+  const desc = reductionText ? `Optimized: ${reductionText}` : undefined;
   if (isFallbackOriginal) {
     // Case E: Fallback upload succeeded
     toast.success("Image uploaded successfully using the original file.", {
-      duration: 4000,
+      description: desc,
+      duration: 5000,
     });
   } else {
     // Case B: Standard optimized upload succeeded
-    toast.success("Image uploaded successfully", {
-      duration: 4000,
+    toast.success("Image uploaded successfully.", {
+      description: desc,
+      duration: 5000,
     });
   }
 }
